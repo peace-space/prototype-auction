@@ -106,7 +106,7 @@ class UserListState extends State<UserList> {
 
   Stream<dynamic> fetchUserListStream() async* {
     print("Start");
-    String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user";
+    String url = "https://www.your-auction-services.com/prototype-auction/api-pa/api/user";
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);

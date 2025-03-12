@@ -21,5 +21,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/user', [UserController::class, 'index']);
 Route::get('/user/{index}', [UserController::class, 'oneIndex']);
-// Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
-Route::post('/edit-user-profile', [UserController::class, 'editUserProfile']);
+Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);

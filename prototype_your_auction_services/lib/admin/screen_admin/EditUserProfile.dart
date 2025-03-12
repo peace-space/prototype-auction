@@ -113,7 +113,7 @@ class EditUserProfileState extends State<EditUserProfile> {
         "email" : email
       };
       //
-      String url = 'https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/edit-user-profile/${id_user}';
+      String url = 'https://www.your-auction-services.com/prototype-auction/api-pa/api/edit-user-profile/${id_user}';
       final uri = Uri.parse(url);
       // final response = await http.post(
       //     uri, headers: {'Content-Type' : 'application/json'},
@@ -130,7 +130,6 @@ class EditUserProfileState extends State<EditUserProfile> {
       print("End");
 
       if (response.statusCode == 200) {
-        userData();
         print("Successfully.");
       } else {
         throw Exception("err");

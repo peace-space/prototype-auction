@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/UserList.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/adminAppBar.dart';
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
 
 class AdminMenu extends StatefulWidget {
@@ -24,7 +25,7 @@ class AdminMenuState extends State<AdminMenu> {
             ],
           )
         ],
-      ),drawer: generalAppBar(context),
+      ),drawer: adminAppbar(context),
     );
   }
 

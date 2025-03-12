@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/AdminMenu.dart';
-import 'package:prototype_your_auction_services/admin/screen_admin/EditUserProfile.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 
-Drawer generalAppBar (BuildContext ctx) {
+Drawer createDrawer (BuildContext ctx) {
   return Drawer(
     child: ListView(
       children: [
@@ -28,7 +27,7 @@ Widget buttonHomePage(BuildContext ctx) {
             )
         ),
       },
-      child: Text("หน้าแก้ไขข้อมูล")
+      child: Text("หน้าหลัก")
   );
 }
 

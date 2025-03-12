@@ -68,7 +68,7 @@ class UserController extends Controller
 
     // }
 
-    public function editUserProfile(Request $request){
+    public function editUserProfile(Request $request, $index){
         $data = [
             "name" => $request->name,
             "phone" => $request->phone,
@@ -77,23 +77,23 @@ class UserController extends Controller
 
         if ($request->name != ""){
                     $update_data = DB::table('users')
-                                    ->where('id', '=', 1)
+                                    ->where('id', '=', $index)
                                     ->update(['name' => $request->name]);
                 }
                 if ($request->phone != ""){
                     $update_data = DB::table('users')
-                                    ->where('id', '=', 1)
+                                    ->where('id', '=', $index)
                                     ->update(['phone' => $request->phone]);
                 }
                 if ($request->email != ""){
                     $update_data = DB::table('users')
-                                    ->where('id', '=', 1)
+                                    ->where('id', '=', $index)
                                     ->update(['email' => $request->email]);
                 }
 
-                $new_data = DB::table('users')
+            return    $new_data = DB::table('users')
                                     ->select('*')
-                                    ->where('id', '=', 1)
+                                    ->where('id', '=', $index)
                                     ->get();
     }
 

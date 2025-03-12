@@ -13,7 +13,7 @@ class HomePageState extends State<HomePage> {
     return Scaffold(
       body: AppBar(
         title: Text("HomePage"),
-      ),drawer: generalAppBar(context),
+      ),drawer: createDrawer(context),
     );
   }
 

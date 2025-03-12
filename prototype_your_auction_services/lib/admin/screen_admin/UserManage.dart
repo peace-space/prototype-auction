@@ -80,8 +80,9 @@ class UserManageState extends State<UserManage> {
       );
     }
   void userData() async {
+    await Future.delayed(Duration(milliseconds: 300));
     print("aaaa");
-    String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user/${id_user}";
+    String url = "https://www.your-auction-services.com/prototype-auction/api-pa/api/user/${id_user}";
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
@@ -93,7 +94,7 @@ class UserManageState extends State<UserManage> {
       user_data = data[0];
     });
 
-    print("End");
+    print("bbbb");
   }
 
 }
