@@ -2,13 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/UserManage.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/adminAppBar.dart';
 import 'package:http/http.dart' as http;
 
 class EditUserProfile extends StatefulWidget {
+  final Map user_data;
   final int id_user;
   EditUserProfile(
-      this.id_user
+      this.id_user, this.user_data
       );
   State<EditUserProfile> createState() {
     return EditUserProfileState(id_user);
@@ -18,9 +20,12 @@ class EditUserProfile extends StatefulWidget {
 class EditUserProfileState extends State<EditUserProfile> {
   final int id_user;
   var _nameController = TextEditingController();
+  var _phoneController = TextEditingController();
+  var _emailController = TextEditingController();
+  Map user_data = {};
 
   String name = '';
-  String phone = 'aaaaa';
+  String phone = '';
   String email = '';
 
   EditUserProfileState(
@@ -37,10 +42,12 @@ class EditUserProfileState extends State<EditUserProfile> {
         children: [
           Text("data"),
           nameEdit(),
+          phoneEdit(),
+          emailEdit(),
           submit(context),
           Text(phone)
         ],
-      ),drawer: adminAppbar(context),
+      ),
     );
   }
 
@@ -52,7 +59,35 @@ class EditUserProfileState extends State<EditUserProfile> {
       ),
       onChanged: (value) {
         setState(() {
-          phone = _nameController.value.text;
+          name = _nameController.value.text;
+        });
+      },
+    );
+  }
+
+  Widget phoneEdit(){
+    return TextField(
+      controller: _phoneController,
+      decoration: InputDecoration(
+        hintText: "เบอร์โทรศัพท์",
+      ),
+      onChanged: (value) {
+        setState(() {
+          phone = _phoneController.value.text;
+        });
+      },
+    );
+  }
+
+  Widget emailEdit(){
+    return TextField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        hintText: "อีเมล",
+      ),
+      onChanged: (value) {
+        setState(() {
+          email = _emailController.value.text;
         });
       },
     );
@@ -62,37 +97,59 @@ class EditUserProfileState extends State<EditUserProfile> {
     // print(phone);
     return ElevatedButton(
         onPressed: () => {
-          save()
+        save(),userData() ,Navigator.pushReplacement(ctx,
+          MaterialPageRoute(builder: (ctx) => UserManage(id_user: id_user),))
         },
         child: Text("บันทึกการแก้ไข")
     );
   }
 
-  Future<void> save() async {
-    print("Start");
-    // final data = {
-    //
-    //   "phone" : 'phone',
-    //
-    // };
-    //
-    String url = "http://127.0.0.1:8000/api/edit-user-profile/1";
-    // final uri = Uri.parse(url);
-    // final response = await http.post(
-    //     uri, headers: {'Content-Type' : 'application/json'},
-    //     body: jsonEncode(data),
-    // );
+  void save() async {
 
-    final response = await http.post(
-      Uri.parse(url),
-        body: jsonEncode(<String, dynamic>{
-          'phone': phone,
-          // Add any other data you want to send in the body
-        }),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+      print("Start");
+      final data = {
+        "name" : name,
+        "phone" : phone,
+        "email" : email
+      };
+      //
+      String url = 'https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/edit-user-profile/${id_user}';
+      final uri = Uri.parse(url);
+      // final response = await http.post(
+      //     uri, headers: {'Content-Type' : 'application/json'},
+      //     body: jsonEncode(data),
+      // );
+
+      final response = await http.post(
+        uri,
+        headers: {"content-type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      response;
+      print("End");
+
+      if (response.statusCode == 200) {
+        userData();
+        print("Successfully.");
+      } else {
+        throw Exception("err");
       }
-    );
-    print("End");
+
   }
+
+void userData() async {
+  print("Start");
+  String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user/${id_user}";
+  final uri = Uri.parse(url);
+  final response = await http.get(uri);
+  final resData = jsonDecode(response.body);
+  print(resData['data'].toString());
+
+  setState(() {
+    this.user_data = resData['data'];
+  });
+
+  print("End");
+}
 }

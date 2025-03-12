@@ -24,7 +24,7 @@ Widget buttonHomePage(BuildContext ctx) {
         Navigator.push(
           ctx,
             MaterialPageRoute(
-                builder:(ctx)=> EditUserProfile(1)
+                builder:(ctx)=> Login()
             )
         ),
       },

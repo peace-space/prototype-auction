@@ -35,7 +35,7 @@ class UserListState extends State<UserList> {
       ),
       body: Container(
         color: Colors.greenAccent,
-        // child: streamUserList()
+        child: streamUserList()
       ),
     );
   }
@@ -68,7 +68,7 @@ class UserListState extends State<UserList> {
         onPressed: () => {
           Navigator.push(
             ctx, MaterialPageRoute(
-              builder: (ctx) => UserManage(id_user: id, user_data: data),
+              builder: (ctx) => UserManage(id_user: id),
           )
           )
         },
@@ -104,40 +104,40 @@ class UserListState extends State<UserList> {
   //   print("End");
   // }
 
-  // Stream<dynamic> fetchUserListStream() async* {
-  //   print("Start");
-  //   String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user";
-  //   final uri = Uri.parse(url);
-  //   final response = await http.get(uri);
-  //   final resData = jsonDecode(response.body);
-  //   // print(resData.toString());
-  //   await Future.delayed(const Duration(seconds: 1));
-  //   setState(() {
-  //     user_data = resData['data'];
-  //   });
-  //   print("End");
-  // }
+  Stream<dynamic> fetchUserListStream() async* {
+    print("Start");
+    String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user";
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    // print(resData.toString());
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      user_data = resData['data'];
+    });
+    print("End");
+  }
 
-  // Widget streamUserList(){
-  //   return StreamBuilder(
-  //       stream: fetchUserListStream(),
-  //       builder: (context, snapshot) => ListView.builder(
-  //         padding: EdgeInsets.all(20),
-  //         itemCount: user_data.length,
-  //         itemBuilder: (context, index) {
-  //           final Map data = user_data[index];
-  //           final id = data['id'];
-  //           final name = data['name'];
-  //           final phone = data['phone'];
-  //           return Card(
-  //               child: ListTile(
-  //                 title: Text(name.toString()),
-  //                 subtitle: Text(phone.toString()),
-  //                 trailing: editUserData(context, id, data),
-  //               )
-  //           );
-  //         },
-  //       )
-  //   );
-  // }
+  Widget streamUserList(){
+    return StreamBuilder(
+        stream: fetchUserListStream(),
+        builder: (context, snapshot) => ListView.builder(
+          padding: EdgeInsets.all(20),
+          itemCount: user_data.length,
+          itemBuilder: (context, index) {
+            final Map data = user_data[index];
+            final id = data['id'];
+            final name = data['name'];
+            final phone = data['phone'];
+            return Card(
+                child: ListTile(
+                  title: Text("${index + 1}: ${name.toString()}"),
+                  subtitle: Text(phone.toString()),
+                  trailing: editUserData(context, id, data),
+                )
+            );
+          },
+        )
+    );
+  }
 }

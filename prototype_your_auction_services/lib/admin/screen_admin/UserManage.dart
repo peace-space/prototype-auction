@@ -9,19 +9,25 @@ import 'package:prototype_your_auction_services/admin/screen_admin/adminAppBar.d
 
 class UserManage extends StatefulWidget {
   int id_user;
-  Map user_data;
   UserManage({
-    required this.id_user, required this.user_data
+    required this.id_user
 });
   State<UserManage> createState() {
-    return UserManageState(id_user, user_data);
+    return UserManageState(id_user);
   }
 }
 
 class UserManageState extends State<UserManage> {
   int id_user;
-  Map user_data;
-  UserManageState(this.id_user, this.user_data);
+  Map user_data = {};
+  UserManageState(this.id_user);
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    userData();
+    super.initState();
+  }
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -47,12 +53,47 @@ class UserManageState extends State<UserManage> {
             onPressed:  () {
               Navigator.pushReplacement(
                   ctx, MaterialPageRoute(
-                  builder: (ctx) => EditUserProfile(id)
+                  builder: (ctx) => EditUserProfile(id, user_data)
                 )
               );
             },
             child: Text("แก้ไขข้อมูลผู้ใช้งาน")
         );
+  }
+  Widget userList() {
+      // userData();
+      return ListView.builder(
+        padding: EdgeInsets.all(20),
+        itemCount: user_data.length,
+        itemBuilder: (context, index) {
+          final Map data = user_data[index];
+          final id = data['id'];
+          final name = data['name'];
+          final phone = data['phone'];
+          return Card(
+            child: ListTile(
+              title: Text(name.toString()),
+              subtitle: Text(phone.toString()),
+            )
+          );
+        },
+      );
+    }
+  void userData() async {
+    print("aaaa");
+    String url = "https://www.your-auction-services.com/prototype-auction/api-prototype-auction/api/user/${id_user}";
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    print(resData['data'].toString());
+    final data = resData['data'];
+
+
+    setState(() {
+      user_data = data[0];
+    });
+
+    print("End");
   }
 
 }

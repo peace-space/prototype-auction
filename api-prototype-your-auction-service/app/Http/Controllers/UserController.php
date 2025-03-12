@@ -37,35 +37,64 @@ class UserController extends Controller
         ]);
     }
 
-    public function editUserProfile(Request $request, $index){
+    // public function editUserProfile(Request $request, $index){
+
+    //     if ($request->name != ""){
+    //         $update_data = DB::table('users')
+    //                         ->where('id', '=', $index)
+    //                         ->update(['name' => $request->name]);
+    //     }
+    //     if ($request->phone != ""){
+    //         $update_data = DB::table('users')
+    //                         ->where('id', '=', $index)
+    //                         ->update(['phone' => $request->phone]);
+    //     }
+    //     if ($request->email != ""){
+    //         $update_data = DB::table('users')
+    //                         ->where('id', '=', $index)
+    //                         ->update(['email' => $request->email]);
+    //     }
+
+    //     $new_data = DB::table('users')
+    //                         ->select('*')
+    //                         ->where('id', '=', $index)
+    //                         ->get();
+
+    //     return response()->json([
+    //         "status" => "1",
+    //         "message" => "Successfully.",
+    //         "data" => $new_data
+    //     ]);
+
+    // }
+
+    public function editUserProfile(Request $request){
+        $data = [
+            "name" => $request->name,
+            "phone" => $request->phone,
+            "email" => $request->email
+        ];
 
         if ($request->name != ""){
-            $update_data = DB::table('users')
-                            ->where('id', '=', $index)
-                            ->update(['name' => $request->name]);
-        }
-        if ($request->phone != ""){
-            $update_data = DB::table('users')
-                            ->where('id', '=', $index)
-                            ->update(['phone' => $request->phone]);
-        }
-        if ($request->email != ""){
-            $update_data = DB::table('users')
-                            ->where('id', '=', $index)
-                            ->update(['email' => $request->email]);
-        }
+                    $update_data = DB::table('users')
+                                    ->where('id', '=', 1)
+                                    ->update(['name' => $request->name]);
+                }
+                if ($request->phone != ""){
+                    $update_data = DB::table('users')
+                                    ->where('id', '=', 1)
+                                    ->update(['phone' => $request->phone]);
+                }
+                if ($request->email != ""){
+                    $update_data = DB::table('users')
+                                    ->where('id', '=', 1)
+                                    ->update(['email' => $request->email]);
+                }
 
-        $new_data = DB::table('users')
-                            ->select('*')
-                            ->where('id', '=', $index)
-                            ->get();
-
-        return response()->json([
-            "status" => "1",
-            "message" => "Successfully.",
-            "data" => $new_data
-        ]);
-
+                $new_data = DB::table('users')
+                                    ->select('*')
+                                    ->where('id', '=', 1)
+                                    ->get();
     }
 
     /**
