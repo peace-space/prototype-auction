@@ -22,9 +22,22 @@ class UserProfileState extends State<UserProfile> {
       appBar: AppBar(
         title: Text("ข้อมูลผู้ใช้งาน: ${ShareData.logedIn}"),
       ),
+      body: userProfile(),
       drawer: createDrawer(context),
     );
   }
 
+  Widget userProfile() {
+    return Container(
+      alignment: Alignment.center,
+      color: Colors.blue,
+      margin: EdgeInsets.all(20),
+      child: Column(
+        children: [
+          Text("test")
+        ],
+      ),
+    );
+  }
 
 }
