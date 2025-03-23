@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/admin/screen_admin/EditUserProfile.dart';
-import 'package:prototype_your_auction_services/admin/screen_admin/UserList.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/EditUserProfileAdmin.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/UserListAdmin.dart';
 
 class UserManage extends StatefulWidget {
   int id_user;

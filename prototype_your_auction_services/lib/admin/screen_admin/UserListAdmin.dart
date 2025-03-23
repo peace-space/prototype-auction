@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/admin/screen_admin/UserManage.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/UserManageAdmin.dart';
 
 class UserList extends StatefulWidget {
   State<UserList> createState() {
@@ -117,7 +117,7 @@ class UserListState extends State<UserList> {
               final phone = data['phone'];
               return Card(
                 child: ListTile(
-                  title: Text("${index + 1}) ชื่อ: ${name.toString()}"),
+                  title: Text("${id}) ชื่อ: ${name.toString()}"),
                   subtitle: Text("เบอร์โทร: ${phone.toString()}"),
                   trailing: editUserData(context, id, data),
                 ),

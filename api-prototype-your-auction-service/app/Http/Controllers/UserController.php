@@ -85,10 +85,12 @@ class UserController extends Controller
                 ->where('id_users', '=', $index)
                 ->get();
 
+                // return $new_data[0];
+
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $new_data
+                'data' => $new_data[0]
             ], 200);
 
         } catch (Exception $e) {

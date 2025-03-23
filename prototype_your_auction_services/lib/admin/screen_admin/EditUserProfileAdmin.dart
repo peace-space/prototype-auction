@@ -1,10 +1,8 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:prototype_your_auction_services/admin/screen_admin/UserManage.dart';
-import "package:prototype_your_auction_services/admin/screen_admin/adminAppBar.dart";
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/admin/screen_admin/UserManageAdmin.dart';
 
 class EditUserProfile extends StatefulWidget {
   final Map user_data;
