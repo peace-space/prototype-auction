@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,4 +27,7 @@ Route::post('/login', [UserController::class, 'login']);
 Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
 Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
 Route::post('/change-password', [UserController::class, 'changePassWord']);
+
+Route::get('/auction', [AuctionController::class, 'index']);
+
 
