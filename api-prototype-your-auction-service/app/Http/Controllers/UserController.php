@@ -38,14 +38,14 @@ class UserController extends Controller
     {
         try{
             $user_data = DB::table('users')
-                        ->select('*')
+                        ->select('id_users', 'name', 'phone', 'address', 'email', 'admin')
                         ->where('id_users', '=', $index)
                         ->get();
 
             return response()->json([
                 "status" => 1,
                 "message" => "Successfully.",
-                "data" => $user_data
+                "data" => $user_data[0]
             ]);
         } catch (Exception $e) {
             return response()->json([

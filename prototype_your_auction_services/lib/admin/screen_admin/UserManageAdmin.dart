@@ -90,9 +90,8 @@ class UserManageState extends State<UserManage> {
     print(resData['data'].toString());
     final data = resData['data'];
 
-
     setState(() {
-      user_data = data[0];
+      user_data = data;
     });
 
     print("bbbb");

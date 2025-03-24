@@ -113,7 +113,7 @@ class EditUserProfileState extends State<EditUserProfile> {
     };
 
     String url =
-        'https://www.your-auction-services.com/prototype-auction/api-pa/api/edit-user-profile/${id_user}';
+        'https://your-auction-services.com/prototype-auction/api-pa/api/edit-user-profile/${id_user}';
     final uri = Uri.parse(url);
 
     final response = await http.post(

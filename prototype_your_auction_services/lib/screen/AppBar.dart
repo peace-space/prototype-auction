@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/HomePage.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/AdminMenu.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ChatList.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
-import 'package:prototype_your_auction_services/share_data/UserData.dart';
 
 Drawer createDrawer (BuildContext ctx) {
   if (ShareData.admin && ShareData.logedIn) {
@@ -34,7 +34,7 @@ Drawer createDrawer (BuildContext ctx) {
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-                "ชื่อ ${UserData.userData['name']} ${ShareData.logedIn}"),
+                "ชื่อ ${ShareData.userData['name']} ${ShareData.logedIn}"),
             accountEmail: Text("เบอร์โทร: ${ShareData.userData['phone']}"),
           ),
           homePageButton(ctx),
@@ -120,7 +120,7 @@ Widget logOutButton(BuildContext ctx) {
         ShareData.logedIn = false,
         Navigator.pushReplacement(
             ctx, MaterialPageRoute(
-            builder: (ctx) => HomePage())
+            builder: (ctx) => AuctionHome())
         )
       },
       child: Text("ออกจากระบบ")
@@ -161,7 +161,7 @@ Widget homePageButton(BuildContext ctx) {
       {
         Navigator.pushReplacement(
             ctx, MaterialPageRoute(
-            builder: (ctx) => HomePage())
+            builder: (ctx) => AuctionHome())
         )
       },
       child: Text("หน้าหลัก")

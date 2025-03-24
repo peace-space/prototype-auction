@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/HomePage.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ForgotPassWord.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
@@ -108,9 +108,9 @@ class LoginState extends State<Login>{
     Navigator.push(ctx, route);
   }
 
-  void goToHomePage(BuildContext ctx) {
+  void goToAuctionHome(BuildContext ctx) {
     final route = MaterialPageRoute(
-      builder: (ctx) => HomePage(),
+      builder: (ctx) => AuctionHome(),
     );
     Navigator.push(ctx, route);
   }
@@ -153,7 +153,7 @@ class LoginState extends State<Login>{
 
         ShareData.userData = data;
 
-        goToHomePage(ctx);
+        goToAuctionHome(ctx);
 
       } else {
         setState(() {

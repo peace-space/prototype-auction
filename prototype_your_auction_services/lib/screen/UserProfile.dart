@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
@@ -15,10 +18,11 @@ class UserProfileState extends State<UserProfile> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    streamUserData();
+
     super.initState();
   }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -37,50 +41,68 @@ class UserProfileState extends State<UserProfile> {
     double height = 3.0;
     return StreamBuilder(
         stream: streamUserData(),
-        builder: (context, snapshot) {
-          return Column(
-            children: [
-              Row(
-                children: [
-                  Text("ชื่อ: ", style: textPrefixStyle(),),
-                  Text("${snapshot.data?['name']}",
-                    style: textStyleUserProfile(),),
-                ],
-              ),
-              SizedBox(height: height,),
-              Row(
-                children: [
-                  Text("เบอร์โทร: ", style: textPrefixStyle(),),
-                  Text("${ShareData.userData['phone']}",
-                    style: textStyleUserProfile(),),
-                ],
-              ),
-              SizedBox(height: height,),
-              Row(
-                children: [
-                  Text("อีเมล: ", style: textPrefixStyle(),),
-                  Text("${ShareData.userData['email']}",
-                    style: textStyleUserProfile(),),
-                ],
-              ),
-              SizedBox(height: height,),
-              Row(
-                children: [
-                  Text("ที่อยู่ในรับสินค้า: ", style: textPrefixStyle(),),
-                ],
-              ),
-              Row(
-                children: [
-                  Text("${ShareData.userData['address']}",
-                    style: textStyleUserProfile(),),
-                ],
-              ),
-              SizedBox(height: height,),
-              editProfile(ctx),
-              SizedBox(height: height,),
-              changePassWord(ctx),
-            ],
-          );
+        builder: (ctx, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text("เกิดข้อผิดพลาดในการโหลดข้อมูล",
+                style: TextStyle(
+                    fontSize: 21
+                ),),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.active) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasData) {
+            return Column(
+              children: [
+                Row(
+                  children: [
+                    Text("ชื่อ: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['name']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
+                SizedBox(height: height,),
+                Row(
+                  children: [
+                    Text("เบอร์โทร: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['phone']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
+                SizedBox(height: height,),
+                Row(
+                  children: [
+                    Text("อีเมล: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['email']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
+                SizedBox(height: height,),
+                Row(
+                  children: [
+                    Text("ที่อยู่ในรับสินค้า: ", style: textPrefixStyle(),),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text("${snapshot.data?['address']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
+                SizedBox(height: height,),
+                editProfile(ctx),
+                SizedBox(height: height,),
+                changePassWord(ctx),
+              ],
+            );
+          }
+          return Center(child: CircularProgressIndicator(),);
         }
     );
   }
@@ -121,11 +143,16 @@ class UserProfileState extends State<UserProfile> {
 
   Stream<Map<String, dynamic>> streamUserData() async* {
     print("Start.");
+    String url = 'https://your-auction-services.com/prototype-auction/api-pa/api/user/${ShareData
+        .userData['id_users']}';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    // print(resData.toString());
     await Future.delayed(Duration(seconds: 1));
-    yield ShareData.userData;
-    setState(() {
-      streamUserData();
-    });
+    Map<String, dynamic> data = resData['data'];
+    yield data;
+    setState(() {});
     print("End.");
   }
 
