@@ -17,13 +17,14 @@ class AuctionFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_users' => 2,
+            'id_users' => fake()->numberBetween(1, 10),
             'name_product' => fake()->firstName(),
             'detail_product' => fake()->sentence(45),
-            'start_price' => fake()->randomNumber(),
+            // 'start_price' => fake()->randomNumber(),
+            'shipping_cost' => fake()->numberBetween(20, 50),
+            'start_price' => fake()->numberBetween(1, 1000),
             'start_date_time' => fake()->dateTime(),
             'end_date_time' => fake()->dateTime(),
-            'image_files' => fake()->filePath(),
         ];
     }
 }

@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Auction;
 use App\Models\Bid;
+use App\Models\Image;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,10 +17,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::factory(10)->create();
-        Auction::factory(10)->create([
-            'image_files' => 'C:\u\name\AppData\Local\Temp\fakFE5C.tmp'
-        ]);
+        Auction::factory(10)->create();
         Bid::factory(10)->create();
+        Image::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',

@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -132,26 +133,36 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
+        return $request->image_profile;
         try {
             $name = $request->name;
             $phone = $request->phone;
             $password = $request->password;
             $address = $request->address;
+            $email = $request->address;
+            // $image = $request->image_profile;
 
             $password_hashed = Hash::make($password);
 
-            if ($request->email == "") {
-                $email = "";
+            $request->validate([
+                'image' => 'required | nullable | image | mimes:png, jpg, jpeh, webp'
+            ]);
+
+            if ($request->image_profile == "") {
+                $image_name = Storage::disk('public')->put('images/user_profile_image', $request->image_profile);
             } else {
-                $email = $request->email;
+                $image_name = Storage::disk('public')->put('images/user_profile_image', $request->image_profile);
             }
+
+            $path = Storage::url($image_name);
 
             $data = [
                 "name" => $name,
                 "phone" => $phone,
                 "email" => $email,
                 "password" => $password_hashed,
-                "address" => $address
+                "address" => $address,
+                "image_profile" => $path
             ];
 
             $user = db::table('users')
@@ -159,7 +170,8 @@ class UserController extends Controller
 
             return response()->json([
                 'status' => 1,
-                'message' => "Successfully."
+                'message' => "Successfully.",
+                'data' => $data
             ], 201);
         } catch (Exception $e) {
             return response()->json([

@@ -16,11 +16,15 @@ return new class extends Migration
             $table->foreignId('id_users');
             $table->string('name_product');
             $table->text('detail_product');
+            $table->text('shipping_cost');
             $table->integer('start_price')->unsigned();
             $table->dateTime('start_date_time');
             $table->dateTime('end_date_time');
-            $table->string('image_files');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
+
+            $table->foreign('id_users')->references('id_users')->on('users');
         });
     }
 

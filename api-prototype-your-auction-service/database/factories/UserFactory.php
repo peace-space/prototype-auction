@@ -28,8 +28,10 @@ class UserFactory extends Factory
             'phone' => fake()->unique()->phoneNumber(),
             'email' => fake()->email(),
             'address' => fake()->address(),
-            'password' => static::$password ??= Hash::make('password'),
+            // 'password' => static::$password ??= Hash::make('password'),
+            'password' => Hash::make('m'),
             'admin' => fake()->boolean(),
+            'image_profile' => "storage/images/user_profile_image"
         ];
     }
 

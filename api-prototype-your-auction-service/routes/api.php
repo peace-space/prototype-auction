@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\v1\EmailController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,11 @@ Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfi
 Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
 Route::post('/change-password', [UserController::class, 'changePassWord']);
 
-Route::get('/auction', [AuctionController::class, 'index']);
 
+Route::prefix('/v1')->group(function () {
+    Route::get('/auction', [AuctionController::class, 'index']);
+    Route::post('/create-product', [AuctionController::class, 'createProduct']);
+    Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
 
+    Route::get('/test', [EmailController::class, 'index']);
+});
