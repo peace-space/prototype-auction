@@ -133,28 +133,27 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-        return $request->image_profile;
         try {
+            // $request->validate([
+            //     'image_profile' => 'nullable | required | image | mimes:png, jpg, jpeh, webp'
+            // ]);
+
             $name = $request->name;
             $phone = $request->phone;
             $password = $request->password;
             $address = $request->address;
-            $email = $request->address;
-            // $image = $request->image_profile;
+            $email = $request->email;
+            $image = $request->image_profile;
 
             $password_hashed = Hash::make($password);
 
-            $request->validate([
-                'image' => 'required | nullable | image | mimes:png, jpg, jpeh, webp'
-            ]);
-
-            if ($request->image_profile == "") {
-                $image_name = Storage::disk('public')->put('images/user_profile_image', $request->image_profile);
+            if ($image != "") {
+                $image_name = Storage::disk('public')->put('images/user-profile-image', $image);
+                $path = Storage::url($image_name);
             } else {
-                $image_name = Storage::disk('public')->put('images/user_profile_image', $request->image_profile);
+                $path = "/storage/images/user-profile-image/default-image.png";
             }
 
-            $path = Storage::url($image_name);
 
             $data = [
                 "name" => $name,

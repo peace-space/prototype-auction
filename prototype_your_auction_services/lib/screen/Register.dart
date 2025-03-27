@@ -165,7 +165,7 @@ class RegisterState extends State<Register> {
           'address': _address.text,
           'password': _passWord.text,
         };
-        String url = 'https://your-auction-services.com/prototype-auction/api-pa/api/register';
+        String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/register';
         final uri = Uri.parse(url);
         final response = await http.post(
             uri,

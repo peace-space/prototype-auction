@@ -208,7 +208,7 @@ class AuctionHomeState extends State<AuctionHome> {
   Stream<List<dynamic>> fetchAuctionData() async* {
     await Future.delayed(Duration(seconds: 1));
     print("Start.");
-    String url = 'https://your-auction-services.com/prototype-auction/api-pa/api/auction';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-auction-servece/api/v1/auction';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);

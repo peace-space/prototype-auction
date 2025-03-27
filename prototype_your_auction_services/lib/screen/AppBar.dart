@@ -5,6 +5,7 @@ import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ChatList.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
+import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
@@ -20,6 +21,7 @@ Drawer createDrawer (BuildContext ctx) {
           ),
           adminMenuButton(ctx),
           homePageButton(ctx),
+          storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),
           logOutButton(ctx)
@@ -38,6 +40,7 @@ Drawer createDrawer (BuildContext ctx) {
             accountEmail: Text("เบอร์โทร: ${ShareData.userData['phone']}"),
           ),
           homePageButton(ctx),
+          storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),
           logOutButton(ctx)
@@ -178,5 +181,18 @@ Widget chatListButton(BuildContext ctx) {
         )
       },
       child: Text("แชท")
+  );
+}
+
+Widget storaManageButton(BuildContext ctx) {
+  return ElevatedButton(
+      onPressed: () =>
+      {
+        Navigator.pushReplacement(
+            ctx, MaterialPageRoute(
+            builder: (ctx) => StoreManage())
+        )
+      },
+      child: Text("จัดการร้านค้า")
   );
 }
