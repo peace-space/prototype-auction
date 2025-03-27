@@ -142,4 +142,6 @@ class AuctionController extends Controller
             ]);
         }
     }
+
+
 }
