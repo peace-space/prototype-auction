@@ -3,6 +3,7 @@
 use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\v1\EmailController;
+use App\Http\Controllers\v1\ImageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -35,5 +36,6 @@ Route::prefix('/v1')->group(function () {
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
 
-    Route::get('/test', [EmailController::class, 'index']);
+    // Route::get('/test', [EmailController::class, 'index']);
+    Route::get('/images', [ImageController::class, 'index']);
 });
