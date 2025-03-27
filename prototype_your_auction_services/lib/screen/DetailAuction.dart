@@ -28,7 +28,8 @@ class DetailAuctionState extends State<DetailAuction> {
             child: displayDataAuction(),
           ),
         ],
-      );
+      )
+    );
   }
 
   Widget displayDataAuction() {

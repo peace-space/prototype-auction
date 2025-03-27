@@ -79,7 +79,7 @@ class AuctionController extends Controller
                 'image' => 'required | image | mimes:png, jpg, jpeh, webp'
             ]);
 
-            $image_name = Storage::disk('public')->put('images/product_images', $request->image);
+            $image_name = Storage::disk('public')->put('images/product-images', $request->image);
 
             $path = Storage::url($image_name);
 
