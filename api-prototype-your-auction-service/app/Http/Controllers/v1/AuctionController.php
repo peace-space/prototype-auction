@@ -15,16 +15,18 @@ class AuctionController extends Controller
     public function index() {
         try{
 
-            $test = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'auctions.name_product', 'images.image_path')
-                    ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
-                    ->where('images.id_auctions', '=', 5)
-                    ->get();
+            $auctions_list = DB::table('auctions')
+                                ->select('id_users', 'name_product',
+                                        'shipping_cost', 'start_price',
+                                        'start_date_time', 'end_date_time')
+                                ->orderByRaw('end_date_time')
+                                ->get();
+
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $test
+                'data' => $auctions_list
             ], 200);
 
         } catch (Exception $e) {

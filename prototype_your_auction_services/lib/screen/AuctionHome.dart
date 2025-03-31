@@ -168,6 +168,7 @@ class AuctionHomeState extends State<AuctionHome> {
                 padding: EdgeInsets.all(8),
                 itemBuilder: (context, index) {
                   Map<String, dynamic> data = snapshot.data?[index];
+                  fetchImage(data['id_auctions']);
                   double left = 0.0;
                   double top = 0.0;
                   double right = 8.0;
@@ -208,7 +209,7 @@ class AuctionHomeState extends State<AuctionHome> {
   Stream<List<dynamic>> fetchAuctionData() async* {
     await Future.delayed(Duration(seconds: 1));
     print("Start.");
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-auction-servece/api/v1/auction';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
@@ -217,6 +218,19 @@ class AuctionHomeState extends State<AuctionHome> {
     yield data;
     setState(() {});
     print("End.");
+  }
+
+  Stream<List<dynamic>> fetchImage(int id_auctions) async* {
+    print("Start.Image");
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction/${id_auctions}';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    List<dynamic> data = resData['data'];
+    // print(data[2].toString());
+    yield data;
+    setState(() {});
+    print("End.Image");
   }
 
   Widget displayer(BuildContext ctx) {

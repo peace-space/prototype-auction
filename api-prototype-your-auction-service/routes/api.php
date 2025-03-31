@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\v1\BidController;
 use App\Http\Controllers\v1\EmailController;
 use App\Http\Controllers\v1\ImageController;
 use Illuminate\Http\Request;
@@ -37,5 +38,8 @@ Route::prefix('/v1')->group(function () {
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
 
     // Route::get('/test', [EmailController::class, 'index']);
-    Route::get('/images', [ImageController::class, 'index']);
+    Route::get('/image/{id_auctions}', [ImageController::class, 'oneImage']);
+
+    Route::get('/high-bids/{id}', [BidController::class, 'highBids']);
+
 });
