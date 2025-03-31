@@ -222,7 +222,7 @@ class AuctionHomeState extends State<AuctionHome> {
 
   Stream<List<dynamic>> fetchImage(int id_auctions) async* {
     print("Start.Image");
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction/${id_auctions}';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/image/${id_auctions}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
