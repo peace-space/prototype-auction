@@ -220,15 +220,15 @@ class AuctionHomeState extends State<AuctionHome> {
     print("End.");
   }
 
-  Stream<List<dynamic>> fetchImage(int id_auctions) async* {
+  void fetchImage(var id_auctions) async {
+    await Future.delayed(Duration(seconds: 1));
     print("Start.Image");
     String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/image/${id_auctions}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     List<dynamic> data = resData['data'];
-    // print(data[2].toString());
-    yield data;
+    print(data[2].toString());
     setState(() {});
     print("End.Image");
   }
