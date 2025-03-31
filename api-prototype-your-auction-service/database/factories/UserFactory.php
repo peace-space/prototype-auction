@@ -26,12 +26,12 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'phone' => fake()->unique()->phoneNumber(),
-            'email' => fake()->email(),
+            'email' => fake()->unique()->email(),
             'address' => fake()->address(),
             // 'password' => static::$password ??= Hash::make('password'),
             'password' => Hash::make('m'),
             'admin' => fake()->boolean(),
-            'image_profile' => "storage/images/user_profile_image"
+            'image_profile' => "storage/images/user-profile-image"
         ];
     }
 

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('bids', function (Blueprint $table) {
             $table->id('id_bids');
-            // $table->integer('id_users')->unsigned();
-            // $table->integer('id_auctions')->unsigned();
+            $table->integer('id_users')->unsigned();
+            $table->integer('id_auctions')->unsigned();
             $table->string('bid_price');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

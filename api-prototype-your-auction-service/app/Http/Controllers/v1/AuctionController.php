@@ -18,7 +18,7 @@ class AuctionController extends Controller
             $test = DB::table('auctions')
                     ->select('auctions.id_auctions', 'auctions.name_product', 'images.image_path')
                     ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
-                    ->where('images.id_auctions', '=', 78)
+                    ->where('images.id_auctions', '=', 5)
                     ->get();
 
             return response()->json([

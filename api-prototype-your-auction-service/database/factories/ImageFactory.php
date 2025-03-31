@@ -18,7 +18,7 @@ class ImageFactory extends Factory
     {
         return [
             'id_auctions' => fake()->numberBetween(1, 10),
-            'image_path' => 'images/product_images'
+            'image_path' => 'storage/images/product-images'
         ];
     }
 }
