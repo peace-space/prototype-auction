@@ -11,6 +11,8 @@ class AddProduct extends StatefulWidget {
 
 class AddProductState extends State<AddProduct> {
   File? _selectedImage;
+  List<File?> data = [];
+  
 
   late List<File>? _selectImageData;
 
@@ -20,18 +22,34 @@ class AddProductState extends State<AddProduct> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          nameProduct(),
-          nameProduct(),
-          startPriceProduct(),
-          closeDateTimeAuction(),
-          imageProduct(),
-          showImage(),
-          Text("เพิ่มรูปที่ 2"),
-          Text("เพิ่มรูปที่ 3"),
-          SizedBox(height: 10),
-          openAuctionButton(),
+          Container(
+            height: 250,
+            alignment: Alignment.center,
+            width: double.infinity,
+            color: Colors.lightBlue,
+            child: showImage(),
+          ),
+          // showImage(),
+          Container(
+            height: 500,
+            width: double.infinity,
+            color: Colors.red,
+            child: ListView(
+              padding: EdgeInsets.all(20),
+              children: [
+                nameProduct(),
+                nameProduct(),
+                startPriceProduct(),
+                closeDateTimeAuction(),
+                imageProduct(),
+                SizedBox(height: 10),
+                openAuctionButton(),
+                SizedBox(height: 300),
+              ],
+            ),
+          )
         ],
-      ),
+      )
     );
   }
 
@@ -80,26 +98,76 @@ class AddProductState extends State<AddProduct> {
       return;
     }
     setState(() {
-      _selectedImage = File(response!.path);
+      data.add(File(response!.path));
     });
   }
 
   void deleteSelectImage() {
     setState(() {
-      _selectedImage = null;
+      data.removeAt(0);
     });
   }
 
   Widget showImage() {
-    return Container(
-      width: 100,
-      height: 400,
-      child:
-          _selectedImage == null
-              ? Image.asset('image/temp.png')
-              : Image.file(_selectedImage!),
+    double left = 0.0;
+    double top = 8.0;
+    double right = 0.0;
+    double bottom = 0.0;
+    return StreamBuilder(
+      stream: null,
+      builder: (context, snapshot) {
+        return GridTile(
+          header: GridTileBar(
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () =>
+                  {
+                    deleteSelectImage()
+                  },
+                  child: Icon(Icons.delete),
+                )
+              ],
+            ),
+          ),
+          child: (data == null)
+              ? Image.network(
+            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/r8mNaVcgLItF3Y6Cm166JrbboAfbLMl2ert3znHL.png',
+            fit: BoxFit.cover,)
+              : Image.file(data[0]!),
+        );
+      },
     );
   }
+
+  // Widget showImage() {
+  //   double left = 0.0;
+  //   double top = 8.0;
+  //   double right = 0.0;
+  //   double bottom = 0.0;
+  //   return StreamBuilder(
+  //     stream: null,
+  //     builder: (context, snapshot) {
+  //       return Container(
+  //           color: Colors.red,
+  //           width: 100,
+  //           height: 400,
+  //           child: ListView.builder(
+  //             itemCount: data.length,
+  //             itemBuilder: (context, index) {
+  //               return Padding(
+  //                 padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+  //                 child: (data == null)
+  //                     ? Image.asset('image/temp.png')
+  //                     : Image.file(data[index]!),
+  //               );
+  //             },
+  //           )
+  //       );
+  //     },
+  //   );
+  // }
 
   Future<void> getLostData() async {}
 }

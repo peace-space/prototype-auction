@@ -38,6 +38,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
 
     // Route::get('/test', [EmailController::class, 'index']);
+    Route::get('/image', [ImageController::class, 'index']);
     Route::get('/image/{id_auctions}', [ImageController::class, 'oneImage']);
 
     Route::get('/high-bids/{id}', [BidController::class, 'highBids']);

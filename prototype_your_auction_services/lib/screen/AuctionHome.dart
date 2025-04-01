@@ -17,7 +17,7 @@ class AuctionHomeState extends State<AuctionHome> {
   String messageButton = "รายการ";
   bool _changeDisplay = false;
   String loginStatus = "";
-  List<dynamic> images_data = [];
+  Map<String, dynamic> images_data = {};
 
   @override
   void initState() {
@@ -61,6 +61,91 @@ class AuctionHomeState extends State<AuctionHome> {
     }
   }
 
+  // Widget auctionGrid(BuildContext ctx) {
+  //   double left = 8.0;
+  //   double top = 0.0;
+  //   double right = 8.0;
+  //   double bottom = 8.0;
+  //
+  //   return StreamBuilder(
+  //       stream: fetchAuctionData(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasError) {
+  //           return const Center(
+  //             child: Text("Error."),
+  //           );
+  //         }
+  //
+  //         if (snapshot.connectionState == ConnectionState.active) {
+  //           return const Center(
+  //               child: CircularProgressIndicator()
+  //           );
+  //         }
+  //
+  //         if (snapshot.hasData) {
+  //           return GridView.builder(
+  //             padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+  //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //               crossAxisCount: 2, //จำนวนคอลลัมน์
+  //               crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
+  //               mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
+  //               //mainAxisExtent: 300, //ขนาดของรูปภาพ
+  //               childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
+  //             ),
+  //             itemCount: snapshot.data?.length,
+  //             itemBuilder: (context, index) {
+  //               Map<String, dynamic> data = snapshot.data?[index];
+  //               return InkWell(
+  //                 onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
+  //                 child: Card(
+  //                     shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(15)
+  //                     ),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.stretch,
+  //                       children: [
+  //                         Expanded(
+  //                           child: ClipRRect(
+  //                               borderRadius: BorderRadius.vertical(
+  //                                   top: Radius.circular(15)),
+  //                               child: Image.network(
+  //                                 'https://picsum.photos/200/300?random=${index}',
+  //                                 fit: BoxFit.cover,)
+  //                           ),
+  //                         ),
+  //                         Padding(
+  //                           padding: EdgeInsets.all(8.0),
+  //                           child: Column(
+  //                             crossAxisAlignment: CrossAxisAlignment.start,
+  //                             children: [
+  //                               // Text(data['name_product']),
+  //                               SizedBox(height: 5,),
+  //                               Text("ราคาสูงสุด ฿${data['start_price']
+  //                                   .toString()}"),
+  //                               SizedBox(height: 5,),
+  //                               Text("เวลา: ",
+  //                                 style: TextStyle(
+  //                                     color: Colors.red,
+  //                                     fontSize: 18
+  //                                 ),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         )
+  //                       ],
+  //                     )
+  //                 ),
+  //               );
+  //             },
+  //           );
+  //         }
+  //
+  //         return const Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
+  //   );
+  // }
   Widget auctionGrid(BuildContext ctx) {
     double left = 8.0;
     double top = 0.0;
@@ -95,7 +180,7 @@ class AuctionHomeState extends State<AuctionHome> {
               itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 Map<String, dynamic> data = snapshot.data?[index];
-                fetchImage(data['id_auctions']);
+                // fetchImage(data['id_auctions']);
                 return InkWell(
                   onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
                   child: Card(
@@ -110,7 +195,7 @@ class AuctionHomeState extends State<AuctionHome> {
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(15)),
                                 child: Image.network(
-                                  'https://picsum.photos/200/300?random=${index}',
+                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/}',
                                   fit: BoxFit.cover,)
                             ),
                           ),
@@ -170,8 +255,9 @@ class AuctionHomeState extends State<AuctionHome> {
                 padding: EdgeInsets.all(8),
                 itemBuilder: (context, index) {
                   Map<String, dynamic> data = snapshot.data?[index];
-                  fetchImage(data['id_auctions']);
-                  print(data['id_auctions'].toString());
+                  // print(data['id_auctions'].toString());
+                  // print(images_data.toString());
+                  // fetchImage(data['id_auctions']);
                   double left = 0.0;
                   double top = 0.0;
                   double right = 8.0;
@@ -183,7 +269,9 @@ class AuctionHomeState extends State<AuctionHome> {
                       leading: ClipRRect(
                           borderRadius: BorderRadius.vertical(),
                           child: Image.network(
-                            'https://picsum.photos/500/500?random=${index}',
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/'
+                                +
+                                'images/product-images${images_data['image_path']}',
                             cacheHeight: 600,
                             cacheWidth: 500,
                           )
@@ -209,6 +297,67 @@ class AuctionHomeState extends State<AuctionHome> {
     );
   }
 
+  // Widget auctionList(BuildContext ctx) {
+  //   return StreamBuilder(
+  //       stream: fetchAuctionData(),
+  //       builder: (context, snapshot) {
+  //         if (snapshot.hasError) {
+  //           return const Center(
+  //             child: Text("Error."),
+  //           );
+  //         }
+  //
+  //         if (snapshot.connectionState == ConnectionState.active) {
+  //           return Center(
+  //             child: CircularProgressIndicator(),
+  //           );
+  //         }
+  //
+  //         if (snapshot.hasData) {
+  //           return ListView.builder(
+  //               itemCount: snapshot.data?.length,
+  //               padding: EdgeInsets.all(8),
+  //               itemBuilder: (context, index) {
+  //                 Map<String, dynamic> data = snapshot.data?[index];
+  //                 print(data['id_auctions'].toString());
+  //
+  //                 double left = 0.0;
+  //                 double top = 0.0;
+  //                 double right = 8.0;
+  //                 double bottom = 8.0;
+  //                 return Padding(
+  //                   padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+  //                   child: ListTile(
+  //                     onTap: () => goToDetailAuction(ctx, data),
+  //                     leading: ClipRRect(
+  //                         borderRadius: BorderRadius.vertical(),
+  //                         child: Image.network(
+  //                           'https://picsum.photos/500/500?random=${index}',
+  //                           cacheHeight: 600,
+  //                           cacheWidth: 500,
+  //                         )
+  //                     ),
+  //                     title: Text(data['name_product']),
+  //                     subtitle: Text(
+  //                         "ราคาสูงสุด ฿${data['start_price'].toString()}"),
+  //                     trailing: Text("เวลา",
+  //                       style: TextStyle(
+  //                           color: Colors.red,
+  //                           fontSize: 18
+  //                       ),),
+  //                   ),
+  //                 );
+  //               }
+  //           );
+  //         }
+  //
+  //         return const Center(
+  //           child: CircularProgressIndicator(),
+  //         );
+  //       }
+  //   );
+  // }
+
   Stream<List<dynamic>> fetchAuctionData() async* {
     await Future.delayed(Duration(seconds: 1));
     print("Start");
@@ -216,22 +365,26 @@ class AuctionHomeState extends State<AuctionHome> {
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
-    List<dynamic> data = resData['data'];
-    // print(data[2].toString());
-    yield data;
-    setState(() {});
+    List<dynamic> auctions_data = resData['data']['auctions_data'];
+    List<dynamic> images_data = resData['data']['images'];
+    yield auctions_data;
+    setState(() {
+      images_data = images_data;
+    });
     print("End");
   }
 
-  void fetchImage(dynamic id_auctions) async {
+  Stream<Map<dynamic, String>> fetchImage(dynamic id_auctions) async* {
     print("Start.Image");
-    await Future.delayed(Duration(seconds: 1));
     String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/image/${id_auctions}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
-    List<dynamic> data = resData['data'];
-    print(data[2].toString());
+    await Future.delayed(Duration(seconds: 500));
+    Map<String, dynamic> data = resData['data'];
+    print(data.runtimeType);
+    // yield data;
+    print(data.toString());
     setState(() {
       images_data = data;
     });

@@ -15,12 +15,30 @@ class AuctionController extends Controller
     public function index() {
         try{
 
+            // $auctions_list = DB::table('auctions')
+            //                     ->select('id_auctions', 'id_users', 'name_product',
+            //                             'shipping_cost', 'start_price',
+            //                             'start_date_time', 'end_date_time')
+            //                     ->orderByRaw('end_date_time')
+            //                     ->get();
+            // $inages = DB::table('images')
+            //                     ->select('id_auctions', 'image_path')
+            //                     ->orderByRaw('id_auctions')
+            //                     ->get();
+            // $data = [
+            //     'auctions_data' => $auctions_list,
+            //     'images' => $inages
+            // ];
+
             $auctions_list = DB::table('auctions')
-                                ->select('id_auctions', 'id_users', 'name_product',
-                                        'shipping_cost', 'start_price',
-                                        'start_date_time', 'end_date_time')
-                                ->orderByRaw('end_date_time')
-                                ->get();
+                    ->select('images.id_auctions', 'images.id_images',
+                            'images.image_path', 'auctions.shipping_cost',
+                            'auctions.start_price', 'auctions.start_date_time',
+                            'auctions.end_date_time')
+                    ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
+                    ->orderByRaw('id_auctions')
+                    ->get();
+
 
 
             return response()->json([
