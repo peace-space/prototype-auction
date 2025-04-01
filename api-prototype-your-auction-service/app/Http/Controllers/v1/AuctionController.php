@@ -16,7 +16,7 @@ class AuctionController extends Controller
         try{
 
             $auctions_list = DB::table('auctions')
-                                ->select('id_users', 'name_product',
+                                ->select('id_auctions', 'id_users', 'name_product',
                                         'shipping_cost', 'start_price',
                                         'start_date_time', 'end_date_time')
                                 ->orderByRaw('end_date_time')
