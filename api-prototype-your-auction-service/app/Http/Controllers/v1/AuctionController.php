@@ -16,6 +16,7 @@ class AuctionController extends Controller
         try{
             $auctions_list = DB::table('auctions')
                     ->select('auctions.id_auctions', 'images.id_images',
+                            'name_product',
                             'images.image_path_1',
                             'auctions.shipping_cost',
                             'auctions.start_price',
@@ -47,7 +48,11 @@ class AuctionController extends Controller
     public function productDetail($id_auctions) {
         try{
             $detail_product = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'images.id_images',
+                    ->select('auctions.id_auctions',
+                            'images.id_images',
+                            'users.name',
+                            'auctions.name_product',
+                            'auctions.detail_product',
                             'images.image_path_1',
                             'images.image_path_2',
                             'images.image_path_3',
@@ -63,13 +68,53 @@ class AuctionController extends Controller
                             'auctions.end_date_time',
                             'max_price')
                     ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                    ->join('users', 'users.id_users', '=', 'auctions.id_users')
+                    ->where('id_auctions', '=', $id_auctions)
                     ->orderByRaw('id_auctions')
                     ->get();
+
+                // return $detail_product->first();
+
+
+            $counter = DB::raw('count(id_users) as bids_counter');
+            $bids_counter = DB::table('bids')
+                                ->select($counter)
+                                ->where('id_auctions', '=', $id_auctions)
+                                ->get();
+            // return $bids_counter;
+
+            $images = [
+                $detail_product->first()->image_path_1,
+                $detail_product->first()->image_path_2,
+                $detail_product->first()->image_path_3,
+                $detail_product->first()->image_path_4,
+                $detail_product->first()->image_path_5,
+                $detail_product->first()->image_path_6,
+                $detail_product->first()->image_path_7,
+                $detail_product->first()->image_path_8,
+                $detail_product->first()->image_path_9,
+                $detail_product->first()->image_path_10,
+            ];
+
+            $data = [
+                "id_auctions" => $detail_product->first()->id_auctions,
+                "id_images"=> $detail_product->first()->id_images,
+                "name" => $detail_product->first()->name,
+                "name_product" => $detail_product->first()->name_product,
+                "detail_product" => $detail_product->first()->detail_product,
+                "images" => $images,
+                "shipping_cost"=> $detail_product->first()->shipping_cost,
+                "start_price"=> $detail_product->first()->start_price,
+                "start_date_time"=> $detail_product->first()->start_date_time,
+                "end_date_time"=> $detail_product->first()->end_date_time,
+                "max_price"=> $detail_product->first()->max_price,
+                "bids_count" => $bids_counter->first()->bids_counter
+            ];
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $detail_product
+                'data' => $data
             ], 200);
 
         } catch (Exception $e) {
