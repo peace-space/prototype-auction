@@ -14,32 +14,20 @@ class AuctionController extends Controller
 {
     public function index() {
         try{
-
-            // $auctions_list = DB::table('auctions')
-            //                     ->select('id_auctions', 'id_users', 'name_product',
-            //                             'shipping_cost', 'start_price',
-            //                             'start_date_time', 'end_date_time')
-            //                     ->orderByRaw('end_date_time')
-            //                     ->get();
-            // $inages = DB::table('images')
-            //                     ->select('id_auctions', 'image_path')
-            //                     ->orderByRaw('id_auctions')
-            //                     ->get();
-            // $data = [
-            //     'auctions_data' => $auctions_list,
-            //     'images' => $inages
-            // ];
-
             $auctions_list = DB::table('auctions')
-                    ->select('images.id_auctions', 'images.id_images',
-                            'images.image_path', 'auctions.shipping_cost',
-                            'auctions.start_price', 'auctions.start_date_time',
-                            'auctions.end_date_time')
-                    ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
+                    ->select('auctions.id_auctions', 'images.id_images',
+                            'images.image_path_1',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.start_date_time',
+                            'auctions.end_date_time',
+                            'max_price',
+                            )
+                    ->join('images', function(JoinClause $join){
+                        $join->on('auctions.id_images', '=', 'images.id_images');
+                    })
                     ->orderByRaw('id_auctions')
                     ->get();
-
-
 
             return response()->json([
                 'status' => 1,
@@ -58,17 +46,30 @@ class AuctionController extends Controller
 
     public function productDetail($id_auctions) {
         try{
-
-            $test = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'auctions.name_product', 'images.image_path')
-                    ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
-                    ->where('images.id_auctions', '=', $id_auctions)
+            $detail_product = DB::table('auctions')
+                    ->select('auctions.id_auctions', 'images.id_images',
+                            'images.image_path_1',
+                            'images.image_path_2',
+                            'images.image_path_3',
+                            'images.image_path_4',
+                            'images.image_path_5',
+                            'images.image_path_6',
+                            'images.image_path_7',
+                            'images.image_path_8',
+                            'images.image_path_9',
+                            'images.image_path_10',
+                            'auctions.shipping_cost',
+                            'auctions.start_price', 'auctions.start_date_time',
+                            'auctions.end_date_time',
+                            'max_price')
+                    ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                    ->orderByRaw('id_auctions')
                     ->get();
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $test
+                'data' => $detail_product
             ], 200);
 
         } catch (Exception $e) {

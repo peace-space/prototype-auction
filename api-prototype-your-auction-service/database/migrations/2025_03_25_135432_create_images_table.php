@@ -13,12 +13,18 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id('id_images');
-            $table->foreignId('id_auctions');
-            $table->string('image_path');
+            $table->string('image_path_1')->nullable();
+            $table->string('image_path_2')->nullable();
+            $table->string('image_path_3')->nullable();
+            $table->string('image_path_4')->nullable();
+            $table->string('image_path_5')->nullable();
+            $table->string('image_path_6')->nullable();
+            $table->string('image_path_7')->nullable();
+            $table->string('image_path_8')->nullable();
+            $table->string('image_path_9')->nullable();
+            $table->string('image_path_10')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-
-            $table->foreign('id_auctions')->references('id_auctions')->on('auctions');
         });
     }
 

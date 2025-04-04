@@ -9,17 +9,17 @@ use Illuminate\Support\Facades\DB;
 class ImageController extends Controller
 {
     public function index() {
-        // $images = DB::table('images')
-        //             ->select('id_images', 'id_auctions', 'image_path')
-        //             ->get();
-
         $images = DB::table('images')
-                    ->select('images.id_images', 'images.id_auctions',
-                            'images.image_path', 'auctions.shipping_cost',
-                            'auctions.start_price', 'auctions.start_date_time',
-                            'auctions.end_date_time')
-                    ->leftJoin('auctions', 'images.id_auctions', '=', 'auctions.id_auctions')
+                    ->select('*')
                     ->get();
+
+        // $images = DB::table('images')
+        //             ->select('images.id_images', 'images.id_auctions',
+        //                     'images.image_path', 'auctions.shipping_cost',
+        //                     'auctions.start_price', 'auctions.start_date_time',
+        //                     'auctions.end_date_time')
+        //             ->leftJoin('auctions', 'images.id_auctions', '=', 'auctions.id_auctions')
+        //             ->get();
 
         return $images;
     }
