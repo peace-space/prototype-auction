@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
@@ -83,18 +84,40 @@ class AuctionController extends Controller
                                 ->get();
             // return $bids_counter;
 
-            $images = [
-                $detail_product->first()->image_path_1,
-                $detail_product->first()->image_path_2,
-                $detail_product->first()->image_path_3,
-                $detail_product->first()->image_path_4,
-                $detail_product->first()->image_path_5,
-                $detail_product->first()->image_path_6,
-                $detail_product->first()->image_path_7,
-                $detail_product->first()->image_path_8,
-                $detail_product->first()->image_path_9,
-                $detail_product->first()->image_path_10,
-            ];
+            $images = [];
+
+            if ($detail_product->first()->image_path_1 != null) {
+                array_push($images, $detail_product->first()->image_path_1);
+            }
+            if ($detail_product->first()->image_path_1 != null) {
+                array_push($images, $detail_product->first()->image_path_2);
+            }
+            if ($detail_product->first()->image_path_3 != null) {
+                array_push($images, $detail_product->first()->image_path_3);
+            }
+            if ($detail_product->first()->image_path_4 != null) {
+                array_push($images, $detail_product->first()->image_path_4);
+            }
+            if ($detail_product->first()->image_path_5 != null) {
+                array_push($images, $detail_product->first()->image_path_5);
+            }
+            if ($detail_product->first()->image_path_6 != null) {
+                array_push($images, $detail_product->first()->image_path_6);
+            }
+            if ($detail_product->first()->image_path_7 != null) {
+                array_push($images, $detail_product->first()->image_path_7);
+            }
+            if ($detail_product->first()->image_path_8 != null) {
+                array_push($images, $detail_product->first()->image_path_8);
+            }
+            if ($detail_product->first()->image_path_9 != null) {
+                array_push($images, $detail_product->first()->image_path_9);
+            }
+            if ($detail_product->first()->image_path_10 != null) {
+                array_push($images, $detail_product->first()->image_path_10);
+            }
+
+            // return $images[4];
 
             $data = [
                 "id_auctions" => $detail_product->first()->id_auctions,
@@ -207,6 +230,33 @@ class AuctionController extends Controller
                 'data' => $e
             ]);
         }
+    }
+
+    public function test($id_auctions) {
+        // $data = [
+        //     'id_users' => 8,
+        //     'name_product' => 'gg',
+        //     'detail_product' => 'bmw',
+        //     'shipping_cost' => 10,
+        //     'start_price' => 10,
+        //     'start_date_time' => "2015-09-11 03:23:17",
+        //     'end_date_time' => "1992-05-09 00:48:10",
+        // ];
+
+        $data = [
+            'a', 'b', 'c', 'd'
+        ];
+
+        array_push($data, 'e');
+        array_push($data, 'f');
+        array_push($data, 1);
+        array_push($data, 2);
+        array_push($data, 3);
+        // $test = array_push($data, '2');
+        // $test = array_push($data, '3');
+        // $test = array_push($data, '4');
+
+        return $data;
     }
 
 
