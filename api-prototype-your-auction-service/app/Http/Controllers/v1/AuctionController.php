@@ -89,7 +89,7 @@ class AuctionController extends Controller
             if ($detail_product->first()->image_path_1 != null) {
                 array_push($images, $detail_product->first()->image_path_1);
             }
-            if ($detail_product->first()->image_path_1 != null) {
+            if ($detail_product->first()->image_path_2 != null) {
                 array_push($images, $detail_product->first()->image_path_2);
             }
             if ($detail_product->first()->image_path_3 != null) {

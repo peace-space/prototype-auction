@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddProduct extends StatefulWidget {
   State<AddProduct> createState() {
@@ -10,164 +7,154 @@ class AddProduct extends StatefulWidget {
 }
 
 class AddProductState extends State<AddProduct> {
-  File? _selectedImage;
-  List<File?> data = [];
-  
-
-  late List<File>? _selectImageData;
+  var _startDate = TextEditingController();
+  DateTime now = DateTime.now();
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('เพิ่มสินค้า')),
+        appBar: AppBar(
+          title: Text("เพิ่มสินค้า"),
+        ),
       body: ListView(
-        padding: EdgeInsets.all(20),
         children: [
-          Container(
-            height: 250,
-            alignment: Alignment.center,
-            width: double.infinity,
-            color: Colors.lightBlue,
-            child: showImage(),
-          ),
-          // showImage(),
-          Container(
-            height: 500,
-            width: double.infinity,
-            color: Colors.red,
-            child: ListView(
-              padding: EdgeInsets.all(20),
+          Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
               children: [
+                showImage(),
+                SizedBox(
+                  height: 8,
+                ),
                 nameProduct(),
-                nameProduct(),
-                startPriceProduct(),
-                closeDateTimeAuction(),
-                imageProduct(),
-                SizedBox(height: 10),
+                detialProduct(),
+                shippingCost(),
+                startPrice(),
+                startDateTime(),
+                endDateTime(),
                 openAuctionButton(),
-                SizedBox(height: 300),
-              ],
-            ),
-          )
-        ],
-      )
-    );
-  }
-
-  Widget nameProduct() {
-    return TextField(decoration: InputDecoration(hintText: "ชื่อสินค้า"));
-  }
-
-  Widget detailProduct() {
-    return TextField(decoration: InputDecoration(hintText: "รายละเอียดสินค้า"));
-  }
-
-  Widget startPriceProduct() {
-    return TextField(decoration: InputDecoration(hintText: "ราคาเริ่มต้น"));
-  }
-
-  Widget closeDateTimeAuction() {
-    return TextField(decoration: InputDecoration(hintText: "วันเวลาปิดประมูล"));
-  }
-
-  Widget imageProduct() {
-    return Column(
-      children: [
-        ElevatedButton(
-          onPressed: () => {selectImage()},
-          child: Text("เพิ่มรูป"),
-        ),
-        ElevatedButton(
-          onPressed: () => {deleteSelectImage()},
-          child: Text("ลบ"),
-        ),
-      ],
-    );
-  }
-
-  Widget openAuctionButton() {
-    return ElevatedButton(
-      onPressed: () => {selectImage()},
-      child: Text("เปิดประมูล"),
-    );
-  }
-
-  Future<void> selectImage() async {
-    final ImagePicker picker = ImagePicker();
-    final response = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (response == null) {
-      return;
-    }
-    setState(() {
-      data.add(File(response!.path));
-    });
-  }
-
-  void deleteSelectImage() {
-    setState(() {
-      data.removeAt(0);
-    });
-  }
-
-  Widget showImage() {
-    double left = 0.0;
-    double top = 8.0;
-    double right = 0.0;
-    double bottom = 0.0;
-    return StreamBuilder(
-      stream: null,
-      builder: (context, snapshot) {
-        return GridTile(
-          header: GridTileBar(
-            subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () =>
+                Text(now.hour.toString() + "."
+                    + now.minute.toString() + "."
+                    + now.second.toString() + ":"
+                    + now.day.toString() + "-"
+                    + now.month.toString() + "-"
+                    + now.year.toString()),
+                ElevatedButton(
+                  onPressed: () =>
                   {
-                    deleteSelectImage()
+                    setState(() {
+                      now = DateTime.now();
+                    })
                   },
-                  child: Icon(Icons.delete),
+                  child: Text("วันเวลาปัจจุบัน"),
                 )
               ],
             ),
           ),
-          child: (data == null)
-              ? Image.network(
-            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/r8mNaVcgLItF3Y6Cm166JrbboAfbLMl2ert3znHL.png',
-            fit: BoxFit.cover,)
-              : Image.file(data[0]!),
-        );
-      },
+        ],
+      )
+    );
+  }
+  Widget showImage() {
+    return SizedBox(
+        height: 200,
+        width: 500,
+        child: GridTile(
+          child: Image.network(
+            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/car-001.jpg',
+            fit: BoxFit.cover,),
+          header: GridTileBar(
+              title: Row(
+              children: [
+                InkWell(
+                  child: Icon(Icons.add_a_photo_outlined, color: Colors.white,),
+                ),
+              ],
+            ),
+              trailing: Row(
+                children: [
+                  InkWell(
+                    child: Icon(Icons.clear_outlined, color: Colors.white,),
+                  ),
+                ],
+              )
+          ),
+        )
     );
   }
 
-  // Widget showImage() {
-  //   double left = 0.0;
-  //   double top = 8.0;
-  //   double right = 0.0;
-  //   double bottom = 0.0;
-  //   return StreamBuilder(
-  //     stream: null,
-  //     builder: (context, snapshot) {
-  //       return Container(
-  //           color: Colors.red,
-  //           width: 100,
-  //           height: 400,
-  //           child: ListView.builder(
-  //             itemCount: data.length,
-  //             itemBuilder: (context, index) {
-  //               return Padding(
-  //                 padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-  //                 child: (data == null)
-  //                     ? Image.asset('image/temp.png')
-  //                     : Image.file(data[index]!),
-  //               );
-  //             },
-  //           )
-  //       );
-  //     },
-  //   );
-  // }
+  Widget nameProduct() {
+    return TextField(
+      onChanged: (value) => {},
+      decoration: InputDecoration(
+          hintText: "ชื่อสินค้า"
+      ),
+    );
+  }
 
-  Future<void> getLostData() async {}
+  Widget detialProduct() {
+    return TextField(
+      decoration: InputDecoration(
+          hintText: "รายละเอียดสินค้า"
+      ),
+    );
+  }
+
+  Widget shippingCost() {
+    return TextField(
+      decoration: InputDecoration(
+          hintText: "ค่าจัดส่งสินค้า"
+      ),
+    );
+  }
+
+  Widget startPrice() {
+    return TextField(
+      decoration: InputDecoration(
+          hintText: "ราคาเริ่มต้น"
+      ),
+    );
+  }
+
+  Widget startDateTime() {
+    return TextField(
+      controller: _startDate,
+      onTap: () =>
+      {
+        showDateTime(),
+      },
+      decoration: InputDecoration(
+          hintText: "เวลาเปิดประมูล"
+      ),
+    );
+  }
+
+  Widget endDateTime() {
+    return Text("เวลาปิดประมูล");
+  }
+
+  Widget openAuctionButton() {
+    return ElevatedButton(
+        onPressed: () => {},
+        child: Text("data")
+    );
+  }
+
+  Future<DateTime?> showDateTime() {
+    return showDatePicker(
+        context: context,
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(Duration(days: 90)),
+        initialDate: DateTime.now(),
+        locale: Locale('en')
+    ).then((date) {
+      if (date != null) {
+        setState(() {
+          int day = date.day;
+          int month = date.month;
+          int year = date.year;
+          _startDate.text = '$day-$month-$year';
+        });
+      }
+    });
+  }
 }
