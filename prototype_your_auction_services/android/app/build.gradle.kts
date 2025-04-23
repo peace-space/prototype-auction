@@ -9,6 +9,7 @@ android {
     namespace = "com.example.prototype_your_auction_services"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
+//    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

@@ -21,8 +21,8 @@ class UserListState extends State<UserList> {
   // }
 
   Widget build(BuildContext context) {
-    bool _searchMode = false;
-    var _searchCtrl = TextEditingController();
+    // bool _searchMode = false;
+    // var _searchCtrl = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(title: Text("รายชื่อผู้ใช้งาน"), actions: [buttSearch()]),

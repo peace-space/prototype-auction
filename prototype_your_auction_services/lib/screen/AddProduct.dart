@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
 class AddProduct extends StatefulWidget {
@@ -19,6 +20,11 @@ class AddProductState extends State<AddProduct> {
   File? imageData;
   int locationImage = 0;
   List<File?> data = [];
+
+  var _nameProduct = TextEditingController();
+  var _detialProduct = TextEditingController();
+  var _shippingCost = TextEditingController();
+  var _startPrice = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,9 +111,17 @@ class AddProductState extends State<AddProduct> {
             SizedBox(
                 child: GridTile(
                   child: (data.length == 0) ?
-                  Image.network(
-                    'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/car-001.jpg',
-                    fit: BoxFit.fill, width: 350, height: 300,) :
+                  Container(
+                    // color: Colors.green,
+                    alignment: Alignment.center,
+                    height: 300,
+                    width: 350,
+                    child: Text("ไม่มีรูปภาพ"),
+                  )
+                  // Image.network(
+                  //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/car-001.jpg',
+                  //   fit: BoxFit.fill, width: 350, height: 300,) 
+                      :
                   Image.file(data[index]!,
                       fit: BoxFit.fill, width: 350, height: 300),
                 )
@@ -118,7 +132,7 @@ class AddProductState extends State<AddProduct> {
 
   Widget nameProduct() {
     return TextField(
-      onChanged: (value) => {},
+      controller: _nameProduct,
       decoration: InputDecoration(
           hintText: "ชื่อสินค้า*"
       ),
@@ -128,7 +142,7 @@ class AddProductState extends State<AddProduct> {
   Widget detialProduct() {
     return TextField(
       maxLines: 5,
-      controller: TextEditingController(),
+      controller: _detialProduct,
       decoration: InputDecoration(
         hintText: "รายละเอียดสินค้า*",
       ),
@@ -143,6 +157,7 @@ class AddProductState extends State<AddProduct> {
 
   Widget shippingCost() {
     return TextField(
+      controller: _shippingCost,
       decoration: InputDecoration(
           hintText: "ค่าจัดส่งสินค้า*"
       ),
@@ -151,6 +166,7 @@ class AddProductState extends State<AddProduct> {
 
   Widget startPrice() {
     return TextField(
+      controller: _startPrice,
       decoration: InputDecoration(
           hintText: "ราคาเริ่มต้น*"
       ),
@@ -159,7 +175,10 @@ class AddProductState extends State<AddProduct> {
 
   Widget openAuctionButton() {
     return ElevatedButton(
-        onPressed: () => {},
+        onPressed: () =>
+        {
+          onSaveProduct()
+        },
         child: Text("เปิดประมูล")
     );
   }
@@ -442,6 +461,58 @@ class AddProductState extends State<AddProduct> {
         color: Colors.lightBlueAccent,
         fontWeight: FontWeight.bold
     );
+  }
+
+  // void onSaveProduct() async {
+  //   print("StartSaveProduct");
+  //   print(await http.MultipartFile.fromBytes('images', File(imageData!.path).readAsBytesSync(), filename: imageData!.path));
+  //   // Map<String, dynamic> body = {
+  //   //   'name_product' : _nameProduct.text,
+  //   //   'detail_product' : _detialProduct.text,
+  //   //   'start_price' : _startPrice.text,
+  //   //   'start_date_time' : _startDate + " " + _startTime,
+  //   //   'end_date_time' : _endDate + " " + _endTime,
+  //   //   'images' : await http.MultipartFile.fromBytes('images', File(imageData!.path).readAsBytesSync(), filename: imageData!.path)
+  //   // };
+  //   // print(body.toString());
+  //   // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+  //   // final uri = Uri.parse(url);
+  //   // final res = await http.post(
+  //   //     uri,
+  //   //     headers: {"Content-Type": "application/json"},
+  //   //     body: jsonEncode(body)
+  //   // );
+  //
+  //   // if (res.statusCode == 201) {
+  //   //
+  //   // }
+  //   print("EndSaveProduct");
+  // }
+
+  // Future<void> uploadImage() async {
+  Future<void> onSaveProduct() async {
+    var stream = new http.ByteStream(imageData!.openRead());
+    stream.cast();
+
+    var length = await imageData!.length();
+
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+    var uri = Uri.parse(url);
+    var request = new http.MultipartRequest('POST', uri);
+
+    request.fields['title'] = "Static title";
+
+    var multiport = new http.MultipartFile('image', stream, length);
+
+    request.files.add(multiport);
+
+    var response = await request.send();
+
+    if (response.statusCode == 201) {
+      print("Successfull. +++++++++++++++++++++++");
+    } else {
+      print("false.------------------------------------");
+    }
   }
 
 }

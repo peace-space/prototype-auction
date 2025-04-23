@@ -113,7 +113,7 @@ class AuctionHomeState extends State<AuctionHome> {
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(15)),
                                 child: Image.network(
-                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/'
+                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
                                       +
                                       '${data['image_path_1']}',
                                   fit: BoxFit.cover,)
@@ -185,9 +185,9 @@ class AuctionHomeState extends State<AuctionHome> {
                     child: ListTile(
                       onTap: () => goToDetailAuction(ctx, data),
                       leading: ClipRRect(
-                          borderRadius: BorderRadius.vertical(),
+                        // borderRadius: BorderRadius.vertical(),
                           child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/'
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
                                 +
                                 '${data['image_path_1']}',
                             cacheHeight: 600,
