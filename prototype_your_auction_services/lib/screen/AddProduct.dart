@@ -558,16 +558,27 @@ class AddProductState extends State<AddProduct> {
   Future<void> onSaveProduct() async {
     print("onSaveStart");
 
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
     var uri = Uri.parse(url);
     var request = http.MultipartRequest('POST', uri);
 
-    var stream = File(imageData!.path).readAsBytesSync();
+    // var stream = File(imageData!.path).readAsBytesSync();
+    //
+    // var multiport = http.MultipartFile.fromBytes(
+    //     'image', stream, filename: imageData!.path);
 
-    var multiport = http.MultipartFile.fromBytes(
-        'image', stream, filename: imageData!.path);
+    List<dynamic> stream = [];
+    List<dynamic> multiport = [];
 
-    request.files.add(multiport);
+    for (int i = 0; i <= 0; i++) {
+      stream.add(File(data[i]!.path).readAsBytesSync());
+
+      multiport.add(http.MultipartFile.fromBytes(
+          'image', stream[i], filename: data[i]!.path));
+      request.files.add(multiport[i]);
+    }
+
 
     request.fields['id_users'] = ShareData.logedIn.toString();
     request.fields['name_product'] = "NewProduct";
