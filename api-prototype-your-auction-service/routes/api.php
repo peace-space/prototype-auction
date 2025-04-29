@@ -36,7 +36,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
-    Route::get('/test/{id_auctions}', [AuctionController::class, 'test']);
+    Route::get('/test', [AuctionController::class, 'test']);
 
     // Route::get('/test', [EmailController::class, 'index']);
     Route::get('/image', [ImageController::class, 'index']);
