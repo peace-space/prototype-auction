@@ -29,6 +29,10 @@ class AuctionHomeState extends State<AuctionHome> {
   }
 
   Widget build(BuildContext context) {
+    double left = 8.0;
+    double top = 0.0;
+    double right = 8.0;
+    double bottom = 0.0;
     return Scaffold(
       appBar: AppBar(
         title: Text("Home: ${loginStatus}"),
@@ -38,15 +42,15 @@ class AuctionHomeState extends State<AuctionHome> {
           Container(
             //color: Colors.lightBlueAccent,
             width: double.infinity,
-            margin: EdgeInsets.fromLTRB(8, 0, 8, 0),
+            margin: EdgeInsets.fromLTRB(left, top, right, bottom),
             alignment: Alignment.topRight,
             height: 23,
             child: changeDisplayButton(context),
           ),
-          SizedBox(width: 10,),
+          SizedBox(height: 3,),
           Expanded(
               child: displayer(context)
-          )
+          ),
         ],
       ),
       drawer: createDrawer(context),
@@ -109,7 +113,7 @@ class AuctionHomeState extends State<AuctionHome> {
                                 borderRadius: BorderRadius.vertical(
                                     top: Radius.circular(15)),
                                 child: Image.network(
-                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/'
+                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
                                       +
                                       '${data['image_path_1']}',
                                   fit: BoxFit.cover,)
@@ -120,7 +124,7 @@ class AuctionHomeState extends State<AuctionHome> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                // Text(data['name_product']),
+                                Text(data['name_product']),
                                 SizedBox(height: 5,),
                                 Text("ราคาสูงสุด ฿${data['start_price']
                                     .toString()}"),
@@ -181,9 +185,9 @@ class AuctionHomeState extends State<AuctionHome> {
                     child: ListTile(
                       onTap: () => goToDetailAuction(ctx, data),
                       leading: ClipRRect(
-                          borderRadius: BorderRadius.vertical(),
+                        // borderRadius: BorderRadius.vertical(),
                           child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/'
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
                                 +
                                 '${data['image_path_1']}',
                             cacheHeight: 600,

@@ -36,11 +36,10 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
+    Route::post('/test/{id_auctions}', [AuctionController::class, 'test']);
 
-    // Route::get('/test', [EmailController::class, 'index']);
     Route::get('/image', [ImageController::class, 'index']);
-    Route::get('/image/{id_auctions}', [ImageController::class, 'oneImage']);
+    Route::get('/image/{id_auctions}&{index}', [ImageController::class, 'oneImage']);
 
     Route::get('/high-bids/{id}', [BidController::class, 'highBids']);
-
 });

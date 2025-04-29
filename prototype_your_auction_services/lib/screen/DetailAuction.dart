@@ -85,17 +85,6 @@ class DetailAuctionState extends State<DetailAuction> {
                 onBit(),
                 SizedBox(height: 8,),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "ชื่อสินค้า: ",
-                      style: headText(),),
-                    Text(
-                      "${snapshot.data!['name_product']}",
-                      style: defaultText(),)
-                  ],
-                ),
-                Row(
                   children: [
                     Text(
                         "ผู้เปิดประมูล: ",
@@ -105,6 +94,17 @@ class DetailAuctionState extends State<DetailAuction> {
                       "${snapshot.data!['name']}",
                       style: defaultText(),
                     )
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "ชื่อสินค้า: ",
+                      style: headText(),),
+                    Text(
+                      "${snapshot.data!['name_product']}",
+                      style: defaultText(),)
                   ],
                 ),
                 Row(
