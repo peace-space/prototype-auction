@@ -164,100 +164,578 @@ class AuctionController extends Controller
 
     public function createProduct(Request $request) {
         try {
-            $request->validate([
-                'image' => 'required | image | mimes:png, jpg, jpeh, webp'
-            ]);
+<<<<<<< HEAD
+<<<<<<< HEAD
+            if(
+                $request->id_users != null
+                && $request->name_product != ''
+                && $request->detail_product != ''
+                && $request->start_price != ''
+                && $request->start_date_time != ''
+                && $request->end_date_time != ''
+                && $request->max_price != ''
+            ) {
+                // $request->validate([
+                //     // 'image_1' => 'nullable | required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_2' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_3' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_4' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_5' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_6' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_7' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_8' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_9' => 'required | image | mimes:png, jpg, jpeh, webp',
+                //     // 'image_10' => 'required | image | mimes:png, jpg, jpeh, webp',
+                // ]);
 
-            $image_name = Storage::disk('public')->put('images/product-images', $request->image);
+                // $image_name = Storage::disk('public')->put('images/product-images', $request->image_1);
 
-            $path = Storage::url($image_name);
+                // $path = Storage::url($image_name);
+                // return $request->image_1;
+                if ($request->image_1 != null) {
+                    if ($request->image_1 != null) {
+                        $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
+                        $image_path_1 = Storage::url($image_name_1);
+                    } else {
+                        $image_path_1 = null;
+                    }
 
-            $data = [
-                'id_users' => 8,
-                'name_product' => 'gg',
-                'detail_product' => 'bmw',
-                'shipping_cost' => 10,
-                'start_price' => 10,
-                'start_date_time' => "2015-09-11 03:23:17",
-                'end_date_time' => "1992-05-09 00:48:10",
+                    if ($request->image_2 != null) {
+                        $image_name_2 = Storage::disk('public')->put('images/product-images', $request->image_2);
+                        $image_path_2 = Storage::url($image_name_2);
+                    } else {
+                        $image_path_2 = null;
+                    }
+
+                    if ($request->image_3 != null) {
+                        $image_name_3 = Storage::disk('public')->put('images/product-images', $request->image_3);
+                        $image_path_3 = Storage::url($image_name_3);
+                    } else {
+                        $image_path_3 = null;
+                    }
+
+                    if ($request->image_4 != null) {
+                        $image_name_4 = Storage::disk('public')->put('images/product-images', $request->image_4);
+                        $image_path_4 = Storage::url($image_name_4);
+                    } else {
+                        $image_path_4 = null;
+                    }
+
+                    if ($request->image_5 != null) {
+                        $image_name_5 = Storage::disk('public')->put('images/product-images', $request->image_5);
+                        $image_path_5 = Storage::url($image_name_5);
+                    } else {
+                        $image_path_5 = null;
+                    }
+
+                    if ($request->image_6 != null) {
+                        $image_name_6 = Storage::disk('public')->put('images/product-images', $request->image_6);
+                        $image_path_6 = Storage::url($image_name_6);
+                    } else {
+                        $image_path_6 = null;
+                    }
+
+                    if ($request->image_7 != null) {
+                        $image_name_7 = Storage::disk('public')->put('images/product-images', $request->image_7);
+                        $image_path_7 = Storage::url($image_name_7);
+                    } else {
+                        $image_path_7 = null;
+                    }
+
+                    if ($request->image_8 != null) {
+                        $image_name_8 = Storage::disk('public')->put('images/product-images', $request->image_8);
+                        $image_path_8 = Storage::url($image_name_8);
+                    } else {
+                        $image_path_8 = null;
+                    }
+
+                    if ($request->image_9 != null) {
+                        $image_name_9 = Storage::disk('public')->put('images/product-images', $request->image_9);
+                        $image_path_9 = Storage::url($image_name_9);
+                    } else {
+                        $image_path_9 = null;
+                    }
+
+                    if ($request->image_10 != null) {
+                        $image_name_10 = Storage::disk('public')->put('images/product-images', $request->image_10);
+                        $image_path_10 = Storage::url($image_name_10);
+                    } else {
+                        $image_path_10 = null;
+                    }
+                }
+
+                $image_model = [
+                    'image_path_1' => $image_path_1,
+                    'image_path_2' => $image_path_2,
+                    'image_path_3' => $image_path_3,
+                    'image_path_4' => $image_path_4,
+                    'image_path_5' => $image_path_5,
+                    'image_path_6' => $image_path_6,
+                    'image_path_7' => $image_path_7,
+                    'image_path_8' => $image_path_8,
+                    'image_path_9' => $image_path_9,
+                    'image_path_10' => $image_path_10,
+                ];
+
+                $save_images = DB::table('images')
+                                    ->insert($image_model);
+
+                $last_time_image = DB::table('images')
+                                    ->select(DB::raw('MAX(created_at) as last_time'))
+                                    ->get();
+
+                $last_id_image = DB::table('images')
+                                    ->select('id_images')
+                                    ->where('created_at', '=', $last_time_image[0]->last_time)
+                                    ->get();
+
+                // return $last_id_image[0]->id_images;
+
+                $data = [
+                    // 'id_users' => $request->id_users,
+                    'id_users' => 2,
+                    'name_product' => $request->name_product,
+                    'detail_product' => $request->detail_product,
+                    'shipping_cost' => $request->shipping_cost,
+                    'start_price' => $request->start_price,
+                    'start_date_time' => $request->start_date_time,
+                    'end_date_time' => $request->end_date_time,
+                    'id_images' => $last_id_image[0]->id_images,
+                    'max_price' => $request->max_price
+                ];
+
+                $save_product = DB::table('auctions')
+                                    ->insert($data);
+
+                $last_time_auction = DB::table('auctions')
+                                ->select(DB::raw('MAX(created_at) as last_time'))
+                                ->where('id_users', '=', $data['id_users'])
+                                ->get();
+                // return $last_time_auction[0]->last_time;
+
+                $reAction = DB::table('auctions')
+                                ->select('*')
+                                ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                                // ->orderByDesc('auctions.id_auctions')
+                                // ->where('auctions.id_users', '=', $data['id_users'], '&',
+                                //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
+                                ->get();
+=======
+            // $request->validate([
+            //     // 'image_1' => 'nullable | required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_2' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_3' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_4' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_5' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_6' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_7' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_8' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_9' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_10' => 'required | image | mimes:png, jpg, jpeh, webp',
+            // ]);
+
+            // $image_name = Storage::disk('public')->put('images/product-images', $request->image_1);
+
+            // $path = Storage::url($image_name);
+            // return $request->image_1;
+            if ($request->image_1 != null) {
+                $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
+                $image_path_1 = Storage::url($image_name_1);
+            } else {
+                $image_path_1 = null;
+            }
+
+            if ($request->image_2 != null) {
+                $image_name_2 = Storage::disk('public')->put('images/product-images', $request->image_2);
+                $image_path_2 = Storage::url($image_name_2);
+            } else {
+                $image_path_2 = null;
+            }
+
+            if ($request->image_3 != null) {
+                $image_name_3 = Storage::disk('public')->put('images/product-images', $request->image_3);
+                $image_path_3 = Storage::url($image_name_3);
+            } else {
+                $image_path_3 = null;
+            }
+
+            if ($request->image_4 != null) {
+                $image_name_4 = Storage::disk('public')->put('images/product-images', $request->image_4);
+                $image_path_4 = Storage::url($image_name_4);
+            } else {
+                $image_path_4 = null;
+            }
+
+            if ($request->image_5 != null) {
+                $image_name_5 = Storage::disk('public')->put('images/product-images', $request->image_5);
+                $image_path_5 = Storage::url($image_name_5);
+            } else {
+                $image_path_5 = null;
+            }
+
+            if ($request->image_6 != null) {
+                $image_name_6 = Storage::disk('public')->put('images/product-images', $request->image_6);
+                $image_path_6 = Storage::url($image_name_6);
+            } else {
+                $image_path_6 = null;
+            }
+
+            if ($request->image_7 != null) {
+                $image_name_7 = Storage::disk('public')->put('images/product-images', $request->image_7);
+                $image_path_7 = Storage::url($image_name_7);
+            } else {
+                $image_path_7 = null;
+            }
+
+            if ($request->image_8 != null) {
+                $image_name_8 = Storage::disk('public')->put('images/product-images', $request->image_8);
+                $image_path_8 = Storage::url($image_name_8);
+            } else {
+                $image_path_8 = null;
+            }
+
+            if ($request->image_9 != null) {
+                $image_name_9 = Storage::disk('public')->put('images/product-images', $request->image_9);
+                $image_path_9 = Storage::url($image_name_9);
+            } else {
+                $image_path_9 = null;
+            }
+
+            if ($request->image_10 != null) {
+                $image_name_10 = Storage::disk('public')->put('images/product-images', $request->image_10);
+                $image_path_10 = Storage::url($image_name_10);
+            } else {
+                $image_path_10 = null;
+            }
+
+            $path = 'test';
+
+            $image_model = [
+                'image_path_1' => $image_path_1,
+                'image_path_2' => $image_path_2,
+                'image_path_3' => $image_path_3,
+                'image_path_4' => $image_path_4,
+                'image_path_5' => $image_path_5,
+                'image_path_6' => $image_path_6,
+                'image_path_7' => $image_path_7,
+                'image_path_8' => $image_path_8,
+                'image_path_9' => $image_path_9,
+                'image_path_10' => $image_path_10,
             ];
 
-            DB::table('auctions')
-                    ->insert($data);
+            $save_images = DB::table('images')
+                                ->insert($image_model);
 
-            // $max = DB::raw('MAX(created_at) as last_time');
-            $max = DB::table('auctions')
+            $last_time_image = DB::table('images')
+                                ->select(DB::raw('MAX(created_at) as last_time'))
+                                ->get();
+
+            $last_id_image = DB::table('images')
+                                ->select('id_images')
+                                ->where('created_at', '=', $last_time_image[0]->last_time)
+                                ->get();
+
+            // return $last_id_image[0]->id_images;
+
+            $data = [
+                'id_users' => $request->id_users,
+                'name_product' => $request->name_product,
+                'detail_product' => $request->detail_product,
+                'shipping_cost' => $request->shipping_cost,
+                'start_price' => $request->start_price,
+                'start_date_time' => $request->start_date_time,
+                'end_date_time' => $request->end_date_time,
+                'id_images' => $last_id_image[0]->id_images,
+                'max_price' => $request->max_price
+            ];
+
+            $save_product = DB::table('auctions')
+                                ->insert($data);
+
+            $last_time_auction = DB::table('auctions')
                             ->select(DB::raw('MAX(created_at) as last_time'))
                             ->where('id_users', '=', $data['id_users'])
                             ->get();
+            // return $last_time_auction[0]->last_time;
 
-            $last_time = $max[0];
+            $reAction = DB::table('auctions')
+                            ->select('*')
+                            ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                            // ->orderByDesc('auctions.id_auctions')
+                            // ->where('auctions.id_users', '=', $data['id_users'], '&',
+                            //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
+                            ->get();
 
-            // return $last_time->last_time;
-            $last_time_data = DB::table('auctions')
-                                    ->select('id_auctions', 'name_product', )
-                                    ->where('created_at', '=', $last_time->last_time)
-                                    ->get();
-
-
-            $id_auctions_last_time = $last_time_data->first();
-            // return $id_auctions_last_time->id_auctions;
-
-            $image_model = [
-                'id_auctions' => $id_auctions_last_time->id_auctions,
-                'image_path' => $path
-            ];
-
-            DB::table('images')
-                    ->insert($image_model);
-
-            $reaction = DB::table('auctions')
-                        ->select('auctions.id_auctions', 'auctions.name_product', 'images.image_path')
-                        ->join('images', 'auctions.id_auctions', '=', 'images.id_auctions')
-                        ->where('images.id_auctions', '=', $id_auctions_last_time->id_auctions)
-                        ->get();
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $reaction
+                'data' => $reAction->last()
             ], 201);
+>>>>>>> 8af8b48dc9e9fd9408e1e8267d6205e4dc0411b1
 
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    'data' => $reAction->last()
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => "Not Data",
+                ]);
+            }
         } catch (Exception $e) {
             return response()->json([
-                'status' => 1,
+                'status' => 0,
                 'message' => "Successfully.",
                 'data' => $e
             ]);
         }
     }
 
-    public function test($id_auctions) {
-        // $data = [
-        //     'id_users' => 8,
-        //     'name_product' => 'gg',
-        //     'detail_product' => 'bmw',
-        //     'shipping_cost' => 10,
-        //     'start_price' => 10,
-        //     'start_date_time' => "2015-09-11 03:23:17",
-        //     'end_date_time' => "1992-05-09 00:48:10",
-        // ];
+<<<<<<< HEAD
+    public function test(Request $request, $id_auctions) {
+        try {
+            $request->validate([
+                'image' => 'required | image | mimes:png, jpg, jpeh, webp'
+            ]);
 
-        $data = [
-            'a', 'b', 'c', 'd'
-        ];
+            if ($request->image != null && $request->image != '') {
+                $image_name = Storage::disk('public')->put('images/product-images', $request->image);
 
-        array_push($data, 'e');
-        array_push($data, 'f');
-        array_push($data, 1);
-        array_push($data, 2);
-        array_push($data, 3);
-        // $test = array_push($data, '2');
-        // $test = array_push($data, '3');
-        // $test = array_push($data, '4');
+                $path = Storage::url($image_name);
 
-        return $data;
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => "Error.",
+                ]);
+            }
+=======
+            // $request->validate([
+            //     // 'image_1' => 'nullable | required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_2' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_3' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_4' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_5' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_6' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_7' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_8' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_9' => 'required | image | mimes:png, jpg, jpeh, webp',
+            //     // 'image_10' => 'required | image | mimes:png, jpg, jpeh, webp',
+            // ]);
+
+            // $image_name = Storage::disk('public')->put('images/product-images', $request->image_1);
+
+            // $path = Storage::url($image_name);
+            // return $request->image_1;
+            if ($request->image_1 != null) {
+                $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
+                $image_path_1 = Storage::url($image_name_1);
+            } else {
+                $image_path_1 = null;
+            }
+
+            if ($request->image_2 != null) {
+                $image_name_2 = Storage::disk('public')->put('images/product-images', $request->image_2);
+                $image_path_2 = Storage::url($image_name_2);
+            } else {
+                $image_path_2 = null;
+            }
+
+            if ($request->image_3 != null) {
+                $image_name_3 = Storage::disk('public')->put('images/product-images', $request->image_3);
+                $image_path_3 = Storage::url($image_name_3);
+            } else {
+                $image_path_3 = null;
+            }
+
+            if ($request->image_4 != null) {
+                $image_name_4 = Storage::disk('public')->put('images/product-images', $request->image_4);
+                $image_path_4 = Storage::url($image_name_4);
+            } else {
+                $image_path_4 = null;
+            }
+
+            if ($request->image_5 != null) {
+                $image_name_5 = Storage::disk('public')->put('images/product-images', $request->image_5);
+                $image_path_5 = Storage::url($image_name_5);
+            } else {
+                $image_path_5 = null;
+            }
+
+            if ($request->image_6 != null) {
+                $image_name_6 = Storage::disk('public')->put('images/product-images', $request->image_6);
+                $image_path_6 = Storage::url($image_name_6);
+            } else {
+                $image_path_6 = null;
+            }
+
+            if ($request->image_7 != null) {
+                $image_name_7 = Storage::disk('public')->put('images/product-images', $request->image_7);
+                $image_path_7 = Storage::url($image_name_7);
+            } else {
+                $image_path_7 = null;
+            }
+
+            if ($request->image_8 != null) {
+                $image_name_8 = Storage::disk('public')->put('images/product-images', $request->image_8);
+                $image_path_8 = Storage::url($image_name_8);
+            } else {
+                $image_path_8 = null;
+            }
+
+            if ($request->image_9 != null) {
+                $image_name_9 = Storage::disk('public')->put('images/product-images', $request->image_9);
+                $image_path_9 = Storage::url($image_name_9);
+            } else {
+                $image_path_9 = null;
+            }
+
+            if ($request->image_10 != null) {
+                $image_name_10 = Storage::disk('public')->put('images/product-images', $request->image_10);
+                $image_path_10 = Storage::url($image_name_10);
+            } else {
+                $image_path_10 = null;
+            }
+
+            $path = 'test';
+
+            $image_model = [
+                'image_path_1' => $image_path_1,
+                'image_path_2' => $image_path_2,
+                'image_path_3' => $image_path_3,
+                'image_path_4' => $image_path_4,
+                'image_path_5' => $image_path_5,
+                'image_path_6' => $image_path_6,
+                'image_path_7' => $image_path_7,
+                'image_path_8' => $image_path_8,
+                'image_path_9' => $image_path_9,
+                'image_path_10' => $image_path_10,
+            ];
+
+            $save_images = DB::table('images')
+                                ->insert($image_model);
+
+            $last_time_image = DB::table('images')
+                                ->select(DB::raw('MAX(created_at) as last_time'))
+                                ->get();
+
+            $last_id_image = DB::table('images')
+                                ->select('id_images')
+                                ->where('created_at', '=', $last_time_image[0]->last_time)
+                                ->get();
+
+            // return $last_id_image[0]->id_images;
+
+            $data = [
+                'id_users' => $request->id_users,
+                'name_product' => $request->name_product,
+                'detail_product' => $request->detail_product,
+                'shipping_cost' => $request->shipping_cost,
+                'start_price' => $request->start_price,
+                'start_date_time' => $request->start_date_time,
+                'end_date_time' => $request->end_date_time,
+                'id_images' => $last_id_image[0]->id_images,
+                'max_price' => $request->max_price
+            ];
+
+            $save_product = DB::table('auctions')
+                                ->insert($data);
+
+            $last_time_auction = DB::table('auctions')
+                            ->select(DB::raw('MAX(created_at) as last_time'))
+                            ->where('id_users', '=', $data['id_users'])
+                            ->get();
+            // return $last_time_auction[0]->last_time;
+
+            $reAction = DB::table('auctions')
+                            ->select('*')
+                            ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                            // ->orderByDesc('auctions.id_auctions')
+                            // ->where('auctions.id_users', '=', $data['id_users'], '&',
+                            //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
+                            ->get();
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $reAction->last()
+            ], 201);
+>>>>>>> origin/main
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Successfully.",
+                'data' => $e
+            ]);
+        }
     }
+=======
+    // public function test(Request $request) {
+    //     try {
+    //         $request->validate([
+    //             'image' => 'required | image | mimes:png, jpg, jpeh, webp'
+    //         ]);
 
+    //         $image_name = Storage::disk('public')->put('images/product-images', $request->image);
+
+    //         $path = Storage::url($image_name);
+
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => "Successfully.",
+    //             'data' => $reaction
+    //         ], 201);
+
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => "Successfully.",
+    //             'data' => $e
+    //         ]);
+    //     }
+    // }
+>>>>>>> 8af8b48dc9e9fd9408e1e8267d6205e4dc0411b1
+
+<<<<<<< HEAD
+=======
+    // public function test(Request $request) {
+    //     try {
+    //         $request->validate([
+    //             'image' => 'required | image | mimes:png, jpg, jpeh, webp'
+    //         ]);
+
+    //         $image_name = Storage::disk('public')->put('images/product-images', $request->image);
+
+    //         $path = Storage::url($image_name);
+
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => "Successfully.",
+    //             'data' => $reaction
+    //         ], 201);
+
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => "Successfully.",
+    //             'data' => $e
+    //         ]);
+    //     }
+    // }
+
+>>>>>>> origin/main
 
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class AddProduct extends StatefulWidget {
   State<AddProduct> createState() {
@@ -250,6 +251,40 @@ class AddProductState extends State<AddProduct> {
     });
   }
 
+  // Future<void> selectImage() async {
+  //   try {
+  //     int maxImageListLength = 10;
+  //
+  //     if (data.length == maxImageListLength) {
+  //       setState(() {
+  //         message = "เพิ่มรูปภาพได้สูงสุด 10 ภาพ";
+  //       });
+  //     } else {
+  //       setState(() {
+  //         message = "";
+  //       });
+  //     }
+  //
+  //     if (data.length <= maxImageListLength - 1) {
+  //       final _picker = ImagePicker();
+  //
+  //       final pickedFile = await _picker.pickImage(
+  //           source: ImageSource.gallery
+  //       );
+  //
+  //       if (pickedFile != null) {
+  //         setState(() {
+  //           imageData = File(pickedFile.path);
+  //           data.add(File(pickedFile.path));
+  //         });
+  //         print("end.aaaaa");
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print("ERROR. ${e}");
+  //   }
+  // }
+
   Future<void> selectImage() async {
     try {
       int maxImageListLength = 10;
@@ -283,6 +318,7 @@ class AddProductState extends State<AddProduct> {
       print("ERROR. ${e}");
     }
   }
+
 
   void deleteImage() {
     int maxImageListLength = 10;
@@ -490,21 +526,50 @@ class AddProductState extends State<AddProduct> {
   // }
 
   // Future<void> uploadImage() async {
-  Future<void> onSaveProduct() async {
-    var stream = new http.ByteStream(imageData!.openRead());
-    stream.cast();
+  // Future<void> onSaveProduct() async {
+  //   print("onSaveStart");
+  //   var stream = new http.ByteStream(imageData!.openRead());
+  //   stream.cast();
+  //
+  //   var length = await imageData!.length();
+  //
+  //   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+  //   var uri = Uri.parse(url);
+  //   var request = new http.MultipartRequest('POST', uri);
+  //
+  //   request.fields['title'] = "Static title";
+  //
+  //   var multiport = new http.MultipartFile('image', stream, length);
+  //
+  //   request.files.add(multiport);
+  //
+  //   var response = await request.send();
+  //
+  //   if (response.statusCode == 201) {
+  //     print("Successfull. +++++++++++++++++++++++");
+  //   } else {
+  //     print("false.------------------------------------");
+  //   }
+  //
+  //   print("onSaveEnd");
+  // }
 
-    var length = await imageData!.length();
+  Future<void> onSaveProduct() async {
+    print("onSaveStart");
 
     String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
     var uri = Uri.parse(url);
-    var request = new http.MultipartRequest('POST', uri);
+    var request = http.MultipartRequest('POST', uri);
 
-    request.fields['title'] = "Static title";
+    var stream = File(imageData!.path).readAsBytesSync();
 
-    var multiport = new http.MultipartFile('image', stream, length);
+    var multiport = http.MultipartFile.fromBytes(
+        'image', stream, filename: imageData!.path);
 
     request.files.add(multiport);
+
+    request.fields['id_users'] = ShareData.logedIn.toString();
+    request.fields['name_product'] = "NewProduct";
 
     var response = await request.send();
 
@@ -513,6 +578,8 @@ class AddProductState extends State<AddProduct> {
     } else {
       print("false.------------------------------------");
     }
+
+    print("onSaveEnd");
   }
 
 }
