@@ -340,11 +340,11 @@ class AuctionController extends Controller
         }
     }
 
-    public function test(Request $request, $id_auctions) {
+    public function test(Request $request) {
         try {
-            $request->validate([
-                'image' => 'required | image | mimes:png, jpg, jpeh, webp'
-            ]);
+            // $request->validate([
+            //     'image' => 'required | image | mimes:png, jpg, jpeh, webp'
+            // ]);
 
             if ($request->image != null && $request->image != '') {
                 $image_name = Storage::disk('public')->put('images/product-images', $request->image);
