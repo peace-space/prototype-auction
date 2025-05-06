@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class AddProduct extends StatefulWidget {
   State<AddProduct> createState() {
@@ -26,6 +26,7 @@ class AddProductState extends State<AddProduct> {
   var _detialProduct = TextEditingController();
   var _shippingCost = TextEditingController();
   var _startPrice = TextEditingController();
+  var _maxPrice = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +68,8 @@ class AddProductState extends State<AddProduct> {
                         ),
                         textStartPrice(),
                         startPrice(),
+                        textMaxPrice(),
+                        maxPrice(),
                         SizedBox(
                           height: 8,
                         ),
@@ -175,6 +178,15 @@ class AddProductState extends State<AddProduct> {
     );
   }
 
+  Widget maxPrice() {
+    return TextField(
+      controller: _maxPrice,
+      decoration: InputDecoration(
+          hintText: "ราคาสูงสุดในการประมูล*"
+      ),
+    );
+  }
+
   Widget openAuctionButton() {
     return ElevatedButton(
         onPressed: () =>
@@ -198,7 +210,7 @@ class AddProductState extends State<AddProduct> {
           int day = date.day;
           int month = date.month;
           int year = date.year;
-          _startDate = '$day-$month-$year';
+          _startDate = '$year-$month-$day';
         });
       }
     });
@@ -216,7 +228,7 @@ class AddProductState extends State<AddProduct> {
           int day = date.day;
           int month = date.month;
           int year = date.year;
-          _endDate = '$day-$month-$year';
+          _endDate = '$year-$month-$day';
         });
       }
     });
@@ -478,6 +490,17 @@ class AddProductState extends State<AddProduct> {
     );
   }
 
+  Widget textMaxPrice() {
+    return Row(
+      children: [
+        Text(
+            "ราคาสูงสุดในการประมูล",
+            style: styleText()
+        ),
+      ],
+    );
+  }
+
   TextStyle styleTextStartDateTime() {
     return TextStyle(
       fontSize: 18,
@@ -500,35 +523,41 @@ class AddProductState extends State<AddProduct> {
     );
   }
 
-  void onSaveProduct() async {
-    print("StartSaveProduct");
-    print(await http.MultipartFile.fromBytes(
-        'images', File(imageData!.path).readAsBytesSync(),
-        filename: imageData!.path));
-    Map<String, dynamic> body = {
-      'name_product': _nameProduct.text,
-      'detail_product': _detialProduct.text,
-      'start_price': _startPrice.text,
-      'start_date_time': _startDate + " " + _startTime,
-      'end_date_time': _endDate + " " + _endTime,
-      'image_1': http.MultipartFile.fromBytes(
-          'image_1', File(imageData!.path).readAsBytesSync(),
-          filename: imageData!.path)
-    };
-    print(body.toString());
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-    final uri = Uri.parse(url);
-    final res = await http.post(
-        uri,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(body)
-    );
-
-    if (res.statusCode == 201) {
-      print('True');
-    }
-    print("EndSaveProduct");
-  }
+  // Future<void> onSaveProduct() async {
+  //   print("StartSaveProduct");
+  //   // print(await http.MultipartFile.fromBytes(
+  //   //     'images', File(imageData!.path).readAsBytesSync(),
+  //   //     filename: imageData!.path));
+  //
+  //   Map<String, dynamic> body = {
+  //     'id_users': ShareData.logedIn,
+  //     'name_product': _nameProduct.text,
+  //     'detail_product': _detialProduct.text,
+  //     'start_price': _startPrice.text,
+  //     'shipping_cost': _shippingCost.text,
+  //     'start_date_time': _startDate + " " + _startTime,
+  //     'end_date_time': _endDate + " " + _endTime,
+  //     'max_price': _maxPrice.text,
+  //   };
+  //
+  //   http.MultipartFile.fromBytes(
+  //       'image_1', File(imageData!.path).readAsBytesSync(),
+  //       filename: imageData!.path);
+  //
+  //   print(body.toString());
+  //   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+  //   final uri = Uri.parse(url);
+  //   final res = await http.post(
+  //       uri,
+  //       headers: {"Content-Type": "application/json"},
+  //       body: jsonEncode(body)
+  //   );
+  //
+  //   if (res.statusCode == 201) {
+  //     print('True');
+  //   }
+  //   print("EndSaveProduct");
+  // }
 
   // Future<void> uploadImage() async {
   // Future<void> onSaveProduct() async {
@@ -559,43 +588,86 @@ class AddProductState extends State<AddProduct> {
   //   print("onSaveEnd");
   // }
 
-// Future<void> onSaveProduct() async {
-//   print("onSaveStart");
-//
-//   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-//   // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
-//   var uri = Uri.parse(url);
-//   var request = http.MultipartRequest('POST', uri);
-//
-//   // var stream = File(imageData!.path).readAsBytesSync();
-//   //
-//   // var multiport = http.MultipartFile.fromBytes(
-//   //     'image', stream, filename: imageData!.path);
-//
-//   List<dynamic> stream = [];
-//   List<dynamic> multiport = [];
-//
-//   for (int i = 0; i <= 0; i++) {
-//     stream.add(File(data[i]!.path).readAsBytesSync());
-//
-//     multiport.add(http.MultipartFile.fromBytes(
-//         'image', stream[i], filename: data[i]!.path));
-//     request.files.add(multiport[i]);
-//   }
-//
-//
-//   request.fields['id_users'] = ShareData.logedIn.toString();
-//   request.fields['name_product'] = "NewProduct";
-//
-//   var response = await request.send();
-//
-//   if (response.statusCode == 201) {
-//     print("Successfull. +++++++++++++++++++++++");
-//   } else {
-//     print("false.------------------------------------");
-//   }
-//
-//   print("onSaveEnd");
-// }
+  Future<void> onSaveProduct() async {
+    try {
+      print("onSaveStart");
+
+      String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+      // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
+      var uri = Uri.parse(url);
+      var request = http.MultipartRequest('POST', uri);
+
+      // var stream = File(imageData!.path).readAsBytesSync();
+      //
+      // var multiport = http.MultipartFile.fromBytes(
+      //     'image', stream, filename: imageData!.path);
+
+      List<dynamic> stream = [];
+      List<dynamic> multiport = [];
+
+      print(data.length);
+
+      for (int i = 0; i < data.length; i++) {
+        print(i);
+        stream.add(File(data[i]!.path).readAsBytesSync());
+
+        multiport.add(http.MultipartFile.fromBytes(
+            'image_${i + 1}', stream[i], filename: data[i]!.path));
+
+        request.files.add(multiport[i]);
+        request.fields['image_${i + 1}'] = request.files[i].toString();
+      }
+
+      // var image = File(data[0]!.path).readAsBytesSync();
+      // var test = http.MultipartFile.fromBytes('image_1', image, filename: data[0]!.path);
+      // print(test.toString());
+      // request.fields['image_1'] = test;
+
+
+      Map<String, dynamic> body = {
+        'id_users': ShareData.logedIn,
+        'name_product': _nameProduct.text,
+        'detail_product': _detialProduct.text,
+        'start_price': _startPrice.text,
+        'shipping_cost': _shippingCost.text,
+        'start_date_time': _startDate + " " + _startTime,
+        'end_date_time': _endDate + " " + _endTime,
+        'max_price': _maxPrice.text,
+      };
+
+      request.fields['id_users'] = ShareData.userData['id_users'].toString();
+      request.fields['name_product'] = _nameProduct.text;
+      request.fields['detail_product'] = _detialProduct.text;
+      request.fields['start_price'] = _startPrice.text;
+      request.fields['shipping_cost'] = _shippingCost.text;
+      request.fields['start_date_time'] = _startDate + " " + _startTime;
+      request.fields['end_date_time'] = _endDate + " " + _endTime;
+      request.fields['max_price'] = _maxPrice.text.toString();
+
+      // request.fields['id_users'] = '1';
+      // request.fields['name_product'] = 'TestProduct';
+      // request.fields['detail_product'] = "detail";
+      // request.fields['start_price'] = '666';
+      // request.fields['shipping_cost'] = '50';
+      // request.fields['start_date_time'] = '2025-04-24 01:26:00';
+      // request.fields['end_date_time'] = '2025-04-25 01:26:00';
+      // request.fields['max_price'] = '100';
+
+      print(request.fields.toString());
+
+      var response = await request.send();
+
+      if (response.statusCode == 201) {
+        print("Successfull. +++++++++++++++++++++++}");
+      } else {
+        print(
+            "false.------------------------------------${response.statusCode}");
+      }
+
+      print("onSaveEnd");
+    } on Exception catch (e) {
+      print(e);
+    }
+  }
 
 }
