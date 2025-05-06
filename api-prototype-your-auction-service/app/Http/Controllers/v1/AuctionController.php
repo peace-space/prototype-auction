@@ -291,7 +291,7 @@ class AuctionController extends Controller
 
                 $data = [
                     // 'id_users' => $request->id_users,
-                    'id_users' => 2,
+                    'id_users' => $request->id_users,
                     'name_product' => $request->name_product,
                     'detail_product' => $request->detail_product,
                     'shipping_cost' => $request->shipping_cost,
