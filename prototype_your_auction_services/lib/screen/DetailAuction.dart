@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ class DetailAuctionState extends State<DetailAuction> {
                     Text("เวลา: ",
                       style: headText(),),
                     Text(
-                      "18.25.23 วินาที",
+                      "${countdown()} วินาที",
                       style: redText(),
                     )
                   ],
@@ -172,18 +173,18 @@ class DetailAuctionState extends State<DetailAuction> {
 
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
     await Future.delayed(Duration(seconds: 1));
-    print('Start.detailAuctions');
+    // print('Start.detailAuctions');
     String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
         .productData['id_auctions']}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
-    print("aaaaaaaaaaaaaaaaaaaa");
+    // print("aaaaaaaaaaaaaaaaaaaa");
     // print(data.toString());
     yield data;
     setState(() {});
-    print('End.detialAuctions');
+    // print('End.detialAuctions');
   }
 
   Widget onBit() {
@@ -254,4 +255,60 @@ class DetailAuctionState extends State<DetailAuction> {
 
     Navigator.push(ctx, route);
   }
+
+  String countdown() {
+    var date_time_curent = DateTime.now();
+
+    var test = DateTime.parse('2025-05-06 21:59:00');
+    print(date_time_curent.toString());
+    // String test = '2025-05-06 14:18:00';
+
+    var hour_difference = test.hour - date_time_curent.hour;
+    var min_difference = test.minute - date_time_curent.minute;
+    var sec_difference = date_time_curent.second;
+
+    // var hour = test.difference(date);
+    // var min = 59 - date.minute;
+    // int sec = 59 - sec_difference;
+
+    var countDown = test.difference(date_time_curent);
+    // var countDown = date.difference(test);
+
+    // print("Days: " + countDown.inDays.toString());
+    // print("Hours: " + countDown.inHours.toString());
+    // print("Minutes: " + countDown.inMinutes.toString());
+    // print("Seconds: " + countDown.inSeconds.toString());
+
+    print("Days: ${test.day.toInt() - date_time_curent.day.toInt()}");
+    print("Hours: ${test.hour.toInt() - date_time_curent.hour.toInt()}");
+    print("Minutes: ${test.minute.toInt() - date_time_curent.minute.toInt()}");
+    print("Seconds: ${60 - date_time_curent.second.toInt()}");
+    // print("Seconds: " + countDown.inSeconds.toString());
+    int day = test.day.toInt() - date_time_curent.day.toInt();
+    int hour = test.hour.toInt() - date_time_curent.hour.toInt();
+    int min = test.minute.toInt() - date_time_curent.minute.toInt();
+    int sec = 59 - date_time_curent.second.toInt();
+
+    if (day > 0) {
+      return day.toString() + "วัน";
+    } else if (hour > 0) {
+      return hour.toString() + ":"
+          + min.toString() + ":"
+          + sec.toString();
+    } else if (hour <= 0 && min > 0) {
+      return "00" + ":"
+          + min.toString() + ":"
+          + sec.toString();
+    } else {
+      return "Timeout";
+    }
+
+    return "Error.";
+
+    // return "{test} วัน "
+    //       + "A" + ":"
+    //       + "B" + ":"
+    //       + "C";
+  }
 }
+

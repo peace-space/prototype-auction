@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -219,18 +218,18 @@ class AuctionHomeState extends State<AuctionHome> {
   Stream<List<dynamic>> fetchAuctionData() async* {
     try {
       await Future.delayed(Duration(seconds: 1));
-      print("Start");
+      // print("Start");
       String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       final uri = Uri.parse(url);
       final response = await http.get(uri);
-      print("Test");
+      // print("Error");
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
       // print(auctions_data[0]['image_path_1']);
-      print(response.statusCode.toString());
+      // print(response.statusCode.toString());
       yield auctions_data;
       setState(() {});
-      print("End");
+      // print("End");
     } on Exception catch (e) {
       print(e);
     }
