@@ -558,8 +558,8 @@ class AddProductState extends State<AddProduct> {
   Future<void> onSaveProduct() async {
     print("onSaveStart");
 
-    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
     var uri = Uri.parse(url);
     var request = http.MultipartRequest('POST', uri);
 

@@ -334,7 +334,7 @@ class AuctionController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
-                'message' => "Successfully.",
+                'message' => "Error.",
                 'data' => $e
             ]);
         }
