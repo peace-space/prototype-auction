@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -216,17 +217,23 @@ class AuctionHomeState extends State<AuctionHome> {
   }
 
   Stream<List<dynamic>> fetchAuctionData() async* {
-    await Future.delayed(Duration(seconds: 1));
-    print("Start");
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final resData = jsonDecode(response.body);
-    List<dynamic> auctions_data = resData['data'];
-    print(auctions_data[0]['image_path_1']);
-    yield auctions_data;
-    setState(() {});
-    print("End");
+    try {
+      await Future.delayed(Duration(seconds: 1));
+      print("Start");
+      String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
+      final uri = Uri.parse(url);
+      final response = await http.get(uri);
+      print("Test");
+      final resData = jsonDecode(response.body);
+      List<dynamic> auctions_data = resData['data'];
+      // print(auctions_data[0]['image_path_1']);
+      print(response.statusCode.toString());
+      yield auctions_data;
+      setState(() {});
+      print("End");
+    } on Exception catch (e) {
+      print(e);
+    }
   }
 
   // Stream<Map<dynamic, String>> fetchImage(dynamic id_auctions) async* {
