@@ -2,9 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
+// import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class DetailAuction extends StatefulWidget {
   State<DetailAuction> createState() {
@@ -14,6 +16,10 @@ class DetailAuction extends StatefulWidget {
 
 class DetailAuctionState extends State<DetailAuction> {
   var _bit = TextEditingController();
+  Map<String, dynamic> detailAuctionData = {};
+
+  var _countDownDateTime = '-';
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +47,7 @@ class DetailAuctionState extends State<DetailAuction> {
   }
 
   Widget displayDataAuction(BuildContext ctx) {
+    // print(_countDownDateTime);
     return StreamBuilder(
       stream: fetchDataDetailAuctions(),
       builder: (context, snapshot) {
@@ -65,8 +72,9 @@ class DetailAuctionState extends State<DetailAuction> {
                   children: [
                     Text("เวลา: ",
                       style: headText(),),
+                    countdown(),
                     Text(
-                      "${countdown()} วินาที",
+                      " วินาที",
                       style: redText(),
                     )
                   ],
@@ -121,6 +129,14 @@ class DetailAuctionState extends State<DetailAuction> {
                   overflow: TextOverflow.clip,
                   style: defaultText(),
                 ),
+                TimerCountdown(
+                  endTime: DateTime(2025, 5, 7, 21, 07, DateTime
+                      .now()
+                      .second),
+                  onEnd: () {
+                    print("EEEEEEEEEEEEEEEE");
+                  },),
+
               ],
             ),
           );
@@ -182,8 +198,11 @@ class DetailAuctionState extends State<DetailAuction> {
     Map<String, dynamic> data = resData['data'];
     // print("aaaaaaaaaaaaaaaaaaaa");
     // print(data.toString());
+    // countdown();
     yield data;
-    setState(() {});
+    setState(() {
+      detailAuctionData = data;
+    });
     // print('End.detialAuctions');
   }
 
@@ -256,59 +275,62 @@ class DetailAuctionState extends State<DetailAuction> {
     Navigator.push(ctx, route);
   }
 
-  String countdown() {
-    var date_time_curent = DateTime.now();
+  // bool compareCurrentDateTimeAndEndDateTime(DateTime date_time_curent, DateTime end_date_time) {
+  //   if ()
+  //   return true;
+  // }
 
-    var test = DateTime.parse('2025-05-06 21:59:00');
-    print(date_time_curent.toString());
-    // String test = '2025-05-06 14:18:00';
+  Widget countdown() {
+    final start_date_time_data = detailAuctionData['start_date_time'];
+    final end_date_time_data = detailAuctionData['end_date_time'];
 
-    var hour_difference = test.hour - date_time_curent.hour;
-    var min_difference = test.minute - date_time_curent.minute;
-    var sec_difference = date_time_curent.second;
+    // print(detailAuctionData.toString());
+    var min;
+    var end_date_time = DateTime.parse(end_date_time_data);
 
-    // var hour = test.difference(date);
-    // var min = 59 - date.minute;
-    // int sec = 59 - sec_difference;
-
-    var countDown = test.difference(date_time_curent);
-    // var countDown = date.difference(test);
-
-    // print("Days: " + countDown.inDays.toString());
-    // print("Hours: " + countDown.inHours.toString());
-    // print("Minutes: " + countDown.inMinutes.toString());
-    // print("Seconds: " + countDown.inSeconds.toString());
-
-    print("Days: ${test.day.toInt() - date_time_curent.day.toInt()}");
-    print("Hours: ${test.hour.toInt() - date_time_curent.hour.toInt()}");
-    print("Minutes: ${test.minute.toInt() - date_time_curent.minute.toInt()}");
-    print("Seconds: ${60 - date_time_curent.second.toInt()}");
-    // print("Seconds: " + countDown.inSeconds.toString());
-    int day = test.day.toInt() - date_time_curent.day.toInt();
-    int hour = test.hour.toInt() - date_time_curent.hour.toInt();
-    int min = test.minute.toInt() - date_time_curent.minute.toInt();
-    int sec = 59 - date_time_curent.second.toInt();
-
-    if (day > 0) {
-      return day.toString() + "วัน";
-    } else if (hour > 0) {
-      return hour.toString() + ":"
-          + min.toString() + ":"
-          + sec.toString();
-    } else if (hour <= 0 && min > 0) {
-      return "00" + ":"
-          + min.toString() + ":"
-          + sec.toString();
-    } else {
-      return "Timeout";
-    }
-
-    return "Error.";
-
-    // return "{test} วัน "
-    //       + "A" + ":"
-    //       + "B" + ":"
-    //       + "C";
+    var date_tiem_difference = end_date_time.difference(DateTime.now());
+    // print("aaaaaaaaaaaaaaa: " + date_tiem_difference.toString());
+    var countdown = TimerCountdown(
+      endTime: DateTime.now().add(
+          Duration(seconds: date_tiem_difference.inSeconds)),
+      onTick: (value) =>
+      {
+        setState(() {
+          String hour = value.inHours.toString();
+          min = value.inMinutes.toString();
+          // String sec = value.inSeconds.toString();
+          _countDownDateTime =
+              hour.toString() + ":" + min.toString() + ":" + "00";
+        })
+      },
+      format: CountDownTimerFormat.daysHoursMinutesSeconds,
+      enableDescriptions: true,
+      spacerWidth: 5,
+      timeTextStyle: TextStyle(
+        fontSize: 36,
+        color: Colors.red,
+        height: 0,
+      ),
+      daysDescription: "day",
+      hoursDescription: "hour",
+      minutesDescription: "min",
+      secondsDescription: "sec",
+      descriptionTextStyle: TextStyle(
+        height: 0,
+      ),
+      colonsTextStyle: TextStyle(
+          fontSize: 36,
+          color: Colors.red
+      ),
+    );
+    // print("aaaaaaaaaaa: " + );
+    return countdown;
   }
+
+// void test() {
+//   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
+//     print("EEEEEEEEEEEEEEEE");
+//   },);
+// }
 }
 
