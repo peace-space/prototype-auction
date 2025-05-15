@@ -246,26 +246,32 @@ class DetailAuctionState extends State<DetailAuction> {
   void submitOnBidding() async {
     print("Start.");
     try {
-      Map<String, dynamic> data = {
-        'id_users': ShareData.userData['id_users'],
-        'id_auctions': ShareProductData.productData['id_auctions'],
-        'bid_price': _bit.text
-      };
+      print(ShareData.userData['id_users']);
+      print(ShareProductData.productData['id_auctions']);
+      if (ShareData.userData['id_users'] != null) {
+        Map<String, dynamic> data = {
+          'id_users': ShareData.userData['id_users'],
+          'id_auctions': ShareProductData.productData['id_auctions'],
+          'bid_price': _bit.text
+        };
 
-      String url = 'http://127.0.0.1:8000/api/v1/bidding';
-      final uri = Uri.parse(url);
-      final responce = await http.post(
-        uri,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(data),
-      );
+        String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
+        final uri = Uri.parse(url);
+        final responce = await http.post(
+          uri,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data),
+        );
 
-      final reActions = jsonDecode(responce.body);
+        final reActions = jsonDecode(responce.body);
 
-      if (responce.statusCode == 200) {
-        print("Successfully: " + responce.statusCode.toString());
+        if (responce.statusCode == 200) {
+          print("Successfully: " + responce.statusCode.toString());
+        } else {
+          print("Error: " + responce.statusCode.toString());
+        }
       } else {
-        print("Error: " + responce.statusCode.toString());
+        print('กรุณาเข้าสู่ระบบ');
       }
     } catch (e) {
       print("Error: " + e.toString());

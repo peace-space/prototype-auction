@@ -37,12 +37,12 @@ class AuctionController extends Controller
             //                     ->where('id_auctions', '=', $id_auctions)
             //                     ->orderByDesc('bid_price')
             //                     ->get();
-            $counter = 0;
-            for ($i = 0; $i < count($auctions_list); $i++) {
-                $counter += $i;
-            }
+            // $counter = 0;
+            // for ($i = 0; $i < count($auctions_list); $i++) {
+            //     $counter += $i;
+            // }
 
-            return $counter;
+            // return $counter;
 
             // highBids();
 
