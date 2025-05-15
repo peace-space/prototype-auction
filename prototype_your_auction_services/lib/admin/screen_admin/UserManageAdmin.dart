@@ -67,7 +67,7 @@ class UserManageState extends State<UserManage> {
         itemCount: user_data.length,
         itemBuilder: (context, index) {
           final Map data = user_data[index];
-          final id = data['id_users'];
+          final id = !data['id_users'];
           final name = data['name'];
           final phone = data['phone'];
           return Card(
