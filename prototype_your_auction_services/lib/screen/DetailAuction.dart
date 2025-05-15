@@ -6,6 +6,7 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 // import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class DetailAuction extends StatefulWidget {
@@ -226,7 +227,10 @@ class DetailAuctionState extends State<DetailAuction> {
           height: 30,
           child: ElevatedButton(
               style: ButtonStyle(),
-              onPressed: () => {},
+              onPressed: () =>
+              {
+                submitOnBidding()
+              },
               child: Text("เสนอราคา")
           ),
         ),
@@ -237,6 +241,36 @@ class DetailAuctionState extends State<DetailAuction> {
         )
       ],
     );
+  }
+
+  void submitOnBidding() async {
+    print("Start.");
+    try {
+      Map<String, dynamic> data = {
+        'id_users': ShareData.userData['id_users'],
+        'id_auctions': ShareProductData.productData['id_auctions'],
+        'bid_price': _bit.text
+      };
+
+      String url = 'http://127.0.0.1:8000/api/v1/bidding';
+      final uri = Uri.parse(url);
+      final responce = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      final reActions = jsonDecode(responce.body);
+
+      if (responce.statusCode == 200) {
+        print("Successfully: " + responce.statusCode.toString());
+      } else {
+        print("Error: " + responce.statusCode.toString());
+      }
+    } catch (e) {
+      print("Error: " + e.toString());
+    }
+    print("End.");
   }
 
   TextStyle headText() {
