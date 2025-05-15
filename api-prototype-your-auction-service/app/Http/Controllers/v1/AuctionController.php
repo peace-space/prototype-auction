@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\v1\BidController;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -30,6 +31,20 @@ class AuctionController extends Controller
                     })
                     ->orderByRaw('id_auctions')
                     ->get();
+
+            // $high_bit = DB::table('bids')
+            //                     ->select('id_users', 'id_auctions', 'bid_price')
+            //                     ->where('id_auctions', '=', $id_auctions)
+            //                     ->orderByDesc('bid_price')
+            //                     ->get();
+            $counter = 0;
+            for ($i = 0; $i < count($auctions_list); $i++) {
+                $counter += $i;
+            }
+
+            return $counter;
+
+            // highBids();
 
             return response()->json([
                 'status' => 1,

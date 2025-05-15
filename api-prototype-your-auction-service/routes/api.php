@@ -42,5 +42,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/image', [ImageController::class, 'index']);
     Route::get('/image/{id_auctions}&{index}', [ImageController::class, 'oneImage']);
 
-    Route::get('/high-bids/{id}', [BidController::class, 'highBids']);
+    Route::get('/bids/{id_auctions}', [BidController::class, 'index']);
+    Route::get('/high-bids/{id_auctions}', [BidController::class, 'highBids']);
+    Route::post('/bidding', [BidController::class, 'bidding']);
 });
