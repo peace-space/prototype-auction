@@ -130,7 +130,7 @@ class BidListsState extends State<BidLists> {
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
     final data = jsonDecode(responce.body);
-    print(data.runtimeType.toString());
+    print(data);
     yield data.toList();
     // setState(() {});
     print("End.");

@@ -130,14 +130,6 @@ class DetailAuctionState extends State<DetailAuction> {
                   overflow: TextOverflow.clip,
                   style: defaultText(),
                 ),
-                TimerCountdown(
-                  endTime: DateTime(2025, 5, 7, 21, 07, DateTime
-                      .now()
-                      .second),
-                  onEnd: () {
-                    print("EEEEEEEEEEEEEEEE");
-                  },),
-
               ],
             ),
           );
@@ -246,8 +238,8 @@ class DetailAuctionState extends State<DetailAuction> {
   void submitOnBidding() async {
     print("Start.");
     try {
-      print(ShareData.userData['id_users']);
-      print(ShareProductData.productData['id_auctions']);
+      print("dddddddddddd" + ShareData.userData['id_users'].toString());
+      print(ShareProductData.productData['id_auctions'].toString());
       if (ShareData.userData['id_users'] != null) {
         Map<String, dynamic> data = {
           'id_users': ShareData.userData['id_users'],
@@ -264,6 +256,7 @@ class DetailAuctionState extends State<DetailAuction> {
         );
 
         final reActions = jsonDecode(responce.body);
+
 
         if (responce.statusCode == 200) {
           print("Successfully: " + responce.statusCode.toString());
@@ -369,7 +362,7 @@ class DetailAuctionState extends State<DetailAuction> {
 
 // void test() {
 //   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
-//     print("EEEEEEEEEEEEEEEE");
+//     print("ZZZZZZZZZZZZZZZZZ");
 //   },);
 // }
 }
