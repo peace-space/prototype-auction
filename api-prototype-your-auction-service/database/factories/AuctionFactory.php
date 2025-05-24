@@ -27,7 +27,8 @@ class AuctionFactory extends Factory
             // 'id_images' => fake()->numberBetween(1, 10),
             'id_images' => fake()->unique()->numberBetween(1, 10),
             'max_price' => fake()->numberBetween(1, 1000),
-            'end_date_time' => fake()->dateTime(),
+            // 'end_date_time' => fake()->dateTime(),
+            'end_date_time' => '2025-12-01 22:30:38',
         ];
     }
 }

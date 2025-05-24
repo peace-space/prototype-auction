@@ -38,16 +38,17 @@ class BidListsState extends State<BidLists> {
         }
 
         if (snapshot.data == '') {
-          print("Test");
+          print("SSSSS: " + snapshot.hasData.toString());
           return Center(
               child: Text("ไม่มีข้อมูล")
           );
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // print(snapshot.data.toString());
-          return Center(child: CircularProgressIndicator());
-        }
+        // if (snapshot.connectionState == ConnectionState.waiting) {
+        //   print("SSSSS: " + snapshot.hasData.toString());
+        //   print("SSSSS: " + snapshot.data.toString());
+        //   return Center(child: CircularProgressIndicator());
+        // }
 
         if (snapshot.hasData) {
           // Map<String, dynamic> data = snapshot.data[index];
@@ -63,6 +64,17 @@ class BidListsState extends State<BidLists> {
                   dataTextStyle: TextStyle(),
                   border: TableBorder.all(),
                   columns: [
+                    DataColumn(
+                        label: Center(
+                          child: Text(
+                            "ลำดับ",
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                    ),
                     DataColumn(
                         label: Center(
                           child: Text(
@@ -103,6 +115,7 @@ class BidListsState extends State<BidLists> {
                     String bidding_date_time = data['created_at'].toString();
                     return DataRow(
                       cells: [
+                        DataCell(Center(child: Text('${index + 1}'))),
                         DataCell(Center(child: Text(user_name))),
                         DataCell(Center(child: Text(price))),
                         DataCell(Center(child: Text(bidding_date_time))),
@@ -123,6 +136,7 @@ class BidListsState extends State<BidLists> {
 
   Stream<dynamic> fetchUserBidList() async* {
     print("Start.");
+    await Future.delayed(Duration(seconds: 1));
     String url =
         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bids/${ShareProductData
         .productData['id_auctions']}';
@@ -136,7 +150,7 @@ class BidListsState extends State<BidLists> {
     } else {
       yield null;
     }
-    // setState(() {});
+    setState(() {});
     print("End.");
   }
 

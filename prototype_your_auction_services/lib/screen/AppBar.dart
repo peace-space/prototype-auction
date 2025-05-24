@@ -8,6 +8,7 @@ import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
 
 Drawer createDrawer (BuildContext ctx) {
   if (ShareData.admin && ShareData.logedIn) {
@@ -19,6 +20,7 @@ Drawer createDrawer (BuildContext ctx) {
                 "${ShareData.admin} Admin ชื่อ: ${ShareData.userData['name']}"),
             accountEmail: Text("เบอร์โทรศัพท์: ${ShareData.userData['phone']}"),
           ),
+          testSystem(ctx), // ทดสอบระบบ
           adminMenuButton(ctx),
           homePageButton(ctx),
           storaManageButton(ctx),
@@ -39,6 +41,7 @@ Drawer createDrawer (BuildContext ctx) {
                 "ชื่อ ${ShareData.userData['name']} ${ShareData.logedIn}"),
             accountEmail: Text("เบอร์โทร: ${ShareData.userData['phone']}"),
           ),
+          testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
           storaManageButton(ctx),
           userProfile(ctx),
@@ -55,6 +58,7 @@ Drawer createDrawer (BuildContext ctx) {
             accountName: Text("ยังไม่ได้เข้าสู่ระบบ"),
             accountEmail: Text("กรุณาเข้าสู่ระบบ"),
           ),
+          testSystem(ctx), // ทดสอบระบบ
           logedIn(ctx),
           registerStatus(ctx),
         ],
@@ -194,5 +198,18 @@ Widget storaManageButton(BuildContext ctx) {
         )
       },
       child: Text("จัดการร้านค้า")
+  );
+}
+
+Widget testSystem(BuildContext ctx) {
+  return ElevatedButton(
+      onPressed: () =>
+      {
+        Navigator.pushReplacement(
+            ctx, MaterialPageRoute(
+            builder: (ctx) => HomeTestSystem())
+        )
+      },
+      child: Text("ทดสอบระบบ")
   );
 }

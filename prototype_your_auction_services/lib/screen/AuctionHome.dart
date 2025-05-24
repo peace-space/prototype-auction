@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
@@ -18,6 +19,8 @@ class AuctionHomeState extends State<AuctionHome> {
   bool _changeDisplay = false;
   String loginStatus = "";
   Map<String, dynamic> images_data = {};
+
+  // Map<String, dynamic> dateTimeCoundown = {};
 
   @override
   void initState() {
@@ -129,12 +132,18 @@ class AuctionHomeState extends State<AuctionHome> {
                                 Text("ราคาสูงสุด ฿${data['start_price']
                                     .toString()}"),
                                 SizedBox(height: 5,),
-                                Text("เวลา: ",
-                                  style: TextStyle(
-                                      color: Colors.red,
-                                      fontSize: 18
-                                  ),
-                                ),
+
+                                Row(
+                                  children: [
+                                    Text("เวลา: ",
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontSize: 18
+                                      ),
+                                    ),
+                                    countdown(data['end_date_time'])
+                                  ],
+                                )
                               ],
                             ),
                           )
@@ -197,11 +206,12 @@ class AuctionHomeState extends State<AuctionHome> {
                       title: Text(data['name_product']),
                       subtitle: Text(
                           "ราคาสูงสุด ฿${data['start_price'].toString()}"),
-                      trailing: Text("เวลา",
-                        style: TextStyle(
-                            color: Colors.red,
-                            fontSize: 18
-                        ),),
+                      trailing: Column(
+                        children: [
+                          Text('เวลา'),
+                          countdown(data['end_date_time'])
+                        ],
+                      ),
                     ),
                   );
                 }
@@ -226,7 +236,7 @@ class AuctionHomeState extends State<AuctionHome> {
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
       // print(auctions_data[0]['image_path_1']);
-      // print(response.statusCode.toString());
+      // print(auctions_data.toString());
       yield auctions_data;
       setState(() {});
       // print("End");
@@ -288,5 +298,37 @@ class AuctionHomeState extends State<AuctionHome> {
     );
 
     Navigator.push(ctx, route);
+  }
+
+  Widget countdown(String end_date_time_data) {
+    // print(end_date_time_data.toString());
+
+    var end_date_time = DateTime.parse(end_date_time_data);
+
+    var date_tiem_difference = end_date_time.difference(DateTime.now());
+
+    return TimerCountdown(
+      endTime: DateTime.now().add(
+          Duration(seconds: date_tiem_difference.inSeconds)),
+      format: CountDownTimerFormat.daysHoursMinutesSeconds,
+      enableDescriptions: false,
+      spacerWidth: 0,
+      timeTextStyle: TextStyle(
+        fontSize: 18,
+        color: Colors.red,
+        height: 0,
+      ),
+      daysDescription: "day",
+      hoursDescription: "hour",
+      minutesDescription: "min",
+      secondsDescription: "sec",
+      descriptionTextStyle: TextStyle(
+        height: 0,
+      ),
+      colonsTextStyle: TextStyle(
+          fontSize: 18,
+          color: Colors.red
+      ),
+    );
   }
 }
