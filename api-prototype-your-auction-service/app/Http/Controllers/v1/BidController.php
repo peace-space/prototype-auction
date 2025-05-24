@@ -56,10 +56,12 @@ class BidController extends Controller
     {
         try {
 
+            $bid_price = (int)$request->bid_price;
+
             $bidding = [
                 'id_users' => $request->id_users,
                 'id_auctions' => $request->id_auctions,
-                'bid_price' => $request->bid_price
+                'bid_price' => $bid_price
             ];
 
             $save_data_bidding = DB::table('bids')

@@ -37,7 +37,15 @@ class BidListsState extends State<BidLists> {
           return Center(child: Text("Error."));
         }
 
+        if (snapshot.data == '') {
+          print("Test");
+          return Center(
+              child: Text("ไม่มีข้อมูล")
+          );
+        }
+
         if (snapshot.connectionState == ConnectionState.waiting) {
+          // print(snapshot.data.toString());
           return Center(child: CircularProgressIndicator());
         }
 
@@ -70,7 +78,7 @@ class BidListsState extends State<BidLists> {
                       // columnWidth: FlexColumnWidth(),
                         label: Center(
                           child: Text(
-                            "ชื่อ",
+                            "ราคา",
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.bold,
@@ -80,16 +88,7 @@ class BidListsState extends State<BidLists> {
                     ),
                     DataColumn(
                       label: Text(
-                        "เสนอราคาเมื่อ",
-                        style: TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        "เสนอราคาเมื่อ",
+                        "เวลา",
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -99,13 +98,13 @@ class BidListsState extends State<BidLists> {
                   ],
                   rows: List.generate(snapshot.data.length, (index) {
                     Map<String, dynamic> data = snapshot.data[index];
-                    String user_name = data['id_users'].toString();
-                    String bidding_date_time = data['id_auctions'].toString();
+                    String user_name = data['name'].toString();
+                    String price = data['bid_price'].toString();
+                    String bidding_date_time = data['created_at'].toString();
                     return DataRow(
                       cells: [
                         DataCell(Center(child: Text(user_name))),
-                        DataCell(Center(child: Text(user_name))),
-                        DataCell(Center(child: Text(bidding_date_time))),
+                        DataCell(Center(child: Text(price))),
                         DataCell(Center(child: Text(bidding_date_time))),
                       ],
                     );
@@ -130,8 +129,13 @@ class BidListsState extends State<BidLists> {
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
     final data = jsonDecode(responce.body);
-    print(data);
-    yield data.toList();
+    print("tset" + data['data'].toString());
+
+    if (data['data'] != '') {
+      yield data['data'].toList();
+    } else {
+      yield null;
+    }
     // setState(() {});
     print("End.");
   }

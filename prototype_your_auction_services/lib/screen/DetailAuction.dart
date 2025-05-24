@@ -16,7 +16,7 @@ class DetailAuction extends StatefulWidget {
 }
 
 class DetailAuctionState extends State<DetailAuction> {
-  var _bit = TextEditingController();
+  var _bid = TextEditingController();
   Map<String, dynamic> detailAuctionData = {};
 
   var _countDownDateTime = '-';
@@ -207,7 +207,7 @@ class DetailAuctionState extends State<DetailAuction> {
           width: 200,
           child: TextField(
             style: TextStyle(),
-            controller: _bit,
+            controller: _bid,
             decoration: InputDecoration(
               hintText: "เสนอราคา",
             ),
@@ -237,6 +237,8 @@ class DetailAuctionState extends State<DetailAuction> {
 
   void submitOnBidding() async {
     print("Start.");
+    int bid_price = int.parse(_bid.text);
+    print("trseteetset: " + bid_price.runtimeType.toString());
     try {
       print("dddddddddddd" + ShareData.userData['id_users'].toString());
       print(ShareProductData.productData['id_auctions'].toString());
@@ -244,7 +246,7 @@ class DetailAuctionState extends State<DetailAuction> {
         Map<String, dynamic> data = {
           'id_users': ShareData.userData['id_users'],
           'id_auctions': ShareProductData.productData['id_auctions'],
-          'bid_price': _bit.text
+          'bid_price': bid_price
         };
 
         String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
@@ -258,7 +260,7 @@ class DetailAuctionState extends State<DetailAuction> {
         final reActions = jsonDecode(responce.body);
 
 
-        if (responce.statusCode == 200) {
+        if (responce.statusCode == 201) {
           print("Successfully: " + responce.statusCode.toString());
         } else {
           print("Error: " + responce.statusCode.toString());
