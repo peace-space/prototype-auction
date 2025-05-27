@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/screen/AddProduct.dart';
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
+import 'package:prototype_your_auction_services/screen/UserProduct.dart';
 
 class StoreManage extends StatefulWidget {
   State<StoreManage> createState() {
@@ -15,7 +16,11 @@ class StoreManageState extends State<StoreManage> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          Column(children: [openAuctionsButton(context)]),
+          Column(
+              children: [
+                buttonGoToUserProduct(context),
+                openAuctionsButton(context),
+              ]),
         ],
       ),
       drawer: createDrawer(context),
@@ -31,6 +36,19 @@ class StoreManageState extends State<StoreManage> {
 
   void goToOpenAuctionButton(BuildContext ctx) {
     final route = MaterialPageRoute(builder: (ctx) => AddProduct());
+
+    Navigator.push(ctx, route);
+  }
+
+  Widget buttonGoToUserProduct(BuildContext ctx) {
+    return ElevatedButton(
+        onPressed: () => goToUserProduct(ctx),
+        child: Text("รายการสินค้า")
+    );
+  }
+
+  void goToUserProduct(BuildContext ctx) {
+    final route = MaterialPageRoute(builder: (ctx) => UserProduct(),);
 
     Navigator.push(ctx, route);
   }

@@ -129,7 +129,7 @@ class AuctionHomeState extends State<AuctionHome> {
                               children: [
                                 Text(data['name_product']),
                                 SizedBox(height: 5,),
-                                Text("ราคาสูงสุด ฿${data['start_price']
+                                Text("ราคาสูงสุด ฿${data['max_price']
                                     .toString()}"),
                                 SizedBox(height: 5,),
 
@@ -205,7 +205,7 @@ class AuctionHomeState extends State<AuctionHome> {
                       ),
                       title: Text(data['name_product']),
                       subtitle: Text(
-                          "ราคาสูงสุด ฿${data['start_price'].toString()}"),
+                          "ราคาสูงสุด ฿${data['max_price'].toString()}"),
                       trailing: Column(
                         children: [
                           Text('เวลา'),
