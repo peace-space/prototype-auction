@@ -358,9 +358,21 @@ class AuctionController extends Controller
     public function userProduct($id_user) {
         try {
             $user_product = DB::table('auctions')
-                            ->select("*")
-                            ->where('id_users', '=', $id_user)
-                            ->get();
+                    ->select('auctions.id_auctions', 'images.id_images',
+                            'name_product',
+                            'images.image_path_1',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.start_date_time',
+                            'auctions.end_date_time',
+                            'max_price',
+                            )
+                    ->join('images', function(JoinClause $join){
+                        $join->on('auctions.id_images', '=', 'images.id_images');
+                    })
+                    ->orderByRaw('id_auctions')
+                    ->where('id_users', '=', $id_user)
+                    ->get();
 
         return response()->json([
             'status' => 1,

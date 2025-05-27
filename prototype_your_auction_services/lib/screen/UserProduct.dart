@@ -22,33 +22,33 @@ class UserProductState extends State<UserProduct> {
 
   Widget displayUserProduct() {
     return StreamBuilder(
-      stream: null,
+      stream: fetchUserProduct(),
       builder: (context, snapshot) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: DataTable(
-              columns: [DataColumn(label: Center(child: Text("ลำดับ")))],
-              rows: [
-                DataRow(cells: [DataCell(Text("test"))]),
-              ],
-            ),
-          ),
+        return ListView.builder(
+          itemCount: snapshot.data.length,
+          itemBuilder: (context, index) {
+            Map<String, dynamic> data = snapshot.data[index];
+            return Card(child: Text(data['name_product'].toString()));
+          },
         );
       },
     );
   }
 
   Stream<dynamic> fetchUserProduct() async* {
+    print("Start");
+    // print(ShareData.userData['id_users']);
     String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-product/${ShareData.userData['id_user']}';
+        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-product/${ShareData.userData['id_users']}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     Map<String, dynamic> resData = jsonDecode(response.body);
 
-    print(resData);
+    List<dynamic> data = resData['data'];
 
-    yield resData;
+    print(data.toString());
+
+    yield data;
+    print("End.");
   }
 }
