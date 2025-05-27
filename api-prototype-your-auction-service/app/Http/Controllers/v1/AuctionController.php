@@ -390,6 +390,32 @@ class AuctionController extends Controller
         }
     }
 
+    public function userProductDelete($id_user, $id_auctions) {
+        try {
+            $user_product_delete = DB::table('auctions')
+            ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
+            ->delete();
+
+            if ($user_product_delete) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully."
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => "ไม่มีสินค้าในฐานข้อมูล"
+                ], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
+    }
+
     public function test(Request $request) {
         try {
             // $request->validate([

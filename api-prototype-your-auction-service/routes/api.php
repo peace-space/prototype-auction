@@ -47,4 +47,5 @@ Route::prefix('/v1')->group(function () {
     Route::post('/bidding', [BidController::class, 'bidding']);
 
     Route::get('/user-product/{id_user}', [AuctionController::class, 'userProduct']);
+    Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
 });
