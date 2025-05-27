@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
+import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share_data/confirm_picker.dart';
@@ -254,7 +255,29 @@ class DetailAuctionState extends State<DetailAuction> {
           print("Error: " + responce.statusCode.toString());
         }
       } else {
-        AlertDialog(title: Text("กรุณาเข้าสู่ระบบ"));
+        showDialog(
+          context: context,
+          builder: (context) =>
+              AlertDialog(
+                title: Text("กรุณาเข้าสู่ระบบ"),
+                content: Text("คุณต้องการเข้าสู่ระบบหรือไม่"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('Cancel', style: TextStyle(fontSize: 18)),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      goToLogin();
+                    },
+                    child: Text('OK', style: TextStyle(fontSize: 18)),
+                  ),
+                ],
+              ),
+        );
+
         print('กรุณาเข้าสู่ระบบ');
       }
     } catch (e) {
@@ -385,6 +408,15 @@ class DetailAuctionState extends State<DetailAuction> {
             ],
           ),
     );
+  }
+
+
+  void goToLogin() {
+    final route = MaterialPageRoute(
+      builder: (context) => Login(),
+    );
+
+    Navigator.push(context, route);
   }
 
   // void test() {

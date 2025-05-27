@@ -56,6 +56,10 @@ class BidController extends Controller
     {
         try {
 
+            $bidController = new BidController();
+
+
+
             $bid_price = (int)$request->bid_price;
 
             $bidding = [
@@ -66,6 +70,14 @@ class BidController extends Controller
 
             $save_data_bidding = DB::table('bids')
                 ->insert($bidding);
+
+            $max_price = $bidController->highBids($request->id_auctions);
+            // return $max_price->bid_price;
+            $save_high_price = DB::table('auctions')
+                                ->where('id_auctions', $request->id_auctions)
+                                ->update(['max_price' => $max_price->bid_price]);
+
+            // return $save_high_price;
 
             return response()->json([
                 'status' => 1,
