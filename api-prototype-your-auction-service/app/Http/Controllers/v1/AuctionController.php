@@ -355,6 +355,14 @@ class AuctionController extends Controller
         }
     }
 
+    public function userProduct($id_user) {
+        $user_product = DB::table('auctions')
+                            ->select("*")
+                            ->where('id_users', '=', $id_user)
+                            ->get();
+        return $user_product;
+    }
+
     public function test(Request $request) {
         try {
             // $request->validate([
