@@ -1,4 +1,10 @@
+// import 'dart:nativewrappers/_internal/vm/lib/convert_patch.dart';
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class UserProduct extends StatefulWidget {
   State<UserProduct> createState() {
@@ -32,5 +38,17 @@ class UserProductState extends State<UserProduct> {
         );
       },
     );
+  }
+
+  Stream<dynamic> fetchUserProduct() async* {
+    String url =
+        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-product/${ShareData.userData['id_user']}';
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    Map<String, dynamic> resData = jsonDecode(response.body);
+
+    print(resData);
+
+    yield resData;
   }
 }

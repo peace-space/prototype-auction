@@ -356,11 +356,26 @@ class AuctionController extends Controller
     }
 
     public function userProduct($id_user) {
-        $user_product = DB::table('auctions')
+        try {
+            $user_product = DB::table('auctions')
                             ->select("*")
                             ->where('id_users', '=', $id_user)
                             ->get();
-        return $user_product;
+
+        return response()->json([
+            'status' => 1,
+            'message' => 'Successfully.',
+            'data' => $user_product
+        ]);
+
+
+        } catch(Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ]);
+        }
     }
 
     public function test(Request $request) {
