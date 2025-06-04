@@ -416,6 +416,35 @@ class AuctionController extends Controller
         }
     }
 
+    public function historyProduct() {
+        try{
+            $auctions_list = DB::table('bids')
+                                ->select('auctions.id_users')
+                                ->join('auctions', function(JoinClause $join){
+                                    $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                                })
+                                // ->join('users', function(JoinClause $join){
+                                //         $join->on('users.id_users', '=', 'bids.id_users');
+                                //     })
+                                // ->orderByDesc('bid_price')
+                                ->where('bids.id_users', '=', 13)
+                                ->get();
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $auctions_list
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ], 500);
+        }
+    }
+
     public function test(Request $request) {
         try {
             // $request->validate([

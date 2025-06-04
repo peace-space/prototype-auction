@@ -36,7 +36,9 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
+    Route::get('/history-product', [AuctionController::class, 'historyProduct']);
     Route::post('/test', [AuctionController::class, 'test']);
+
 
     // Route::get('/test', [EmailController::class, 'index']);
     Route::get('/image', [ImageController::class, 'index']);
@@ -48,4 +50,5 @@ Route::prefix('/v1')->group(function () {
 
     Route::get('/user-product/{id_user}', [AuctionController::class, 'userProduct']);
     Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
+
 });
