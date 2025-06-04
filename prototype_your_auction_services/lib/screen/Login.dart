@@ -112,7 +112,7 @@ class LoginState extends State<Login>{
     final route = MaterialPageRoute(
       builder: (ctx) => AuctionHome(),
     );
-    Navigator.push(ctx, route);
+    Navigator.pushReplacement(ctx, route);
   }
 
   void onLogin(BuildContext ctx) async {

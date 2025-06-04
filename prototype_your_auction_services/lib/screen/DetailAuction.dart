@@ -205,6 +205,7 @@ class DetailAuctionState extends State<DetailAuction> {
     print("Start.");
     try {
       int bid_price = int.parse(_bid.text);
+      print("Check num bid: ${bid_price.runtimeType == int}");
       if (ShareData.userData['id_users'] != null) {
         Map<String, dynamic> data = {
           'id_users': ShareData.userData['id_users'],
@@ -230,26 +231,17 @@ class DetailAuctionState extends State<DetailAuction> {
                 (context) => AlertDialog(
                   title: Text("เสนอราคาสำเร็จ"),
                   actions: [
-                    TextButton(
-                      onPressed:
-                          () => {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => DetailAuction(),
-                              ),
-                            ),
-                          },
-                      child: Text("ตกลง"),
-                    ),
+                    TextButton(onPressed: () =>
+                    {
+                      Navigator.pop(context)
+                    }, child: Text("ตกลง")),
                   ],
                 ),
           );
           print("Successfully: " + responce.statusCode.toString());
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => DetailAuction()),
-          );
+
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => DetailAuction(),));
         } else {
           _alertDialog(title: "เกิดข้อผิดพลาด");
           print("Error: " + responce.statusCode.toString());
@@ -257,7 +249,8 @@ class DetailAuctionState extends State<DetailAuction> {
       } else {
         showDialog(
           context: context,
-          builder: (context) =>
+          builder:
+              (context) =>
               AlertDialog(
                 title: Text("กรุณาเข้าสู่ระบบ"),
                 content: Text("คุณต้องการเข้าสู่ระบบหรือไม่"),
@@ -383,40 +376,61 @@ class DetailAuctionState extends State<DetailAuction> {
   }
 
   void confirmButton() {
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text("ยืนยันการเสนอราคา"),
-            content: Text("จำนวนเงิน: " + _bid.text),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Cancel', style: TextStyle(fontSize: 18)),
+    try {
+      int bid_price = int.parse(_bid.text);
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+            AlertDialog(
+              title: Text("ยืนยันการเสนอราคา"),
+              content: Text("จำนวนเงิน: " + _bid.text),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => DetailAuction(),));
+                  },
+                  child: Text('Cancel', style: TextStyle(fontSize: 18)),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      submitOnBidding();
+                    });
+                  },
+                  child: Text('OK', style: TextStyle(fontSize: 18)),
+                ),
+              ],
+            ),
+      );
+    } on Exception catch (e) {
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+            AlertDialog(
+              title: Text("แจ้งเตือน"),
+              content: Text(
+                "กรุณาตรวจสอบความถูกต้องอีกครั้ง.",
+                style: TextStyle(fontSize: 16),
               ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  setState(() {
-                    submitOnBidding();
-                  });
-                },
-                child: Text('OK', style: TextStyle(fontSize: 18)),
-              ),
-            ],
-          ),
-    );
+              actions: [
+                TextButton(
+                  onPressed: () => {Navigator.pop(context)},
+                  child: Text('OK', style: TextStyle(fontSize: 18)),
+                ),
+              ],
+            ),
+      );
+    }
   }
 
-
   void goToLogin() {
-    final route = MaterialPageRoute(
-      builder: (context) => Login(),
-    );
+    final route = MaterialPageRoute(builder: (context) => Login());
 
-    Navigator.push(context, route);
+    Navigator.pushReplacement(context, route);
   }
 
   // void test() {

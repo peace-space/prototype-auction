@@ -7,8 +7,11 @@ import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
+import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
+
+import 'HistoryAuctions.dart';
 
 Drawer createDrawer (BuildContext ctx) {
   if (ShareData.admin && ShareData.logedIn) {
@@ -26,6 +29,7 @@ Drawer createDrawer (BuildContext ctx) {
           storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),
+          buttonGoToHistoryAuction(ctx),
           logOutButton(ctx)
         ],
       ),
@@ -46,6 +50,7 @@ Drawer createDrawer (BuildContext ctx) {
           storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),
+          buttonGoToHistoryAuction(ctx),
           logOutButton(ctx)
         ],
       ),
@@ -125,6 +130,11 @@ Widget logOutButton(BuildContext ctx) {
   return ElevatedButton(
       onPressed: () => {
         ShareData.logedIn = false,
+        ShareData.admin = false,
+        ShareData.userData = {},
+        ShareData.upDateState = () {},
+        ShareProductData.productData = {},
+
         Navigator.pushReplacement(
             ctx, MaterialPageRoute(
             builder: (ctx) => AuctionHome())
@@ -211,5 +221,16 @@ Widget testSystem(BuildContext ctx) {
         )
       },
       child: Text("ทดสอบระบบ")
+  );
+}
+
+Widget buttonGoToHistoryAuction(BuildContext ctx) {
+  return ElevatedButton(
+      onPressed: () {
+        Navigator.push(ctx,
+            MaterialPageRoute(builder: (context) => HistoryAuctions(),)
+        );
+      },
+      child: Text("ประวัติการประมูล")
   );
 }

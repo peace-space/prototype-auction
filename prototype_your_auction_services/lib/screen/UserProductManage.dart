@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
+import 'package:prototype_your_auction_services/screen/UserProduct.dart';
 import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 import 'BidLists.dart';
 
@@ -43,7 +43,6 @@ class UserProductManageState extends State<UserProductManage> {
           ],
         ),
       ),
-      drawer: createDrawer(context),
     );
   }
 
@@ -237,12 +236,65 @@ class UserProductManageState extends State<UserProductManage> {
         (
             showDialog(
               context: context,
-              builder: (context) =>,
+              builder: (context) =>
+                  AlertDialog(
+                    title: Text("ลบสินค้า"),
+                    content: Text("ยืนยันการลบสินค้า ชื่อ: ${ShareProductData
+                        .productData['name_product']}",
+                      style: TextStyle(
+                          fontSize: 16
+                      ),),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel', style: TextStyle(fontSize: 18)),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          onUserProductDelete();
+                        },
+                        child: Text('OK', style: TextStyle(fontSize: 18)),
+                      ),
+                    ],
+                  ),
             )
         ),
         child: Text("ยกเลิกการเปิดประมูล")
     );
   }
 
+  void onUserProductDelete() async {
+    print(ShareData.userData['id_users']);
+    print(ShareProductData.productData['id_auctions']);
+    String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
+        .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
+    final uri = Uri.parse(url);
+    final response = await http.delete(uri);
+    if (response.statusCode == 200) {
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => UserProduct(),));
+      print("Successfully.");
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: Text("ลบสินค้าล้มเหลว"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK', style: TextStyle(fontSize: 18)),
+                ),
+              ],
+            ),
+      );
+      throw Exception('Failed');
+    }
+  }
 
 }

@@ -51,7 +51,7 @@ class UserManageState extends State<UserManage> {
   Widget buttonEditUserProfile(BuildContext ctx, int id){
     return ElevatedButton(
             onPressed:  () {
-              Navigator.pushReplacement(
+              Navigator.push(
                   ctx, MaterialPageRoute(
                   builder: (ctx) => EditUserProfile(id, user_data)
                 )
