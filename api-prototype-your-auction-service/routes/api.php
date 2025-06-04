@@ -36,7 +36,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
-    Route::get('/history-product', [AuctionController::class, 'historyProduct']);
+    Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     Route::post('/test', [AuctionController::class, 'test']);
 
 

@@ -416,24 +416,34 @@ class AuctionController extends Controller
         }
     }
 
-    public function historyProduct() {
+    public function historyProduct($id_users) {
         try{
             $auctions_list = DB::table('bids')
-                                ->select('auctions.id_users')
+                                ->select('auctions.id_auctions', 'images.id_images',
+                                            'name_product',
+                                            'images.image_path_1',
+                                            'auctions.shipping_cost',
+                                            'auctions.start_price',
+                                            'auctions.start_date_time',
+                                            'auctions.end_date_time',
+                                            'max_price',
+                                            )
                                 ->join('auctions', function(JoinClause $join){
                                     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
                                 })
                                 ->join('users', function(JoinClause $join){
                                         $join->on('users.id_users', '=', 'bids.id_users');
+                                    })->join('images', function(JoinClause $join){
+                                        $join->on('images.id_images', '=', 'auctions.id_images');
                                     })
                                 ->orderByDesc('bid_price')
-                                ->where('bids.id_users', '=', 13)
+                                ->where('bids.id_users', '=', $id_users)
                                 ->get();
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $auctions_list
+                'data' => $auctions_list->first()
             ], 200);
 
         } catch (Exception $e) {
