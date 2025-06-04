@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class HistoryAuctions extends StatefulWidget {
   State<HistoryAuctions> createState() {
@@ -40,7 +41,10 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
             padding: EdgeInsets.all(8),
             child: ListView.builder(
               itemCount: snapshot.data.length,
-              itemBuilder: (context, index) => Card(child: Text("test")),
+              itemBuilder: (context, index) =>
+                  Card(
+                      child: Text(snapshot.data['name_product'])
+                  ),
             ),
           );
         }
@@ -56,7 +60,8 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
 
   Stream<dynamic> fetchHistoryAuctions() async* {
     print('Start.');
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/history-product';
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/history-product/${ShareData
+        .userData['id_users']}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     print(response.statusCode);
@@ -64,7 +69,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
       final data = jsonDecode(response.body);
       // print(data['data']);
       yield data['data'];
-      setState(() {});
+      // setState(() {});
     }
     print("End.");
   }
