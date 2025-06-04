@@ -423,10 +423,10 @@ class AuctionController extends Controller
                                 ->join('auctions', function(JoinClause $join){
                                     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
                                 })
-                                // ->join('users', function(JoinClause $join){
-                                //         $join->on('users.id_users', '=', 'bids.id_users');
-                                //     })
-                                // ->orderByDesc('bid_price')
+                                ->join('users', function(JoinClause $join){
+                                        $join->on('users.id_users', '=', 'bids.id_users');
+                                    })
+                                ->orderByDesc('bid_price')
                                 ->where('bids.id_users', '=', 13)
                                 ->get();
 
