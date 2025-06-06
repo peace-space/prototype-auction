@@ -453,10 +453,6 @@ class AuctionController extends Controller
         }
     }
 
-    public function reportResultAuction() {
-        return "test";
-    }
-
     public function test(Request $request) {
         try {
             // $request->validate([

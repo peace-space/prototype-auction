@@ -5,6 +5,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\v1\BidController;
 use App\Http\Controllers\v1\EmailController;
 use App\Http\Controllers\v1\ImageController;
+use App\Models\ResultReportAuction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -51,5 +52,5 @@ Route::prefix('/v1')->group(function () {
     Route::get('/user-product/{id_user}', [AuctionController::class, 'userProduct']);
     Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
 
-    // Route::get('/report-result-auction', [A])
+    Route::get('/report-result-auction', [ResultReportAuction::class], 'index');
 });
