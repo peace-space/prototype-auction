@@ -40,7 +40,8 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
           return Padding(
             padding: EdgeInsets.all(8),
             child: ListView.builder(
-              itemCount: snapshot.data.length,emBuilder: (context, index) {
+                itemCount: snapshot.data.length,
+                itemBuilder: (context, index) {
                 Map<String, dynamic> data = snapshot.data?[index];
                 return Card(
                   child: ListTile(
