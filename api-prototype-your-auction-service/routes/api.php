@@ -39,6 +39,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     Route::post('/test', [AuctionController::class, 'test']);
+    Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
 
 
     // Route::get('/test', [EmailController::class, 'index']);

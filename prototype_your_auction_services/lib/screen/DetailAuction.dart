@@ -22,7 +22,7 @@ class DetailAuctionState extends State<DetailAuction> {
   var _bid = TextEditingController();
   Map<String, dynamic> detailAuctionData = {};
 
-  var _countDownDateTime = '-';
+  var _countDownDateTime;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -316,28 +316,20 @@ class DetailAuctionState extends State<DetailAuction> {
   Widget countdown() {
     final start_date_time_data = detailAuctionData['start_date_time'];
     final end_date_time_data = detailAuctionData['end_date_time'];
-
-    // print(detailAuctionData.toString());
-    print(end_date_time_data.toString());
+    print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
     var min;
     var end_date_time = DateTime.parse(end_date_time_data);
 
     var date_tiem_difference = end_date_time.difference(DateTime.now());
-    // print("aaaaaaaaaaaaaaa: " + date_tiem_difference.toString());
+    print("ความต่างของเวลา: " + date_tiem_difference.toString());
     var countdown = TimerCountdown(
       endTime: DateTime.now().add(
         Duration(seconds: date_tiem_difference.inSeconds),
       ),
-      onTick:
-          (value) => {
-            setState(() {
-              String hour = value.inHours.toString();
-              min = value.inMinutes.toString();
-              // String sec = value.inSeconds.toString();
-              _countDownDateTime =
-                  hour.toString() + ":" + min.toString() + ":" + "00";
-            }),
-          },
+      onTick: (remainingTime) {
+        print("Test: " + remainingTime.inMinutes.toString());
+        _countDownDateTime = remainingTime.inDays;
+      },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: true,
       spacerWidth: 5,
@@ -348,9 +340,17 @@ class DetailAuctionState extends State<DetailAuction> {
       secondsDescription: "sec",
       descriptionTextStyle: TextStyle(height: 0),
       colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
+      onEnd: () {
+
+      },
     );
-    // print("aaaaaaaaaaa: " + );
+    // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
+
     return countdown;
+  }
+
+  void onEntDateTime() {
+
   }
 
   void showConfirmDialog() async {
@@ -433,9 +433,9 @@ class DetailAuctionState extends State<DetailAuction> {
     Navigator.pushReplacement(context, route);
   }
 
-  // void test() {
-  //   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
-  //     print("ZZZZZZZZZZZZZZZZZ");
-  //   },);
-  // }
+// void test() {
+//   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
+//     print("ZZZZZZZZZZZZZZZZZ");
+//   },);
+// }
 }

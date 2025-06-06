@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\v1\BidController;
+use App\Models\ResultReportAuction;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -450,6 +451,82 @@ class AuctionController extends Controller
                 'message' => 'Error.',
                 'data' => $e
             ], 500);
+        }
+    }
+
+    public function onEndDateTime(Request $request) {
+        try {
+                $id_users = $request->id_users;
+                $id_bids = $request->id_bids;
+                $id_auctions = $request->id_auctions;
+                $payment_status = $request->payment_status;
+                $shipping_number = $request->shipping_number;
+                $delivery_status = $request->delivery_status;
+                $id_auction_types = $request->id_auction_types;
+                $id_payment_types = $request->id_payment_types;
+                $bank_account_number = $request->bank_account_number;
+
+            if ($payment_status == '') {
+                $payment_status = false;
+            }
+
+            if ($shipping_number == null) {
+                $shipping_number = '';
+            }
+
+            if ($delivery_status == null) {
+                $delivery_status = false;
+            }
+
+            if ($id_auction_types == null) {
+                $id_auction_types = 0;
+            }
+
+            if ($id_payment_types == null) {
+                $id_payment_types = 0;
+            }
+
+            if ($bank_account_number == null) {
+                $bank_account_number = '';
+            }
+
+
+            $data = [
+                'id_users' => $id_users,
+                'id_bids' => $id_bids,
+                'id_auctions' => $id_auctions,
+                'payment_status' => $payment_status,
+                'shipping_number' => $shipping_number,
+                'delivery_status' => $delivery_status,
+                'id_auction_types' => $id_auction_types,
+                'id_payment_types' => $id_payment_types,
+                'bank_account_number' => $bank_account_number,
+            ];
+            // return $data;
+            $save_result_report_auction = DB::table('result_report_auctions')
+                                            ->insert($data);
+
+
+            if ($save_result_report_auction == true) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Successfully.',
+                    'data' => $data
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Error.',
+                    'data' => 'มีข้อผิดพลาดในการบันทึกข้อมูล'
+                ], 404);
+            }
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ], 404);
         }
     }
 
