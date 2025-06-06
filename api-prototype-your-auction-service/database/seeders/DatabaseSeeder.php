@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Auction;
 use App\Models\Bid;
 use App\Models\Image;
+use App\Models\ResultReportAuction;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -20,6 +21,7 @@ class DatabaseSeeder extends Seeder
         Bid::factory(10)->create();
         Image::factory(10)->create();
         Auction::factory(10)->create();
+        ResultReportAuction::factory(10)->create();
 
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
