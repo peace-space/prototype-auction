@@ -420,13 +420,11 @@ class AuctionController extends Controller
         try{
             $auctions_list = DB::table('bids')
                                 ->select('auctions.id_auctions', 'images.id_images',
-                                            'name_product',
-                                            'images.image_path_1',
-                                            'auctions.shipping_cost',
-                                            'auctions.start_price',
-                                            'auctions.start_date_time',
-                                            'auctions.end_date_time',
-                                            'max_price',
+                                            'auctions.name_product', 'images.image_path_1',
+                                            'auctions.shipping_cost', 'auctions.start_price',
+                                            'auctions.start_date_time', 'auctions.end_date_time',
+                                            'auctions.max_price', 'bids.created_at',
+                                            'bids.bid_price'
                                             )
                                 ->join('auctions', function(JoinClause $join){
                                     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
@@ -436,14 +434,14 @@ class AuctionController extends Controller
                                     })->join('images', function(JoinClause $join){
                                         $join->on('images.id_images', '=', 'auctions.id_images');
                                     })
-                                ->orderByDesc('bid_price')
+                                ->orderByDesc('created_at')
                                 ->where('bids.id_users', '=', $id_users)
                                 ->get();
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $auctions_list->first()
+                'data' => $auctions_list
             ], 200);
 
         } catch (Exception $e) {
@@ -453,6 +451,10 @@ class AuctionController extends Controller
                 'data' => $e
             ], 500);
         }
+    }
+
+    public function reportResultAuction() {
+        return "test";
     }
 
     public function test(Request $request) {

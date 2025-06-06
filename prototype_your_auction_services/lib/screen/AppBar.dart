@@ -5,6 +5,7 @@ import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ChatList.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
+import 'package:prototype_your_auction_services/screen/ResultReportAuction.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
 import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
@@ -30,6 +31,7 @@ Drawer createDrawer (BuildContext ctx) {
           userProfile(ctx),
           chatListButton(ctx),
           buttonGoToHistoryAuction(ctx),
+          buttonGoToReportAution(ctx),
           logOutButton(ctx)
         ],
       ),
@@ -51,6 +53,7 @@ Drawer createDrawer (BuildContext ctx) {
           userProfile(ctx),
           chatListButton(ctx),
           buttonGoToHistoryAuction(ctx),
+          buttonGoToReportAution(ctx),
           logOutButton(ctx)
         ],
       ),
@@ -232,5 +235,16 @@ Widget buttonGoToHistoryAuction(BuildContext ctx) {
         );
       },
       child: Text("ประวัติการประมูล")
+  );
+}
+
+Widget buttonGoToReportAution(BuildContext ctx) {
+  return ElevatedButton(
+      onPressed: () {
+        Navigator.push(ctx,
+            MaterialPageRoute(builder: (context) => ReportAuction(),)
+        );
+      },
+      child: Text("รางานผลการประมูล")
   );
 }
