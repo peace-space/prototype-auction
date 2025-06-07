@@ -53,5 +53,5 @@ Route::prefix('/v1')->group(function () {
     Route::get('/user-product/{id_user}', [AuctionController::class, 'userProduct']);
     Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
 
-    Route::get('/result-report-auction', [ResultReportAuctionController::class, 'resultReportAuction']);
+    Route::get('/result-report-auction/{id_users}', [ResultReportAuctionController::class, 'resultReportAuction']);
 });

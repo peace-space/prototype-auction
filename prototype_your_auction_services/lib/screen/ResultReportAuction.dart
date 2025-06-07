@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AppBar.dart';
+import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class ReportAuction extends StatefulWidget {
   State<ReportAuction> createState() {
@@ -44,7 +45,8 @@ class ReportAuctionState extends State<ReportAuction> {
   }
 
   Stream<dynamic> fetchResultReportAuction() async* {
-    String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/result-report-auction';
+    String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/result-report-auction/${ShareData
+        .userData['id_users']}';
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
 

@@ -245,6 +245,6 @@ Widget buttonGoToReportAution(BuildContext ctx) {
             MaterialPageRoute(builder: (context) => ReportAuction(),)
         );
       },
-      child: Text("รางานผลการประมูล")
+      child: Text("รายงานผลการประมูล")
   );
 }
