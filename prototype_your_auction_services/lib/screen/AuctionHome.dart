@@ -19,6 +19,7 @@ class AuctionHomeState extends State<AuctionHome> {
   bool _changeDisplay = false;
   String loginStatus = "";
   Map<String, dynamic> images_data = {};
+  var _timeout;
 
   // Map<String, dynamic> dateTimeCoundown = {};
 
@@ -37,9 +38,7 @@ class AuctionHomeState extends State<AuctionHome> {
     double right = 8.0;
     double bottom = 0.0;
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home: ${loginStatus}"),
-      ),
+      appBar: AppBar(title: Text("Home: ${loginStatus}")),
       body: Column(
         children: [
           Container(
@@ -50,10 +49,8 @@ class AuctionHomeState extends State<AuctionHome> {
             height: 23,
             child: changeDisplayButton(context),
           ),
-          SizedBox(height: 3,),
-          Expanded(
-              child: displayer(context)
-          ),
+          SizedBox(height: 3),
+          Expanded(child: displayer(context)),
         ],
       ),
       drawer: createDrawer(context),
@@ -75,153 +72,138 @@ class AuctionHomeState extends State<AuctionHome> {
     double bottom = 8.0;
 
     return StreamBuilder(
-        stream: fetchAuctionData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("Error."),
-            );
-          }
+      stream: fetchAuctionData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error."));
+        }
 
-          if (snapshot.connectionState == ConnectionState.active) {
-            return const Center(
-                child: CircularProgressIndicator()
-            );
-          }
+        if (snapshot.connectionState == ConnectionState.active) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasData) {
-            return GridView.builder(
-              padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, //จำนวนคอลลัมน์
-                crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
-                mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
-                //mainAxisExtent: 300, //ขนาดของรูปภาพ
-                childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
-              ),
-              itemCount: snapshot.data?.length,
-              itemBuilder: (context, index) {
-                Map<String, dynamic> data = snapshot.data?[index];
-                return InkWell(
-                  onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
-                  child: Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Expanded(
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15)),
-                                child: Image.network(
-                                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
-                                      +
-                                      '${data['image_path_1']}',
-                                  fit: BoxFit.cover,)
-                            ),
+        if (snapshot.hasData) {
+          return GridView.builder(
+            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, //จำนวนคอลลัมน์
+              crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
+              mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
+              //mainAxisExtent: 300, //ขนาดของรูปภาพ
+              childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
+            ),
+            itemCount: snapshot.data?.length,
+            itemBuilder: (context, index) {
+              Map<String, dynamic> data = snapshot.data?[index];
+
+              return InkWell(
+                onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Expanded(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.vertical(
+                            top: Radius.circular(15),
                           ),
-                          Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(data['name_product']),
-                                SizedBox(height: 5,),
-                                Text("ราคาสูงสุด ฿${data['max_price']
-                                    .toString()}"),
-                                SizedBox(height: 5,),
+                          child: Image.network(
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                                '${data['image_path_1']}',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(data['name_product']),
+                            SizedBox(height: 5),
+                            Text("ราคาสูงสุด ฿${data['max_price'].toString()}"),
+                            SizedBox(height: 5),
 
-                                Row(
-                                  children: [
-                                    Text("เวลา: ",
-                                      style: TextStyle(
-                                          color: Colors.red,
-                                          fontSize: 18
-                                      ),
-                                    ),
-                                    countdown(data['end_date_time'])
-                                  ],
-                                )
+                            Row(
+                              children: [
+                                Text(
+                                  "เวลา: ",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                countdown(data['end_date_time']),
                               ],
                             ),
-                          )
-                        ],
-                      )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
+                ),
+              );
+            },
           );
         }
+
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
   Widget auctionList(BuildContext ctx) {
     return StreamBuilder(
-        stream: fetchAuctionData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text("Error."),
-            );
-          }
+      stream: fetchAuctionData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error."));
+        }
 
-          if (snapshot.connectionState == ConnectionState.active) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+        if (snapshot.connectionState == ConnectionState.active) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-          if (snapshot.hasData) {
-            return ListView.builder(
-                itemCount: snapshot.data?.length,
-                padding: EdgeInsets.all(8),
-                itemBuilder: (context, index) {
-                  Map<String, dynamic> data = snapshot.data?[index];
+        if (snapshot.hasData) {
+          return ListView.builder(
+            itemCount: snapshot.data?.length,
+            padding: EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              Map<String, dynamic> data = snapshot.data?[index];
 
-                  double left = 0.0;
-                  double top = 0.0;
-                  double right = 8.0;
-                  double bottom = 8.0;
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                    child: ListTile(
-                      onTap: () => goToDetailAuction(ctx, data),
-                      leading: ClipRRect(
-                        // borderRadius: BorderRadius.vertical(),
-                          child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
-                                +
-                                '${data['image_path_1']}',
-                            cacheHeight: 600,
-                            cacheWidth: 500,
-                          )
-                      ),
-                      title: Text(data['name_product']),
-                      subtitle: Text(
-                          "ราคาสูงสุด ฿${data['max_price'].toString()}"),
-                      trailing: Column(
-                        children: [
-                          Text('เวลา'),
-                          countdown(data['end_date_time'])
-                        ],
-                      ),
+              double left = 0.0;
+              double top = 0.0;
+              double right = 8.0;
+              double bottom = 8.0;
+              return Padding(
+                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                child: ListTile(
+                  onTap: () => goToDetailAuction(ctx, data),
+                  leading: ClipRRect(
+                    // borderRadius: BorderRadius.vertical(),
+                    child: Image.network(
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                          '${data['image_path_1']}',
+                      cacheHeight: 600,
+                      cacheWidth: 500,
                     ),
-                  );
-                }
-            );
-          }
-
-          return const Center(
-            child: CircularProgressIndicator(),
+                  ),
+                  title: Text(data['name_product']),
+                  subtitle: Text("ราคาสูงสุด ฿${data['max_price'].toString()}"),
+                  trailing: Column(
+                    children: [Text('เวลา'), countdown(data['end_date_time'])],
+                  ),
+                ),
+              );
+            },
           );
         }
+
+        return const Center(child: CircularProgressIndicator());
+      },
     );
   }
 
@@ -229,38 +211,20 @@ class AuctionHomeState extends State<AuctionHome> {
     try {
       await Future.delayed(Duration(seconds: 1));
       // print("Start");
-      String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
+      String url =
+          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       final uri = Uri.parse(url);
       final response = await http.get(uri);
-      // print("Error");
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
-      // print(auctions_data[0]['image_path_1']);
-      // print(auctions_data.toString());
-      yield auctions_data;
+      List<dynamic> data = checkEndDateTime(auctions_data);
+      // print(data.toString());
+      yield data;
       setState(() {});
-      // print("End");
     } on Exception catch (e) {
       print(e);
     }
   }
-
-  // Stream<Map<dynamic, String>> fetchImage(dynamic id_auctions) async* {
-  //   print("Start.Image");
-  //   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/image/${id_auctions}';
-  //   final uri = Uri.parse(url);
-  //   final response = await http.get(uri);
-  //   final resData = jsonDecode(response.body);
-  //   await Future.delayed(Duration(seconds: 500));
-  //   Map<String, dynamic> data = resData['data'];
-  //   print(data.runtimeType);
-  //   // yield data;
-  //   print(data.toString());
-  //   setState(() {
-  //     images_data = data;
-  //   });
-  //   print("End.Image");
-  // }
 
   Widget displayer(BuildContext ctx) {
     if (_changeDisplay) {
@@ -286,16 +250,14 @@ class AuctionHomeState extends State<AuctionHome> {
 
   Widget changeDisplayButton(BuildContext ctx) {
     return ElevatedButton(
-        onPressed: () => changeDisplayStatus(ctx),
-        child: Text(messageButton)
+      onPressed: () => changeDisplayStatus(ctx),
+      child: Text(messageButton),
     );
   }
 
   void goToDetailAuction(BuildContext ctx, Map<String, dynamic> data) {
     ShareProductData.productData = data;
-    final route = MaterialPageRoute(
-      builder: (ctx) => DetailAuction(),
-    );
+    final route = MaterialPageRoute(builder: (ctx) => DetailAuction());
 
     Navigator.push(ctx, route);
   }
@@ -309,26 +271,42 @@ class AuctionHomeState extends State<AuctionHome> {
 
     return TimerCountdown(
       endTime: DateTime.now().add(
-          Duration(seconds: date_tiem_difference.inSeconds)),
+        Duration(seconds: date_tiem_difference.inSeconds),
+      ),
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 0,
-      timeTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.red,
-        height: 0,
-      ),
+      timeTextStyle: TextStyle(fontSize: 18, color: Colors.red, height: 0),
       daysDescription: "day",
       hoursDescription: "hour",
       minutesDescription: "min",
       secondsDescription: "sec",
-      descriptionTextStyle: TextStyle(
-        height: 0,
-      ),
-      colonsTextStyle: TextStyle(
-          fontSize: 18,
-          color: Colors.red
-      ),
+      descriptionTextStyle: TextStyle(height: 0),
+      colonsTextStyle: TextStyle(fontSize: 18, color: Colors.red),
     );
+  }
+
+  List<Map<String, dynamic>> checkEndDateTime(List<dynamic> data) {
+    // void checkEndDateTime(List<dynamic> data) async {
+    print('Start.');
+    // var check_timeout = DateTime.parse(data['end_date_time']);
+    // Duration different_date_time = check_timeout.difference(DateTime.now());
+    // print(different_date_time.inMinutes.toString());
+
+    List<Map<String, dynamic>> newData = [];
+
+    for (int index = 0; index < data.length; index++) {
+      var check_timeout = DateTime.parse(data[index]['end_date_time']);
+      Duration different_date_time = check_timeout.difference(DateTime.now());
+      print(different_date_time.inMinutes.toString());
+
+      if (different_date_time >= Duration.zero) {
+        newData.add(data[index]);
+      }
+    }
+
+    return newData;
+
+    print('End.');
   }
 }

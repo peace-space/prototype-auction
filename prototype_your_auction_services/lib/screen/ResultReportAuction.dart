@@ -31,12 +31,20 @@ class ReportAuctionState extends State<ReportAuction> {
                 Map<String, dynamic> data = snapshot.data![index];
                 return Card(
                     child: ListTile(
+                      leading: Image.network(
+                        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                            '${data['image_path_1']}',
+                        cacheHeight: 1000,
+                        cacheWidth: 900,
+                      ),
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(data['id_users'].toString())
+                            Text(data['name_product'].toString()),
+                            Text('${paymentStatus(data['payment_status'])}')
                           ],
-                        )
+                        ),
+                      trailing: Text("ประมูลสำเร็จ"),
                     )
                 );
               }
@@ -45,17 +53,25 @@ class ReportAuctionState extends State<ReportAuction> {
   }
 
   Stream<dynamic> fetchResultReportAuction() async* {
-    String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/result-report-auction/${ShareData
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/result-report-auction/${ShareData
         .userData['id_users']}';
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
-
     if (responce.statusCode == 200) {
       final body = jsonDecode(responce.body);
-      print(body['data'].toString());
+      // print(body['data'].toString());
+      // ShareProductData.productData = body['data'];
+      // print(ShareProductData.productData);
       yield body['data'];
+      setState(() {});
+    }
+  }
 
-      // setState(() {});
+  String paymentStatus(int payment_status) {
+    if (payment_status == 1) {
+      return "ชำระเงินแล้ว";
+    } else {
+      return "ยังไม่ชำระเงิน";
     }
   }
 }

@@ -17,8 +17,14 @@ class ResultReportAuctionController extends Controller
                                                     ->Join('bids', function(JoinClause $join) {
                                                         $join->on('bids.id_bids', '=', 'result_report_auctions.id_bids');
                                                     })
+                                                    ->join('auctions', function(JoinClause $join){
+                                                        $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                                                    })
+													->join('images', function(JoinClause $join){
+                                                        $join->on('images.id_images', '=', 'auctions.id_images');
+                                                    })
                                                     ->where('result_report_auctions.id_users', '=', $id_user)
-                                                    // ->orderBy('result_report_auction.created_at')
+                                                    #->orderBy('result_report_auction.created_at')
                                                     ->get();
                     return response()->json([
                         'status' => 1,
