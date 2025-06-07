@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\DB;
 
 class ResultReportAuctionController extends Controller
 {
-    public function resultReportAuction() {
+    public function resultReportAuction($id_user) {
        try {
             $result_report_auction = DB::table('result_report_auctions')
                                                     ->select('*')
                                                     ->Join('bids', function(JoinClause $join) {
                                                         $join->on('bids.id_bids', '=', 'result_report_auctions.id_bids');
                                                     })
-                                                    ->where('result_report_auctions.id_users', '=', 5)
+                                                    ->where('result_report_auctions.id_users', '=', $id_user)
                                                     // ->orderBy('result_report_auction.created_at')
                                                     ->get();
                     return response()->json([
