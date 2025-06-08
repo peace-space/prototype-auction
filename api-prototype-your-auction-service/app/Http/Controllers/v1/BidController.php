@@ -42,14 +42,14 @@ class BidController extends Controller
 
     public function highBids($id_auctions)
     {
-        $high_bit = DB::table('bids')
+        $high_bid = DB::table('bids')
             ->select('bids.id_users', 'bids.id_auctions', 'bids.bid_price')
             ->leftJoin('auctions', 'bids.id_auctions', '=', 'auctions.id_auctions')
             ->where('bids.id_auctions', '=', $id_auctions)
             ->orderByDesc('bid_price')
             ->get();
 
-        return $high_bit->first();
+        return $high_bid->first();
     }
 
     public function bidding(Request $request)
