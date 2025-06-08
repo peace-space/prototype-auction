@@ -26,27 +26,39 @@ class ReportAuctionState extends State<ReportAuction> {
       builder:
           (context, snapshot) => ListView.builder(
             padding: EdgeInsets.all(8),
-              itemCount: snapshot.data.length,
+              itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
+                if (snapshot.hasError) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.connectionState == ConnectionState.active) {
+                  return Center(child: CircularProgressIndicator());
+                }
+
+                if (snapshot.hasData) {
                 Map<String, dynamic> data = snapshot.data![index];
                 return Card(
-                    child: ListTile(
-                      leading: Image.network(
-                        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                            '${data['image_path_1']}',
-                        cacheHeight: 1000,
-                        cacheWidth: 900,
-                      ),
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(data['name_product'].toString()),
-                            Text('${paymentStatus(data['payment_status'])}')
-                          ],
-                        ),
-                      trailing: Text("ประมูลสำเร็จ"),
-                    )
+                  child: ListTile(
+                    leading: Image.network(
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                          '${data['image_path_1']}',
+                      cacheHeight: 1000,
+                      cacheWidth: 900,
+                    ),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(data['name_product'].toString()),
+                        Text('${paymentStatus(data['payment_status'])}'),
+                      ],
+                    ),
+                    trailing: Text("ประมูลสำเร็จ"),
+                  ),
                 );
+                }
+
+                return Center(child: CircularProgressIndicator());
               }
           ),
     );

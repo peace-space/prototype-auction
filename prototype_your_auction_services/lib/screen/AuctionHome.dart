@@ -136,7 +136,7 @@ class AuctionHomeState extends State<AuctionHome> {
                                     fontSize: 18,
                                   ),
                                 ),
-                                countdown(data['end_date_time']),
+                                countdown(data),
                               ],
                             ),
                           ],
@@ -194,7 +194,7 @@ class AuctionHomeState extends State<AuctionHome> {
                   title: Text(data['name_product']),
                   subtitle: Text("ราคาสูงสุด ฿${data['max_price'].toString()}"),
                   trailing: Column(
-                    children: [Text('เวลา'), countdown(data['end_date_time'])],
+                    children: [Text('เวลา'), countdown(data)],
                   ),
                 ),
               );
@@ -217,7 +217,7 @@ class AuctionHomeState extends State<AuctionHome> {
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
-      List<dynamic> data = checkEndDateTime(auctions_data);
+      List<dynamic>? data = checkEndDateTime(auctions_data);
       // print(data.toString());
       yield data;
       setState(() {});
@@ -262,10 +262,10 @@ class AuctionHomeState extends State<AuctionHome> {
     Navigator.push(ctx, route);
   }
 
-  Widget countdown(String end_date_time_data) {
+  Widget countdown(Map<String, dynamic> data) {
     // print(end_date_time_data.toString());
-
-    var end_date_time = DateTime.parse(end_date_time_data);
+    // print(data.toString());
+    var end_date_time = DateTime.parse(data['end_date_time']);
 
     var date_tiem_difference = end_date_time.difference(DateTime.now());
 
@@ -273,6 +273,9 @@ class AuctionHomeState extends State<AuctionHome> {
       endTime: DateTime.now().add(
         Duration(seconds: date_tiem_difference.inSeconds),
       ),
+      onEnd: () {
+        winTheAuction(data);
+      },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 0,
@@ -288,7 +291,7 @@ class AuctionHomeState extends State<AuctionHome> {
 
   List<Map<String, dynamic>> checkEndDateTime(List<dynamic> data) {
     // void checkEndDateTime(List<dynamic> data) async {
-    print('Start.');
+    // print('Start.');
     // var check_timeout = DateTime.parse(data['end_date_time']);
     // Duration different_date_time = check_timeout.difference(DateTime.now());
     // print(different_date_time.inMinutes.toString());
@@ -298,7 +301,7 @@ class AuctionHomeState extends State<AuctionHome> {
     for (int index = 0; index < data.length; index++) {
       var check_timeout = DateTime.parse(data[index]['end_date_time']);
       Duration different_date_time = check_timeout.difference(DateTime.now());
-      print(different_date_time.inMinutes.toString());
+      // print(different_date_time.inMinutes.toString());
 
       if (different_date_time >= Duration.zero) {
         newData.add(data[index]);
@@ -309,4 +312,54 @@ class AuctionHomeState extends State<AuctionHome> {
 
     print('End.');
   }
+
+  void winTheAuction(Map<String, dynamic> data) async {
+    print("Win The Auction");
+    Future.delayed(Duration(seconds: 1000));
+    int count = 0;
+    count += 1;
+    showDialog(
+      context: context,
+      builder:
+          (context) =>
+          AlertDialog(
+            title: Text("data: " + count.toString()),
+            content: Text(
+              "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
+              style: TextStyle(fontSize: 16),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => {Navigator.pop(context)},
+                child: Text('OK', style: TextStyle(fontSize: 18)),
+              ),
+            ],
+          ),
+    );
+    saveTheWinnerAuctions();
+
+    String url = '';
+    final uri = Uri.parse(url);
+    // final
+  }
+
+  void saveTheWinnerAuctions() async {
+    Map<String, dynamic> data = {
+      'id_auctions': 1,
+    };
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+    final uri = Uri.parse(url);
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 201) {
+      final reActionData = jsonDecode(response.body);
+      print(reActionData['message']);
+    } else {
+      print(response.statusCode.toString());
+    }
+  }
+
 }
