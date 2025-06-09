@@ -209,7 +209,7 @@ class AuctionController extends Controller
                 if ($request->image_1 != null) {
                     if ($request->image_1 != null) {
                         $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
-                        $image_path_1 = Storage::url($image_name_1);
+                        // $image_path_1 = Storage::url($image_name_1);
                     } else {
                         $image_path_1 = null;
                     }

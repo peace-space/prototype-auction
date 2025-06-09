@@ -110,9 +110,12 @@ class AuctionHomeState extends State<AuctionHome> {
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                           ),
+                          // child: Image.network(
+                          //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                          //       '${data['image_path_1']}',
                           child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                                '${data['image_path_1']}',
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
+                                data['image_path_1'],
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -185,8 +188,8 @@ class AuctionHomeState extends State<AuctionHome> {
                   leading: ClipRRect(
                     // borderRadius: BorderRadius.vertical(),
                     child: Image.network(
-                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                          '${data['image_path_1']}',
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
+                          data['image_path_1'],
                       cacheHeight: 600,
                       cacheWidth: 500,
                     ),
