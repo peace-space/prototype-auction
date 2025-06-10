@@ -12,6 +12,7 @@ class HomeTestSystem extends StatefulWidget {
 class HomeTestSystemState extends State<HomeTestSystem> {
   bool _confirm = false;
   String _return_value = '';
+  var _DropDown;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,6 +34,8 @@ class HomeTestSystemState extends State<HomeTestSystem> {
               button1(context),
               Text("ทดสอบ Confirm Dialog: " + _confirm.toString()),
               button2(context),
+              Text("ทดสอบ DropDown: " + _DropDown.toString()),
+              dropdownTest(),
             ],
           ),
         );
@@ -75,4 +78,30 @@ class HomeTestSystemState extends State<HomeTestSystem> {
       _return_value = result!;
     });
   }
+
+  Widget dropdownTest() {
+    //ข้อมูล ต้องเป็น String เท่านั้น
+    // ตัวแปร _DropDown ต้องเป็น ชนิดข้อมูล var เท่านั้น
+    List<String> dataTestDropDown = ['1', 'BBBB', '3', 'TestDropDown'];
+    return DropdownButton<String>(
+      value: _DropDown,
+      items:
+          dataTestDropDown.map((data) {
+            return DropdownMenuItem(value: data, child: Text(data));
+          }).toList(),
+      onChanged:
+          (value) => {
+            setState(() {
+              _DropDown = value.toString();
+            }),
+          },
+    );
+  }
+
+  // DropdownMenuItem buildMenuItem(String data) {
+  //   return DropdownMenuItem(
+  //     value: data,
+  //       child: Text(data)
+  //   );
+  // }
 }
