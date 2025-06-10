@@ -128,7 +128,7 @@ class AddProductState extends State<AddProduct> {
         ),
         inputEndTime(),
         SizedBox(height: 8),
-        Text("เวลาปิดประมูล ( วัน / เดือน / ปี )", style: subjectTextStyle())),
+        Text("เวลาปิดประมูล ( วัน / เดือน / ปี )", style: subjectTextStyle()),
         inputEndDate(),
         SizedBox(height: 8),
 
