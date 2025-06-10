@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class UserProfile extends StatefulWidget {
 

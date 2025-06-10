@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/screen/AddProduct.dart';
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
-import 'package:prototype_your_auction_services/screen/UserProduct.dart';
+import 'package:prototype_your_auction_services/screen/AuctionListUser.dart';
+import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class StoreManage extends StatefulWidget {
   State<StoreManage> createState() {
@@ -16,11 +16,9 @@ class StoreManageState extends State<StoreManage> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          Column(
-              children: [
-                buttonGoToUserProduct(context),
-                openAuctionsButton(context),
-              ]),
+          openAuctionsButton(context),
+          Divider(),
+          buttonGoToUserProduct(context),
         ],
       ),
       drawer: createDrawer(context),

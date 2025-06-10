@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
-import 'package:prototype_your_auction_services/share_data/CustomDialog.dart';
-import 'package:prototype_your_auction_services/share_data/confirm_picker.dart';
+import 'package:prototype_your_auction_services/share/CustomDialog.dart';
+import 'package:prototype_your_auction_services/share/confirm_picker.dart';
+import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class HomeTestSystem extends StatefulWidget {
   State<HomeTestSystem> createState() {
@@ -69,7 +69,7 @@ class HomeTestSystemState extends State<HomeTestSystem> {
   void _showCustomDlg(BuildContext ctx) async {
     String? result = await showDialog(
       context: ctx,
-      builder: (_) => CustomDialog(data: 123, title: "Test"),
+      builder: (_) => CustomDialog(message: "123", title: "Test"),
     );
     setState(() {
       _return_value = result!;

@@ -8,11 +8,11 @@ import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/ResultReportAuction.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
-import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
 
-import 'HistoryAuctions.dart';
+import '../screen/HistoryBids.dart';
 
 Drawer createDrawer (BuildContext ctx) {
   if (ShareData.admin && ShareData.logedIn) {

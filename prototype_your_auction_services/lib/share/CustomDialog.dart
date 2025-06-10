@@ -1,28 +1,28 @@
 import 'package:flutter/material.dart';
 
 class CustomDialog extends StatefulWidget {
-  int data;
+  String? message;
   String? title;
 
-  CustomDialog({required this.data, this.title});
+  CustomDialog({required this.message, this.title});
 
   State<CustomDialog> createState() {
-    return CustomDialogState(data: data, title: title);
+    return CustomDialogState(message: message, title: title);
   }
 }
 
 class CustomDialogState extends State<CustomDialog> {
-  int data;
+  var message;
   String? title;
 
-  CustomDialogState({required this.data, required this.title});
+  CustomDialogState({required this.message, required this.title});
 
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("แจ้งเตือน"),
+      title: Text(title!),
       content: Padding(
         padding: EdgeInsets.symmetric(vertical: 5),
-        child: Text("data"),
+        child: Text(message!),
       ),
       actions: [
         TextButton(

@@ -1,9 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
 
 class AddProduct extends StatefulWidget {
   State<AddProduct> createState() {
@@ -12,662 +7,289 @@ class AddProduct extends StatefulWidget {
 }
 
 class AddProductState extends State<AddProduct> {
-  var _startDate = null;
-  var _endDate = null;
-  var _startTime = null;
-  var _endTime = null;
-  DateTime now = DateTime.now();
-  String message = "";
-  File? imageData;
-  int locationImage = 0;
-  List<File?> data = [];
-
-  var _nameProduct = TextEditingController();
-  var _detialProduct = TextEditingController();
-  var _shippingCost = TextEditingController();
-  var _startPrice = TextEditingController();
-  var _maxPrice = TextEditingController();
-
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("เพิ่มสินค้า"),
-        ),
-        body: StreamBuilder(
-          stream: null,
-          builder: (context, snapshot) =>
-              ListView(
+      appBar: AppBar(title: Text('เพิ่มสินค้า')),
+      body: StreamBuilder(
+        stream: null,
+        builder:
+            (context, snapshot) =>
+            Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      children: [
-                        showImage(),
-                        Text("${data.length}/10"),
-                        Text("${message}", style: TextStyle(
-                            color: Colors.red
-                        ),),
-                        buttonAddAndDeleteImage(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        textName(),
-                        nameProduct(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        textProductDetail(),
-                        detialProduct(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        textShippingCost(),
-                        shippingCost(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        textStartPrice(),
-                        startPrice(),
-                        textMaxPrice(),
-                        maxPrice(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        textStartDate(),
-                        textStartTime(),
-                        textEndDate(),
-                        textEndTime(),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        openAuctionButton(),
-                        Text(now.hour.toString() + "."
-                            + now.minute.toString() + "."
-                            + now.second.toString() + ":"
-                            + now.day.toString() + "-"
-                            + now.month.toString() + "-"
-                            + now.year.toString()),
-                        ElevatedButton(
-                          onPressed: () =>
-                          {
-                            setState(() {
-                              now = DateTime.now();
-                            })
-                          },
-                          child: Text("วันเวลาปัจจุบัน"),
-                        ),
-                      ],
-                    ),
+                  showOneImage(),
+                  showAndSelectImage(),
+                  selectShowImage(),
+                  SizedBox(
+                    height: 8,
                   ),
-                ],
-              ),
-        )
-    );
-  }
+                  inputImageProduct(),
+                  Divider(),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  inputDataProduct(),
+                  Divider(),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  inputBankAccount(),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  buttonSubmit(),
 
-  Widget showImage() {
-    return Container(
-      height: 300,
-      width: 350,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: (data.length == 0) ? 1 : data.length,
-        itemBuilder: (context, index) =>
-            SizedBox(
-                child: GridTile(
-                  child: (data.length == 0) ?
-                  Container(
-                    // color: Colors.green,
-                    alignment: Alignment.center,
-                    height: 300,
-                    width: 350,
-                    child: Text("ไม่มีรูปภาพ"),
+                  SizedBox(
+                    height: 500,
                   )
-                  // Image.network(
-                  //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/storage/images/product-images/car-001.jpg',
-                  //   fit: BoxFit.fill, width: 350, height: 300,) 
-                      :
-                  Image.file(data[index]!,
-                      fit: BoxFit.fill, width: 350, height: 300),
+                ],
                 )
             ),
       ),
     );
   }
 
-  Widget nameProduct() {
-    return TextField(
-      controller: _nameProduct,
-      decoration: InputDecoration(
-          hintText: "ชื่อสินค้า*"
+  Widget showOneImage() {
+    return Container(
+        width: 500,
+        height: 300,
+        child: Image.network(
+          "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/car-001.jpg",
+          fit: BoxFit.fill,)
+    );
+  }
+
+  Widget showAndSelectImage() {
+    return Container(
+      width: 100,
+      height: 100,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (context, index) =>
+              Card(
+                child: InkWell(
+                  onTap: () => {},
+                  child: Image.network(
+                    "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/car-001.jpg",
+                    fit: BoxFit.fill,),
+                ),
+              )
       ),
     );
   }
 
-  Widget detialProduct() {
-    return TextField(
-      maxLines: 5,
-      controller: _detialProduct,
-      decoration: InputDecoration(
-        hintText: "รายละเอียดสินค้า*",
+  Widget selectShowImage() {
+    return Container(
+      // color: Colors.lightBlueAccent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+              onPressed: () => {},
+              icon: Icon(Icons.arrow_back_sharp)
+          ),
+          // Text("Start"),
+          Text("8/10"),
+          // Text("End"),
+          IconButton(
+              onPressed: () => {},
+              icon: Icon(Icons.arrow_forward_sharp)
+          ),
+        ],
       ),
     );
   }
 
-  Widget test() {
-    return TextFormField(
-
+  Widget inputDataProduct() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: Text(
+            "เพิ่มข้อมูลสินค้าเพื่อเปิดประมูล", style: subjectTextStyle(),),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ประเภทการประมูล", style: subjectTextStyle(),),
+        inputAuctionTypes(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ชื่อสินค้า:", style: subjectTextStyle(),),
+        inputNameProduct(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("รายละเอียดสินค้า:", style: subjectTextStyle(),),
+        inputDetailProduct(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ค่าจัดส่ง:", style: subjectTextStyle(),),
+        inputShippingCost(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ราคาเริ่มต้น", style: subjectTextStyle(),),
+        inputStartPrice(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("เวลาปิดประมูล ( วัน : ชั่วโมง : นาที : วินาที )",
+          style: subjectTextStyle(),),
+        inputEndDateTime(),
+        SizedBox(
+          height: 8,
+        ),
+      ],
     );
   }
 
-  Widget shippingCost() {
-    return TextField(
-      controller: _shippingCost,
-      decoration: InputDecoration(
-          hintText: "ค่าจัดส่งสินค้า*"
-      ),
-    );
-  }
-
-  Widget startPrice() {
-    return TextField(
-      controller: _startPrice,
-      decoration: InputDecoration(
-          hintText: "ราคาเริ่มต้น*"
-      ),
-    );
-  }
-
-  Widget maxPrice() {
-    return TextField(
-      controller: _maxPrice,
-      decoration: InputDecoration(
-          hintText: "ราคาสูงสุดในการประมูล*"
-      ),
-    );
-  }
-
-  Widget openAuctionButton() {
+  Widget inputImageProduct() {
     return ElevatedButton(
-        onPressed: () =>
-        {
-          onSaveProduct()
-        },
+        onPressed: () => {},
+        child: Text("inputImageProduct")
+    );
+  }
+
+  Widget inputNameProduct() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "ชื่อสินค้า"
+      ),
+    );
+  }
+
+  Widget inputDetailProduct() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "รายละเอียดสินค้า"
+      ),
+    );
+  }
+
+  Widget inputShippingCost() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputShippingCost"
+      ),
+    );
+  }
+
+  Widget inputStartPrice() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputStartPrice"
+      ),
+    );
+  }
+
+  Widget inputEndDateTime() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputEndDateTime"
+      ),
+    );
+  }
+
+  Widget inputAuctionTypes() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputAuctionTypes"
+      ),
+    );
+  }
+
+  Widget inputBankAccount() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: Text("inputBankAccount", style: subjectTextStyle(),),
+        ),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ประเภทการชำระเงิน", style: subjectTextStyle(),),
+        inputPaymentTypes(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("ชื่อบัญชีธนาคาร", style: subjectTextStyle(),),
+        inputNameBankAccount(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("เลขบัญชีธนาคาร", style: subjectTextStyle(),),
+        inputBankAccountNumber(),
+        SizedBox(
+          height: 8,
+        ),
+        Text("พร้อมเพย์", style: subjectTextStyle(),),
+        inputPromptPay(),
+        SizedBox(
+          height: 8,
+        ),
+      ],
+    );
+  }
+
+  Widget inputPaymentTypes() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputPaymentTypes"
+      ),
+    );
+  }
+
+  Widget inputBankAccountNumber() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputBankAccountNumber"
+      ),
+    );
+  }
+
+  Widget inputNameBankAccount() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputNameBankAccount"
+      ),
+    );
+  }
+
+  Widget inputPromptPay() {
+    return TextFormField(
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          hintText: "inputPromptPay"
+      ),
+    );
+  }
+
+  Widget buttonSubmit() {
+    return ElevatedButton(
+        onPressed: () => {}, 
         child: Text("เปิดประมูล")
     );
   }
 
-  Future<DateTime?> selectStartDate() {
-    return showDatePicker(
-        context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 90)),
-        initialDate: DateTime.now(),
-        locale: Locale('en')
-    ).then((date) {
-      if (date != null) {
-        setState(() {
-          int day = date.day;
-          int month = date.month;
-          int year = date.year;
-          _startDate = '$year-$month-$day';
-        });
-      }
-    });
-  }
-
-  Future<DateTime?> selectEndDate() {
-    return showDatePicker(
-        context: context,
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(Duration(days: 90)),
-        locale: Locale('en')
-    ).then((date) {
-      if (date != null) {
-        setState(() {
-          int day = date.day;
-          int month = date.month;
-          int year = date.year;
-          _endDate = '$year-$month-$day';
-        });
-      }
-    });
-  }
-
-  Future<DateTime?> selectStartTime() {
-    return showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now()
-    ).then((time) {
-      if (time != null) {
-        setState(() {
-          int hour = time.hour;
-          int minute = time.minute;
-          _startTime = '${hour.toString()}:${minute.toString()}:00';
-        });
-      }
-    });
-  }
-
-  Future<TimeOfDay?> selectTimeEnd() {
-    return showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now()
-    ).then((time) {
-      if (time != null) {
-        setState(() {
-          int hour = time.hour;
-          int minute = time.minute;
-          _endTime = '$hour:$minute:00';
-        });
-      }
-    });
-  }
-
-  // Future<void> selectImage() async {
-  //   try {
-  //     int maxImageListLength = 10;
-  //
-  //     if (data.length == maxImageListLength) {
-  //       setState(() {
-  //         message = "เพิ่มรูปภาพได้สูงสุด 10 ภาพ";
-  //       });
-  //     } else {
-  //       setState(() {
-  //         message = "";
-  //       });
-  //     }
-  //
-  //     if (data.length <= maxImageListLength - 1) {
-  //       final _picker = ImagePicker();
-  //
-  //       final pickedFile = await _picker.pickImage(
-  //           source: ImageSource.gallery
-  //       );
-  //
-  //       if (pickedFile != null) {
-  //         setState(() {
-  //           imageData = File(pickedFile.path);
-  //           data.add(File(pickedFile.path));
-  //         });
-  //         print("end.aaaaa");
-  //       }
-  //     }
-  //   } catch (e) {
-  //     print("ERROR. ${e}");
-  //   }
-  // }
-
-  Future<void> selectImage() async {
-    try {
-      int maxImageListLength = 10;
-
-      if (data.length == maxImageListLength) {
-        setState(() {
-          message = "เพิ่มรูปภาพได้สูงสุด 10 ภาพ";
-        });
-      } else {
-        setState(() {
-          message = "";
-        });
-      }
-
-      if (data.length <= maxImageListLength - 1) {
-        final _picker = ImagePicker();
-
-        final pickedFile = await _picker.pickImage(
-            source: ImageSource.gallery
-        );
-
-        if (pickedFile != null) {
-          setState(() {
-            imageData = File(pickedFile.path);
-            data.add(File(pickedFile.path));
-          });
-          print("end.aaaaa");
-        }
-      }
-    } catch (e) {
-      print("ERROR. ${e}");
-    }
-  }
-
-
-  void deleteImage() {
-    int maxImageListLength = 10;
-
-    if (data.length > 0) {
-      setState(() {
-        data.removeAt(data.length - 1);
-      });
-    }
-
-    if (data.length <= maxImageListLength - 1) {
-      setState(() {
-        message = "";
-      });
-    }
-  }
-
-  Widget buttonAddAndDeleteImage() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        IconButton(
-            onPressed: () =>
-            {
-              selectImage()
-            },
-            icon: Icon(Icons.image_outlined)
-        ),
-        SizedBox(
-          width: 100,
-        ),
-        IconButton(
-            onPressed: () =>
-            {
-              deleteImage()
-            },
-            icon: Icon(Icons.delete)
-        )
-      ],
-    );
-  }
-
-  Widget textName() {
-    return Row(
-      children: [
-        Text(
-            "ชื่อสินค้า",
-            style: styleText()
-        ),
-      ],
-    );
-  }
-
-  Widget textProductDetail() {
-    return Row(
-      children: [
-        Text(
-          "รายละเอียดสินค้า",
-          style: styleText(),
-        ),
-      ],
-    );
-  }
-
-  Widget textShippingCost() {
-    return Row(
-      children: [
-        Text(
-            "ราคาจัดส่งสินค้า",
-            style: styleText()
-        ),
-      ],
-    );
-  }
-
-  Widget textStartDate() {
-    return Row(
-      children: [
-        Text("วันที่เปิดประมูล (วว-ดด-ปปปป): ",
-            style: styleText()),
-        TextButton(
-            onPressed: () => {selectStartDate()},
-            child: Text(
-              (_startDate != null) ?
-              "${_startDate}" :
-              "เลือกวันที่", style: styleTextStartDateTime(),)),
-      ],
-    );
-  }
-
-  Widget textEndDate() {
-    return Row(
-      children: [
-        Text("วันที่ปิดประมูล (วว-ดด-ปปปป): ",
-            style: styleText()),
-        TextButton(
-            onPressed: () => {selectEndDate()},
-            child: Text(
-              (_endDate != null) ?
-              "${_endDate}" :
-              "เลือกวันที่",
-              style: styleTextStartDateTime(),))
-      ],
-    );
-  }
-
-  Widget textStartTime() {
-    return Row(
-      children: [
-        Text("เวลาเปิดประมูล (ชช:นน:วว): ",
-          style: styleText(),
-        ),
-        TextButton(
-            onPressed: () =>
-            {
-              selectStartTime()
-            },
-            child: Text(
-              (_startTime != null) ?
-              "${_startTime}" :
-              "เลือกเวลา",
-              style: styleTextStartDateTime(),)
-        )
-      ],
-    );
-  }
-
-  Widget textEndTime() {
-    return Row(
-      children: [
-        Text("เวลาปิดประมูล (ชช:นน:วว): ",
-          style: styleText(),),
-        TextButton(
-            onPressed: () =>
-            {
-              selectTimeEnd()
-            },
-            child: Text(
-              (_endTime != null) ?
-              "${_endTime}" :
-              "เลือกเวลา",
-              style: styleTextStartDateTime(),)
-        )
-      ],
-    );
-  }
-
-  Widget textStartPrice() {
-    return Row(
-      children: [
-        Text(
-            "ราคาเปิดประมูล",
-            style: styleText()
-        ),
-      ],
-    );
-  }
-
-  Widget textMaxPrice() {
-    return Row(
-      children: [
-        Text(
-            "ราคาสูงสุดในการประมูล",
-            style: styleText()
-        ),
-      ],
-    );
-  }
-
-  TextStyle styleTextStartDateTime() {
+  TextStyle subjectTextStyle() {
     return TextStyle(
-      fontSize: 18,
-      color: Colors.green,
+        fontWeight: FontWeight.bold,
+        fontSize: 18
     );
   }
-
-  TextStyle styleTextEndDateTime() {
-    return TextStyle(
-      fontSize: 18,
-      color: Colors.red,
-    );
-  }
-
-  TextStyle styleText() {
-    return TextStyle(
-        fontSize: 16,
-        color: Colors.lightBlueAccent,
-        fontWeight: FontWeight.bold
-    );
-  }
-
-  // Future<void> onSaveProduct() async {
-  //   print("StartSaveProduct");
-  //   // print(await http.MultipartFile.fromBytes(
-  //   //     'images', File(imageData!.path).readAsBytesSync(),
-  //   //     filename: imageData!.path));
-  //
-  //   Map<String, dynamic> body = {
-  //     'id_users': ShareData.logedIn,
-  //     'name_product': _nameProduct.text,
-  //     'detail_product': _detialProduct.text,
-  //     'start_price': _startPrice.text,
-  //     'shipping_cost': _shippingCost.text,
-  //     'start_date_time': _startDate + " " + _startTime,
-  //     'end_date_time': _endDate + " " + _endTime,
-  //     'max_price': _maxPrice.text,
-  //   };
-  //
-  //   http.MultipartFile.fromBytes(
-  //       'image_1', File(imageData!.path).readAsBytesSync(),
-  //       filename: imageData!.path);
-  //
-  //   print(body.toString());
-  //   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-  //   final uri = Uri.parse(url);
-  //   final res = await http.post(
-  //       uri,
-  //       headers: {"Content-Type": "application/json"},
-  //       body: jsonEncode(body)
-  //   );
-  //
-  //   if (res.statusCode == 201) {
-  //     print('True');
-  //   }
-  //   print("EndSaveProduct");
-  // }
-
-  // Future<void> uploadImage() async {
-  // Future<void> onSaveProduct() async {
-  //   print("onSaveStart");
-  //   var stream = new http.ByteStream(imageData!.openRead());
-  //   stream.cast();
-  //
-  //   var length = await imageData!.length();
-  //
-  //   String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-  //   var uri = Uri.parse(url);
-  //   var request = new http.MultipartRequest('POST', uri);
-  //
-  //   request.fields['title'] = "Static title";
-  //
-  //   var multiport = new http.MultipartFile('image', stream, length);
-  //
-  //   request.files.add(multiport);
-  //
-  //   var response = await request.send();
-  //
-  //   if (response.statusCode == 201) {
-  //     print("Successfull. +++++++++++++++++++++++");
-  //   } else {
-  //     print("false.------------------------------------");
-  //   }
-  //
-  //   print("onSaveEnd");
-  // }
-
-  Future<void> onSaveProduct() async {
-    try {
-      print("onSaveStart");
-
-      String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
-      // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/test';
-      var uri = Uri.parse(url);
-      var request = http.MultipartRequest('POST', uri);
-
-      // var stream = File(imageData!.path).readAsBytesSync();
-      //
-      // var multiport = http.MultipartFile.fromBytes(
-      //     'image', stream, filename: imageData!.path);
-
-      List<dynamic> stream = [];
-      List<dynamic> multiport = [];
-
-      print(data.length);
-
-      for (int i = 0; i < data.length; i++) {
-        print(i);
-        stream.add(File(data[i]!.path).readAsBytesSync());
-
-        multiport.add(http.MultipartFile.fromBytes(
-            'image_${i + 1}', stream[i], filename: data[i]!.path));
-
-        request.files.add(multiport[i]);
-        request.fields['image_${i + 1}'] = request.files[i].toString();
-      }
-
-      // var image = File(data[0]!.path).readAsBytesSync();
-      // var test = http.MultipartFile.fromBytes('image_1', image, filename: data[0]!.path);
-      // print(test.toString());
-      // request.fields['image_1'] = test;
-
-
-      Map<String, dynamic> body = {
-        'id_users': ShareData.logedIn,
-        'name_product': _nameProduct.text,
-        'detail_product': _detialProduct.text,
-        'start_price': _startPrice.text,
-        'shipping_cost': _shippingCost.text,
-        'start_date_time': _startDate + " " + _startTime,
-        'end_date_time': _endDate + " " + _endTime,
-        'max_price': _maxPrice.text,
-      };
-
-      request.fields['id_users'] = ShareData.userData['id_users'].toString();
-      request.fields['name_product'] = _nameProduct.text;
-      request.fields['detail_product'] = _detialProduct.text;
-      request.fields['start_price'] = _startPrice.text;
-      request.fields['shipping_cost'] = _shippingCost.text;
-      request.fields['start_date_time'] = _startDate + " " + _startTime;
-      request.fields['end_date_time'] = _endDate + " " + _endTime;
-      request.fields['max_price'] = _maxPrice.text.toString();
-
-      // request.fields['id_users'] = '1';
-      // request.fields['name_product'] = 'TestProduct';
-      // request.fields['detail_product'] = "detail";
-      // request.fields['start_price'] = '666';
-      // request.fields['shipping_cost'] = '50';
-      // request.fields['start_date_time'] = '2025-04-24 01:26:00';
-      // request.fields['end_date_time'] = '2025-04-25 01:26:00';
-      // request.fields['max_price'] = '100';
-
-      print(request.fields.toString());
-
-      var response = await request.send();
-
-      if (response.statusCode == 201) {
-        print("Successfull. +++++++++++++++++++++++}");
-      } else {
-        print(
-            "false.------------------------------------${response.statusCode}");
-      }
-
-      print("onSaveEnd");
-    } on Exception catch (e) {
-      print(e);
-    }
-  }
-
 }

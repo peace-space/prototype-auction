@@ -5,10 +5,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
 import 'package:prototype_your_auction_services/screen/UserProductManage.dart';
-import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class UserProduct extends StatefulWidget {
   State<UserProduct> createState() {
@@ -21,7 +20,6 @@ class UserProductState extends State<UserProduct> {
     return Scaffold(
       appBar: AppBar(title: Text("รายการสินค้า")),
       body: displayUserProduct(context),
-      drawer: createDrawer(context),
     );
   }
 

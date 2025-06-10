@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ForgotPassWord.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Login extends StatefulWidget {
   State<Login> createState(){
@@ -14,9 +14,10 @@ class Login extends StatefulWidget {
 }
 
 class LoginState extends State<Login>{
-  var _phone = TextEditingController();
+  var _email = TextEditingController();
   var _passWord = TextEditingController();
   String message = "";
+  bool _hiddenPassWord = true;
 
   Widget build(BuildContext context){
     return Scaffold(
@@ -31,8 +32,13 @@ class LoginState extends State<Login>{
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("เข้าสู่ระบบ",textScaler: TextScaler.linear(1.5),),
-                Text("ประมูลออนไลน์", textScaler: TextScaler.linear(1.0),),
+                Text("เข้าสู่ระบบ", style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold
+                ),),
+                Text("ประมูลออนไลน์", style: TextStyle(
+                    fontSize: 35
+                ),),
                 SizedBox(height: 3,),
                 Text("${message}", textScaler: TextScaler.linear(1.3), style: TextStyle(color: Colors.red),),
                 phone(),
@@ -55,9 +61,10 @@ class LoginState extends State<Login>{
 
   Widget phone() {
     return TextField(
-      controller: _phone,
+      controller: _email,
       decoration: InputDecoration(
-        hintText: "เบอร์โทรศัพท์",
+        prefixIcon: Icon(Icons.email_outlined),
+        hintText: "อีเมล",
       ),
     );
   }
@@ -65,9 +72,24 @@ class LoginState extends State<Login>{
   Widget passWord() {
     return TextField(
       controller: _passWord,
-      obscureText: true,
+      obscureText: _hiddenPassWord,
       decoration: InputDecoration(
-        hintText: "รหัสผ่าน"
+          prefixIcon: Icon(Icons.key),
+          hintText: "รหัสผ่าน",
+          suffixIcon: IconButton(
+              onPressed: () =>
+              {
+                setState(() {
+                  if (_hiddenPassWord) {
+                    _hiddenPassWord = false;
+                  } else {
+                    _hiddenPassWord = true;
+                  }
+                })
+              },
+              icon: Icon(
+                  _hiddenPassWord ? Icons.visibility_off : Icons.visibility)
+          )
       ),
     );
   }
@@ -118,9 +140,9 @@ class LoginState extends State<Login>{
   void onLogin(BuildContext ctx) async {
     print("Start");
 
-    if (_phone.text != "" && _passWord.text != "") {
+    if (_email.text != "" && _passWord.text != "") {
       Map<String, dynamic> data = {
-        'phone' : _phone.text,
+        'phone': _email.text,
         'password' : _passWord.text
       };
 
@@ -161,7 +183,7 @@ class LoginState extends State<Login>{
         });
       }
     } else {
-      if (_phone.text == "") {
+      if (_email.text == "") {
         setState(() {
           message = "กรุณากรอกเบอร์โทรศัพท์";
         });

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Chat extends StatefulWidget {
   final int id_user;

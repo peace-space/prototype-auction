@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
 class BidLists extends StatefulWidget {
   State<BidLists> createState() {

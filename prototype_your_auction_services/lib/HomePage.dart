@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:prototype_your_auction_services/screen/AppBar.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class HomePage extends StatefulWidget {
 

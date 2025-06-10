@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/admin/screen_admin/UserManageAdmin.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/UserDetailAdmin.dart';
 
 class EditUserProfile extends StatefulWidget {
   final Map user_data;

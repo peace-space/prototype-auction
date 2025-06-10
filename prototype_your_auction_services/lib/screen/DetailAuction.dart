@@ -6,9 +6,9 @@ import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
-import 'package:prototype_your_auction_services/share_data/ShareProductData.dart';
-import 'package:prototype_your_auction_services/share_data/ShareUserData.dart';
-import 'package:prototype_your_auction_services/share_data/confirm_picker.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/confirm_picker.dart';
 // import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class DetailAuction extends StatefulWidget {

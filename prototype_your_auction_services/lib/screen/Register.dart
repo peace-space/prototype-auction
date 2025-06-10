@@ -21,15 +21,20 @@ class RegisterState extends State<Register> {
 
   String message = "";
 
+  bool _hiddenPassWord = true;
+  bool _hiddenPassWordVerifyPassWord = true;
+
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("ลงทะเบียน")
-      ),
+      appBar: AppBar(title: Text("ลงทะเบียน")),
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          Text(message, textScaler: TextScaler.linear(1.5), style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue)),
+          Text(
+            message,
+            textScaler: TextScaler.linear(1.5),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+          ),
           firstName(),
           lastName(),
           phone(),
@@ -37,101 +42,115 @@ class RegisterState extends State<Register> {
           address(),
           passWord(),
           verifyPassWord(),
+          SizedBox(height: 8),
           registerButton(context),
         ],
-      )
+      ),
     );
   }
 
   Widget firstName() {
     return TextField(
       controller: _firstName,
-      decoration: InputDecoration(
-       hintText: "ชื่อจริง"
-     ),
+      decoration: InputDecoration(hintText: "ชื่อจริง"),
     );
   }
 
   Widget lastName() {
     return TextField(
       controller: _lastName,
-      decoration: InputDecoration(
-        hintText: "นามสกุล"
-      ),
+      decoration: InputDecoration(hintText: "นามสกุล"),
     );
   }
 
   Widget phone() {
     return TextField(
       controller: _phone,
-      decoration: InputDecoration(
-        hintText: "เบอร์ที่ต้องการใช้เพื่อเข้าสู่ระบบ"
-      ),
+      decoration: InputDecoration(hintText: "เบอร์โทร"),
     );
   }
 
   Widget email() {
     return TextField(
       controller: _email,
-      decoration: InputDecoration(
-        hintText: "อีเมล"
-      )
+      decoration: InputDecoration(hintText: "อีเมล"),
     );
   }
 
   Widget address() {
     return TextField(
       controller: _address,
-      decoration: InputDecoration(
-        hintText: "ที่อยู่ในการรับสินค้า"
-      )
+      decoration: InputDecoration(hintText: "ที่อยู่ในการรับสินค้า"),
     );
   }
 
   Widget passWord() {
     return TextField(
       controller: _passWord,
-        obscureText: true,
+      obscureText: _hiddenPassWord,
       decoration: InputDecoration(
-        hintText: "รหัสผ่าน"
-      )
+        hintText: "รหัสผ่าน",
+        suffixIcon: IconButton(
+          onPressed:
+              () => {
+                setState(() {
+                  if (_hiddenPassWord) {
+                    _hiddenPassWord = false;
+                  } else {
+                    _hiddenPassWord = true;
+                  }
+                }),
+              },
+          icon: Icon(_hiddenPassWord ? Icons.visibility : Icons.visibility_off),
+        ),
+      ),
     );
   }
 
   Widget verifyPassWord() {
     return TextField(
       controller: _verifyPassWord,
-        obscureText: true,
+      obscureText: _hiddenPassWordVerifyPassWord,
       decoration: InputDecoration(
-        hintText: "ยืนยันรหัสผ่าน"
-      )
+        hintText: "ยืนยันรหัสผ่าน",
+        suffixIcon: IconButton(
+          onPressed:
+              () => {
+                setState(() {
+                  if (_hiddenPassWordVerifyPassWord) {
+                    _hiddenPassWordVerifyPassWord = false;
+                  } else {
+                    _hiddenPassWordVerifyPassWord = true;
+                  }
+                }),
+              },
+          icon: Icon(
+            _hiddenPassWordVerifyPassWord
+                ? Icons.visibility
+                : Icons.visibility_off,
+          ),
+        ),
+      ),
     );
   }
 
   Widget registerButton(BuildContext ctx) {
     return ElevatedButton(
-        onPressed: () => {
-          onRegister(ctx)
-        },
-        child: Text("ลงทะเบียน")
+      onPressed: () => {onRegister(ctx)},
+      child: Text("ลงทะเบียน"),
     );
   }
 
   Widget insertImageButton() {
-    return ElevatedButton(
-        onPressed: () => {},
-        child: Text("เพิ่มรูปโปรไฟล์")
-    );
+    return ElevatedButton(onPressed: () => {}, child: Text("เพิ่มรูปโปรไฟล์"));
   }
 
   bool hasData() {
-    if (
-    _firstName.text != "" &&
+    if (_firstName.text != "" &&
         _phone.text != "" &&
         _address.text != "" &&
         _passWord.text != "" &&
-        _verifyPassWord.text != ""
-    ) {
+        _verifyPassWord.text != "") {
       return true;
     } else {
       return false;
@@ -139,9 +158,7 @@ class RegisterState extends State<Register> {
   }
 
   void goToLogin(BuildContext ctx) {
-    var route = MaterialPageRoute(
-      builder: (ctx) => Login(),
-    );
+    var route = MaterialPageRoute(builder: (ctx) => Login());
 
     Navigator.pushReplacement(ctx, route);
   }
@@ -165,12 +182,13 @@ class RegisterState extends State<Register> {
           'address': _address.text,
           'password': _passWord.text,
         };
-        String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/register';
+        String url =
+            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/register';
         final uri = Uri.parse(url);
         final response = await http.post(
-            uri,
-            headers: {"Content-Type": "application/json"},
-            body: jsonEncode(data)
+          uri,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode(data),
         );
 
         if (response.statusCode == 201) {
@@ -209,5 +227,4 @@ class RegisterState extends State<Register> {
     }
     print("End.");
   }
-
 }
