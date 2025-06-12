@@ -16,20 +16,13 @@ class UserProfile extends StatefulWidget {
 class UserProfileState extends State<UserProfile> {
   Map<String, dynamic> userData = ShareData.userData;
 
-  @override
-  void initState() {
-
-    super.initState();
-  }
-
-
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("ข้อมูลผู้ใช้งาน: ${ShareData.logedIn}"),
       ),
       body: Container(
-        color: Colors.lightBlueAccent,
+        // color: Colors.lightBlueAccent,
         margin: EdgeInsets.all(20),
         child: userProfile(context),
       ),
@@ -59,46 +52,38 @@ class UserProfileState extends State<UserProfile> {
 
           if (snapshot.hasData) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text("ชื่อ: ", style: textPrefixStyle(),),
-                    Text("${snapshot.data?['name']}",
-                      style: textStyleUserProfile(),),
-                  ],
-                ),
+                Text("ชื่อ: ", style: textPrefixStyle(),),
+                Text("${snapshot.data?['name']}",
+                  style: textStyleUserProfile(),),
                 SizedBox(height: height,),
-                Row(
-                  children: [
-                    Text("เบอร์โทร: ", style: textPrefixStyle(),),
-                    Text("${snapshot.data?['phone']}",
-                      style: textStyleUserProfile(),),
-                  ],
-                ),
+
+                Text("เบอร์โทร: ", style: textPrefixStyle(),),
+                Text("${snapshot.data?['phone']}",
+                  style: textStyleUserProfile(),),
                 SizedBox(height: height,),
-                Row(
-                  children: [
-                    Text("อีเมล: ", style: textPrefixStyle(),),
-                    Text("${snapshot.data?['email']}",
-                      style: textStyleUserProfile(),),
-                  ],
-                ),
+
+                Text("อีเมล: ", style: textPrefixStyle(),),
+                Text("${snapshot.data?['email']}",
+                  style: textStyleUserProfile(),),
                 SizedBox(height: height,),
-                Row(
-                  children: [
-                    Text("ที่อยู่ในรับสินค้า: ", style: textPrefixStyle(),),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text("${snapshot.data?['address']}",
-                      style: textStyleUserProfile(),),
-                  ],
-                ),
-                SizedBox(height: height,),
-                editProfile(ctx),
-                SizedBox(height: height,),
-                changePassWord(ctx),
+
+                Text("ที่อยู่ในการรับสินค้า: ", style: textPrefixStyle(),),
+
+                Text("${snapshot.data?['address']}",
+                  style: textStyleUserProfile(),),
+
+                Center(
+                  child: Column(
+                    children: [
+                      SizedBox(height: height,),
+                      editProfile(ctx),
+                      SizedBox(height: height,),
+                      changePassWord(ctx),
+                    ],
+                  ),
+                )
               ],
             );
           }
@@ -109,14 +94,14 @@ class UserProfileState extends State<UserProfile> {
 
   TextStyle textPrefixStyle() {
     return TextStyle(
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: FontWeight.bold
     );
   }
 
   TextStyle textStyleUserProfile() {
     return TextStyle(
-      fontSize: 16,
+      fontSize: 25,
     );
   }
 

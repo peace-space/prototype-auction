@@ -8,7 +8,6 @@ import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
-import 'package:prototype_your_auction_services/share/confirm_picker.dart';
 // import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class DetailAuction extends StatefulWidget {
@@ -18,145 +17,10 @@ class DetailAuction extends StatefulWidget {
 }
 
 class DetailAuctionState extends State<DetailAuction> {
-  bool _confirm = false;
   var _bid = TextEditingController();
   Map<String, dynamic> detailAuctionData = {};
-
-  var _countDownDateTime;
-
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text(
-  //         "รายละเอียด: ${ShareProductData.productData['id_auctions']}",
-  //       ),
-  //     ),
-  //     body: Container(
-  //       margin: EdgeInsets.all(20),
-  //       child: ListView(
-  //         children: [
-  //           Container(
-  //             color: Colors.lightBlueAccent,
-  //             height: 300,
-  //             width: 500,
-  //             child: displayImages(),
-  //           ),
-  //           displayDataAuction(context),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  //
-  // Widget displayDataAuction(BuildContext ctx) {
-  //   // print(_countDownDateTime);
-  //   return StreamBuilder(
-  //     stream: fetchDataDetailAuctions(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasError) {
-  //         return Text("ERROR.");
-  //       }
-  //
-  //       if (snapshot.connectionState == ConnectionState.active) {
-  //         return Center(child: CircularProgressIndicator());
-  //       }
-  //       print(snapshot.hasData);
-  //       if (snapshot.hasData) {
-  //         return Padding(
-  //           padding: EdgeInsets.all(19),
-  //           child: Column(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             children: [
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text("เวลา: ", style: headText()),
-  //                   countdown(),
-  //                   Text(" วินาที", style: redText()),
-  //                 ],
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.center,
-  //                 children: [
-  //                   Text("ราคาสูงสุด: ", style: headText()),
-  //                   Text("${snapshot.data!['max_price']}", style: redText()),
-  //                 ],
-  //               ),
-  //               textButtonGoToBidLists(ctx, snapshot.data!['bids_count']),
-  //               onBit(),
-  //               SizedBox(height: 7),
-  //               Row(
-  //                 children: [
-  //                   Text("ผู้เปิดประมูล: ", style: headText()),
-  //                   Text("${snapshot.data!['name']}", style: defaultText()),
-  //                 ],
-  //               ),
-  //               Row(
-  //                 mainAxisAlignment: MainAxisAlignment.start,
-  //                 children: [
-  //                   Text("ชื่อสินค้า: ", style: headText()),
-  //                   Text(
-  //                     "${snapshot.data!['name_product']}",
-  //                     style: defaultText(),
-  //                   ),
-  //                 ],
-  //               ),
-  //               Row(children: [Text("ข้อมูลเพิ่มเติม: ", style: headText())]),
-  //               Text(
-  //                 "${snapshot.data!['detail_product']}",
-  //                 textAlign: TextAlign.justify,
-  //                 overflow: TextOverflow.clip,
-  //                 style: defaultText(),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       }
-  //       return Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
-  //
-  // // Widget displayDataAuction() {
-  // //   return Text("data");
-  // // }
-  //
-  // Widget displayImages() {
-  //   double left = 0.0;
-  //   double top = 0.0;
-  //   double right = 0.0;
-  //   double bottom = 0.0;
-  //   return StreamBuilder(
-  //     stream: fetchDataDetailAuctions(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasError) {
-  //         return Center(child: Text("Error."));
-  //       }
-  //       print(snapshot.hasData == true);
-  //       if (snapshot.hasData) {
-  //         return ListView.builder(
-  //           scrollDirection: Axis.horizontal,
-  //           itemCount: snapshot.data!['images'].length,
-  //           itemBuilder: (context, index) {
-  //             return Container(
-  //               width: 353,
-  //               height: 300,
-  //               padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-  //               child: Image.network(
-  //                 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/'
-  //                     '${snapshot.data!['images'][index]}',
-  //                 fit: BoxFit.cover,
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       }
-  //
-  //       return Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
+  List<dynamic> _imageData = [];
+  int indexSelectImage = 0;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -168,17 +32,18 @@ class DetailAuctionState extends State<DetailAuction> {
       body: StreamBuilder(
         stream: fetchDataDetailAuctions(),
         builder:
-            (context, snapshot) => Container(
-              margin: EdgeInsets.all(20),
+            (context, snapshot) => Padding(
+              padding: const EdgeInsets.all(8.0),
               child: ListView(
                 children: [
-                  Container(
-                    color: Colors.lightBlueAccent,
-                    width: 353,
-                    height: 300,
-                    child: displayImages(snapshot.data),
-                  ),
-                  Container(child: displayDataAuction(context, snapshot.data)),
+                  showOneImage(),
+                  SizedBox(height: 8),
+                  showAndSelectImage(),
+                  SizedBox(height: 8),
+                  selectShowImage(),
+                  SizedBox(height: 8),
+                  displayDataAuction(context, snapshot.data),
+                  SizedBox(height: 500),
                 ],
               ),
             ),
@@ -186,8 +51,108 @@ class DetailAuctionState extends State<DetailAuction> {
     );
   }
 
+  Widget showOneImage() {
+    return Container(
+      width: 500,
+      height: 300,
+      child:
+          (_imageData.length == 0)
+              ? Center(child: Text("ไม่พบรูปภาพ"))
+              : Image.network(
+                "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
+                    _imageData![indexSelectImage],
+              ),
+    );
+  }
+
+  // Widget imagePlatformWebOrAndroid({required List<String?> imageData, required int index}) {
+  //
+  //   if (kIsWeb) {
+  //     //return Image.network(imageData[index]!.path, fit: BoxFit.fill,);
+  //     return Image.network(imageData[index]!);
+  //   } else if (Platform.isAndroid) {
+  //     // return Image.file(_imageData[index]!, fit: BoxFit.fill);
+  //     return Image.file(imageData[index]!);
+  //   }
+  //
+  //   return Text("Error");
+  // }
+
+  Widget showAndSelectImage() {
+    return Container(
+      width: 100,
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _imageData.length,
+        itemBuilder:
+            (context, index) => Card(
+              child: InkWell(
+                onTap:
+                    () => {
+                      setState(() {
+                        indexSelectImage = index;
+                      }),
+                    },
+                child: Image.network(
+                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
+                      _imageData[index],
+                ),
+              ),
+            ),
+      ),
+    );
+  }
+
+  Widget selectShowImage() {
+    return Container(
+      // color: Colors.lightBlueAccent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed:
+                () => {
+                  if (indexSelectImage > 0)
+                    {
+                      setState(() {
+                        indexSelectImage -= 1;
+                      }),
+                    },
+                },
+            icon: Icon(Icons.arrow_back_sharp),
+          ),
+          // Text("Start"),
+          Column(
+            children: [
+              // Text("ทดสอบต่ำแหน่ง: " + indexSelectImage.toString()),
+              Text(
+                _imageData.length == 0
+                    ? "ไม่มีรูปภาพ"
+                    : "รูปภาพที่: ${indexSelectImage + 1} / 10",
+              ),
+              // Text("จำนวนรูปภาพทั้งหมด: ${_imageData.length} / 10"),
+            ],
+          ),
+          // Text("End"),
+          IconButton(
+            onPressed:
+                () => {
+                  if (indexSelectImage < _imageData.length - 1)
+                    {
+                      setState(() {
+                        indexSelectImage += 1;
+                      }),
+                    },
+                },
+            icon: Icon(Icons.arrow_forward_sharp),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget displayDataAuction(BuildContext ctx, dynamic data) {
-    // print(_countDownDateTime);
     return Padding(
       padding: EdgeInsets.all(19),
       child: Column(
@@ -247,27 +212,29 @@ class DetailAuctionState extends State<DetailAuction> {
     double bottom = 0.0;
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: data!['images'].length,
+      itemCount: data,
+      // itemCount: data!['images'].length,
       itemBuilder: (context, index) {
+        return Text("data");
         // Map<String, dynamic> data = snapshot.data
-        return Padding(
-          padding: EdgeInsets.all(8),
-          child: Container(
-            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-            child: Image.network(
-              'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/'
-              '${data!['images'][index]}',
-              fit: BoxFit.cover,
-            ),
-          ),
-        );
+        // return Padding(
+        //   padding: EdgeInsets.all(8),
+        //   child: Container(
+        //     padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+        //     child: Image.network(
+        //       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/'
+        //       '${data!['images'][index]}',
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        // );
       },
     );
   }
 
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
     // await Future.delayed(Duration(seconds: 30));
-    // print('Start.detailAuctions');
+    print('Start.detailAuctions');
     String url =
         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData.productData['id_auctions']}';
     final uri = Uri.parse(url);
@@ -275,13 +242,14 @@ class DetailAuctionState extends State<DetailAuction> {
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
     // print("aaaaaaaaaaaaaaaaaaaa");
-    // print(data.toString());
+    print(data['images'].toString());
     // countdown();
     yield data;
     setState(() {
       detailAuctionData = data;
+      _imageData = data["images"];
     });
-    // print('End.detialAuctions');
+    print('End.detialAuctions');
   }
 
   Widget onBit() {
@@ -398,7 +366,7 @@ class DetailAuctionState extends State<DetailAuction> {
 
   TextStyle redText() {
     return TextStyle(
-      color: Colors.red,
+      // color: Colors.red,
       fontSize: 18,
       fontWeight: FontWeight.bold,
     );
@@ -427,7 +395,7 @@ class DetailAuctionState extends State<DetailAuction> {
   // }
 
   Widget countdown() {
-    final start_date_time_data = detailAuctionData['start_date_time'];
+    // final start_date_time_data = detailAuctionData['start_date_time'];
     final end_date_time_data = detailAuctionData['end_date_time'];
     print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
     var min;
@@ -441,7 +409,7 @@ class DetailAuctionState extends State<DetailAuction> {
       ),
       onTick: (remainingTime) {
         print("Test: " + remainingTime.inMinutes.toString());
-        _countDownDateTime = remainingTime.inDays;
+        // _countDownDateTime = remainingTime.inDays;
       },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: true,
@@ -462,18 +430,18 @@ class DetailAuctionState extends State<DetailAuction> {
 
   void onEntDateTime() {}
 
-  void showConfirmDialog() async {
-    confirmPicker(
-      context: context,
-      callback: (_return_value) {
-        setState(() {
-          _confirm = _return_value;
-        });
-      },
-      message: 'ยืนยันการเสนอราคา' + ": Confirm: " + _confirm.toString(),
-      data: "จำนวนเงิน: " + _bid.text,
-    );
-  }
+  // void showConfirmDialog() async {
+  //   confirmPicker(
+  //     context: context,
+  //     callback: (_return_value) {
+  //       setState(() {
+  //         _confirm = _return_value;
+  //       });
+  //     },
+  //     message: 'ยืนยันการเสนอราคา' + ": Confirm: " + _confirm.toString(),
+  //     data: "จำนวนเงิน: " + _bid.text,
+  //   );
+  // }
 
   void _alertDialog({String? title, String? message}) async {
     await showDialog(
