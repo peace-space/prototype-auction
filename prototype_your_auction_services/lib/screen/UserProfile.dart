@@ -74,6 +74,22 @@ class UserProfileState extends State<UserProfile> {
                 Text("${snapshot.data?['address']}",
                   style: textStyleUserProfile(),),
 
+                Text("บัญชีธนาคาร: ", style: textPrefixStyle(),),
+                Text("data",
+                  style: textStyleUserProfile(),),
+
+                Text("ชื่อบัญชี: ", style: textPrefixStyle(),),
+                Text("data",
+                  style: textStyleUserProfile(),),
+
+                Text("เลขบัญชี: ", style: textPrefixStyle(),),
+                Text("data",
+                  style: textStyleUserProfile(),),
+
+                Text("พร้อมเพย์: ", style: textPrefixStyle(),),
+                Text("data",
+                  style: textStyleUserProfile(),),
+
                 Center(
                   child: Column(
                     children: [
