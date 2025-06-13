@@ -19,6 +19,7 @@ class BankAccountFactory extends Factory
         return [
             'id_users' => fake()->numberBetween(1, 10),
             'bank_account_number' => fake()->numberBetween(1000000000, 9999999999),
+            'prompt_pay' => fake()->numberBetween(1000000000, 9999999999),
             'name_bank_account' => fake()->name(),
         ];
     }

@@ -185,31 +185,27 @@ class AuctionController extends Controller
                 && $request->name_product != ''
                 && $request->detail_product != ''
                 && $request->start_price != ''
-                && $request->start_date_time != ''
                 && $request->end_date_time != ''
                 && $request->max_price != ''
             ) {
-                // $request->validate([
-                //     // 'image_1' => 'nullable | required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_2' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_3' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_4' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_5' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_6' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_7' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_8' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_9' => 'required | image | mimes:png, jpg, jpeh, webp',
-                //     // 'image_10' => 'required | image | mimes:png, jpg, jpeh, webp',
-                // ]);
 
-                // $image_name = Storage::disk('public')->put('images/product-images', $request->image_1);
+                $request_data = [
+                    'id_users' => $request->id_users,
+                    'name_product' => $request->name_product,
+                    'detail_product' => $request->detail_product,
+                    'shipping_cost' => $request->shipping_cost,
+                    'start_price' => $request->start_price,
+                    'end_date_time' => $request->end_date_time,
+                    // 'max_price' => $request->max_price,
+                    'id_auction_types' => $request->id_auction_types,
+                    'id_payment_types' => $request->id_payment_types,
+                    'id_bank_account' => $request->id_bank_account,
+                ];
 
-                // $path = Storage::url($image_name);
-                // return $request->image_1;
                 if ($request->image_1 != null) {
                     if ($request->image_1 != null) {
                         $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
-                        // $image_path_1 = Storage::url($image_name_1);
+                        $image_path_1 = Storage::url($image_name_1);
                     } else {
                         $image_path_1 = null;
                     }
@@ -305,31 +301,48 @@ class AuctionController extends Controller
 
                 // return $last_id_image[0]->id_images;
 
-                $data = [
-                    // 'id_users' => $request->id_users,
-                    'id_users' => $request->id_users,
-                    'name_product' => $request->name_product,
-                    'detail_product' => $request->detail_product,
-                    'shipping_cost' => $request->shipping_cost,
-                    'start_price' => $request->start_price,
-                    'start_date_time' => $request->start_date_time,
-                    'end_date_time' => $request->end_date_time,
+                $product_data = [
+                    'id_users' => $request_data['id_users'],
+                    'name_product' => $request_data['name_product'],
+                    'detail_product' => $request_data['detail_product'],
                     'id_images' => $last_id_image[0]->id_images,
-                    'max_price' => $request->max_price
                 ];
 
-                $save_product = DB::table('auctions')
-                                    ->insert($data);
+                $save_product = DB::table('products')->insert($product_data);
 
-                $last_time_auction = DB::table('auctions')
-                                ->select(DB::raw('MAX(created_at) as last_time'))
-                                ->where('id_users', '=', $data['id_users'])
-                                ->get();
-                // return $last_time_auction[0]->last_time;
+                $product = DB::table('products')
+                                    ->select('id_products')
+                                    ->where('id_users', '=', $request_data['id_users'])
+                                    ->orderByDesc('created_at')
+                                    ->get();
 
-                $reAction = DB::table('auctions')
+                // return $product->first();
+
+                $id_product = $product->first();
+                // return $id_product;
+
+                $current_highest_price = $request_data['start_price'];
+
+                $auction_data = [
+                    'id_products' => $id_product->id_products,
+                    'auction_status' => 1,
+                    'shipping_cost' => $request_data['shipping_cost'],
+                    'start_price' => $request_data['start_price'],
+                    'end_date_time' => $request_data['end_date_time'],
+                    'max_price' => $current_highest_price,
+                    'id_auction_types' => $request_data['id_auction_types'],
+                    'id_payment_types' => $request_data['id_payment_types'],
+                    'id_bank_account' => $request_data['id_bank_account']
+                ];
+
+                // return $auction_data;
+
+                $create_auction = DB::table('auctions')
+                                        ->insert($auction_data);
+
+                $reAction = DB::table('products')
                                 ->select('*')
-                                ->join('images', 'auctions.id_images', '=', 'images.id_images')
+                                ->join('images', 'products.id_images', '=', 'images.id_images')
                                 // ->orderByDesc('auctions.id_auctions')
                                 // ->where('auctions.id_users', '=', $data['id_users'], '&',
                                 //         'auctions.created_at', '=', $last_time_auction[0]->last_time)

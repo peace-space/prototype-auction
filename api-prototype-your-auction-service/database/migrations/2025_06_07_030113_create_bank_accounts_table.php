@@ -16,6 +16,7 @@ return new class extends Migration
             $table->bigInteger('id_users');
             $table->string('bank_account_number');
             $table->string('name_bank_account');
+            $table->string('prompt_pay');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

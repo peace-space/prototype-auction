@@ -77,7 +77,8 @@ class ImageController extends Controller
     // }
 
     public function getImage($image_path) {
-        $path = 'storage/images/product-images/'.$image_path;
+        // $path = 'storage/images/product-images/'.$image_path;
+        $path = $image_path;
         return response()->file($path);
     }
 }
