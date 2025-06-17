@@ -545,7 +545,7 @@ class AddProductState extends State<AddProduct> {
 
           request.files.add(http.MultipartFile(
               "image_${i + 1}", stream[i], _imageData[i]!.lengthSync(),
-              filename: _imageData[i].name
+            // filename: _imageData[i]!.toString(), contentType: {"jpg"}
           ));
         }
       }
