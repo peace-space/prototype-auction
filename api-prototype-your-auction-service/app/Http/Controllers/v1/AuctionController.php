@@ -186,7 +186,6 @@ class AuctionController extends Controller
                 && $request->detail_product != ''
                 && $request->start_price != ''
                 && $request->end_date_time != ''
-                && $request->max_price != ''
             ) {
 
                 $request_data = [
@@ -196,10 +195,9 @@ class AuctionController extends Controller
                     'shipping_cost' => $request->shipping_cost,
                     'start_price' => $request->start_price,
                     'end_date_time' => $request->end_date_time,
-                    // 'max_price' => $request->max_price,
                     'id_auction_types' => $request->id_auction_types,
                     'id_payment_types' => $request->id_payment_types,
-                    'id_bank_account' => $request->id_bank_account,
+                    'id_bank_accounts' => $request->id_bank_accounts,
                 ];
 
                 if ($request->image_1 != null) {
@@ -318,13 +316,15 @@ class AuctionController extends Controller
 
                 // return $product->first();
 
-                $id_product = $product->first();
-                // return $id_product;
+                $product = $product->first();
+                // return $product;
 
                 $current_highest_price = $request_data['start_price'];
 
+                // return $current_highest_price;
+
                 $auction_data = [
-                    'id_products' => $id_product->id_products,
+                    'id_products' => $product->id_products,
                     'auction_status' => 1,
                     'shipping_cost' => $request_data['shipping_cost'],
                     'start_price' => $request_data['start_price'],
@@ -332,7 +332,7 @@ class AuctionController extends Controller
                     'max_price' => $current_highest_price,
                     'id_auction_types' => $request_data['id_auction_types'],
                     'id_payment_types' => $request_data['id_payment_types'],
-                    'id_bank_account' => $request_data['id_bank_account']
+                    'id_bank_accounts' => $request_data['id_bank_accounts']
                 ];
 
                 // return $auction_data;
@@ -400,7 +400,7 @@ class AuctionController extends Controller
                 'status' => 0,
                 'message' => 'Error.',
                 'data' => $e
-            ]);
+            ], 404);
         }
     }
 
