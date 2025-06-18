@@ -45,11 +45,11 @@ class StoreManageState extends State<StoreManage> {
     );
   }
 
-  void goToUserProduct(BuildContext ctx) { {
-    final route = MaterialPageRoute(builder: (ctx) => AuctionListUser());
+  void goToUserProduct(BuildContext ctx) {
+    {
+      final route = MaterialPageRoute(builder: (ctx) => AuctionListUser());
 
-    Navigator.push(ctx, route);
+      Navigator.push(ctx, route);
+    }
   }
-
-
 }
