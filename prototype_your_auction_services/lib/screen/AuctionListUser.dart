@@ -9,16 +9,16 @@ import 'package:prototype_your_auction_services/screen/UserProductManage.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class UserProduct extends StatefulWidget {
-  State<UserProduct> createState() {
-    return UserProductState();
+class AuctionListUser extends StatefulWidget {
+  State<AuctionListUser> createState() {
+    return AuctionListUserState();
   }
 }
 
-class UserProductState extends State<UserProduct> {
+class AuctionListUserState extends State<AuctionListUser> {
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("รายการสินค้า")),
+      appBar: AppBar(title: Text("รายการประมูล")),
       body: displayUserProduct(context),
     );
   }

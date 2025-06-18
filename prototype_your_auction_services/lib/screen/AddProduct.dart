@@ -445,10 +445,10 @@ class AddProductState extends State<AddProduct> {
         int year = date_data.year;
 
         _inputEndDateData = '$year-$month-$day';
-            _inputEndDateController.text = '$day / $month / $year';
-          });
-        }
+        _inputEndDateController.text = '$day / $month / $year';
       });
+    }
+  });
 
   // Widget inputAuctionTypes() {
   //   return TextFormField(
@@ -570,13 +570,47 @@ class AddProductState extends State<AddProduct> {
   Future<void> submit() async {
     try {
       print("Start Submit");
+
+      var check_integer_shipping_cost;
+      var check_integer_start_price;
+
+      try {
+        print("Test");
+        check_integer_shipping_cost = int.parse(_shippingCost.text);
+        print(check_integer_shipping_cost.toString());
+      } on Exception catch (e) {
+        showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text('แจ้งเตือน'),
+                content: Text("ราคาการจัดส่งต้องเป็นตัวเลขเท่านั้น"),
+              ),
+        );
+      }
+      try {
+        check_integer_start_price = int.parse(_startPrice.text);
+        print(check_integer_start_price.toString());
+      } on Exception catch (e) {
+        showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text('แจ้งเตือน'),
+                content: Text("ราคาเริ่มต้นต้องเป็นต้วเลขเท่านั้น"),
+              ),
+        );
+      }
+
       if (_imageData.length > 0 &&
           _nameProduct.text != '' &&
           _detialProduct.text != '' &&
           _shippingCost.text != '' &&
           _startPrice.text != '' &&
           _inputEndTimeData != '' &&
-          _inputEndDateData != '') {
+          _inputEndDateData != '' &&
+          check_integer_shipping_cost != null &&
+          check_integer_start_price != null) {
         showDialog(
           context: context,
           builder: (context) => Center(child: CircularProgressIndicator()),
@@ -610,14 +644,17 @@ class AddProductState extends State<AddProduct> {
           // } else {
           //   // User canceled the picker
           // }
+          Map data = {"image_1": "ข้อมูลรูปภาพ"};
+
           for (int i = 0; i < _imageData.length; i++) {
             PlatformFile? _imageDataPlatformFile =
                 _imageData[i] as PlatformFile;
+
             stream.add(_imageDataPlatformFile.bytes!);
             //
             multiport.add(
               http.MultipartFile.fromBytes(
-                'image_${i + 1}',
+                'image_${i + 1}', //image_1 -image_10
                 stream[i],
                 filename: _imageDataPlatformFile?.path.toString(),
               ),
@@ -699,6 +736,11 @@ class AddProductState extends State<AddProduct> {
             MaterialPageRoute(builder: (context) => StoreManage()),
           );
         } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => AddProduct()),
+          );
+
           showDialog(
             context: context,
             builder: (context) => AlertDialog(title: Text("ล้มเหลว")),

@@ -275,7 +275,7 @@ class UserProductManageState extends State<UserProductManage> {
     final response = await http.delete(uri);
     if (response.statusCode == 200) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => UserProduct(),));
+          context, MaterialPageRoute(builder: (context) => AuctionListUser(),));
       print("Successfully.");
     } else {
       showDialog(
