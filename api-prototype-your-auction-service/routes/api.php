@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\v1\AuctionController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\BidController;
 use App\Http\Controllers\v1\ImageController;
 use App\Http\Controllers\v1\ResultReportAuctionController;
@@ -24,16 +24,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::get('/user', [UserController::class, 'index']);
-Route::get('/user/{index}', [UserController::class, 'oneIndex']);
-Route::post('/register', [UserController::class, 'register']);
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
-Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
+
+Route::prefix('/v1')->group(function () {
+    Route::get('/user', [UserController::class, 'index']);
+    Route::get('/user/{index}', [UserController::class, 'oneIndex']);
+    Route::post('/register', [UserController::class, 'register']);
+    Route::post('/login', [UserController::class, 'login']);
+    Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
+    Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
 Route::post('/change-password', [UserController::class, 'changePassWord']);
 
 
-Route::prefix('/v1')->group(function () {
+
+
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\v1;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         try {
+            // return "Test";
             $users_data = DB::table('users')
                     ->select('*')
                     ->get();
@@ -137,12 +139,12 @@ class UserController extends Controller
             // $request->validate([
             //     'image_profile' => 'nullable | required | image | mimes:png, jpg, jpeh, webp'
             // ]);
-
-            $name = $request->name;
+            $first_name_users = $request->first_name_users;
+            $last_name_users = $request->last_name_users;
+            $email = $request->email;
             $phone = $request->phone;
             $password = $request->password;
             $address = $request->address;
-            $email = $request->email;
             $image = $request->image_profile;
 
             $password_hashed = Hash::make($password);
@@ -156,7 +158,8 @@ class UserController extends Controller
 
 
             $data = [
-                "name" => $name,
+                "first_name_users" => $first_name_users,
+                "last_name_users" => $last_name_users,
                 "phone" => $phone,
                 "email" => $email,
                 "password" => $password_hashed,
@@ -170,7 +173,7 @@ class UserController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
-                'data' => $data
+                // 'data' => $data
             ], 201);
         } catch (Exception $e) {
             return response()->json([
@@ -184,22 +187,27 @@ class UserController extends Controller
     public function login(Request $request)
     {
         try {
-            $phone = $request->phone;
+            $email = $request->email;
             $password = $request->password;
 
             $login = DB::table('users')
-                        ->where('phone', $phone)
+                        ->select('id_users', 'first_name_users',
+                                    'last_name_users', 'phone',
+                                    'address', 'email',
+                                    'admin_status', 'image_profile', 'password')
+                        ->where('email', $email)
                         ->first();
 
-            if ($login && (Hash::check($password, $login->password) == 1)) {
-
+            if ($login == true && Hash::check($password, $login->password)) {
                 $data = [
                     'id_users' => $login->id_users,
-                    'name' => $login->name,
+                    'first_name_users' => $login->first_name_users,
+                    'last_name_users' => $login->last_name_users,
                     'phone' => $login->phone,
                     'address' => $login->address,
                     'email' => $login->email,
-                    'admin' => $login->admin
+                    'admin_status' => $login->admin_status,
+                    'image_profile' => $login->image_profile,
                 ];
 
                 return response()->json([

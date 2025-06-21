@@ -24,7 +24,7 @@ class UserFactory extends Factory
             'email' => fake()->unique()->email(),
             'address' => fake()->address(),
             // 'password' => static::$password ??= Hash::make('password'),
-            'password' => Hash::make('m'),
+            'password' => Hash::make('1'),
             'admin_status' => fake()->boolean(),
             'image_profile' => "profile-default"
         ];
