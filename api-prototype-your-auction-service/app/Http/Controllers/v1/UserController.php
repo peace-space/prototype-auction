@@ -148,8 +148,8 @@ class UserController extends Controller
             $image = $request->image_profile;
 
             $password_hashed = Hash::make($password);
-
-            if ($image != "") {
+            // return $image;
+            if ($image != null) {
                 $image_name = Storage::disk('public')->put('images/user-profile-image', $image);
                 $path = Storage::url($image_name);
             } else {

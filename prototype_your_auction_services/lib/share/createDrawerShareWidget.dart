@@ -43,9 +43,20 @@ Drawer createDrawer (BuildContext ctx) {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
+                      ShareData.userData['image_profile']),
+            ),
             accountName: Text(
-                "ชื่อ ${ShareData.userData['name']} ${ShareData.logedIn}"),
-            accountEmail: Text("เบอร์โทร: ${ShareData.userData['phone']}"),
+                "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                    .userData['last_name_users']}"),
+            accountEmail: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("อีเมล: ${ShareData.userData['email']}"),
+                Text("เบอร์โทร: ${ShareData.userData['phone']}")
+              ],),
           ),
           testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),

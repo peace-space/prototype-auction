@@ -41,7 +41,7 @@ class LoginState extends State<Login>{
                 ),),
                 SizedBox(height: 3,),
                 Text("${message}", textScaler: TextScaler.linear(1.3), style: TextStyle(color: Colors.red),),
-                phone(),
+                email(),
                 passWord(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -59,7 +59,7 @@ class LoginState extends State<Login>{
     );
   }
 
-  Widget phone() {
+  Widget email() {
     return TextField(
       controller: _email,
       decoration: InputDecoration(
@@ -142,11 +142,13 @@ class LoginState extends State<Login>{
 
     if (_email.text != "" && _passWord.text != "") {
       Map<String, dynamic> data = {
-        'phone': _email.text,
+        'email': _email.text,
         'password' : _passWord.text
       };
 
-      String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/login";
+      // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/login";
+      String url = "http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/login";
+
       final uri = Uri.parse(url);
       final response = await http.post(
         uri,
@@ -169,11 +171,12 @@ class LoginState extends State<Login>{
         } else {
           ShareData.admin = false;
         }
-        print(ShareData.admin);
+        print("Admin Status: " + ShareData.admin.toString());
 
         ShareData.logedIn = true;
 
         ShareData.userData = data;
+        print(ShareData.userData.toString());
 
         goToAuctionHome(ctx);
 
@@ -185,7 +188,7 @@ class LoginState extends State<Login>{
     } else {
       if (_email.text == "") {
         setState(() {
-          message = "กรุณากรอกเบอร์โทรศัพท์";
+          message = "กรุณากรอกอีเมล";
         });
       } else if(_passWord.text == "") {
         setState(() {

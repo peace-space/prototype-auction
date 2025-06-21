@@ -1,7 +1,10 @@
-import 'dart:convert';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 
 class Register extends StatefulWidget {
@@ -18,6 +21,7 @@ class RegisterState extends State<Register> {
   var _address = TextEditingController();
   var _passWord = TextEditingController();
   var _verifyPassWord = TextEditingController();
+  var _imageData;
 
   String message = "";
 
@@ -30,11 +34,10 @@ class RegisterState extends State<Register> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          Text(
-            message,
-            textScaler: TextScaler.linear(1.5),
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
-          ),
+          showImage(),
+          selectImageTextButton(),
+          deleteImageTextButton(),
+          alertText(),
           firstName(),
           lastName(),
           phone(),
@@ -44,8 +47,22 @@ class RegisterState extends State<Register> {
           verifyPassWord(),
           SizedBox(height: 8),
           registerButton(context),
+          SizedBox(
+            height: 200,
+          ),
         ],
       ),
+    );
+  }
+
+  Widget alertText() {
+    return Text(
+      message,
+      textScaler: TextScaler.linear(1.5),
+      style: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+          color: Colors.red),
     );
   }
 
@@ -134,15 +151,80 @@ class RegisterState extends State<Register> {
     );
   }
 
+  Widget showImage() {
+    if (_imageData != null) {
+      if (kIsWeb) {
+        return CircleAvatar(
+            radius: 200,
+            backgroundImage: NetworkImage(_imageData.path));
+      } else if (Platform.isAndroid) {
+        return CircleAvatar(
+            radius: 150,
+            backgroundImage: FileImage(_imageData)
+        );
+      } else {
+        return CircleAvatar(
+          radius: 150,
+          backgroundImage: NetworkImage(
+            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile-default',
+          ),
+        );
+      }
+    } else {
+      return Center(
+        child: Image.network(
+          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile-default',
+        ),
+      );
+    }
+  }
+
+  Widget selectImageTextButton() {
+    return TextButton(
+      onPressed: () => {selectImage()},
+      child: Text('เพิ่มรูปภาพ'),
+    );
+  }
+
+  Widget deleteImageTextButton() {
+    return TextButton(
+        onPressed: () =>
+        {
+          setState(() {
+            _imageData = null;
+          })
+        }, child: Text('ลบรูปภาพที่เลือก'));
+  }
+
+  void selectImage() async {
+    if (kIsWeb) {
+      FilePickerResult? selectImage = await FilePicker.platform.pickFiles();
+      if (selectImage != null) {
+        PlatformFile? imageFile = selectImage.files.first;
+        setState(() {
+          _imageData = imageFile;
+        });
+      }
+    } else if (Platform.isAndroid) {
+      ImagePicker selectImage = ImagePicker();
+
+      final imageFile = await selectImage.pickImage(
+        source: ImageSource.gallery,
+      );
+
+      if (imageFile != null) {
+        setState(() {
+          _imageData = File(imageFile.path);
+        });
+      }
+    }
+  }
+
   Widget registerButton(BuildContext ctx) {
     return ElevatedButton(
       onPressed: () => {onRegister(ctx)},
       child: Text("ลงทะเบียน"),
     );
-  }
-
-  Widget insertImageButton() {
-    return ElevatedButton(onPressed: () => {}, child: Text("เพิ่มรูปโปรไฟล์"));
   }
 
   bool hasData() {
@@ -164,8 +246,6 @@ class RegisterState extends State<Register> {
   }
 
   void onRegister(BuildContext ctx) async {
-    String name = "${_firstName.text} ${_lastName.text}";
-    print(name);
 
     if (hasData()) {
       if (_passWord.text == _verifyPassWord.text) {
@@ -175,21 +255,110 @@ class RegisterState extends State<Register> {
         } else {
           email = _email.text;
         }
+
         Map<String, dynamic> data = {
-          'name': name,
+          'first_name_users': _firstName.text,
+          'last_name_users': _lastName.text,
           'phone': _phone.text,
           'email': email,
           'address': _address.text,
           'password': _passWord.text,
+          // 'image_profile':
         };
-        String url =
-            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/register';
-        final uri = Uri.parse(url);
-        final response = await http.post(
-          uri,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(data),
+
+
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (context) =>
+                Container(
+                  width: 200,
+                  height: 200,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text("กำลังบันทึกข้อมูล...", style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.normal,
+                          decoration: TextDecoration.none
+                      ),),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      TextButton(onPressed: () =>
+                      {
+                        Navigator.of(context).pop()
+                      }, child: Text('ยกเลิก', style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                          decorationColor: Colors.white,
+                          color: Colors.white
+                      ),)),
+                    ],
+                  ),
+                )
         );
+        // SafeArea(
+        //     child: Center(
+        //       child: CircularProgressIndicator(),
+        //     )
+        // );
+
+        // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/register';
+
+        String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/register';
+        final uri = Uri.parse(url);
+        // final response = await http.post(
+        //   uri,
+        //   headers: {"Content-Type": "application/json"},
+        //   body: jsonEncode(data),
+        // );
+
+        final request = http.MultipartRequest('POST', uri);
+
+        request.headers['Content-Type'] = 'application/json';
+
+        if (_imageData != null) {
+          if (kIsWeb) {
+            PlatformFile? _imageDataPlatformFile = _imageData as PlatformFile;
+            var stream = _imageDataPlatformFile.bytes!;
+
+            var multipart = http.MultipartFile.fromBytes(
+                'image_profile', stream,
+                filename: _imageDataPlatformFile.path.toString());
+
+
+            request.fields['image_profile'] = request.files.toString();
+          } else if (Platform.isAndroid) {
+            File? _imageDataFile = _imageData as File;
+            var stream = File(_imageDataFile!.path.toString())
+                .readAsBytesSync();
+            var multiport = http.MultipartFile.fromBytes(
+                'image_profile', stream, filename: _imageDataFile!.path);
+            request.files.add(multiport);
+            request.fields['image_profile'] = request.files.toString();
+          }
+        }
+
+        request.fields['first_name_users'] = data['first_name_users'];
+        request.fields['last_name_users'] = data['last_name_users'];
+        request.fields['phone'] = data['phone'];
+        request.fields['email'] = data['email'];
+        request.fields['password'] = data['password'];
+        request.fields['address'] = data['address'];
+
+
+        final response = await request.send();
+
+
 
         if (response.statusCode == 201) {
           setState(() {
@@ -198,9 +367,21 @@ class RegisterState extends State<Register> {
           });
         } else {
           setState(() {
-            message = "ข้อมูลไม่ถูกต้อง/มีบัญชีผู้ใช้งานอยู่แล้ว";
+            message =
+            "ข้อมูลไม่ถูกต้อง/มีบัญชีผู้ใช้งานอยู่แล้ว\nหรืออาจมีอีเมล/เบอร์โทรที่ถูกใช้งานแล้ว";
           });
         }
+
+        // if (response.statusCode == 201) {
+        //   setState(() {
+        //     message = "Successfully.";
+        //     goToLogin(ctx);
+        //   });
+        // } else {
+        //   setState(() {
+        //     message = "ข้อมูลไม่ถูกต้อง/มีบัญชีผู้ใช้งานอยู่แล้ว";
+        //   });
+        // }
       } else {
         setState(() {
           message = "รหัสผ่านไม่ตรงกัน";

@@ -13,6 +13,7 @@ class HomeTestSystemState extends State<HomeTestSystem> {
   bool _confirm = false;
   String _return_value = '';
   var _DropDown;
+  bool ignoring = true;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,6 +37,8 @@ class HomeTestSystemState extends State<HomeTestSystem> {
               button2(context),
               Text("ทดสอบ DropDown: " + _DropDown.toString()),
               dropdownTest(),
+              buttonLoadingPage1(),
+              buttonLoadingPage2(),
             ],
           ),
         );
@@ -98,10 +101,100 @@ class HomeTestSystemState extends State<HomeTestSystem> {
     );
   }
 
-  // DropdownMenuItem buildMenuItem(String data) {
-  //   return DropdownMenuItem(
-  //     value: data,
-  //       child: Text(data)
-  //   );
-  // }
+  Widget buttonLoadingPage1() {
+    return TextButton(
+      onPressed: () => {loadingPage1()},
+      child: Text("Loading Page"),
+    );
+  }
+
+  void loadingPage1() async {
+    print("\n\n\nLoadingPage\n");
+
+    // IgnorePointer(
+    //   child: await showDialog(context: context, builder: (context) => TextButton(onPressed: () => {
+    //     print("SAFE+++++++++++++++++++++++++++++++++++++++++++++++")
+    //   }, child: Text("SAFE")),),
+    // );
+    await showDialog(
+      context: context,
+      builder:
+          (context) =>
+          AlertDialog(
+            title: Text("Test"),
+            actions: [
+              IgnorePointer(
+                ignoring: ignoring,
+                child: TextButton(
+                  onPressed:
+                      () => {print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")},
+                  child: Text("ปุ่ม 1"),
+                ),
+              ),
+              TextButton(
+                onPressed:
+                    () =>
+                {
+                  print("Ignoring: " + ignoring.toString()),
+                  setState(() {
+                    if (ignoring == true) {
+                      ignoring = false;
+                    } else {
+                      ignoring = true;
+                    }
+                  }),
+                  print("Ignoring: " + ignoring.toString()),
+                },
+                child: Text("ปุ่ม 2"),
+              ),
+            ],
+          ),
+    );
+
+    // IgnorePointer(
+    //   child: await showDialog(
+    //     context: context,
+    //     builder:
+    //         (context) => Center(
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             children: [
+    //               CircularProgressIndicator(),
+    //               Text("กำลังโหนด...", style: TextStyle(
+    //                 fontSize: 16,
+    //                   color: Colors.blue)),
+    //             ],
+    //           ),
+    //         ),
+    //   ),
+    // );
+
+    // showDialog(
+    //     context: context,
+    //     builder: (context) => IgnorePointer(
+    //       child: Dialog(
+    //           child: TextButton(onPressed: () => {
+    //         print("SAFE+++++++++++++++++++++++++++++++++++++++++++++++")
+    //       }, child: Text("SAFE"))),
+    //     ),
+    // );
+  }
+
+  Widget buttonLoadingPage2() {
+    return TextButton(
+      onPressed: () => {loadingPage2()},
+      child: Text("Loading Page 2"),
+    );
+  }
+
+  void loadingPage2() {
+    showDialog(
+      barrierDismissible: false,
+      // useSafeArea: true,
+      context: context, builder: (context) =>
+        Center(
+          child: CircularProgressIndicator(),
+        ),);
+  }
+
 }
