@@ -78,7 +78,14 @@ class ImageController extends Controller
 
     public function getImage($image_path) {
         // $path = 'storage/images/product-images/'.$image_path;
+
+        // $path = 'storage/images/user-profile-image/'.$image_path;
         $path = $image_path;
+        return $path;
         return response()->file($path);
+    }
+
+    public function getImageProfile() {
+        return response()->file('storage\images\user-profile-image\profile-default-image.png');
     }
 }
