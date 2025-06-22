@@ -15,7 +15,7 @@ class BidController extends Controller
         try {
             $high_bit = DB::table('bids')
                 ->select(
-                    'users.name',
+                    'users.first_name_users', 'users.last_name_users',
                     'bids.bid_price',
                     'bids.created_at'
                 )
