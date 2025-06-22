@@ -190,18 +190,18 @@ class AuctionHomeState extends State<AuctionHome> {
                   onTap: () => goToDetailAuction(ctx, data),
                   leading: ClipRRect(
                     // borderRadius: BorderRadius.vertical(),
-                    // child: Image.network(
-                    //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
-                    //       data['image_path_1'],
-                    //   cacheHeight: 600,
-                    //   cacheWidth: 500,
-                    // ),
                     child: Image.network(
-                      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
                           data['image_path_1'],
                       cacheHeight: 600,
                       cacheWidth: 500,
                     ),
+                    // child: Image.network(
+                    //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
+                    //       data['image_path_1'],
+                    //   cacheHeight: 600,
+                    //   cacheWidth: 500,
+                    // ),
                   ),
                   title: Text(data['name_product']),
                   subtitle: Text("ราคาสูงสุด ฿${data['max_price'].toString()}"),
@@ -219,19 +219,20 @@ class AuctionHomeState extends State<AuctionHome> {
 
   Stream<List<dynamic>> fetchAuctionData() async* {
     try {
-      await Future.delayed(Duration(seconds: 1));
+      await Future.delayed(Duration(seconds: 5));
       print("Start");
-      // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       String url =
-          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/auction';
+          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
+      // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/auction';
       final uri = Uri.parse(url);
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
       List<dynamic>? data = checkEndDateTime(auctions_data);
       // print(data.toString());
+      // print(data[9]['id_auctions'].toString());
       yield data;
-      // setState(() {});
+      setState(() {});
     } on Exception catch (e) {
       print(e);
     }

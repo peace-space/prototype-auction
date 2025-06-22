@@ -110,13 +110,17 @@ class BidListsState extends State<BidLists> {
                   ],
                   rows: List.generate(snapshot.data.length, (index) {
                     Map<String, dynamic> data = snapshot.data[index];
-                    String user_name = data['name'].toString();
+                    String first_name_users = data['first_name_users']
+                        .toString();
+                    String last_name_users = data['first_name_users']
+                        .toString();
                     String price = data['bid_price'].toString();
                     String bidding_date_time = data['created_at'].toString();
                     return DataRow(
                       cells: [
                         DataCell(Center(child: Text('${index + 1}'))),
-                        DataCell(Center(child: Text(user_name))),
+                        DataCell(Center(child: Text(
+                            '${first_name_users} ${last_name_users}'))),
                         DataCell(Center(child: Text(price))),
                         DataCell(Center(child: Text(bidding_date_time))),
                       ],

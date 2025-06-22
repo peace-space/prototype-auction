@@ -90,27 +90,15 @@ Widget showImageProfile() {
   if (ShareData.userData['image_profile'] != null) {
     return CircleAvatar(
       backgroundImage: NetworkImage(
-          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile' +
+          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile' +
               ShareData.userData['image_profile']
       ),
     );
 
-    // if (kIsWeb) {
-    //   return CircleAvatar(
-    //     backgroundImage: NetworkImage(
-    //       'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile/' +
-    //           ShareData.userData['image_profile'],
-    //     ),
-    //   );
-    // } else if (Platform.isAndroid) {
-    //   return CircleAvatar(
-    //     backgroundImage: FileImage(a),
-    //   )
-    // }
   } else {
     return CircleAvatar(
       backgroundImage: NetworkImage(
-        'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
+        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
       ),
     );
   }

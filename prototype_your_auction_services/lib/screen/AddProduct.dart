@@ -612,12 +612,15 @@ class AddProductState extends State<AddProduct> {
           check_integer_shipping_cost != null &&
           check_integer_start_price != null) {
         showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) => Center(child: CircularProgressIndicator()),
         );
 
+        // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/create-product';
         String url =
-            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/create-product';
+            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+
         final uri = Uri.parse(url);
         final request = http.MultipartRequest('POST', uri);
 
@@ -703,8 +706,10 @@ class AddProductState extends State<AddProduct> {
           // "end_date_time": "2025-04-25 01:26:00",
           "end_date_time": _inputEndDateData + " " + _inputEndTimeData,
           "id_auction_types": _dataAuctionTypeValue,
-          "id_payment_types": "1",
-          "id_bank_accounts": "1",
+          // "id_payment_types": ShareData.userData['id_payment_types'],
+          "id_payment_types": '1',
+          // "id_bank_accounts": ShareData.userData['id_bank_accounts'],
+          "id_bank_accounts": '1',
         };
 
         print(data.toString());

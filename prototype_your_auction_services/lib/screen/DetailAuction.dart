@@ -74,14 +74,14 @@ class DetailAuctionState extends State<DetailAuction> {
       child:
           (_imageData.length == 0)
               ? Center(child: Text("ไม่พบรูปภาพ"))
-          // : Image.network(
-          //   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
-          //       _imageData![indexSelectImage],
-          // ),
               : Image.network(
-            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image'
-                + _imageData![indexSelectImage],
+            "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+                _imageData![indexSelectImage],
           ),
+      //     : Image.network(
+      //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image'
+      //       + _imageData![indexSelectImage],
+          // ),
     );
   }
 
@@ -114,14 +114,14 @@ class DetailAuctionState extends State<DetailAuction> {
                         indexSelectImage = index;
                       }),
                     },
-                // child: Image.network(
-                //   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
-                //       _imageData[index],
-                // ),
                 child: Image.network(
-                  'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
+                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
                 ),
+                // child: Image.network(
+                //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
+                //       _imageData[index],
+                // ),
               ),
             ),
       ),
