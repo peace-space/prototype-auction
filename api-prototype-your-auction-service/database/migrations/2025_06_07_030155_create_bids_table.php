@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id('id_bids');
             $table->bigInteger('id_users');
             $table->foreignId('id_auctions');
-            $table->string('bid_price');
+            // $table->string('bid_price');
+            $table->integer('bid_price');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
