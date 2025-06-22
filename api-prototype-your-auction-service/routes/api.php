@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\ResultAuctionController;
 use App\Http\Controllers\v1\ProductController;
 use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\v1\UserController;
@@ -37,7 +38,7 @@ Route::prefix('/v1')->group(function () {
 
 
 
-    // AuctionController
+    // AuctionController -----------------------------------------------------------
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
@@ -45,10 +46,11 @@ Route::prefix('/v1')->group(function () {
     Route::post('/test', [AuctionController::class, 'test']);
     Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
 
-    // ProductController
+    // ProductController -----------------------------------------------------------
     Route::get('/product-detail/{id_auctions}', [ProductController::class, 'productDetail']);
     // Route::get('/test-product-controller', [ProductController::class, 'test']);
 
+    // Email -----------------------------------------------------------
     // Route::get('/test', [EmailController::class, 'index']);
     // Route::get('/image', [ImageController::class, 'index']);
     // Route::get('/image/{id_auctions}&{index}', [ImageController::class, 'oneImage']);
@@ -57,14 +59,17 @@ Route::prefix('/v1')->group(function () {
     // Route::get('/test-image/{storage}/{images}/{user_profile_image}', [ImageController::class, 'test']);
     // Route::get('/get-image-profile/{storage}/{images}/{user-profile-image}', [ImageController::class, 'getImageProfile']);
 
+    // Bid -----------------------------------------------------------
     Route::get('/bids/{id_auctions}', [BidController::class, 'index']);
     Route::get('/high-bids/{id_auctions}', [BidController::class, 'highBids']);
     Route::post('/bidding', [BidController::class, 'bidding']);
 
+    // Auctions User Product -----------------------------------------------------------
     Route::get('/user-product/{id_user}', [AuctionController::class, 'userProduct']);
     Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
 
-    Route::get('/result-report-auction/{id_users}', [ResultReportAuctionController::class, 'resultReportAuction']);
-    Route::post('/check-the-winners', [ResultReportAuctionController::class, 'checkTheWinners']);
-    Route::post('/save-the-winners', [ResultReportAuctionController::class, 'saveTheWinnerAuctions']);
+    // Result -----------------------------------------------------------
+    Route::get('/result-report-auction/{id_users}', [ResultAuctionController::class, 'resultReportAuction']);
+    Route::post('/check-the-winners', [ResultAuctionController::class, 'checkTheWinners']);
+    Route::post('/save-the-winners', [ResultAuctionController::class, 'saveTheWinnerAuctions']);
 });
