@@ -18,17 +18,18 @@ class AuctionController extends Controller
     public function index() {
         try{
             $auctions_list = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'images.id_images',
-                            'name_product',
-                            'images.image_path_1',
-                            'auctions.shipping_cost',
-                            'auctions.start_price',
-                            'auctions.start_date_time',
-                            'auctions.end_date_time',
-                            'max_price',
+                    ->select('auctions.id_auctions', 'auctions.auction_status',
+                            'auctions.shipping_cost', 'auctions.start_price',
+                            'auctions.end_date_time', 'auctions.max_price',
+                            'auctions.id_auction_types', 'auctions.id_payment_types',
+                            'auctions.id_bank_accounts', 'products.id_products',
+                            'products.name_product', 'images.image_path_1'
                             )
+                    ->join('products', function(JoinClause $join){
+                        $join->on('auctions.id_products', '=', 'products.id_products');
+                    })
                     ->join('images', function(JoinClause $join){
-                        $join->on('auctions.id_images', '=', 'images.id_images');
+                        $join->on('images.id_images', '=', 'products.id_images');
                     })
                     ->orderByRaw('id_auctions')
                     ->get();
