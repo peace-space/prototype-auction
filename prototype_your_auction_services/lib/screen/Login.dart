@@ -171,12 +171,13 @@ class LoginState extends State<Login>{
         } else {
           ShareData.admin = false;
         }
-        print("Admin Status: " + ShareData.admin.toString());
+        // print("Admin Status: " + ShareData.admin.toString());
 
         ShareData.logedIn = true;
 
         ShareData.userData = data;
-        print(ShareData.userData.toString());
+        print(ShareData.userData['image_profile'].toString());
+        // print(ShareData.userData.toString());
 
         goToAuctionHome(ctx);
 

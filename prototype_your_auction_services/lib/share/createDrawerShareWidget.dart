@@ -14,14 +14,15 @@ import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart'
 
 import '../screen/HistoryBids.dart';
 
-Drawer createDrawer (BuildContext ctx) {
+Drawer createDrawer(BuildContext ctx) {
   if (ShareData.admin && ShareData.logedIn) {
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
             accountName: Text(
-                "${ShareData.admin} Admin ชื่อ: ${ShareData.userData['name']}"),
+              "${ShareData.admin} Admin ชื่อ: ${ShareData.userData['name']}",
+            ),
             accountEmail: Text("เบอร์โทรศัพท์: ${ShareData.userData['phone']}"),
           ),
           testSystem(ctx), // ทดสอบระบบ
@@ -32,7 +33,7 @@ Drawer createDrawer (BuildContext ctx) {
           chatListButton(ctx),
           buttonGoToHistoryAuction(ctx),
           buttonGoToReportAution(ctx),
-          logOutButton(ctx)
+          logOutButton(ctx),
         ],
       ),
     );
@@ -43,20 +44,18 @@ Drawer createDrawer (BuildContext ctx) {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(
-                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
-                      ShareData.userData['image_profile']),
-            ),
+            currentAccountPicture: showImageProfile(),
             accountName: Text(
-                "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
-                    .userData['last_name_users']}"),
+              "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                  .userData['last_name_users']}",
+            ),
             accountEmail: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text("อีเมล: ${ShareData.userData['email']}"),
-                Text("เบอร์โทร: ${ShareData.userData['phone']}")
-              ],),
+                Text("เบอร์โทร: ${ShareData.userData['phone']}"),
+              ],
+            ),
           ),
           testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
@@ -65,7 +64,7 @@ Drawer createDrawer (BuildContext ctx) {
           chatListButton(ctx),
           buttonGoToHistoryAuction(ctx),
           buttonGoToReportAution(ctx),
-          logOutButton(ctx)
+          logOutButton(ctx),
         ],
       ),
     );
@@ -86,87 +85,113 @@ Drawer createDrawer (BuildContext ctx) {
   }
 }
 
+Widget showImageProfile() {
+  // if (ShareData.logedIn != false) {
+  if (ShareData.userData['image_profile'] != null) {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(
+          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile' +
+              ShareData.userData['image_profile']
+      ),
+    );
+
+    // if (kIsWeb) {
+    //   return CircleAvatar(
+    //     backgroundImage: NetworkImage(
+    //       'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile/' +
+    //           ShareData.userData['image_profile'],
+    //     ),
+    //   );
+    // } else if (Platform.isAndroid) {
+    //   return CircleAvatar(
+    //     backgroundImage: FileImage(a),
+    //   )
+    // }
+  } else {
+    return CircleAvatar(
+      backgroundImage: NetworkImage(
+        'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile/profile-default-image.png',
+      ),
+    );
+  }
+}
+
 Widget HomePageButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () => {
-        Navigator.push(
-          ctx,
-            MaterialPageRoute(
-                builder: (ctx) => HomePage()
-            )
-        ),
-      },
-      child: Text("หน้าหลัก")
+    onPressed:
+        () =>
+    {
+      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => HomePage())),
+    },
+    child: Text("หน้าหลัก"),
   );
 }
 
 Widget registerButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () => {
-        Navigator.push(
-            ctx,
-            MaterialPageRoute(
-                builder:(ctx)=> Register()
-            )
-        ),
-      },
-      child: Text("ลงทะเบียน")
+    onPressed:
+        () =>
+    {
+      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => Register())),
+    },
+    child: Text("ลงทะเบียน"),
   );
 }
 
 Widget loginButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () => {
-        Navigator.push(
-            ctx,
-            MaterialPageRoute(
-                builder:(ctx)=> Login()
-            )
-        ),
-      },
-      child: Text("เข้าสู่ระบบ")
+    onPressed:
+        () =>
+    {
+      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => Login())),
+    },
+    child: Text("เข้าสู่ระบบ"),
   );
 }
 
 Widget adminMenuButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-          builder: (ctx) => AdminMenu())
-        );
-      },
-      child: Text("Admin")
+    onPressed: () {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => AdminMenu()),
+      );
+    },
+    child: Text("Admin"),
   );
 }
 
 Widget logOutButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () => {
-        ShareData.logedIn = false,
-        ShareData.admin = false,
-        ShareData.userData = {},
-        ShareData.upDateState = () {},
-        ShareProductData.productData = {},
+    onPressed:
+        () =>
+    {
+      ShareData.logedIn = false,
+      ShareData.admin = false,
+      ShareData.userData = {},
+      ShareData.upDateState = () {},
+      ShareProductData.productData = {},
 
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => AuctionHome())
-        )
-      },
-      child: Text("ออกจากระบบ")
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => AuctionHome()),
+      ),
+    },
+    child: Text("ออกจากระบบ"),
   );
 }
 
-Widget userProfile(BuildContext ctx){
+Widget userProfile(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () => {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => UserProfile())
-        )
-      },
-      child: Text("ข้อมูลผู้ใช้งาน")
+    onPressed:
+        () =>
+    {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => UserProfile()),
+      ),
+    },
+    child: Text("ข้อมูลผู้ใช้งาน"),
   );
 }
 
@@ -188,74 +213,80 @@ Widget registerStatus(BuildContext ctx) {
 
 Widget homePageButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () =>
-      {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => AuctionHome())
-        )
-      },
-      child: Text("หน้าหลัก")
+    onPressed:
+        () =>
+    {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => AuctionHome()),
+      ),
+    },
+    child: Text("หน้าหลัก"),
   );
 }
 
 Widget chatListButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () =>
-      {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => ChatList())
-        )
-      },
-      child: Text("แชท")
+    onPressed:
+        () =>
+    {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => ChatList()),
+      ),
+    },
+    child: Text("แชท"),
   );
 }
 
 Widget storaManageButton(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () =>
-      {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => StoreManage())
-        )
-      },
-      child: Text("จัดการร้านค้า")
+    onPressed:
+        () =>
+    {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => StoreManage()),
+      ),
+    },
+    child: Text("จัดการร้านค้า"),
   );
 }
 
 Widget testSystem(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () =>
-      {
-        Navigator.pushReplacement(
-            ctx, MaterialPageRoute(
-            builder: (ctx) => HomeTestSystem())
-        )
-      },
-      child: Text("ทดสอบระบบ")
+    onPressed:
+        () =>
+    {
+      Navigator.pushReplacement(
+        ctx,
+        MaterialPageRoute(builder: (ctx) => HomeTestSystem()),
+      ),
+    },
+    child: Text("ทดสอบระบบ"),
   );
 }
 
 Widget buttonGoToHistoryAuction(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () {
-        Navigator.push(ctx,
-            MaterialPageRoute(builder: (context) => HistoryAuctions(),)
-        );
-      },
-      child: Text("ประวัติการประมูล")
+    onPressed: () {
+      Navigator.push(
+        ctx,
+        MaterialPageRoute(builder: (context) => HistoryAuctions()),
+      );
+    },
+    child: Text("ประวัติการประมูล"),
   );
 }
 
 Widget buttonGoToReportAution(BuildContext ctx) {
   return ElevatedButton(
-      onPressed: () {
-        Navigator.push(ctx,
-            MaterialPageRoute(builder: (context) => ReportAuction(),)
-        );
-      },
-      child: Text("รายงานผลการประมูล")
+    onPressed: () {
+      Navigator.push(
+        ctx,
+        MaterialPageRoute(builder: (context) => ReportAuction()),
+      );
+    },
+    child: Text("รายงานผลการประมูล"),
   );
 }
