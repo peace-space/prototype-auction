@@ -445,7 +445,8 @@ class DetailAuctionState extends State<DetailAuction> {
       minutesDescription: "min",
       secondsDescription: "sec",
       descriptionTextStyle: TextStyle(height: 0),
-      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),End: () {
+      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
+      onEnd: () {
         Navigator.of(context).pop();
         showDialog(
           context: context,
