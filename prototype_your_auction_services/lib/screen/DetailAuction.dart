@@ -203,7 +203,8 @@ class DetailAuctionState extends State<DetailAuction> {
           Row(
             children: [
               Text("ผู้เปิดประมูล: ", style: headText()),
-              Text("${data!['name']}", style: defaultText()),
+              Text("${data!['first_name_users']} ${data!['last_name_users']}",
+                  style: defaultText()),
             ],
           ),
           Row(

@@ -440,9 +440,9 @@ class AuctionController extends Controller
         try{
             $auctions_list = DB::table('bids')
                                 ->select('auctions.id_auctions', 'images.id_images',
-                                            'auctions.name_product', 'images.image_path_1',
+                                            'products.name_product', 'images.image_path_1',
                                             'auctions.shipping_cost', 'auctions.start_price',
-                                            'auctions.start_date_time', 'auctions.end_date_time',
+                                            'auctions.end_date_time',
                                             'auctions.max_price', 'bids.created_at',
                                             'bids.bid_price'
                                             )
@@ -451,9 +451,13 @@ class AuctionController extends Controller
                                 })
                                 ->join('users', function(JoinClause $join){
                                         $join->on('users.id_users', '=', 'bids.id_users');
-                                    })->join('images', function(JoinClause $join){
-                                        $join->on('images.id_images', '=', 'auctions.id_images');
                                     })
+                                ->join('products', function(JoinClause $join){
+                                        $join->on('products.id_products', '=', 'auctions.id_products');
+                                    })
+                                ->join('images', function(JoinClause $join){
+                                        $join->on('images.id_images', '=', 'products.id_images');
+                                })
                                 ->orderByDesc('created_at')
                                 ->where('bids.id_users', '=', $id_users)
                                 ->get();
