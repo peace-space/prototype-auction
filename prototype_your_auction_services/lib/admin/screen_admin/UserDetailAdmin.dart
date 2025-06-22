@@ -69,7 +69,7 @@ class UserManageState extends State<UserManage> {
         itemBuilder: (context, index) {
           final Map data = user_data[index];
           final id = !data['id_users'];
-          final name = data['name'];
+          final name = data['first_name_users'];
           final phone = data['phone'];
           return Card(
             child: ListTile(
@@ -83,7 +83,7 @@ class UserManageState extends State<UserManage> {
   void userData() async {
     await Future.delayed(Duration(milliseconds: 300));
     print("aaaa");
-    String url = "https://your-auction-services.com/prototype-auction/api-pa/api/user/${id_user}";
+    String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user/${id_user}";
     // String url = "https://www.your-auction-services.com/prototype-auction/api-pa/api/user/${id_user}";
     final uri = Uri.parse(url);
     final response = await http.get(uri);

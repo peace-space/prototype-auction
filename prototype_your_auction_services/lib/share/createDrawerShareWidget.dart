@@ -20,10 +20,18 @@ Drawer createDrawer(BuildContext ctx) {
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
+            currentAccountPicture: showImageProfile(),
             accountName: Text(
-              "${ShareData.admin} Admin ชื่อ: ${ShareData.userData['name']}",
+              "Admin ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                  .userData['last_name_users']}",
             ),
-            accountEmail: Text("เบอร์โทรศัพท์: ${ShareData.userData['phone']}"),
+            accountEmail: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("อีเมล: ${ShareData.userData['email']}"),
+                Text("เบอร์โทร: ${ShareData.userData['phone']}"),
+              ],
+            ),
           ),
           testSystem(ctx), // ทดสอบระบบ
           adminMenuButton(ctx),
