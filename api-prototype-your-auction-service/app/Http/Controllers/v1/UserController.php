@@ -152,8 +152,9 @@ class UserController extends Controller
             if ($image != null) {
                 $image_name = Storage::disk('public')->put('images/user-profile-image', $image);
                 $path = Storage::url($image_name);
+                // return $path;
             } else {
-                $path = "/storage/images/user-profile-image/default-image.png";
+                $path = "/storage/images/user-profile-image/public/storage/images/user-profile-image/profile-default-image.png";
             }
 
 
@@ -166,7 +167,7 @@ class UserController extends Controller
                 "address" => $address,
                 "image_profile" => $path
             ];
-
+            // return $data['image_profile'];
             $user = db::table('users')
                 ->insert($data);
 
@@ -197,6 +198,8 @@ class UserController extends Controller
                                     'admin_status', 'image_profile', 'password')
                         ->where('email', $email)
                         ->first();
+
+                        // return $login;
 
             if ($login == true && Hash::check($password, $login->password)) {
                 $data = [

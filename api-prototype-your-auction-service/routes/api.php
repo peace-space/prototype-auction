@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\ProductController;
 use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\BidController;
@@ -32,24 +33,29 @@ Route::prefix('/v1')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
-Route::post('/change-password', [UserController::class, 'changePassWord']);
+    Route::post('/change-password', [UserController::class, 'changePassWord']);
 
 
 
-
+    // AuctionController
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
-    Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
+    // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     Route::post('/test', [AuctionController::class, 'test']);
     Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
 
+    // ProductController
+    Route::get('/product-detail/{id_auctions}', [ProductController::class, 'productDetail']);
+    // Route::get('/test-product-controller', [ProductController::class, 'test']);
 
     // Route::get('/test', [EmailController::class, 'index']);
     // Route::get('/image', [ImageController::class, 'index']);
     // Route::get('/image/{id_auctions}&{index}', [ImageController::class, 'oneImage']);
-    Route::get('/get-image/{image_path}', [ImageController::class, 'getImage']);
-    Route::get('/get-image-profile-default', [ImageController::class, 'getImageProfileDefault']);
+    Route::get('/get-image/{storage}/{images}/{user_profile_image}/{image_path}', [ImageController::class, 'getImage']);
+    Route::get('/get-image-profile/{storage}/{images}/{user_profile_image}/{image_path}', [ImageController::class, 'getImageProfile']);
+    // Route::get('/test-image/{storage}/{images}/{user_profile_image}', [ImageController::class, 'test']);
+    // Route::get('/get-image-profile/{storage}/{images}/{user-profile-image}', [ImageController::class, 'getImageProfile']);
 
     Route::get('/bids/{id_auctions}', [BidController::class, 'index']);
     Route::get('/high-bids/{id_auctions}', [BidController::class, 'highBids']);

@@ -31,8 +31,19 @@ class DetailAuctionState extends State<DetailAuction> {
       ),
       body: StreamBuilder(
         stream: fetchDataDetailAuctions(),
-        builder:
-            (context, snapshot) => Padding(
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("เกิดข้อผิดพลาด"),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.active) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasData) {
+            return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
                 children: [
@@ -46,7 +57,12 @@ class DetailAuctionState extends State<DetailAuction> {
                   SizedBox(height: 500),
                 ],
               ),
-            ),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       ),
     );
   }
@@ -58,10 +74,14 @@ class DetailAuctionState extends State<DetailAuction> {
       child:
           (_imageData.length == 0)
               ? Center(child: Text("ไม่พบรูปภาพ"))
+          // : Image.network(
+          //   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
+          //       _imageData![indexSelectImage],
+          // ),
               : Image.network(
-                "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
-                    _imageData![indexSelectImage],
-              ),
+            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image'
+                + _imageData![indexSelectImage],
+          ),
     );
   }
 
@@ -94,8 +114,12 @@ class DetailAuctionState extends State<DetailAuction> {
                         indexSelectImage = index;
                       }),
                     },
+                // child: Image.network(
+                //   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
+                //       _imageData[index],
+                // ),
                 child: Image.network(
-                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/" +
+                  'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
                       _imageData[index],
                 ),
               ),
@@ -235,8 +259,9 @@ class DetailAuctionState extends State<DetailAuction> {
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
     // await Future.delayed(Duration(seconds: 30));
     print('Start.detailAuctions');
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData.productData['id_auctions']}';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData.productData['id_auctions']}';
+    String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/product-detail/${ShareProductData
+        .productData['id_auctions']}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);

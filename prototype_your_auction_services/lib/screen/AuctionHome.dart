@@ -110,14 +110,17 @@ class AuctionHomeState extends State<AuctionHome> {
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                           ),
-                          // child: Image.network(
-                          //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                          //       '${data['image_path_1']}',
                           child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
+                            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
                                 data['image_path_1'],
-                            fit: BoxFit.cover,
+                            cacheHeight: 600,
+                            cacheWidth: 500,
                           ),
+                          // child: Image.network(
+                          //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                          //       data['image_path_1'],
+                          //   fit: BoxFit.cover,
+                          // ),
                         ),
                       ),
                       Padding(
@@ -187,8 +190,14 @@ class AuctionHomeState extends State<AuctionHome> {
                   onTap: () => goToDetailAuction(ctx, data),
                   leading: ClipRRect(
                     // borderRadius: BorderRadius.vertical(),
+                    // child: Image.network(
+                    //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                    //       data['image_path_1'],
+                    //   cacheHeight: 600,
+                    //   cacheWidth: 500,
+                    // ),
                     child: Image.network(
-                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/' +
+                      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
                           data['image_path_1'],
                       cacheHeight: 600,
                       cacheWidth: 500,
@@ -196,9 +205,7 @@ class AuctionHomeState extends State<AuctionHome> {
                   ),
                   title: Text(data['name_product']),
                   subtitle: Text("ราคาสูงสุด ฿${data['max_price'].toString()}"),
-                  trailing: Column(
-                    children: [Text('เวลา'), countdown(data)],
-                  ),
+                  trailing: Column(children: [Text('เวลา'), countdown(data)]),
                 ),
               );
             },
@@ -213,9 +220,10 @@ class AuctionHomeState extends State<AuctionHome> {
   Stream<List<dynamic>> fetchAuctionData() async* {
     try {
       await Future.delayed(Duration(seconds: 1));
-      // print("Start");
+      print("Start");
+      // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       String url =
-          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
+          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/auction';
       final uri = Uri.parse(url);
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);
@@ -324,8 +332,7 @@ class AuctionHomeState extends State<AuctionHome> {
     showDialog(
       context: context,
       builder:
-          (context) =>
-          AlertDialog(
+          (context) => AlertDialog(
             title: Text("data: " + count.toString()),
             content: Text(
               "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
@@ -347,10 +354,9 @@ class AuctionHomeState extends State<AuctionHome> {
   }
 
   void saveTheWinnerAuctions() async {
-    Map<String, dynamic> data = {
-      'id_auctions': 1,
-    };
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+    Map<String, dynamic> data = {'id_auctions': 1};
+    String url =
+        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
     final uri = Uri.parse(url);
     final response = await http.post(
       uri,
@@ -364,5 +370,4 @@ class AuctionHomeState extends State<AuctionHome> {
       print(response.statusCode.toString());
     }
   }
-
 }

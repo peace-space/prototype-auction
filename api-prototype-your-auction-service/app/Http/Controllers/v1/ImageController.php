@@ -76,16 +76,68 @@ class ImageController extends Controller
     //     ]);
     // }
 
-    public function getImage($image_path) {
-        // $path = 'storage/images/product-images/'.$image_path;
+    public function getImage($storage_path, $images_path, $user_profile_image_path, $image_path) {
+        // $path = 'storage/images//'.$image_path;
+
+        $path = $storage_path;
+
+        if ($images_path != '') {
+            $path = $storage_path. '/' .$images_path;
+        }
+
+        if ($user_profile_image_path != '') {
+            $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path;
+        }
+        if ($image_path != '') {
+            $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path . '/' . $image_path;
+        }
+
+        // return $path;
 
         // $path = 'storage/images/user-profile-image/'.$image_path;
-        $path = $image_path;
-        return $path;
+        // $path = $image_path;
+        // return $path;
         return response()->file($path);
     }
 
-    public function getImageProfile() {
-        return response()->file('storage\images\user-profile-image\profile-default-image.png');
+    // Route::get('/get-image-profile/{storage}/{images}/{user-profile-image}', [ImageController::class, 'getImageProfile']);
+    public function getImageProfile($storage_path, $images_path, $user_profile_image_path, $image_path) {
+    // public function getImageProfile($image_path) {
+        // return response()->file('storage\images\user-profile-image\profile-default-image.png');
+        // $path = $storage_path . $images_path . $user_profile_image_path;
+
+         $path = $storage_path;
+
+        if ($images_path != '') {
+            $path = $storage_path. '/' .$images_path;
+        }
+
+        if ($user_profile_image_path != '') {
+            $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path;
+        }
+        if ($image_path != '') {
+            $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path . '/' . $image_path;
+        }
+        // return $path;
+        return response()->file($path);
+
+        // return $image_path;
+        // return response()->file('storage/images/user-profile-image/'.$image_path);
+        // return response()->file($image_path);
+    }
+
+    public function test($storage_path, $images_path, $user_profile_image_path, $image_path) {
+        // $path = $storage_path.$images_path.$user_profile_image_path;
+        $path = $storage_path;
+
+        if ($images_path != '') {
+            $path = $storage_path. '/' .$images_path;
+        }
+
+        if ($user_profile_image_path != '') {
+            $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path;
+        }
+
+        return $path;
     }
 }
