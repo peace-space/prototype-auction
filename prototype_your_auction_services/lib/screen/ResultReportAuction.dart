@@ -75,7 +75,7 @@ class ReportAuctionState extends State<ReportAuction> {
       // ShareProductData.productData = body['data'];
       // print(ShareProductData.productData);
       yield body['data'];
-      setState(() {});
+      // setState(() {});
     }
   }
 

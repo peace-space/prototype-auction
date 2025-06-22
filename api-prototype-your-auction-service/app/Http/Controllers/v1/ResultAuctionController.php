@@ -52,12 +52,16 @@ class ResultAuctionController extends Controller
             // return $id_auctions;
 
             $high_bid = DB::table('bids')
-                                        ->select('id_bids', 'id_users',
-                                                'id_auctions', 'bid_price')
-                                        // ->leftJoin('auctions', 'bids.id_auctions', '=', 'auctions.id_auctions')
-                                        ->where('id_auctions', '=', $id_auctions)
+                                        ->select('bids.id_bids', 'bids.id_users',
+                                                'bids.id_auctions', 'bids.bid_price',
+                                                'auctions.shipping_cost', 'auctions.id_payment_types')
+                                        ->leftJoin('auctions', function(JoinClause $join) {
+                                            $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                                        })
+                                        ->where('bids.id_auctions', '=', $id_auctions)
                                         ->orderByDesc('bid_price')
                                         ->get();
+
             $the_winner_auctions = $high_bid->first();
             // return $high_bid->first();
 
@@ -72,14 +76,44 @@ class ResultAuctionController extends Controller
             //   'id_payment_types' => '',
             //   'bank_account_number' => '',
             ];
-
             // return $data;
-            DB::table('result_auctions')->insert($data);
+            // DB::table('result_auctions')->insert($data);
+
+            $result_auction_datas = [
+
+            ];
+
+            $result_auction_datas = DB::table('result_auctions')
+                                    ->select('*')
+                                    ->where('id_users', '=', $data['id_users'],
+                                                'and',
+                                            'id_bids', '=', $data['id_bids'])
+                                    ->orderByDesc('id_result_auctions')
+                                    ->get();
+
+            // return $result_auction_datas->first();
+
+            $id_result_auctions = $result_auction_datas->first()->id_result_auctions;
+
+            // return $id_result_auctions;
+
+            $bill_auction_data = [
+                'id_result_auctions' => $id_result_auctions,
+                'payment_status' => false,
+                'debts' => $the_winner_auctions->bid_price,
+                'shipping_number' => $the_winner_auctions->shipping_cost,
+                'delivery_status' => false
+            ];
+
+            // return $bill_auction_data;
+
+            $create_bill_auction = DB::table('bill_auctions')
+                                        ->insert($bill_auction_data);
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                'data' => $data
+                // 'data' => $create_bill_auction
             ], 201);
 
 
@@ -147,9 +181,27 @@ class ResultAuctionController extends Controller
             $id_user = $request->id_users;
             $id_auction = $request->id_auctions;
 
-            $winner = DB::table('result_report_auctions')
+            $winner = DB::table('result_auctions')
                             ->select('*')
-                            ->where('id_users', '=', $id_user, 'and', 'id_auctions', '=', $id_auction)
+                            ->join('bids', function(JoinClause $join){
+                                $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
+                            })
+                            ->join('auctions', function(JoinClause $join){
+                                $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                            })
+                            ->join('products', function(JoinClause $join){
+                                $join->on('products.id_products', '=', 'auctions.id_products');
+                            })
+                            ->join('images', function(JoinClause $join){
+                                $join->on('images.id_images', '=', 'products.id_images');
+                            })
+                            ->join('users', function(JoinClause $join) {
+                                $join->on('users.id_users', '=', 'products.id_users');
+                            })
+                            ->join('bill_auctions', function(JoinClause $join) {
+                                $join->on('bill_auctions', '=', '');
+                            })
+                            ->where('result_auctions.id_users', '=', $id_user, 'and', 'id_auctions', '=', $id_auction)
                             ->get();
 
             return response()->json([

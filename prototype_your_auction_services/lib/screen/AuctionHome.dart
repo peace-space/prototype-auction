@@ -287,6 +287,7 @@ class AuctionHomeState extends State<AuctionHome> {
       ),
       onEnd: () {
         // winTheAuction(data);
+        saveTheWinnerAuctions(data);
       },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: false,
@@ -325,50 +326,51 @@ class AuctionHomeState extends State<AuctionHome> {
     print('End.');
   }
 
-  // void winTheAuction(Map<String, dynamic> data) async {
-  //   print("Win The Auction");
-  //   Future.delayed(Duration(seconds: 1000));
-  //   int count = 0;
-  //   count += 1;
-  //   showDialog(
-  //     context: context,
-  //     builder:
-  //         (context) => AlertDialog(
-  //           title: Text("data: " + count.toString()),
-  //           content: Text(
-  //             "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () => {Navigator.pop(context)},
-  //               child: Text('OK', style: TextStyle(fontSize: 18)),
-  //             ),
-  //           ],
-  //         ),
-  //   );
-  //   saveTheWinnerAuctions();
-  //
-  //   String url = '';
-  //   final uri = Uri.parse(url);
-  //   // final
-  // }
-  //
-  // void saveTheWinnerAuctions() async {
-  //   Map<String, dynamic> data = {'id_auctions': 1};
-  //   String url =
-  //       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
-  //   final uri = Uri.parse(url);
-  //   final response = await http.post(
-  //     uri,
-  //     headers: {'Content-Type': 'application/json'},
-  //     body: jsonEncode(data),
-  //   );
-  //   if (response.statusCode == 201) {
-  //     final reActionData = jsonDecode(response.body);
-  //     print(reActionData['message']);
-  //   } else {
-  //     print(response.statusCode.toString());
-  //   }
-  // }
+  void winTheAuction(Map<String, dynamic> data) async {
+    print("Win The Auction");
+    Future.delayed(Duration(seconds: 1000));
+    int count = 0;
+    // count += 1;
+    // showDialog(
+    //   context: context,
+    //   builder:
+    //       (context) => AlertDialog(
+    //         title: Text("data: " + count.toString()),
+    //         content: Text(
+    //           "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
+    //           style: TextStyle(fontSize: 16),
+    //         ),
+    //         actions: [
+    //           TextButton(
+    //             onPressed: () => {Navigator.pop(context)},
+    //             child: Text('OK', style: TextStyle(fontSize: 18)),
+    //           ),
+    //         ],
+    //       ),
+    // );
+    // saveTheWinnerAuctions();
+
+    String url = '';
+    final uri = Uri.parse(url);
+    // final
+  }
+
+  void saveTheWinnerAuctions(Map<String, dynamic> data) async {
+    // Map<String, dynamic> data = {'id_auctions': 1};
+    print(data.toString());
+    String url =
+        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+    final uri = Uri.parse(url);
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(data),
+    );
+    if (response.statusCode == 201) {
+      final reActionData = jsonDecode(response.body);
+      print(reActionData['message']);
+    } else {
+      print(response.statusCode.toString());
+    }
+  }
 }

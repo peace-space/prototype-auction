@@ -445,8 +445,23 @@ class DetailAuctionState extends State<DetailAuction> {
       minutesDescription: "min",
       secondsDescription: "sec",
       descriptionTextStyle: TextStyle(height: 0),
-      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
-      onEnd: () {},
+      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),End: () {
+        Navigator.of(context).pop();
+        showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: Text('หมดเวลา'),
+                content: Text("สามารถตรวจสอบผลการประมูล"),
+                actions: [
+                  TextButton(
+                    onPressed: () => {Navigator.of(context).pop()},
+                    child: Text('ตกลง'),
+                  ),
+                ],
+              ),
+        );
+      },
     );
     // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
 
