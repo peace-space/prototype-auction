@@ -97,7 +97,9 @@ class ImageController extends Controller
         // $path = 'storage/images/user-profile-image/'.$image_path;
         // $path = $image_path;
         // return $path;
-        return response()->file($path);
+
+        // return response()->file('public/'.$path); // สำหรัย Server
+        return response()->file($path); // สำหรับ Local
     }
 
     // Route::get('/get-image-profile/{storage}/{images}/{user-profile-image}', [ImageController::class, 'getImageProfile']);
@@ -119,7 +121,8 @@ class ImageController extends Controller
             $path = $storage_path. '/' . $images_path . '/' . $user_profile_image_path . '/' . $image_path;
         }
         // return $path;
-        return response()->file($path);
+        // return response()->file('public/'.$path); // สำหรัย Server
+        return response()->file($path); // สำหรับ Local
 
         // return $image_path;
         // return response()->file('storage/images/user-profile-image/'.$image_path);

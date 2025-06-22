@@ -257,18 +257,18 @@ class DetailAuctionState extends State<DetailAuction> {
   }
 
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
-    // await Future.delayed(Duration(seconds: 30));
+    // Future.delayed(Duration(seconds: 1));
     print('Start.detailAuctions');
-    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData.productData['id_auctions']}';
-    String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/product-detail/${ShareProductData
+    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
         .productData['id_auctions']}';
+    // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/product-detail/${ShareProductData
+    //     .productData['id_auctions']}';
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
     // print("aaaaaaaaaaaaaaaaaaaa");
-    print(data['images'].toString());
-    // countdown();
+    // print(data['images'].toString());
     yield data;
     setState(() {
       detailAuctionData = data;
@@ -318,8 +318,7 @@ class DetailAuctionState extends State<DetailAuction> {
           'bid_price': bid_price,
         };
 
-        String url =
-            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
+        String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
         final uri = Uri.parse(url);
         final responce = await http.post(
           uri,
@@ -422,18 +421,18 @@ class DetailAuctionState extends State<DetailAuction> {
   Widget countdown() {
     // final start_date_time_data = detailAuctionData['start_date_time'];
     final end_date_time_data = detailAuctionData['end_date_time'];
-    print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
-    var min;
+    // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
+    // var min;
     var end_date_time = DateTime.parse(end_date_time_data);
 
     var date_tiem_difference = end_date_time.difference(DateTime.now());
-    print("ความต่างของเวลา: " + date_tiem_difference.toString());
+    // print("ความต่างของเวลา: " + date_tiem_difference.toString());
     var countdown = TimerCountdown(
       endTime: DateTime.now().add(
         Duration(seconds: date_tiem_difference.inSeconds),
       ),
       onTick: (remainingTime) {
-        print("Test: " + remainingTime.inMinutes.toString());
+        // print("Test: " + remainingTime.inMinutes.toString());
         // _countDownDateTime = remainingTime.inDays;
       },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,

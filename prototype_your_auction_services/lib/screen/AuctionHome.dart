@@ -110,17 +110,17 @@ class AuctionHomeState extends State<AuctionHome> {
                           borderRadius: BorderRadius.vertical(
                             top: Radius.circular(15),
                           ),
-                          child: Image.network(
-                            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
-                                data['image_path_1'],
-                            cacheHeight: 600,
-                            cacheWidth: 500,
-                          ),
                           // child: Image.network(
-                          //   'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                          //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
                           //       data['image_path_1'],
-                          //   fit: BoxFit.cover,
+                          //   cacheHeight: 600,
+                          //   cacheWidth: 500,
                           // ),
+                          child: Image.network(
+                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                                data['image_path_1'],
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                       Padding(
@@ -231,7 +231,7 @@ class AuctionHomeState extends State<AuctionHome> {
       List<dynamic>? data = checkEndDateTime(auctions_data);
       // print(data.toString());
       yield data;
-      setState(() {});
+      // setState(() {});
     } on Exception catch (e) {
       print(e);
     }
@@ -285,7 +285,7 @@ class AuctionHomeState extends State<AuctionHome> {
         Duration(seconds: date_tiem_difference.inSeconds),
       ),
       onEnd: () {
-        winTheAuction(data);
+        // winTheAuction(data);
       },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: false,
@@ -324,50 +324,50 @@ class AuctionHomeState extends State<AuctionHome> {
     print('End.');
   }
 
-  void winTheAuction(Map<String, dynamic> data) async {
-    print("Win The Auction");
-    Future.delayed(Duration(seconds: 1000));
-    int count = 0;
-    count += 1;
-    showDialog(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text("data: " + count.toString()),
-            content: Text(
-              "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
-              style: TextStyle(fontSize: 16),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => {Navigator.pop(context)},
-                child: Text('OK', style: TextStyle(fontSize: 18)),
-              ),
-            ],
-          ),
-    );
-    saveTheWinnerAuctions();
-
-    String url = '';
-    final uri = Uri.parse(url);
-    // final
-  }
-
-  void saveTheWinnerAuctions() async {
-    Map<String, dynamic> data = {'id_auctions': 1};
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
-    final uri = Uri.parse(url);
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(data),
-    );
-    if (response.statusCode == 201) {
-      final reActionData = jsonDecode(response.body);
-      print(reActionData['message']);
-    } else {
-      print(response.statusCode.toString());
-    }
-  }
+  // void winTheAuction(Map<String, dynamic> data) async {
+  //   print("Win The Auction");
+  //   Future.delayed(Duration(seconds: 1000));
+  //   int count = 0;
+  //   count += 1;
+  //   showDialog(
+  //     context: context,
+  //     builder:
+  //         (context) => AlertDialog(
+  //           title: Text("data: " + count.toString()),
+  //           content: Text(
+  //             "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
+  //             style: TextStyle(fontSize: 16),
+  //           ),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => {Navigator.pop(context)},
+  //               child: Text('OK', style: TextStyle(fontSize: 18)),
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  //   saveTheWinnerAuctions();
+  //
+  //   String url = '';
+  //   final uri = Uri.parse(url);
+  //   // final
+  // }
+  //
+  // void saveTheWinnerAuctions() async {
+  //   Map<String, dynamic> data = {'id_auctions': 1};
+  //   String url =
+  //       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+  //   final uri = Uri.parse(url);
+  //   final response = await http.post(
+  //     uri,
+  //     headers: {'Content-Type': 'application/json'},
+  //     body: jsonEncode(data),
+  //   );
+  //   if (response.statusCode == 201) {
+  //     final reActionData = jsonDecode(response.body);
+  //     print(reActionData['message']);
+  //   } else {
+  //     print(response.statusCode.toString());
+  //   }
+  // }
 }

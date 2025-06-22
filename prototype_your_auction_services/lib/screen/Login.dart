@@ -146,8 +146,8 @@ class LoginState extends State<Login>{
         'password' : _passWord.text
       };
 
-      // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/login";
-      String url = "http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/login";
+      String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login";
+      // String url = "http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/login";
 
       final uri = Uri.parse(url);
       final response = await http.post(
