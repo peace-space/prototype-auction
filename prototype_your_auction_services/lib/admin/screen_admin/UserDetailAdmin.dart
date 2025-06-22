@@ -37,7 +37,8 @@ class UserManageState extends State<UserManage> {
         children: [
           Text("รหัสผู้ใช้งาน: ${user_data['id_users']}",
             textScaler: TextScaler.linear(1.5),),
-          Text("ชื่อ: ${user_data['name']}", textScaler: TextScaler.linear(1.5)),
+          Text("ชื่อ: ${user_data['first_name_users']}",
+              textScaler: TextScaler.linear(1.5)),
           Text("เบอร์โทร: ${user_data['phone']}", textScaler: TextScaler.linear(1.5)),
           Text("อีเมล: ${user_data['email']}", textScaler: TextScaler.linear(1.5)),
           Text("ที่อยู่: ${user_data['address']}", textScaler: TextScaler.linear(1.5)),

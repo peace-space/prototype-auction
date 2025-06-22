@@ -165,8 +165,8 @@ class LoginState extends State<Login>{
         });
 
         Map<String, dynamic> data = resData['data'];
-
-        if (data['admin'] == 1) {
+        // print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" + data['admin_status'].runtimeType.toString() + "\n\n\n\n");
+        if (data['admin_status'] == '1') {
           ShareData.admin = true;
         } else {
           ShareData.admin = false;

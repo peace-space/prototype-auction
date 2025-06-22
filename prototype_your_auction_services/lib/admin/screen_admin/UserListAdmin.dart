@@ -113,11 +113,13 @@ class UserListState extends State<UserList> {
             itemBuilder: (context, index) {
               final Map data = user_data[index];
               final id = data['id_users'];
-              final name = data['name'];
+              final first_name_users = data['first_name_users'];
+              final last_name_users = data['first_name_users'];
               final phone = data['phone'];
               return Card(
                 child: ListTile(
-                  title: Text("${id}) ชื่อ: ${name.toString()}"),
+                  title: Text("${id}) ชื่อ: ${first_name_users
+                      .toString()} ${last_name_users.toString()}"),
                   subtitle: Text("เบอร์โทร: ${phone.toString()}"),
                   trailing: editUserData(context, id, data),
                 ),

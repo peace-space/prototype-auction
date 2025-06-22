@@ -41,7 +41,8 @@ class UserController extends Controller
     {
         try{
             $user_data = DB::table('users')
-                        ->select('id_users', 'name', 'phone', 'address', 'email', 'admin')
+                        // ->select('id_users', 'first_name_users', 'last_name_users', 'phone', 'address', 'email', 'admin')
+                        ->select('*')
                         ->where('id_users', '=', $index)
                         ->get();
 
