@@ -204,7 +204,9 @@ class HomeTestSystemState extends State<HomeTestSystem> {
         Center(
           child: CircularProgressIndicator(),
         ),);
-  }extFormField testEmailValidatorTextFormField() {
+  }
+
+  TextFormField testEmailValidatorTextFormField() {
     return TextFormField(
       controller: testEmailValidatorTextFormFieldController,
       validator: (email) {

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
@@ -447,7 +448,8 @@ class DetailAuctionState extends State<DetailAuction> {
       descriptionTextStyle: TextStyle(height: 0),
       colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
       onEnd: () {
-        Navigator.of(context).pop();
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => AuctionHome(),));
         showDialog(
           context: context,
           builder:

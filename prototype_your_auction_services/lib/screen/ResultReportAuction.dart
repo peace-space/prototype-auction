@@ -50,11 +50,17 @@ class ReportAuctionState extends State<ReportAuction> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(data['name_product'].toString()),
-                        // Text('${paymentStatus(data['payment_status']).toString()}'),
-                        Text('${data['payment_status'].toString()}'),
+                        Text('${paymentStatus(data['payment_status'])
+                            .toString()}'),
+                        // Text('${data['payment_status'].toString()}'),
                       ],
                     ),
-                    trailing: Text("ประมูลสำเร็จ"),
+                    trailing: Column(
+                      children: [
+                        Text("คุณเป็นผู้ประมูลสำเร็จ"),
+                        // Text("กรุณาแจ้งชำระเงิน")
+                      ],
+                    ),
                   ),
                 );
                 }
@@ -72,7 +78,7 @@ class ReportAuctionState extends State<ReportAuction> {
     final responce = await http.get(uri);
     if (responce.statusCode == 200) {
       final body = jsonDecode(responce.body);
-      print(body['data'].toString());
+      // print(body['data'].toString());
       // ShareProductData.productData = body['data'];
       // print(ShareProductData.productData);
       yield body['data'];
@@ -80,7 +86,7 @@ class ReportAuctionState extends State<ReportAuction> {
     }
   }
 
-  String paymentStatus(bool payment_status) {
+  String paymentStatus(int payment_status) {
     if (payment_status == 1) {
       return "ชำระเงินแล้ว";
     } else {

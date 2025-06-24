@@ -17,15 +17,18 @@ class ResultAuctionController extends Controller
                                                     ->Join('bids', function(JoinClause $join) {
                                                         $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                                                     })
-                                                    // ->join('auctions', function(JoinClause $join){
-                                                    //     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                                                    // })
-                                                    // ->join('products', function(JoinClause $join){
-                                                    //     $join->on('products.id_products', '=', 'auctions.id_products');
-                                                    // })
-													// ->join('images', function(JoinClause $join){
-                                                    //     $join->on('images.id_images', '=', 'products.id_images');
-                                                    // })
+                                                    ->join('auctions', function(JoinClause $join){
+                                                        $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                                                    })
+                                                    ->join('products', function(JoinClause $join){
+                                                        $join->on('products.id_products', '=', 'auctions.id_products');
+                                                    })
+													->join('images', function(JoinClause $join){
+                                                        $join->on('images.id_images', '=', 'products.id_images');
+                                                    })
+                                                    ->join('bill_auctions', function(JoinClause $join){
+                                                        $join->on('bill_auctions.id_result_auctions', '=', 'result_auctions.id_result_auctions');
+                                                    })
                                                     ->where('result_auctions.id_users', '=', $id_user)
                                                     #->orderBy('result_report_auction.created_at')
                                                     ->get();
