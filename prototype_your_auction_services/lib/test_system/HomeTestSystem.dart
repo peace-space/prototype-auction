@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/share/CustomDialog.dart';
 import 'package:prototype_your_auction_services/share/confirm_picker.dart';
@@ -14,6 +15,8 @@ class HomeTestSystemState extends State<HomeTestSystem> {
   String _return_value = '';
   var _DropDown;
   bool ignoring = true;
+  var testEmailValidatorTextFormFieldController = TextEditingController();
+  var testEmail;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +42,12 @@ class HomeTestSystemState extends State<HomeTestSystem> {
               dropdownTest(),
               buttonLoadingPage1(),
               buttonLoadingPage2(),
+              Divider(),
+              Text("ทดลองตรวจสอบอีเมล"),
+              Text("OutCon: " + testEmailValidatorTextFormFieldController.text),
+              Text("OutTest: " + testEmail.toString()),
+              testEmailValidatorTextFormField(),
+              buttonTestEmailValidatorTextFormField(),
             ],
           ),
         );
@@ -195,6 +204,37 @@ class HomeTestSystemState extends State<HomeTestSystem> {
         Center(
           child: CircularProgressIndicator(),
         ),);
+  }extFormField testEmailValidatorTextFormField() {
+    return TextFormField(
+      controller: testEmailValidatorTextFormFieldController,
+      validator: (email) {
+        if (!EmailValidator.validate(email!)) {
+          // return "ไม่ใช้อีเมล";
+          setState(() {
+            testEmail = "ไม่ใช้อีเมล";
+          });
+        } else {
+          return null;
+        }
+      },
+    );
   }
 
+  Widget buttonTestEmailValidatorTextFormField() {
+    return ElevatedButton(
+      onPressed: () {
+        var email = testEmailValidatorTextFormFieldController.text;
+        if (EmailValidator.validate(email)) {
+          setState(() {
+            testEmail = email;
+          });
+        } else {
+          setState(() {
+            testEmail = '';
+          });
+        }
+      },
+      child: Text("ตรวจสอบอีเมล"),
+    );
+  }
 }

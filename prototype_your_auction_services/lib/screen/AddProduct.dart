@@ -218,8 +218,10 @@ class AddProductState extends State<AddProduct> {
         ),
         inputEndTime(),
         SizedBox(height: 8),
-        Text("วันที่ปิดประมูล ( วัน / เดือน / ปี )", style: subjectTextStyle()),
-        inputEndDate(),
+        Text(
+          "วันที่ปิดประมูล ( วัน / เดือน / ปี ค.ศ.)",
+          style: subjectTextStyle(),
+        ), inputEndDate(),
         SizedBox(height: 8),
       ],
     );
@@ -463,8 +465,6 @@ class AddProductState extends State<AddProduct> {
     List<String>? listDataAuctionTypeValue = [
       'ประมูลปกติ',
       'ประมูลแบบส่วนตัว',
-      "2",
-      'Test',
     ];
     double left = 20, top = 0, right = 20, bottom = 0;
     return DropdownButton(

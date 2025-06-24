@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +40,21 @@ class RegisterState extends State<Register> {
           selectImageTextButton(),
           deleteImageTextButton(),
           alertText(),
+          SizedBox(height: 8),
           firstName(),
+          SizedBox(height: 8),
           lastName(),
+          SizedBox(height: 8),
           phone(),
+          SizedBox(height: 8),
           email(),
+          SizedBox(height: 8),
           address(),
+          SizedBox(height: 8),
           passWord(),
+          SizedBox(height: 8),
           verifyPassWord(),
+          SizedBox(height: 8),
           SizedBox(height: 8),
           registerButton(context),
           SizedBox(
@@ -70,35 +79,54 @@ class RegisterState extends State<Register> {
   Widget firstName() {
     return TextField(
       controller: _firstName,
-      decoration: InputDecoration(hintText: "ชื่อจริง"),
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text("ชื่อ"),
+          hintText: "ชื่อจริง"),
     );
   }
 
   Widget lastName() {
     return TextField(
       controller: _lastName,
-      decoration: InputDecoration(hintText: "นามสกุล"),
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text('นามสกุล'),
+          hintText: "นามสกุล"),
     );
   }
 
   Widget phone() {
     return TextField(
       controller: _phone,
-      decoration: InputDecoration(hintText: "เบอร์โทร"),
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text("เบอร์โทร"),
+          hintText: "เบอร์โทร"),
     );
   }
 
   Widget email() {
     return TextField(
+      keyboardType: TextInputType.emailAddress,
+      autofillHints: [
+        AutofillHints.email
+      ],
       controller: _email,
-      decoration: InputDecoration(hintText: "อีเมล"),
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text("อีเมล"),
+          hintText: "อีเมล"),
     );
   }
 
   Widget address() {
     return TextField(
       controller: _address,
-      decoration: InputDecoration(hintText: "ที่อยู่ในการรับสินค้า"),
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text("ที่อยู่ในการรับสินค้า"),
+          hintText: "ที่อยู่ในการรับสินค้า"),
     );
   }
 
@@ -107,6 +135,8 @@ class RegisterState extends State<Register> {
       controller: _passWord,
       obscureText: _hiddenPassWord,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        label: Text("รหัสผ่าน"),
         hintText: "รหัสผ่าน",
         suffixIcon: IconButton(
           onPressed:
@@ -130,6 +160,8 @@ class RegisterState extends State<Register> {
       controller: _verifyPassWord,
       obscureText: _hiddenPassWordVerifyPassWord,
       decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        label: Text("ยืนยันรหัสผ่าน"),
         hintText: "ยืนยันรหัสผ่าน",
         suffixIcon: IconButton(
           onPressed:
@@ -234,7 +266,8 @@ class RegisterState extends State<Register> {
         _phone.text != "" &&
         _address.text != "" &&
         _passWord.text != "" &&
-        _verifyPassWord.text != "") {
+        _verifyPassWord.text != "" &&
+        EmailValidator.validate(_email.text)) {
       return true;
     } else {
       return false;
@@ -394,6 +427,10 @@ class RegisterState extends State<Register> {
         msg = "กรุณากรอกชื่อ";
       } else if (_phone.text == "") {
         msg = "กรุณากรอกเบอร์โทรที่ต้องการใช้เข้าสู่ระบบ";
+      } else if (_email.text == "") {
+        msg = "กรุณากรอกเมล";
+      } else if (!EmailValidator.validate(_email.text)) {
+        msg = "รูปแบบอีเมลไม่ถูกต้อง";
       } else if (_address.text == "") {
         msg = "กรุณากรอกที่อยู่ในการรับสินค้า";
       } else if (_passWord.text == "") {

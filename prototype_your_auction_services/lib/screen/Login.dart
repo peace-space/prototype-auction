@@ -61,6 +61,7 @@ class LoginState extends State<Login>{
 
   Widget email() {
     return TextField(
+      keyboardType: TextInputType.emailAddress,
       controller: _email,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.email_outlined),

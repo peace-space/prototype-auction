@@ -17,15 +17,15 @@ class ResultAuctionController extends Controller
                                                     ->Join('bids', function(JoinClause $join) {
                                                         $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                                                     })
-                                                    ->join('auctions', function(JoinClause $join){
-                                                        $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                                                    })
-                                                    ->join('products', function(JoinClause $join){
-                                                        $join->on('products.id_products', '=', 'auctions.id_products');
-                                                    })
-													->join('images', function(JoinClause $join){
-                                                        $join->on('images.id_images', '=', 'products.id_images');
-                                                    })
+                                                    // ->join('auctions', function(JoinClause $join){
+                                                    //     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                                                    // })
+                                                    // ->join('products', function(JoinClause $join){
+                                                    //     $join->on('products.id_products', '=', 'auctions.id_products');
+                                                    // })
+													// ->join('images', function(JoinClause $join){
+                                                    //     $join->on('images.id_images', '=', 'products.id_images');
+                                                    // })
                                                     ->where('result_auctions.id_users', '=', $id_user)
                                                     #->orderBy('result_report_auction.created_at')
                                                     ->get();
@@ -77,7 +77,7 @@ class ResultAuctionController extends Controller
             //   'bank_account_number' => '',
             ];
             // return $data;
-            // DB::table('result_auctions')->insert($data);
+            DB::table('result_auctions')->insert($data);
 
             $result_auction_datas = [
 
@@ -91,7 +91,7 @@ class ResultAuctionController extends Controller
                                     ->orderByDesc('id_result_auctions')
                                     ->get();
 
-            // return $result_auction_datas->first();
+            // return $result_auction_datas;
 
             $id_result_auctions = $result_auction_datas->first()->id_result_auctions;
 
