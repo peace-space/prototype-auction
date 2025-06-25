@@ -1,15 +1,22 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 
+import 'ShareProductData.dart';
+import 'ShareUserData.dart';
+
 class Logout {
   final String logout_api_local_get = ApiPathLocal().getLogoutApiLocalGet();
-  final String logout_api_server_get = ApiPathServer().getLogoutServer();
+  final String logout_api_server_get = ApiPathServer().getLogoutServerGet();
 
-  // final BuildContext context;
-  //
-  // Logout({required this.context});
+  final BuildContext context;
+
+  Logout({required this.context});
 
   void onLogout() async {
     try {
@@ -20,17 +27,34 @@ class Logout {
 
       String? user_token = await storage.read(key: 'user_token');
       String? user_token_type = await storage.read(key: 'user_token_type');
+      Map<String, String> http_header = {
+        HttpHeaders.authorizationHeader:
+            user_token_type.toString() + user_token.toString(),
+      };
       final response = await get(
-        uri,
-        headers: {
-          "Authorisation": user_token_type.toString() + user_token.toString(),
-        },
-      );
+        uri, headers: http_header);
+      // storage.deleteAll();
+      // ShareData.logedIn = false;
+      // ShareData.admin = false;
+      // ShareData.userData = {};
+      // ShareData.upDateState = () {};
+      // ShareProductData.productData = {};
 
       if (response.statusCode == 200) {
-        await storage.deleteAll();
-        // Navigator.pushReplacement(this.context, MaterialPageRoute(builder: (context) => AuctionHome(),));
+        storage.deleteAll();
+        ShareData.logedIn = false;
+        ShareData.admin = false;
+        ShareData.userData = {};
+        ShareData.upDateState = () {};
+        ShareProductData.productData = {};
+        print("Logout Successfully.");
+
+        Navigator.pushReplacement(
+          this.context,
+          MaterialPageRoute(builder: (context) => AuctionHome()),
+        );
       } else {
+        print("Login Error");
         // showDialog(context: context, builder: (context) => AlertDialog(
         //   title: Text("แจ้งเตือน"),
         //   content: Text("เกิดข้อผิดพลาดในการออกจากระบบ"),

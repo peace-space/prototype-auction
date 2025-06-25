@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ForgotPassWord.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
-import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Login extends StatefulWidget {
@@ -29,33 +29,38 @@ class LoginState extends State<Login>{
       body: Container(
         margin: EdgeInsets.all(20),
         color: Colors.orange,
-        child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("เข้าสู่ระบบ", style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold
-                ),),
-                Text("ประมูลออนไลน์", style: TextStyle(
-                    fontSize: 35
-                ),),
-                SizedBox(height: 3,),
-                Text("${message}", textScaler: TextScaler.linear(1.3), style: TextStyle(color: Colors.red),),
-                email(),
-                passWord(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    forgot_password(context),
-                  ],
-                ),
-                loginButton(context),
-                SizedBox(height: 5,),
-                registerButton(context)
-              ],
+        child: ListView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("เข้าสู่ระบบ", style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold
+                  ),),
+                  Text("ประมูลออนไลน์", style: TextStyle(
+                      fontSize: 35
+                  ),),
+                  SizedBox(height: 3,),
+                  Text("${message}", textScaler: TextScaler.linear(1.3),
+                    style: TextStyle(color: Colors.red),),
+                  email(),
+                  passWord(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      forgot_password(context),
+                    ],
+                  ),
+                  loginButton(context),
+                  SizedBox(height: 5,),
+                  registerButton(context)
+                ],
+              ),
             ),
+          ],
         ),
       ),
     );
@@ -150,7 +155,8 @@ class LoginState extends State<Login>{
       };
 
       // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login";
-      String url = ApiPathLocal().getLoginApiLocalPost();
+      // String url = ApiPathLocal().getLoginApiLocalPost();
+      String url = ApiPathServer().getLoginApiServerPost();
 
       final uri = Uri.parse(url);
       final response = await http.post(
@@ -168,7 +174,7 @@ class LoginState extends State<Login>{
         });
 
         FlutterSecureStorage storage = FlutterSecureStorage();
-
+        await storage.deleteAll();
         await storage.write(
             key: 'user_token', value: resData['authorisation']['token']);
         await storage.write(

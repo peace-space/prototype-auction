@@ -12,7 +12,7 @@ class ApiPathLocal {
     return this.login_api_local_post;
   }
 
-  String getCheckApiLocalGet() {
+  String getCheckLoginApiLocalGet() {
     return this.check_login_api_local_get;
   }
 

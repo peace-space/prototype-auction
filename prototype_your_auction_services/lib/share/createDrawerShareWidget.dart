@@ -17,7 +17,7 @@ import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart'
 import '../screen/HistoryBids.dart';
 
 Drawer createDrawer(BuildContext ctx) {
-  CheckLogin().onCheckLogin();
+  // CheckLogin().onCheckLogin();
   if (ShareData.admin && ShareData.logedIn) {
     return Drawer(
       child: ListView(
@@ -88,6 +88,7 @@ Drawer createDrawer(BuildContext ctx) {
             accountEmail: Text("กรุณาเข้าสู่ระบบ"),
           ),
           testSystem(ctx), // ทดสอบระบบ
+          homePageButton(ctx),
           logedIn(ctx),
           registerStatus(ctx),
         ],
@@ -164,20 +165,7 @@ Widget logOutButton(BuildContext ctx) {
   return ElevatedButton(
     onPressed:
         () =>
-    {
-      ShareData.logedIn = false,
-      ShareData.admin = false,
-      ShareData.userData = {},
-      ShareData.upDateState = () {},
-      ShareProductData.productData = {},
-
-      Logout().onLogout(),
-
-      Navigator.pushReplacement(
-        ctx,
-        MaterialPageRoute(builder: (ctx) => AuctionHome()),
-      ),
-    },
+    { {Logout(context: ctx).onLogout()},
     child: Text("ออกจากระบบ"),
   );
 }

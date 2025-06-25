@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
+import 'package:prototype_your_auction_services/share/CheckLogin.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
@@ -27,8 +28,9 @@ class AuctionHomeState extends State<AuctionHome> {
   @override
   void initState() {
     // TODO: implement initState
+    print("\n\n\n\n\n\n\n\n\n\nTest");
     super.initState();
-    // CheckLogin().onCheckLogin();
+    CheckLogin().onCheckLogin();
     setState(() {
       loginStatus = logedIn();
     });
@@ -41,6 +43,7 @@ class AuctionHomeState extends State<AuctionHome> {
     double bottom = 0.0;
     setState(() {
       this.ctx = context;
+      loginStatus = logedIn();
     });
     return Scaffold(
       appBar: AppBar(title: Text("Home: ${loginStatus}")),

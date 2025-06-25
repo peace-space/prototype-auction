@@ -393,7 +393,7 @@ class UserController extends Controller
             if ($user_data) {
                 return response()->json([
                     'status' => 1,
-                    'meesage' => 'Successfully.',
+                    'message' => 'Successfully.',
                     'data' => $user_data,
                 ], 200);
             } else {
