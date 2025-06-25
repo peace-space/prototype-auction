@@ -8,9 +8,7 @@ import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/ResultReportAuction.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
-import 'package:prototype_your_auction_services/share/CheckLogin.dart';
 import 'package:prototype_your_auction_services/share/Logout.dart';
-import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
 
@@ -164,7 +162,7 @@ Widget adminMenuButton(BuildContext ctx) {
 Widget logOutButton(BuildContext ctx) {
   return ElevatedButton(
     onPressed:
-        () =>> {Logout(context: ctx).onLogout()},
+        () => {Logout(context: ctx).onLogout()},
     child: Text("ออกจากระบบ"),
   );
 }
