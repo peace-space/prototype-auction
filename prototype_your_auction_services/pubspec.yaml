@@ -39,6 +39,7 @@ dependencies:
   flutter_timer_countdown: ^1.0.7
   file_picker: ^10.2.0
   email_validator: ^3.0.0
+  flutter_secure_storage: ^9.2.4
 
 dev_dependencies:
   flutter_test:

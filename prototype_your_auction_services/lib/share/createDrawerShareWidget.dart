@@ -8,6 +8,8 @@ import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/ResultReportAuction.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
+import 'package:prototype_your_auction_services/share/CheckLogin.dart';
+import 'package:prototype_your_auction_services/share/Logout.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
@@ -15,6 +17,7 @@ import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart'
 import '../screen/HistoryBids.dart';
 
 Drawer createDrawer(BuildContext ctx) {
+  CheckLogin().onCheckLogin();
   if (ShareData.admin && ShareData.logedIn) {
     return Drawer(
       child: ListView(
@@ -167,6 +170,8 @@ Widget logOutButton(BuildContext ctx) {
       ShareData.userData = {},
       ShareData.upDateState = () {},
       ShareProductData.productData = {},
+
+      Logout().onLogout(),
 
       Navigator.pushReplacement(
         ctx,

@@ -1,10 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ForgotPassWord.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
+import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Login extends StatefulWidget {
@@ -147,8 +149,8 @@ class LoginState extends State<Login>{
         'password' : _passWord.text
       };
 
-      String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login";
-      // String url = "http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/login";
+      // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login";
+      String url = ApiPathLocal().getLoginApiLocalPost();
 
       final uri = Uri.parse(url);
       final response = await http.post(
@@ -156,7 +158,7 @@ class LoginState extends State<Login>{
         headers: {"Content-Type" : "application/json"},
         body: jsonEncode(data)
       );
-      
+
       final resData = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
@@ -164,6 +166,13 @@ class LoginState extends State<Login>{
         setState(() {
           message = resData['message'].toString();
         });
+
+        FlutterSecureStorage storage = FlutterSecureStorage();
+
+        await storage.write(
+            key: 'user_token', value: resData['authorisation']['token']);
+        await storage.write(
+            key: 'user_token_type', value: resData['authorisation']['type']);
 
         Map<String, dynamic> data = resData['data'];
         // print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" + data['admin_status'].runtimeType.toString() + "\n\n\n\n");

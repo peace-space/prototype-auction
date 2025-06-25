@@ -1,8 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:prototype_your_auction_services/share/CustomDialog.dart';
 import 'package:prototype_your_auction_services/share/confirm_picker.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
+// import 'flutter_s';
 
 class HomeTestSystem extends StatefulWidget {
   State<HomeTestSystem> createState() {
@@ -17,6 +19,7 @@ class HomeTestSystemState extends State<HomeTestSystem> {
   bool ignoring = true;
   var testEmailValidatorTextFormFieldController = TextEditingController();
   var testEmail;
+  var show_all_data_in_storage;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +51,7 @@ class HomeTestSystemState extends State<HomeTestSystem> {
               Text("OutTest: " + testEmail.toString()),
               testEmailValidatorTextFormField(),
               buttonTestEmailValidatorTextFormField(),
+              buttonTestFlutterStorage(),
             ],
           ),
         );
@@ -238,5 +242,29 @@ class HomeTestSystemState extends State<HomeTestSystem> {
       },
       child: Text("ตรวจสอบอีเมล"),
     );
+  }
+
+  Widget buttonTestFlutterStorage() {
+    return ElevatedButton(onPressed: () => getAllStorage(),
+        child: Text('ข้อมูลใน Storage ทั้งหมด'));
+  }
+
+  void getAllStorage() async {
+    FlutterSecureStorage storage = FlutterSecureStorage();
+    Map<String, String> readAllStorage = await storage.readAll();
+    setState(() {
+      show_all_data_in_storage = readAllStorage;
+    });
+
+    showDialog(context: context, builder: (context) =>
+        Dialog(
+          child: ListView(
+            padding: EdgeInsets.all(8),
+            children: [
+              Text("แสดงข้อมูลใน Storage ทั้งหมด"),
+              Text(show_all_data_in_storage.toString())
+            ],
+          ),
+        ),);
   }
 }

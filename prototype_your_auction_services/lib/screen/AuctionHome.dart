@@ -20,16 +20,18 @@ class AuctionHomeState extends State<AuctionHome> {
   String loginStatus = "";
   Map<String, dynamic> images_data = {};
   var _timeout;
+  late BuildContext ctx;
 
   // Map<String, dynamic> dateTimeCoundown = {};
 
   @override
   void initState() {
     // TODO: implement initState
+    super.initState();
+    // CheckLogin().onCheckLogin();
     setState(() {
       loginStatus = logedIn();
     });
-    super.initState();
   }
 
   Widget build(BuildContext context) {
@@ -37,6 +39,9 @@ class AuctionHomeState extends State<AuctionHome> {
     double top = 0.0;
     double right = 8.0;
     double bottom = 0.0;
+    setState(() {
+      this.ctx = context;
+    });
     return Scaffold(
       appBar: AppBar(title: Text("Home: ${loginStatus}")),
       body: Column(
