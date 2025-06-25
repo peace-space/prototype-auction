@@ -31,8 +31,7 @@ class Logout {
         HttpHeaders.authorizationHeader:
             user_token_type.toString() + user_token.toString(),
       };
-      final response = await get(
-        uri, headers: http_header);
+      final response = await get(uri, headers: http_header);
       // storage.deleteAll();
       // ShareData.logedIn = false;
       // ShareData.admin = false;

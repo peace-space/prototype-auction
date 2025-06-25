@@ -164,8 +164,7 @@ Widget adminMenuButton(BuildContext ctx) {
 Widget logOutButton(BuildContext ctx) {
   return ElevatedButton(
     onPressed:
-        () =>
-    { {Logout(context: ctx).onLogout()},
+        () =>> {Logout(context: ctx).onLogout()},
     child: Text("ออกจากระบบ"),
   );
 }
