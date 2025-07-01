@@ -159,11 +159,13 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
+      print(data['images'].toString());
       print(data['message'].toString());
-      yield data['data'];
       setState(() {
         _imageData = data['images'];
       });
+      print("aaaaaaaaa: " + _imageData[1].toString());
+      yield data['data'];
     } else {
       print("ERROR. fetchBillAuction: Status = ${response.statusCode
           .toString()}");
