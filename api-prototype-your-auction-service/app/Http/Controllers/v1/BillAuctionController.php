@@ -37,20 +37,29 @@ class BillAuctionController extends Controller
                                     })
                                     ->where('bill_auctions.id_bill_auctions', '=', $id_bill_result)
                                     ->get();
-                    $image_model = [
-                    'image_path_1' => $bill_auction->image_path_1,
-                    'image_path_2' => $bill_auction->image_path_2,
-                    'image_path_3' => $bill_auction->image_path_3,
-                    'image_path_4' => $bill_auction->image_path_4,
-                    'image_path_5' => $bill_auction->image_path_5,
-                    'image_path_6' => $bill_auction->image_path_6,
-                    'image_path_7' => $bill_auction->image_path_7,
-                    'image_path_8' => $bill_auction->image_path_8,
-                    'image_path_9' => $bill_auction->image_path_9,
-                    'image_path_10' => $bill_auction->image_path_10,
+                $get_data_bill_auction =  $bill_auction->first();
+
+                $image_model = [
+                    'image_path_1' => $get_data_bill_auction->image_path_1,
+                    'image_path_2' => $get_data_bill_auction->image_path_2,
+                    'image_path_3' => $get_data_bill_auction->image_path_3,
+                    'image_path_4' => $get_data_bill_auction->image_path_4,
+                    'image_path_5' => $get_data_bill_auction->image_path_5,
+                    'image_path_6' => $get_data_bill_auction->image_path_6,
+                    'image_path_7' => $get_data_bill_auction->image_path_7,
+                    'image_path_8' => $get_data_bill_auction->image_path_8,
+                    'image_path_9' => $get_data_bill_auction->image_path_9,
+                    'image_path_10' => $get_data_bill_auction->image_path_10,
+
                 ];
 
-                    yield response()->json([
+                $bill_auction_model = [
+                    'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
+                    'id_'
+
+                ];
+
+                    return response()->json([
                         'status' => 1,
                         'message' => 'Successfully.',
                         'data' => $bill_auction,
