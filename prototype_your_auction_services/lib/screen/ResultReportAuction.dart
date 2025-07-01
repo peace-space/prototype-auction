@@ -86,7 +86,7 @@ class ReportAuctionState extends State<ReportAuction> {
     final responce = await http.get(uri);
     if (responce.statusCode == 200) {
       final body = jsonDecode(responce.body);
-      print(body['data'].toString());
+      // print(body['data'].toString());
       // ShareProductData.productData = body['data'];
       // print(ShareProductData.productData);
       yield body['data'];

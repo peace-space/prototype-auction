@@ -148,20 +148,21 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   Stream<void> fetchBillAuction() async* {
     print("Start FetchBillAuction");
-    print(ShareProductData.productData['id_bill_auctions']);
-    String url = ApiPathServer().getBillAuctionApiServerGet(
-        id_bill_auction: ShareProductData.productData['id_bilL_auctions']);
-    print("TETTT");
-    print(url);
-    final uri = Uri.parse(url);
+    // print(ShareProductData.productData['id_bill_auctions']);
+    ApiPathServer apiServerPath = ApiPathServer();
+    // print("TETTT");
+    String api = apiServerPath.getBillAuctionApiServerGet(
+        id_bill_auction: ShareProductData.productData['id_bill_auctions']
+            .toString());
+    // print(api);
+    final uri = Uri.parse(api);
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data['message'].toString());
-
       yield data['data'];
       setState(() {
-
+        _imageData = data['images'];
       });
     } else {
       print("ERROR. fetchBillAuction: Status = ${response.statusCode
