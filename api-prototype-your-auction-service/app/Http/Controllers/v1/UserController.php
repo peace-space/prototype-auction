@@ -260,7 +260,7 @@ class UserController extends Controller
                 $path = Storage::url($image_name);
                 // return $path;
             } else {
-                $path = "/storage/images/user-profile-image/public/storage/images/user-profile-image/profile-default-image.png";
+                $path = "/storage/images/user-profile-image/profile-default-image.png";
             }
 
 

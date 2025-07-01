@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Register extends StatefulWidget {
@@ -199,15 +200,16 @@ class RegisterState extends State<Register> {
         return CircleAvatar(
           radius: 150,
           backgroundImage: NetworkImage(
-            'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile' +
-                ShareData.userData['image_profile'],
+            ApiPathServer().getImageApiServerGet(
+                ShareData.userData['image_profile'])
+            ,
           ),
         );
       }
     } else {
       return Center(
         child: Image.network(
-          'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
+          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
         ),
       );
     }

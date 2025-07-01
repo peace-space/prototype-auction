@@ -12,7 +12,7 @@ import 'ShareUserData.dart';
 
 class Logout {
   final String logout_api_local_get = ApiPathLocal().getLogoutApiLocalGet();
-  final String logout_api_server_get = ApiPathServer().getLogoutServerGet();
+  final String logout_api_server_get = ApiPathServer().getLogoutApiServerGet();
 
   final BuildContext context;
 
@@ -21,7 +21,7 @@ class Logout {
   void onLogout() async {
     try {
       print("\n\n\n\n\n Start onLogout");
-      final uri = Uri.parse(logout_api_local_get);
+      final uri = Uri.parse(logout_api_server_get);
 
       FlutterSecureStorage storage = FlutterSecureStorage();
 
@@ -64,7 +64,11 @@ class Logout {
         //   ],
         // ),);
       }
-    } on Exception catch (e) {}
+
+      print("StatusCode Logout: " + response.statusCode.toString());
+    } on Exception catch (e) {
+      print("Error Logout: " + e.toString());
+    }
 
     print("End onLogout\n\n\n\n\n");
   }

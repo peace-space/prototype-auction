@@ -55,8 +55,11 @@ class CheckLogin {
           ShareData.admin = false;
         }
       } else {
-        print("ERROR.");
+        print("หมดเวลาเข้าสู่ระบบ");
         ShareData.logedIn = false;
+        ShareData.userData = {};
+        ShareData.upDateState = () {};
+        ShareProductData.productData = {};
       }
     } else {
       print("Storage No data");

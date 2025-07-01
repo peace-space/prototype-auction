@@ -9,6 +9,9 @@ class ApiPathServer {
   final String logout_api_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/logout';
 
+  final String image_profile_api_server_get =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -21,7 +24,13 @@ class ApiPathServer {
     return this.register_api_server_post;
   }
 
-  String getLogoutServerGet() {
+  String getLogoutApiServerGet() {
     return this.logout_api_server_get;
+  }
+
+  String getImageApiServerGet(String image_profile_path) {
+    String path = this.image_profile_api_server_get + image_profile_path;
+    print(path);
+    return path!;
   }
 }

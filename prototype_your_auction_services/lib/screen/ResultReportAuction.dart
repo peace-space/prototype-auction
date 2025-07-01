@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/screen/ConfirmPayment.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -25,7 +27,7 @@ class ReportAuctionState extends State<ReportAuction> {
       stream: fetchResultReportAuction(),
       builder:
           (context, snapshot) => ListView.builder(
-            padding: EdgeInsets.all(8),
+              padding: EdgeInsets.all(8),
               itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 if (snapshot.hasError) {
@@ -37,32 +39,38 @@ class ReportAuctionState extends State<ReportAuction> {
                 }
 
                 if (snapshot.hasData) {
-                Map<String, dynamic> data = snapshot.data![index];
-                return Card(
-                  child: ListTile(
-                    leading: Image.network(
-                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                          '${data['image_path_1']}',
-                      cacheHeight: 1000,
-                      cacheWidth: 900,
+                  Map<String, dynamic> data = snapshot.data![index];
+                  return Card(
+                    child: ListTile(
+                      onTap: () => goToConfirmPayment(data),
+                      leading: Image.network(
+                        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
+                            '${data['image_path_1']}',
+                        cacheHeight: 1000,
+                        cacheWidth: 900,
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data['name_product'].toString()),
+                          Text('${paymentStatus(data['payment_status'])
+                              .toString()}'),
+                          // Text('${data['payment_status'].toString()}'),
+                        ],
+                      ),
+                      trailing: Column(
+                        children: [
+                          Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
+                              color: Colors.green
+                          ),),
+                          Text("จำนวนเงิน ${data['debts'].toString()} บาท",
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),)
+                        ],
+                      ),
                     ),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(data['name_product'].toString()),
-                        Text('${paymentStatus(data['payment_status'])
-                            .toString()}'),
-                        // Text('${data['payment_status'].toString()}'),
-                      ],
-                    ),
-                    trailing: Column(
-                      children: [
-                        Text("คุณเป็นผู้ประมูลสำเร็จ"),
-                        // Text("กรุณาแจ้งชำระเงิน")
-                      ],
-                    ),
-                  ),
-                );
+                  );
                 }
 
                 return Center(child: CircularProgressIndicator());
@@ -78,7 +86,7 @@ class ReportAuctionState extends State<ReportAuction> {
     final responce = await http.get(uri);
     if (responce.statusCode == 200) {
       final body = jsonDecode(responce.body);
-      // print(body['data'].toString());
+      print(body['data'].toString());
       // ShareProductData.productData = body['data'];
       // print(ShareProductData.productData);
       yield body['data'];
@@ -92,5 +100,13 @@ class ReportAuctionState extends State<ReportAuction> {
     } else {
       return "ยังไม่ชำระเงิน";
     }
+  }
+
+  void goToConfirmPayment(Map<String, dynamic> data) {
+    ShareProductData.productData = data;
+    Navigator.push(context,
+        MaterialPageRoute(
+          builder: (context) => ConfirmPayment(),
+        ));
   }
 }
