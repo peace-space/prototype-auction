@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\BillAuctionController;
 use App\Http\Controllers\v1\ResultAuctionController;
 use App\Http\Controllers\v1\ProductController;
 use App\Http\Controllers\v1\AuctionController;
@@ -74,4 +75,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/result-report-auction/{id_users}', [ResultAuctionController::class, 'resultReportAuction']);
     Route::post('/check-the-winners', [ResultAuctionController::class, 'checkTheWinners']);
     Route::post('/save-the-winners', [ResultAuctionController::class, 'saveTheWinnerAuctions']);
+
+    // Bill -----------------------------------------------------------
+    Route::get('/bill-auction/{id_bill_auction}', [BillAuctionController::class, 'billAuction']);
 });
