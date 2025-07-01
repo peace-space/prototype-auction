@@ -33,7 +33,7 @@ class BillAuctionController extends Controller
                                         $join->on('users.id_users', '=', 'products.id_users');
                                     })
                                     ->join('bank_accounts', function(JoinClause $join) {
-                                        $join->on('banK_accounts.id_users', '=', 'products.id_users');
+                                        $join->on('bank_accounts.id_users', '=', 'products.id_users');
                                     })
                                     ->where('bill_auctions.id_bill_auctions', '=', $id_bill_result)
                                     ->get();
