@@ -12,30 +12,36 @@ class BillAuctionController extends Controller
 {
     public function billAuction($id_bill_result) {
         try {
-            $result_report_auction = DB::table('result_auctions')
-                                                    ->select('*')
-                                                    ->Join('bids', function(JoinClause $join) {
-                                                        $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
-                                                    })
-                                                    ->join('auctions', function(JoinClause $join){
-                                                        $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                                                    })
-                                                    ->join('products', function(JoinClause $join){
-                                                        $join->on('products.id_products', '=', 'auctions.id_products');
-                                                    })
-													->join('images', function(JoinClause $join){
-                                                        $join->on('images.id_images', '=', 'products.id_images');
-                                                    })
-                                                    ->join('bill_auctions', function(JoinClause $join){
-                                                        $join->on('bill_auctions.id_result_auctions', '=', 'result_auctions.id_result_auctions');
-                                                    })
-                                                    ->where('result_auctions.id_users', '=', $id_bill_result)
-                                                    #->orderBy('result_report_auction.created_at')
-                                                    ->get();
+            $bill_auction = DB::table('bill_auctions')
+                                    ->select('*')
+                                    ->join('result_auctions', function(JoinClause $join){
+                                        $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
+                                    })
+                                    ->join('bids', function(JoinClause $join){
+                                        $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
+                                    })
+                                    ->join('auctions', function(JoinClause $join){
+                                        $join->on('auctions.id_auctions', '=', 'bids.id_bids');
+                                    })
+                                    ->join('products', function(JoinClause $join){
+                                        $join->on('products.id_products', '=', 'auctions.id_products');
+                                    })
+                                    ->join('images', function(JoinClause $join) {
+                                        $join->on('images.id_images', '=', 'products.id_images');
+                                    })
+                                    ->join('users', function(JoinClause $join) {
+                                        $join->on('users.id_users', '=', 'products.id_users');
+                                    })
+                                    ->join('bank_accounts', function(JoinClause $join) {
+                                        $join->on('banK_accounts.id_users', '=', 'products.id_users');
+                                    })
+                                    ->where('bill_auctions.id_bill_auctions', '=', $id_bill_result)
+                                    ->get();
+
                     return response()->json([
                         'status' => 1,
                         'message' => 'Successfully.',
-                        'data' => $result_report_auction
+                        'data' => $bill_auction
                     ], 200);
 
        } catch (Exception $e) {

@@ -1,4 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
 class ConfirmPayment extends StatefulWidget {
   State<ConfirmPayment> createState() {
@@ -14,7 +19,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     return Scaffold(
       appBar: AppBar(title: Text("แจ้งชำระเงิน")),
       body: StreamBuilder(
-        stream: null,
+        stream: fetchBillAuction(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(child: Text("เกิดข้อผิดพลาด"));
@@ -139,5 +144,30 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
         ],
       ),
     );
+  }
+
+  Stream<void> fetchBillAuction() async* {
+    print("Start FetchBillAuction");
+    print(ShareProductData.productData['id_bill_auctions']);
+    String url = ApiPathServer().getBillAuctionApiServerGet(
+        id_bill_auction: ShareProductData.productData['id_bilL_auctions']);
+    print("TETTT");
+    print(url);
+    final uri = Uri.parse(url);
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      print(data['message'].toString());
+
+      yield data['data'];
+      setState(() {
+
+      });
+    } else {
+      print("ERROR. fetchBillAuction: Status = ${response.statusCode
+          .toString()}");
+    }
+
+    print("End FetchBillAuction");
   }
 }
