@@ -164,7 +164,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       setState(() {
         _imageData = data['images'];
       });
-      print("aaaaaaaaa: " + _imageData[1].toString());
+      // print("aaaaaaaaa: " + _imageData[1].toString());
       yield data['data'];
     } else {
       print("ERROR. fetchBillAuction: Status = ${response.statusCode
