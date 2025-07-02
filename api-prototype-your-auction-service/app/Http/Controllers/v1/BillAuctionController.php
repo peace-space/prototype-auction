@@ -41,9 +41,9 @@ class BillAuctionController extends Controller
 
             $get_data_bill_auction =  $bill_auction->first();
 
-
+            // return "Test";
             $images_model = [];
-            // return $get_data_bill_auction->image_path_1;
+            return $get_data_bill_auction;
 
             if ($get_data_bill_auction->image_path_1 != null) {
                 array_push($images_model, $get_data_bill_auction->image_path_1);

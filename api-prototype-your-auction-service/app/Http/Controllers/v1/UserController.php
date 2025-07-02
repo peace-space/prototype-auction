@@ -136,108 +136,6 @@ class UserController extends Controller
         }
     }
 
-    // public function register(Request $request)
-    // {
-    //     try {
-    //         // $request->validate([
-    //         //     'image_profile' => 'nullable | required | image | mimes:png, jpg, jpeh, webp'
-    //         // ]);
-    //         $first_name_users = $request->first_name_users;
-    //         $last_name_users = $request->last_name_users;
-    //         $email = $request->email;
-    //         $phone = $request->phone;
-    //         $password = $request->password;
-    //         $address = $request->address;
-    //         $image = $request->image_profile;
-
-    //         $password_hashed = Hash::make($password);
-    //         // return $image;
-    //         if ($image != null) {
-    //             $image_name = Storage::disk('public')->put('images/user-profile-image', $image);
-    //             $path = Storage::url($image_name);
-    //             // return $path;
-    //         } else {
-    //             $path = "/storage/images/user-profile-image/public/storage/images/user-profile-image/profile-default-image.png";
-    //         }
-
-
-    //         $data = [
-    //             "first_name_users" => $first_name_users,
-    //             "last_name_users" => $last_name_users,
-    //             "phone" => $phone,
-    //             "email" => $email,
-    //             "password" => $password_hashed,
-    //             "address" => $address,
-    //             "image_profile" => $path
-    //         ];
-    //         // return $data['image_profile'];
-    //         $user = db::table('users')
-    //             ->insert($data);
-
-    //         return response()->json([
-    //             'status' => 1,
-    //             'message' => "Successfully.",
-    //             // 'data' => $data
-    //         ], 201);
-    //     } catch (Exception $e) {
-    //         return response()->json([
-    //             'status' => 0,
-    //             'message' => "Error",
-    //             'data' => $e
-    //         ], 500);
-    //     }
-    // }
-
-    // public function login(Request $request)
-    // {
-    //     try {
-    //         $email = $request->email;
-    //         $password = $request->password;
-
-    //         $login = DB::table('users')
-    //                     ->select('id_users', 'first_name_users',
-    //                                 'last_name_users', 'phone',
-    //                                 'address', 'email',
-    //                                 'admin_status', 'image_profile', 'password')
-    //                     ->where('email', $email)
-    //                     ->first();
-
-    //                     // return $login;
-
-    //         if ($login == true && Hash::check($password, $login->password)) {
-    //             $data = [
-    //                 'id_users' => $login->id_users,
-    //                 'first_name_users' => $login->first_name_users,
-    //                 'last_name_users' => $login->last_name_users,
-    //                 'phone' => $login->phone,
-    //                 'address' => $login->address,
-    //                 'email' => $login->email,
-    //                 'admin_status' => $login->admin_status,
-    //                 'image_profile' => $login->image_profile,
-    //             ];
-
-    //             return response()->json([
-    //                 'status' => '1',
-    //                 'message' => 'Successfully.',
-    //                 'data' => $data
-    //             ], 200);
-
-    //         } else {
-    //             return response()->json([
-    //                 'status' => 0,
-    //                 'message' => 'ไม่มีข้อมูล'
-    //             ], 500);
-    //         }
-    //     } catch (Exception $e) {
-    //         return response()->json([
-    //             'status' => 0,
-    //             'message' => "เกิดข้อผิดพลาด",
-    //             'data' => $e
-    //         ], 500);
-    //     }
-    // }
-
-
     public function register(Request $request)
     {
         try {
@@ -347,13 +245,13 @@ class UserController extends Controller
                 'email' => $email,
                 'password' => $password,
             ];
-
+            // return $login_data;
             $user_token_data = auth()->attempt($login_data);
-            // return $token;
+            return $user_token_data;
             if (!$user_token_data) {
                 return response()->json([
                     'status' => 0,
-                    'message' => 'ไม่มีข้อมูลผู้ใชhงาน',
+                    'message' => 'ไม่มีข้อมูลผู้ใช้งาน',
                     // 'data' => $data,
                 ], 404);
             }

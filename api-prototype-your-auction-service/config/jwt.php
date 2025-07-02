@@ -102,7 +102,7 @@ return [
     */
 
     // 'ttl' => env('JWT_TTL', 60),
-    'ttl' => env('JWT_TTL', null),
+    // 'ttl' => env('JWT_TTL', Null), // คอมเมนต์ไว้คือค่าว่าง
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +122,7 @@ return [
     */
 
     // 'refresh_ttl' => env('JWT_REFRESH_TTL', 20160),
-    'refresh_ttl' => env('JWT_REFRESH_TTL', null),
+    // 'refresh_ttl' => env('JWT_REFRESH_TTL', Null), // คอมเมนต์ไว้คือค่าว่าง
 
     /*
     |--------------------------------------------------------------------------

@@ -17,7 +17,7 @@ class BankAccountFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_users' => fake()->numberBetween(1000, 1010),
+            'id_users' => fake()->numberBetween(1, 10),
             'bank_account_number' => fake()->numberBetween(1000000000, 9999999999),
             'prompt_pay' => fake()->numberBetween(1000000000, 9999999999),
             'name_bank_account' => fake()->name(),
