@@ -247,7 +247,7 @@ class UserController extends Controller
             ];
             // return $login_data;
             $user_token_data = auth()->attempt($login_data);
-            return $user_token_data;
+            // return $user_token_data;
             if (!$user_token_data) {
                 return response()->json([
                     'status' => 0,

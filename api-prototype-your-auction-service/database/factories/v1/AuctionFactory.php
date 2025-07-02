@@ -19,7 +19,7 @@ class AuctionFactory extends Factory
         return [
             // 'id_users' => fake()->numberBetween(1, 10),
             'id_products' => fake()->numberBetween(1, 10),
-            'auction_status' => fake()->boolean(),
+            'auction_status' => true,
             'shipping_cost' => fake()->numberBetween(20, 50),
             'start_price' => fake()->numberBetween(1, 1000),
             'max_price' => fake()->numberBetween(1, 1000),

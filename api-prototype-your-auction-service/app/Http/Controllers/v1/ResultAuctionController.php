@@ -54,6 +54,10 @@ class ResultAuctionController extends Controller
             $id_auctions = $request->id_auctions;
             // return $id_auctions;
 
+            $update_auction_status = DB::table('auctions')
+                                    ->where('id_auctions', '=', $id_auctions)
+                                    ->update(['auction_status' => false]);
+
             $high_bid = DB::table('bids')
                                         ->select('bids.id_bids', 'bids.id_users',
                                                 'bids.id_auctions', 'bids.bid_price',

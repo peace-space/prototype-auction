@@ -35,7 +35,7 @@ class AuctionController extends Controller
                     ->join('users', function(JoinClause $join){
                         $join->on('users.id_users', '=', 'products.id_users');
                     })
-
+                    ->where('auctions.auction_status', '=', true)
                     ->orderByRaw('id_auctions')
                     ->get();
 
