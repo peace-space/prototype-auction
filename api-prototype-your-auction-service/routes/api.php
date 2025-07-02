@@ -78,4 +78,5 @@ Route::prefix('/v1')->group(function () {
 
     // Bill -----------------------------------------------------------
     Route::get('/bill-auction/{id_bill_auction}', [BillAuctionController::class, 'billAuction']);
+    Route::post('/insert-receipt-bill-auction', [BillAuctionController::class, 'insertReceiptBillAuction']);
 });

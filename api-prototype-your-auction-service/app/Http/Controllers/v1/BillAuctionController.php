@@ -41,21 +41,9 @@ class BillAuctionController extends Controller
 
             $get_data_bill_auction =  $bill_auction->first();
 
-            $image_model = [
-                $get_data_bill_auction->image_path_1,
-                $get_data_bill_auction->image_path_2,
-                $get_data_bill_auction->image_path_3,
-                $get_data_bill_auction->image_path_4,
-                $get_data_bill_auction->image_path_5,
-                $get_data_bill_auction->image_path_6,
-                $get_data_bill_auction->image_path_7,
-                $get_data_bill_auction->image_path_8,
-                $get_data_bill_auction->image_path_9,
-                $get_data_bill_auction->image_path_10,
-
-            ];
 
             $images_model = [];
+            // return $get_data_bill_auction->image_path_1;
 
             if ($get_data_bill_auction->image_path_1 != null) {
                 array_push($images_model, $get_data_bill_auction->image_path_1);
@@ -88,6 +76,8 @@ class BillAuctionController extends Controller
                 array_push($images_model, $get_data_bill_auction->image_path_10);
             }
 
+            // return $images_model;
+
 
             // $bill_auction_model = [
             //     'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
@@ -98,9 +88,9 @@ class BillAuctionController extends Controller
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                'test' => $bill_auction,
-                // 'data' => $bill_auction,
-                'images' => $image_model,
+                // 'test' => $bill_auction,
+                'data' => $bill_auction,
+                'images' => $images_model,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -108,6 +98,21 @@ class BillAuctionController extends Controller
                 'message' => 'Error.',
                 'data' => $e
             ], 404);
+        }
+    }
+
+
+    public function insertReceiptBillAuction(Request $request) {
+        try {
+
+
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ]);
         }
     }
 }

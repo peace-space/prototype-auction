@@ -14,10 +14,13 @@ class ConfirmPayment extends StatefulWidget {
 class ConfirmPaymentState extends State<ConfirmPayment> {
   List<dynamic> _imageData = [];
   int indexSelectImage = 0;
+  Map<String, dynamic> bill_auction_data = {};
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("แจ้งชำระเงิน")),
+      appBar: AppBar(title: Text(
+          "แจ้งชำระเงิน: Bill-${ShareProductData.productData['id_bill_auctions']
+              .toString()}")),
       body: StreamBuilder(
         stream: fetchBillAuction(),
         builder: (context, snapshot) {
@@ -38,7 +41,12 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
                   SizedBox(height: 8),
                   selectShowImage(),
                   SizedBox(height: 8),
-                  // displayDataAuction(context, snapshot.data),
+                  buttonDetailAuction(),
+                  Divider(),
+                  displayConfirmPayment(),
+                  SizedBox(height: 8,),
+                  buttonGoToChat(),
+                  buttonInsertReceipt(),
                   SizedBox(height: 500),
                 ],
               ),
@@ -51,7 +59,51 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget displayConfirmPayment() {
-    return ListView(children: [Text("data")]);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text("รหัสใบ้แจ้งชำระเงิน: "),
+              Text("Bill-${bill_auction_data['id_bill_auctions']}")
+            ],
+          ),
+          Row(
+            children: [
+              Text("ชื่อผู้เปิดประมูล: "),
+              Text(
+                  "${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}")
+            ],
+          ),
+          Row(
+            children: [
+              Text("อีเมลผู้เปิดประมูล: "),
+              Text("${bill_auction_data['email']}")
+            ],
+          ),
+          Row(
+            children: [
+              Text("ชื่อบัญชีธนาคาร: "),
+              Text("${bill_auction_data['name_bank_account']}")
+            ],
+          ),
+          Row(
+            children: [
+              Text("เลขบัญชีธนาคาร: "),
+              Text("${bill_auction_data['bank_account_number']}")
+            ],
+          ),
+          Row(
+            children: [
+              Text("บัญชีพร้อมเพย์: "),
+              Text("${bill_auction_data['prompt_pay']}")
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget showOneImage() {
@@ -146,7 +198,8 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     );
   }
 
-  Stream<void> fetchBillAuction() async* {
+  Stream<List<dynamic>> fetchBillAuction() async* {
+    Future.delayed(Duration(seconds: 5));
     print("Start FetchBillAuction");
     // print(ShareProductData.productData['id_bill_auctions']);
     ApiPathServer apiServerPath = ApiPathServer();
@@ -159,18 +212,68 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
-      print(data['images'].toString());
-      print(data['message'].toString());
-      setState(() {
-        _imageData = data['images'];
-      });
+      // print(data['images'].toString());
+      // print(data['message'].toString());
+
       // print("aaaaaaaaa: " + _imageData[1].toString());
       yield data['data'];
+      setState(() {
+        _imageData = data['images'];
+        bill_auction_data = data['data'][0];
+      });
     } else {
       print("ERROR. fetchBillAuction: Status = ${response.statusCode
           .toString()}");
     }
 
     print("End FetchBillAuction");
+  }
+
+  Widget buttonDetailAuction() {
+    return TextButton(onPressed: () =>
+    {
+      showDetailAuction()
+    }, child: Text("รายละเอียดสินค้า"));
+  }
+
+  void showDetailAuction() {
+    showDialog(context: context, builder: (context) =>
+        Dialog(
+          child: Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  Text("No.Bill-${bill_auction_data['id_bill_auctions']
+                      .toString()}"),
+                  Text("ชื่อสินค้า: ${bill_auction_data['name_product']}"),
+                  Text(
+                      "ชื่อผู้เปิดประมูล: ${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}"),
+                  Text("รายละเอียดสินค้า:"),
+                  Text("${bill_auction_data['detail_product']}")
+                ],
+              ),
+            ),
+          ),
+        ),);
+  }
+
+  Widget buttonGoToChat() {
+    return ElevatedButton(onPressed: () => {}, child: Text("แชท"));
+  }
+
+  Widget buttonInsertReceipt() {
+    return ElevatedButton(onPressed: () => {}, child: Text("เพิ่มใบเสร็จ"));
+  }
+
+  void insertReceiptImages() {
+
+  }
+
+  TextStyle textTopicStyle() {
+    return TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold
+    );
   }
 }

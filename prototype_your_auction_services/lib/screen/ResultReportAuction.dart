@@ -52,23 +52,35 @@ class ReportAuctionState extends State<ReportAuction> {
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(data['name_product'].toString()),
-                          Text('${paymentStatus(data['payment_status'])
-                              .toString()}'),
-                          // Text('${data['payment_status'].toString()}'),
-                        ],
-                      ),
-                      trailing: Column(
-                        children: [
                           Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
                               color: Colors.green
                           ),),
-                          Text("จำนวนเงิน ${data['debts'].toString()} บาท",
+                          Text(
+                            'No. Bill-${data['id_bill_auctions'].toString()}',
+                            style: TextStyle(
+                                fontSize: 13
+                            ),),
+                          Text('ชื่อ: ${data['name_product'].toString()}'),
+                          Text('สถานะ: ${paymentStatus(data['payment_status'])
+                              .toString()}'),
+                          Text("จำนวนเงิน: ${data['debts'].toString()} บาท",
                             style: TextStyle(
                               fontSize: 16,
                             ),)
+                          // Text('${data['payment_status'].toString()}'),
                         ],
                       ),
+                      // trailing: Column(
+                      //   children: [
+                      //     // Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
+                      //     //     color: Colors.green
+                      //     // ),),
+                      //     // Text("จำนวนเงิน ${data['debts'].toString()} บาท",
+                      //     //   style: TextStyle(
+                      //     //     fontSize: 16,
+                      //     //   ),)
+                      //   ],
+                      // ),
                     ),
                   );
                 }
@@ -104,9 +116,12 @@ class ReportAuctionState extends State<ReportAuction> {
 
   void goToConfirmPayment(Map<String, dynamic> data) {
     ShareProductData.productData = data;
+    print(data.toString());
     Navigator.push(context,
         MaterialPageRoute(
           builder: (context) => ConfirmPayment(),
         ));
   }
+
+
 }
