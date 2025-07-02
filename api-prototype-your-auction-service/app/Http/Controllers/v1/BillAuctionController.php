@@ -55,18 +55,52 @@ class BillAuctionController extends Controller
 
             ];
 
-            $bill_auction_model = [
-                'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
-                // 'id_'
+            $images_model = [];
 
-            ];
+            if ($get_data_bill_auction->image_path_1 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_1);
+            }
+            if ($get_data_bill_auction->image_path_2 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_2);
+            }
+            if ($get_data_bill_auction->image_path_3 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_3);
+            }
+            if ($get_data_bill_auction->image_path_4 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_4);
+            }
+            if ($get_data_bill_auction->image_path_5 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_5);
+            }
+            if ($get_data_bill_auction->image_path_6 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_6);
+            }
+            if ($get_data_bill_auction->image_path_7 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_7);
+            }
+            if ($get_data_bill_auction->image_path_8 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_8);
+            }
+            if ($get_data_bill_auction->image_path_9 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_9);
+            }
+            if ($get_data_bill_auction->image_path_10 != null) {
+                array_push($images_model, $get_data_bill_auction->image_path_10);
+            }
+
+
+            // $bill_auction_model = [
+            //     'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
+            //     // 'id_'
+
+            // ];
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
                 'test' => $bill_auction,
                 // 'data' => $bill_auction,
-                // 'images' => $image_model,
+                'images' => $image_model,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
