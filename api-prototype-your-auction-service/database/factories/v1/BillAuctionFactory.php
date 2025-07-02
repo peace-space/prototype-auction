@@ -22,6 +22,7 @@ class BillAuctionFactory extends Factory
             'debts' => fake()->numberBetween(1, 100),
             'shipping_number' => fake()->numberBetween(10000, 99999),
             'delivery_status' => fake()->boolean(),
+            'id_payment_proof_images'=> null,
         ];
     }
 }

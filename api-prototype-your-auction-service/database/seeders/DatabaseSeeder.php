@@ -10,6 +10,9 @@ use App\Models\v1\Image;
 use App\Models\v1\AuctionType;
 use App\Models\v1\BankAccount;
 use App\Models\v1\BillAuction;
+use App\Models\v1\Chat;
+use App\Models\v1\ImageInChats;
+use App\Models\v1\PaymentProofImages;
 use App\Models\v1\PaymentType;
 use App\Models\v1\Product;
 use App\Models\v1\ResultAuction;
@@ -37,7 +40,10 @@ class DatabaseSeeder extends Seeder
         Auction::factory(10)->create();
         Bid::factory(10)->create();
         ResultAuction::factory(10)->create();
+        PaymentProofImages::factory(10)->create();
         BillAuction::factory(10)->create();
+        Chat::factory(10)->create();
+        ImageInChats::factory(10)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

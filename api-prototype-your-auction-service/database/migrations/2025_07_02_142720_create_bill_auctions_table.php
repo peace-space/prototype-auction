@@ -15,13 +15,15 @@ return new class extends Migration
             $table->id('id_bill_auctions');
             $table->foreignId('id_result_auctions');
             $table->boolean('payment_status')->default(false);
+            $table->string('shipping_number');
             $table->integer('debts');
-            $table->integer('shipping_number');
             $table->boolean('delivery_status')->default(false);
+            $table->foreignId('id_payment_proof_images')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('id_result_auctions')->references('id_result_auctions')->on('result_auctions');
+            $table->foreign('id_payment_proof_images')->references('id_payment_proof_images')->on('payment_proof_images');
         });
     }
 
