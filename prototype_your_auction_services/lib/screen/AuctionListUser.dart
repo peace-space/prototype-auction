@@ -3,7 +3,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+// import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/UserProductManage.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
@@ -105,35 +106,54 @@ class AuctionListUserState extends State<AuctionListUser> {
     print("End.");
   }
 
+  // Widget countdown(String end_date_time_data) {
+  //   // print(end_date_time_data.toString());
+  //
+  //   var end_date_time = DateTime.parse(end_date_time_data);
+  //
+  //   var date_tiem_difference = end_date_time.difference(DateTime.now());
+  //
+  //   return TimerCountdown(
+  //     endTime: DateTime.now().add(
+  //         Duration(seconds: date_tiem_difference.inSeconds)),
+  //     format: CountDownTimerFormat.daysHoursMinutesSeconds,
+  //     enableDescriptions: false,
+  //     spacerWidth: 0,
+  //     timeTextStyle: TextStyle(
+  //       fontSize: 18,
+  //       color: Colors.red,
+  //       height: 0,
+  //     ),
+  //     daysDescription: "day",
+  //     hoursDescription: "hour",
+  //     minutesDescription: "min",
+  //     secondsDescription: "sec",
+  //     descriptionTextStyle: TextStyle(
+  //       height: 0,
+  //     ),
+  //     colonsTextStyle: TextStyle(
+  //         fontSize: 18,
+  //         color: Colors.red
+  //     ),
+  //   );
+  // }
+
+
   Widget countdown(String end_date_time_data) {
-    // print(end_date_time_data.toString());
-
-    var end_date_time = DateTime.parse(end_date_time_data);
-
-    var date_tiem_difference = end_date_time.difference(DateTime.now());
-
-    return TimerCountdown(
-      endTime: DateTime.now().add(
-          Duration(seconds: date_tiem_difference.inSeconds)),
-      format: CountDownTimerFormat.daysHoursMinutesSeconds,
-      enableDescriptions: false,
-      spacerWidth: 0,
-      timeTextStyle: TextStyle(
-        fontSize: 18,
-        color: Colors.red,
-        height: 0,
-      ),
-      daysDescription: "day",
-      hoursDescription: "hour",
-      minutesDescription: "min",
-      secondsDescription: "sec",
-      descriptionTextStyle: TextStyle(
-        height: 0,
-      ),
-      colonsTextStyle: TextStyle(
-          fontSize: 18,
-          color: Colors.red
-      ),
+    DateTime dateTime = DateTime.parse(end_date_time_data);
+    return CountdownTimer(
+      endTime: dateTime.millisecondsSinceEpoch,
+      widgetBuilder: (context, time) {
+        if (time == null) {
+          return Text('หมดเวลา', style: TextStyle(
+              color: Colors.red
+          ),);
+        }
+        String hour = time.hours.toString();
+        String min = time.min.toString();
+        String sec = time.sec.toString();
+        return Text("${hour} : ${min} : ${sec}");
+      },
     );
   }
 

@@ -46,7 +46,7 @@ Route::prefix('/v1')->group(function () {
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
-    Route::post('/test', [AuctionController::class, 'test']);
+    Route::get('/test', [AuctionController::class, 'test']);
     Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
 
     // ProductController -----------------------------------------------------------

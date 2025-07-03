@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+// import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
 import 'package:prototype_your_auction_services/share/CheckLogin.dart';
@@ -144,19 +145,7 @@ class AuctionHomeState extends State<AuctionHome> {
                                 Text("ราคาสูงสุด ฿${data['max_price']
                                     .toString()}"),
                                 SizedBox(height: 5),
-
-                                Row(
-                                  children: [
-                                    Text(
-                                      "เวลา: ",
-                                      style: TextStyle(
-                                        color: Colors.red,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    countdown(data),
-                                  ],
-                                ),
+                                showDateTimeCountdown(data),
                               ],
                             ),
                           ),
@@ -210,30 +199,32 @@ class AuctionHomeState extends State<AuctionHome> {
                 double top = 0.0;
                 double right = 8.0;
                 double bottom = 8.0;
-                if (data['auction_status'] == 1) {
                   return Padding(
                     padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                    child: ListTile(
-                      onTap: () => goToDetailAuction(ctx, data),
-                      leading: ClipRRect(
-                        // borderRadius: BorderRadius.vertical(),
-                        child: Image.network(
-                          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
-                              data['image_path_1'],
-                          cacheHeight: 600,
-                          cacheWidth: 500,
+                      child: Card(
+                        child: ListTile(
+                          onTap: () => goToDetailAuction(ctx, data),
+                          leading: ClipRRect(
+                            // borderRadius: BorderRadius.vertical(),
+                            child: Image.network(
+                              'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                                  data['image_path_1'],
+                              cacheHeight: 600,
+                              cacheWidth: 500,
+                            ),
+                          ),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['name_product']),
+                              Text("ราคาสูงสุด ฿${data['max_price']
+                                  .toString()}"),
+                            ],
+                          ),
+                          subtitle: showDateTimeCountdown(data),
                         ),
-                      ),
-                      title: Text(data['name_product']),
-                      subtitle: Text(
-                          "ราคาสูงสุด ฿${data['max_price'].toString()}"),
-                      trailing: Column(children: [
-                        Text('เวลา'),
-                        countdown(data)
-                      ]),
-                    ),
+                      )
                   );
-                }
               },
             );
           } on Exception catch (e) {
@@ -257,7 +248,7 @@ class AuctionHomeState extends State<AuctionHome> {
 
   Stream<List<dynamic>> fetchAuctionData() async* {
     try {
-      await Future.delayed(Duration(seconds: 5));
+      // await Future.delayed(Duration(seconds: 5));
       print("Start");
       String url =
           'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
@@ -266,10 +257,12 @@ class AuctionHomeState extends State<AuctionHome> {
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);
       List<dynamic> auctions_data = resData['data'];
-      List<dynamic>? data = checkEndDateTime(auctions_data);
+      // List<dynamic>? data = checkEndDateTime(auctions_data);
+
       // print(data.toString());
       // print(data[9]['id_auctions'].toString());
-      yield data;
+      yield auctions_data;
+      // yield auctions_data;
       setState(() {});
     } on Exception catch (e) {
       print(e);
@@ -329,97 +322,103 @@ class AuctionHomeState extends State<AuctionHome> {
     }
   }
 
-  Widget countdown(Map<String, dynamic> data) {
-    // print(end_date_time_data.toString());
-    // print(data.toString());
-    // Future.delayed(Duration(seconds: 1));
-    var end_date_time = DateTime.parse(data['end_date_time']);
-    var test = DateTime.parse('2025-07-03 02:10:00');
-    var t = test.difference(DateTime.now());
-    var date_time_difference = end_date_time.difference(DateTime.now());
-    print("--------------------: ${t.inSeconds.toString()}");
-    return TimerCountdown(
-      endTime: DateTime.now().add(
-        Duration(seconds: date_time_difference.inSeconds),
-      ),
-      onTick: (end_time) {
-        // print(end_time.inSeconds.toString());
-        end_date_time_check = end_time.inSeconds;
-        if (end_time.inSeconds == 0) {
-          print(
-              "+++++++++++++++++++++++++++++" + end_time.inSeconds.toString());
+  // Widget countdown(Map<String, dynamic> data) {
+  //   // print(end_date_time_data.toString());
+  //   // print(data.toString());
+  //   // Future.delayed(Duration(seconds: 1));
+  //   var end_date_time = DateTime.parse(data['end_date_time']);
+  //   var date_time_difference = end_date_time.difference(DateTime.now());
+  //
+  //   TimerCountdown countdown_date_time = TimerCountdown(
+  //     endTime: DateTime.now().add(
+  //       Duration(seconds: date_time_difference.inSeconds),
+  //     ),
+  //     onTick: (end_time) {
+  //       // print(end_time.inSeconds.toString());
+  //       end_date_time_check = end_time.inSeconds;
+  //       if (end_time.inSeconds == 0) {
+  //         print(
+  //             "+++++++++++++++++++++++++++++" + end_time.inSeconds.toString());
+  //       }
+  //     },
+  //     onEnd: () {
+  //       // saveTheWinnerAuctions(data);
+  //     },
+  //     format: CountDownTimerFormat.daysHoursMinutesSeconds,
+  //     enableDescriptions: false,
+  //     spacerWidth: 0,
+  //     timeTextStyle: TextStyle(fontSize: 18, color: Colors.red, height: 0),
+  //     daysDescription: "day",
+  //     hoursDescription: "hour",
+  //     minutesDescription: "min",
+  //     secondsDescription: "sec",
+  //     descriptionTextStyle: TextStyle(height: 0),
+  //     colonsTextStyle: TextStyle(fontSize: 18, color: Colors.red),
+  //   );
+  //
+  //   if (end_date_time_check == 0) {
+  //     saveTheWinnerAuctions(data);
+  //   }
+  //
+  //   return countdown_date_time;
+  // }
+
+  Widget showDateTimeCountdown(Map<String, dynamic> data) {
+    DateTime dateTime = DateTime.parse(data['end_date_time']);
+    return CountdownTimer(
+      endTime: dateTime.millisecondsSinceEpoch,
+      widgetBuilder: (context, time) {
+        if (time == null) {
+          return Text('หมดเวลา', style: TextStyle(
+              color: Colors.red
+          ),);
         }
+        String day = (time.days == null || time.days == 00) ? "00" : time.days
+            .toString();
+        String hour = (time.hours == null || time.hours == 00) ? "00" : time
+            .hours.toString();
+        String min = (time.min == null || time.hours == 00) ? "00" : time.min
+            .toString();
+        String sec = (time.sec == null) ? "00" : time.sec.toString();
+
+        return Text(
+          "เวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+            color: Colors.red
+        ),
+        );
       },
       onEnd: () {
-        // winTheAuction(data);
-        print("TTTTT");
         saveTheWinnerAuctions(data);
       },
-      format: CountDownTimerFormat.daysHoursMinutesSeconds,
-      enableDescriptions: false,
-      spacerWidth: 0,
-      timeTextStyle: TextStyle(fontSize: 18, color: Colors.red, height: 0),
-      daysDescription: "day",
-      hoursDescription: "hour",
-      minutesDescription: "min",
-      secondsDescription: "sec",
-      descriptionTextStyle: TextStyle(height: 0),
-      colonsTextStyle: TextStyle(fontSize: 18, color: Colors.red),
     );
   }
 
-  List<Map<String, dynamic>> checkEndDateTime(List<dynamic> data) {
-    // void checkEndDateTime(List<dynamic> data) async {
-    // print('Start.');
-    // var check_timeout = DateTime.parse(data['end_date_time']);
-    // Duration different_date_time = check_timeout.difference(DateTime.now());
-    // print(different_date_time.inMinutes.toString());
 
-    List<Map<String, dynamic>> newData = [];
-
-    for (int index = 0; index < data.length; index++) {
-      var check_timeout = DateTime.parse(data[index]['end_date_time']);
-      Duration different_date_time = check_timeout.difference(DateTime.now());
-      // print(different_date_time.inMinutes.toString());
-
-      if (different_date_time >= Duration.zero) {
-        newData.add(data[index]);
-      }
-    }
-
-    return newData;
-
-    print('End.');
-  }
-
-  void winTheAuction(Map<String, dynamic> data) async {
-    print("Win The Auction");
-    Future.delayed(Duration(seconds: 1000));
-    int count = 0;
-    // count += 1;
-    // showDialog(
-    //   context: context,
-    //   builder:
-    //       (context) => AlertDialog(
-    //         title: Text("data: " + count.toString()),
-    //         content: Text(
-    //           "ยินดีด้วย คุณเป็นผู้ชนะประมูล",
-    //           style: TextStyle(fontSize: 16),
-    //         ),
-    //         actions: [
-    //           TextButton(
-    //             onPressed: () => {Navigator.pop(context)},
-    //             child: Text('OK', style: TextStyle(fontSize: 18)),
-    //           ),
-    //         ],
-    //       ),
-    // );
-    // saveTheWinnerAuctions();
-
-    String url = '';
-    final uri = Uri.parse(url);
-    // final
-  }
+  // List<Map<String, dynamic>> checkEndDateTime(List<dynamic> data) {
+  //   // void checkEndDateTime(List<dynamic> data) async {
+  //   // print('Start.');
+  //   // var check_timeout = DateTime.parse(data['end_date_time']);
+  //   // Duration different_date_time = check_timeout.difference(DateTime.now());
+  //   // print(different_date_time.inMinutes.toString());
+  //
+  //   List<Map<String, dynamic>> newData = [];
+  //
+  //   for (int index = 0; index < data.length; index++) {
+  //     var check_timeout = DateTime.parse(data[index]['end_date_time']);
+  //     Duration different_date_time = check_timeout.difference(DateTime.now());
+  //     // print(different_date_time.inMinutes.toString());
+  //
+  //     if (different_date_time >= Duration.zero) {
+  //       newData.add(data[index]);
+  //     }
+  //   }
+  //
+  //   return newData;
+  //
+  //   print('End.');
+  // }
 
   void saveTheWinnerAuctions(Map<String, dynamic> data) async {
     // Map<String, dynamic> data = {'id_auctions': 1};

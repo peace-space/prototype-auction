@@ -5,6 +5,8 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\v1\BidController;
 use App\Models\ResultReportAuction;
+use Carbon\Carbon;
+use DateTime;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
@@ -15,29 +17,38 @@ use Illuminate\Support\Facades\Storage;
 
 class AuctionController extends Controller
 {
-    public function index() {
-        try{
+    public function index()
+    {
+        try {
             $auctions_list = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'auctions.auction_status',
-                            'auctions.shipping_cost', 'auctions.start_price',
-                            'auctions.end_date_time', 'auctions.max_price',
-                            'auctions.id_auction_types', 'auctions.id_payment_types',
-                            'auctions.id_bank_accounts', 'products.id_products',
-                            'products.name_product', 'images.image_path_1',
-                            'users.first_name_users', 'users.last_name_users',
-                            )
-                    ->join('products', function(JoinClause $join){
-                        $join->on('auctions.id_products', '=', 'products.id_products');
-                    })
-                    ->join('images', function(JoinClause $join){
-                        $join->on('images.id_images', '=', 'products.id_images');
-                    })
-                    ->join('users', function(JoinClause $join){
-                        $join->on('users.id_users', '=', 'products.id_users');
-                    })
-                    ->where('auctions.auction_status', '=', true)
-                    ->orderByRaw('id_auctions')
-                    ->get();
+                ->select(
+                    'auctions.id_auctions',
+                    'auctions.auction_status',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.end_date_time',
+                    'auctions.max_price',
+                    'auctions.id_auction_types',
+                    'auctions.id_payment_types',
+                    'auctions.id_bank_accounts',
+                    'products.id_products',
+                    'products.name_product',
+                    'images.image_path_1',
+                    'users.first_name_users',
+                    'users.last_name_users',
+                )
+                ->join('products', function (JoinClause $join) {
+                    $join->on('auctions.id_products', '=', 'products.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->where('auctions.auction_status', '=', true)
+                ->orderByRaw('id_auctions')
+                ->get();
 
             // $high_bit = DB::table('bids')
             //                     ->select('id_users', 'id_auctions', 'bid_price')
@@ -58,7 +69,6 @@ class AuctionController extends Controller
                 'message' => "Successfully.",
                 'data' => $auctions_list
             ], 200);
-
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -172,21 +182,24 @@ class AuctionController extends Controller
 
     // }
 
-    public function addImageForProduct() {
+    public function addImageForProduct()
+    {
         // Schema::table('auctions', function($table){
         //     $table->string('test');
         // });
     }
 
-    public function deleteImageForProduct() {
+    public function deleteImageForProduct()
+    {
         // Schema::table('auctions', function($table){
         //     $table->dropColumn('test');
         // });
     }
 
-    public function createProduct(Request $request) {
+    public function createProduct(Request $request)
+    {
         try {
-            if(
+            if (
                 $request->id_users != null
                 && $request->name_product != ''
                 && $request->detail_product != ''
@@ -292,16 +305,16 @@ class AuctionController extends Controller
                 ];
 
                 $save_images = DB::table('images')
-                                    ->insert($image_model);
+                    ->insert($image_model);
 
                 $last_time_image = DB::table('images')
-                                    ->select(DB::raw('MAX(created_at) as last_time'))
-                                    ->get();
+                    ->select(DB::raw('MAX(created_at) as last_time'))
+                    ->get();
 
                 $last_id_image = DB::table('images')
-                                    ->select('id_images')
-                                    ->where('created_at', '=', $last_time_image[0]->last_time)
-                                    ->get();
+                    ->select('id_images')
+                    ->where('created_at', '=', $last_time_image[0]->last_time)
+                    ->get();
 
                 // return $last_id_image[0]->id_images;
 
@@ -315,10 +328,10 @@ class AuctionController extends Controller
                 $save_product = DB::table('products')->insert($product_data);
 
                 $product = DB::table('products')
-                                    ->select('id_products')
-                                    ->where('id_users', '=', $request_data['id_users'])
-                                    ->orderByDesc('created_at')
-                                    ->get();
+                    ->select('id_products')
+                    ->where('id_users', '=', $request_data['id_users'])
+                    ->orderByDesc('created_at')
+                    ->get();
 
                 // return $product->first();
 
@@ -344,15 +357,15 @@ class AuctionController extends Controller
                 // return $auction_data;
 
                 $create_auction = DB::table('auctions')
-                                        ->insert($auction_data);
+                    ->insert($auction_data);
 
                 $reAction = DB::table('products')
-                                ->select('*')
-                                ->join('images', 'products.id_images', '=', 'images.id_images')
-                                // ->orderByDesc('auctions.id_auctions')
-                                // ->where('auctions.id_users', '=', $data['id_users'], '&',
-                                //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
-                                ->get();
+                    ->select('*')
+                    ->join('images', 'products.id_images', '=', 'images.id_images')
+                    // ->orderByDesc('auctions.id_auctions')
+                    // ->where('auctions.id_users', '=', $data['id_users'], '&',
+                    //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
+                    ->get();
 
 
                 return response()->json([
@@ -375,33 +388,34 @@ class AuctionController extends Controller
         }
     }
 
-    public function userProduct($id_user) {
+    public function userProduct($id_user)
+    {
         try {
             $user_product = DB::table('auctions')
-                    ->select('auctions.id_auctions', 'images.id_images',
-                            'name_product',
-                            'images.image_path_1',
-                            'auctions.shipping_cost',
-                            'auctions.start_price',
-                            'auctions.start_date_time',
-                            'auctions.end_date_time',
-                            'max_price',
-                            )
-                    ->join('images', function(JoinClause $join){
-                        $join->on('auctions.id_images', '=', 'images.id_images');
-                    })
-                    ->orderByRaw('id_auctions')
-                    ->where('id_users', '=', $id_user)
-                    ->get();
+                ->select(
+                    'auctions.id_auctions',
+                    'images.id_images',
+                    'name_product',
+                    'images.image_path_1',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.start_date_time',
+                    'auctions.end_date_time',
+                    'max_price',
+                )
+                ->join('images', function (JoinClause $join) {
+                    $join->on('auctions.id_images', '=', 'images.id_images');
+                })
+                ->orderByRaw('id_auctions')
+                ->where('id_users', '=', $id_user)
+                ->get();
 
-        return response()->json([
-            'status' => 1,
-            'message' => 'Successfully.',
-            'data' => $user_product
-        ]);
-
-
-        } catch(Exception $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'Successfully.',
+                'data' => $user_product
+            ]);
+        } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Error.',
@@ -410,11 +424,12 @@ class AuctionController extends Controller
         }
     }
 
-    public function userProductDelete($id_user, $id_auctions) {
+    public function userProductDelete($id_user, $id_auctions)
+    {
         try {
             $user_product_delete = DB::table('auctions')
-            ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
-            ->delete();
+                ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
+                ->delete();
 
             if ($user_product_delete) {
                 return response()->json([
@@ -436,38 +451,43 @@ class AuctionController extends Controller
         }
     }
 
-    public function historyProduct($id_users) {
-        try{
+    public function historyProduct($id_users)
+    {
+        try {
             $auctions_list = DB::table('bids')
-                                ->select('auctions.id_auctions', 'images.id_images',
-                                            'products.name_product', 'images.image_path_1',
-                                            'auctions.shipping_cost', 'auctions.start_price',
-                                            'auctions.end_date_time',
-                                            'auctions.max_price', 'bids.created_at',
-                                            'bids.bid_price'
-                                            )
-                                ->join('auctions', function(JoinClause $join){
-                                    $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                                })
-                                ->join('users', function(JoinClause $join){
-                                        $join->on('users.id_users', '=', 'bids.id_users');
-                                    })
-                                ->join('products', function(JoinClause $join){
-                                        $join->on('products.id_products', '=', 'auctions.id_products');
-                                    })
-                                ->join('images', function(JoinClause $join){
-                                        $join->on('images.id_images', '=', 'products.id_images');
-                                })
-                                ->orderByDesc('created_at')
-                                ->where('bids.id_users', '=', $id_users)
-                                ->get();
+                ->select(
+                    'auctions.id_auctions',
+                    'images.id_images',
+                    'products.name_product',
+                    'images.image_path_1',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.end_date_time',
+                    'auctions.max_price',
+                    'bids.created_at',
+                    'bids.bid_price'
+                )
+                ->join('auctions', function (JoinClause $join) {
+                    $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'bids.id_users');
+                })
+                ->join('products', function (JoinClause $join) {
+                    $join->on('products.id_products', '=', 'auctions.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->orderByDesc('created_at')
+                ->where('bids.id_users', '=', $id_users)
+                ->get();
 
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
                 'data' => $auctions_list
             ], 200);
-
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -477,17 +497,18 @@ class AuctionController extends Controller
         }
     }
 
-    public function onEndDateTime(Request $request) {
+    public function onEndDateTime(Request $request)
+    {
         try {
-                $id_users = $request->id_users;
-                $id_bids = $request->id_bids;
-                $id_auctions = $request->id_auctions;
-                $payment_status = $request->payment_status;
-                $shipping_number = $request->shipping_number;
-                $delivery_status = $request->delivery_status;
-                $id_auction_types = $request->id_auction_types;
-                $id_payment_types = $request->id_payment_types;
-                $bank_account_number = $request->bank_account_number;
+            $id_users = $request->id_users;
+            $id_bids = $request->id_bids;
+            $id_auctions = $request->id_auctions;
+            $payment_status = $request->payment_status;
+            $shipping_number = $request->shipping_number;
+            $delivery_status = $request->delivery_status;
+            $id_auction_types = $request->id_auction_types;
+            $id_payment_types = $request->id_payment_types;
+            $bank_account_number = $request->bank_account_number;
 
             if ($payment_status == '') {
                 $payment_status = false;
@@ -527,7 +548,7 @@ class AuctionController extends Controller
             ];
             // return $data;
             $save_result_report_auction = DB::table('result_report_auctions')
-                                            ->insert($data);
+                ->insert($data);
 
 
             if ($save_result_report_auction == true) {
@@ -543,7 +564,6 @@ class AuctionController extends Controller
                     'data' => 'มีข้อผิดพลาดในการบันทึกข้อมูล'
                 ], 404);
             }
-
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -553,37 +573,34 @@ class AuctionController extends Controller
         }
     }
 
-    public function test(Request $request) {
+    public function test(Request $request)
+    {
         try {
-            // $request->validate([
-            //     'image' => 'required | image | mimes:png, jpg, jpeh, webp'
-            // ]);
+            $end_time = '2025-07-04 03:52:00';
+            $dateTime = now('Asia/Bangkok');
+            $now = date('Y-m-d H:i:s');
+            $a = Carbon::now('Asia/Bangkok');
+            $b = Carbon::parse($end_time);
+            $diff = $a->diffInMinutes($b);
 
-            if ($request->image != null && $request->image != '') {
-                $image_name = Storage::disk('public')->put('images/product-images', $request->image);
+        $to = Carbon::createFromFormat('Y-m-d H:s:i', '2025-07-03 05:00:00');
 
-                $path = Storage::url($image_name);
+        $from = Carbon::createFromFormat('Y-m-d H:s:i', '2025-07-03 05:00:00');
 
 
-                return response()->json([
-                    'status' => 1,
-                    'message' => "Successfully.",
-                ], 201);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => "Error.",
-                ]);
-            }
 
+        $diff_in_hours = $to->diffForHumans($from);
+
+
+
+        // dd($diff_in_hours);
+        return $diff_in_hours;
         } catch (Exception $e) {
             return response()->json([
-                'status' => 1,
-                'message' => "Successfully.",
+                'status' => 0,
+                'message' => "Error",
                 'data' => $e
             ]);
         }
     }
-
-
 }

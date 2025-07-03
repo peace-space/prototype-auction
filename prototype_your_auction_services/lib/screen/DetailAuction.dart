@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
@@ -73,16 +71,16 @@ class DetailAuctionState extends State<DetailAuction> {
       width: 500,
       height: 300,
       child:
-          (_imageData.length == 0)
-              ? Center(child: Text("ไม่พบรูปภาพ"))
-              : Image.network(
-            "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-                _imageData![indexSelectImage],
-          ),
+      (_imageData.length == 0)
+          ? Center(child: Text("ไม่พบรูปภาพ"))
+          : Image.network(
+        "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+            _imageData![indexSelectImage],
+      ),
       //     : Image.network(
       //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image'
       //       + _imageData![indexSelectImage],
-          // ),
+      // ),
     );
   }
 
@@ -110,11 +108,12 @@ class DetailAuctionState extends State<DetailAuction> {
             (context, index) => Card(
               child: InkWell(
                 onTap:
-                    () => {
-                      setState(() {
-                        indexSelectImage = index;
-                      }),
-                    },
+                    () =>
+                {
+                  setState(() {
+                    indexSelectImage = index;
+                  }),
+                },
                 child: Image.network(
                   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
@@ -187,7 +186,7 @@ class DetailAuctionState extends State<DetailAuction> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text("เวลา: ", style: headText()),
-              countdown(),
+              // showDateTimeCountdown(),
               Text(" วินาที", style: redText()),
             ],
           ),
@@ -420,58 +419,102 @@ class DetailAuctionState extends State<DetailAuction> {
   //   return true;
   // }
 
-  Widget countdown() {
-    // final start_date_time_data = detailAuctionData['start_date_time'];
-    final end_date_time_data = detailAuctionData['end_date_time'];
-    // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
-    // var min;
-    var end_date_time = DateTime.parse(end_date_time_data);
+  // Widget countdown() {
+  //   // final start_date_time_data = detailAuctionData['start_date_time'];
+  //   final end_date_time_data = detailAuctionData['end_date_time'];
+  //   // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
+  //   // var min;
+  //   var end_date_time = DateTime.parse(end_date_time_data);
+  //
+  //   var date_tiem_difference = end_date_time.difference(DateTime.now());
+  //   // print("ความต่างของเวลา: " + date_tiem_difference.toString());
+  //   var countdown = TimerCountdown(
+  //     endTime: DateTime.now().add(
+  //       Duration(seconds: date_tiem_difference.inSeconds),
+  //     ),
+  //     onTick: (remainingTime) {
+  //       // print("Test: " + remainingTime.inMinutes.toString());
+  //       // _countDownDateTime = remainingTime.inDays;
+  //     },
+  //     format: CountDownTimerFormat.daysHoursMinutesSeconds,
+  //     enableDescriptions: true,
+  //     spacerWidth: 5,
+  //     timeTextStyle: TextStyle(fontSize: 21, color: Colors.red, height: 0),
+  //     daysDescription: "day",
+  //     hoursDescription: "hour",
+  //     minutesDescription: "min",
+  //     secondsDescription: "sec",
+  //     descriptionTextStyle: TextStyle(height: 0),
+  //     colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
+  //     onEnd: () {
+  //       Navigator.pushReplacement(
+  //           context, MaterialPageRoute(builder: (context) => AuctionHome(),));
+  //       showDialog(
+  //         context: context,
+  //         builder:
+  //             (context) => AlertDialog(
+  //               title: Text('หมดเวลา'),
+  //               content: Text("สามารถตรวจสอบผลการประมูล"),
+  //               actions: [
+  //                 TextButton(
+  //                   onPressed: () => {Navigator.of(context).pop()},
+  //                   child: Text('ตกลง'),
+  //                 ),
+  //               ],
+  //             ),
+  //       );
+  //     },
+  //   );
+  // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
+  //
+  //   return countdown;
+  // }
 
-    var date_tiem_difference = end_date_time.difference(DateTime.now());
-    // print("ความต่างของเวลา: " + date_tiem_difference.toString());
-    var countdown = TimerCountdown(
-      endTime: DateTime.now().add(
-        Duration(seconds: date_tiem_difference.inSeconds),
-      ),
-      onTick: (remainingTime) {
-        // print("Test: " + remainingTime.inMinutes.toString());
-        // _countDownDateTime = remainingTime.inDays;
-      },
-      format: CountDownTimerFormat.daysHoursMinutesSeconds,
-      enableDescriptions: true,
-      spacerWidth: 5,
-      timeTextStyle: TextStyle(fontSize: 21, color: Colors.red, height: 0),
-      daysDescription: "day",
-      hoursDescription: "hour",
-      minutesDescription: "min",
-      secondsDescription: "sec",
-      descriptionTextStyle: TextStyle(height: 0),
-      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
-      onEnd: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => AuctionHome(),));
-        showDialog(
-          context: context,
-          builder:
-              (context) => AlertDialog(
-                title: Text('หมดเวลา'),
-                content: Text("สามารถตรวจสอบผลการประมูล"),
-                actions: [
-                  TextButton(
-                    onPressed: () => {Navigator.of(context).pop()},
-                    child: Text('ตกลง'),
-                  ),
-                ],
-              ),
-        );
-      },
-    );
-    // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
+  // Widget showDateTimeCountdown(Map<String, dynamic> data) {
+  // Widget showDateTimeCountdown() {
+  //     DateTime dateTime = DateTime.parse(detailAuctionData['end_date_time']);
+  //     return CountdownTimer(
+  //       endTime: dateTime.millisecondsSinceEpoch,
+  //       widgetBuilder: (context, time) {
+  //         if (time == null) {
+  //           return Text('หมดเวลา', style: TextStyle(
+  //               color: Colors.red
+  //           ),);
+  //         }
+  //         String day = (time.days == null || time.days == 00)? "00": time.days.toString();
+  //         String hour = (time.hours == null || time.hours == 00)? "00": time.hours.toString();
+  //         String min = (time.min == null || time.hours == 00)? "00": time.min.toString();
+  //         String sec = (time.sec == null)? "00": time.sec.toString();
+  //
+  //         return Text("เวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
+  //             fontSize: 15,
+  //             fontWeight: FontWeight.bold,
+  //             color: Colors.red
+  //         ),
+  //         );
+  //       },
+  //       onEnd: () {
+  //         // saveTheWinnerAuctions(data);
+  //         Navigator.pushReplacement(
+  //             context, MaterialPageRoute(builder: (context) => AuctionHome(),));
+  //         showDialog(
+  //           context: context,
+  //           builder:
+  //               (context) => AlertDialog(
+  //             title: Text('หมดเวลา'),
+  //             content: Text("สามารถตรวจสอบผลการประมูล"),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () => {Navigator.of(context).pop()},
+  //                 child: Text('ตกลง'),
+  //               ),
+  //             ],
+  //           ),
+  //         );
+  //       },
+  //     );
+  //   }
 
-    return countdown;
-  }
-
-  void onEntDateTime() {}
 
   // void showConfirmDialog() async {
   //   confirmPicker(
@@ -491,7 +534,7 @@ class DetailAuctionState extends State<DetailAuction> {
       context: context,
       builder:
           (context) =>
-              AlertDialog(title: Text(title!), content: Text(message!)),
+          AlertDialog(title: Text(title!), content: Text(message!)),
     );
   }
 
@@ -501,7 +544,8 @@ class DetailAuctionState extends State<DetailAuction> {
       showDialog(
         context: context,
         builder:
-            (context) => AlertDialog(
+            (context) =>
+            AlertDialog(
               title: Text("ยืนยันการเสนอราคา"),
               content: Text("จำนวนเงิน: " + _bid.text),
               actions: [
@@ -528,7 +572,8 @@ class DetailAuctionState extends State<DetailAuction> {
       showDialog(
         context: context,
         builder:
-            (context) => AlertDialog(
+            (context) =>
+            AlertDialog(
               title: Text("แจ้งเตือน"),
               content: Text(
                 "กรุณาตรวจสอบความถูกต้องอีกครั้ง.",
@@ -550,10 +595,11 @@ class DetailAuctionState extends State<DetailAuction> {
 
     Navigator.pushReplacement(context, route);
   }
+  }
 
-  // void test() {
-  //   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
-  //     print("ZZZZZZZZZZZZZZZZZ");
-  //   },);
-  // }
-}
+// void test() {
+//   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
+//     print("ZZZZZZZZZZZZZZZZZ");
+//   },);
+// }
+// }
