@@ -46,8 +46,8 @@ class ReportAuctionState extends State<ReportAuction> {
                       leading: Image.network(
                         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
                             '${data['image_path_1']}',
-                        cacheHeight: 1000,
-                        cacheWidth: 900,
+                        // cacheHeight: 1200,
+                        // cacheWidth: 9200,
                       ),
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

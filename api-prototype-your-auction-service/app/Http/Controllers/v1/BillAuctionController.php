@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BillAuctionController extends Controller
 {
@@ -43,7 +44,7 @@ class BillAuctionController extends Controller
 
             // return "Test";
             $images_model = [];
-            return $get_data_bill_auction;
+            // return $get_data_bill_auction;
 
             if ($get_data_bill_auction->image_path_1 != null) {
                 array_push($images_model, $get_data_bill_auction->image_path_1);
@@ -104,7 +105,51 @@ class BillAuctionController extends Controller
 
     public function insertReceiptBillAuction(Request $request) {
         try {
+            $payment_proof_images_1 = $request->payment_proof_images_path_1;
+            $payment_proof_images_2 = $request->payment_proof_images_path_2;
+            $id_result_auctions = $request->id_result_auctions;
 
+            if ($payment_proof_images_1 != null) {
+                $image_name_1 = Storage::disk('public')->put('images/payment-proof-images', $payment_proof_images_1);
+                $image_path_1 = Storage::url($image_name_1);
+            } else {
+                $image_path_1 = null;
+            }
+
+            if ($payment_proof_images_2 != null) {
+                $image_name_2 = Storage::disk('public')->put('images/payment-proof-images', $payment_proof_images_2);
+                $image_path_2 = Storage::url($image_name_1);
+            } else {
+                $image_path_2 = null;
+            }
+
+            $image_model = [
+                'payment_proof_images_path_1' => $image_path_1,
+                'payment_proof_images_path_2' => $image_path_2,
+            ];
+
+            $save_images = DB::table('payment_proof_images')
+                    ->insert($image_model);
+
+            $last_time_image = DB::table('payment_proof_images')
+                    ->select(DB::raw('MAX(created_at) as last_time'))
+                    ->get();
+
+            $last_id_image = DB::table('payment_proof_images')
+                    ->select('id_payment_proof_images')
+                    ->where('created_at', '=', $last_time_image[0]->last_time)
+                    ->get();
+
+            $update_image_in_bill_auctions = DB::table('bill_auctions')
+                    ->where('id_result_auctions', '=', $id_result_auctions)
+                    ->update(['id_payment_proof_images' => $last_id_image]);
+
+
+          return response()->json([
+            'status' => 1,
+            'message' => 'Successfully.',
+            // 'data' => '',
+          ]);
 
 
         } catch (Exception $e) {

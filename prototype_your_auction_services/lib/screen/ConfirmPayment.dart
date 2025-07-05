@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
@@ -13,14 +16,19 @@ class ConfirmPayment extends StatefulWidget {
 
 class ConfirmPaymentState extends State<ConfirmPayment> {
   List<dynamic> _imageData = [];
+  List<File?> _receipt = [];
   int indexSelectImage = 0;
   Map<String, dynamic> bill_auction_data = {};
+  String message = '';
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(
+      appBar: AppBar(
+        title: Text(
           "แจ้งชำระเงิน: Bill-${ShareProductData.productData['id_bill_auctions']
-              .toString()}")),
+              .toString()}",
+        ),
+      ),
       body: StreamBuilder(
         stream: fetchBillAuction(),
         builder: (context, snapshot) {
@@ -44,9 +52,12 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
                   buttonDetailAuction(),
                   Divider(),
                   displayConfirmPayment(),
-                  SizedBox(height: 8,),
+                  SizedBox(height: 8),
                   buttonGoToChat(),
                   buttonInsertReceipt(),
+                  buttonDeleteReceiptImage(),
+                  displayReceiptImage(),
+                  buttonSubmit(),
                   SizedBox(height: 500),
                 ],
               ),
@@ -66,41 +77,48 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
         children: [
           Row(
             children: [
+              Text("สถานะการแจ้งชำระเงิน: ${paymentStatus(
+                  bill_auction_data['payment_status'])}"),
+            ],
+          ),
+          Row(
+            children: [
               Text("รหัสใบ้แจ้งชำระเงิน: "),
-              Text("Bill-${bill_auction_data['id_bill_auctions']}")
+              Text("Bill-${bill_auction_data['id_bill_auctions']}"),
             ],
           ),
           Row(
             children: [
               Text("ชื่อผู้เปิดประมูล: "),
               Text(
-                  "${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}")
+                "${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}",
+              ),
             ],
           ),
           Row(
             children: [
               Text("อีเมลผู้เปิดประมูล: "),
-              Text("${bill_auction_data['email']}")
+              Text("${bill_auction_data['email']}"),
             ],
           ),
           Row(
             children: [
               Text("ชื่อบัญชีธนาคาร: "),
-              Text("${bill_auction_data['name_bank_account']}")
+              Text("${bill_auction_data['name_bank_account']}"),
             ],
           ),
           Row(
             children: [
               Text("เลขบัญชีธนาคาร: "),
-              Text("${bill_auction_data['bank_account_number']}")
+              Text("${bill_auction_data['bank_account_number']}"),
             ],
           ),
           Row(
             children: [
               Text("บัญชีพร้อมเพย์: "),
-              Text("${bill_auction_data['prompt_pay']}")
+              Text("${bill_auction_data['prompt_pay']}"),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -140,10 +158,6 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
                   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
                 ),
-                // child: Image.network(
-                //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
-                //       _imageData[index],
-                // ),
               ),
             ),
       ),
@@ -205,8 +219,9 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     ApiPathServer apiServerPath = ApiPathServer();
     // print("TETTT");
     String api = apiServerPath.getBillAuctionApiServerGet(
-        id_bill_auction: ShareProductData.productData['id_bill_auctions']
-            .toString());
+      id_bill_auction:
+      ShareProductData.productData['id_bill_auctions'].toString(),
+    );
     // print(api);
     final uri = Uri.parse(api);
     final response = await http.get(uri);
@@ -222,40 +237,48 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
         bill_auction_data = data['data'][0];
       });
     } else {
-      print("ERROR. fetchBillAuction: Status = ${response.statusCode
-          .toString()}");
+      print(
+        "ERROR. fetchBillAuction: Status = ${response.statusCode.toString()}",
+      );
     }
 
     print("End FetchBillAuction");
   }
 
   Widget buttonDetailAuction() {
-    return TextButton(onPressed: () =>
-    {
-      showDetailAuction()
-    }, child: Text("รายละเอียดสินค้า"));
+    return TextButton(
+      onPressed: () => {showDetailAuction()},
+      child: Text("รายละเอียดสินค้า"),
+    );
   }
 
   void showDetailAuction() {
-    showDialog(context: context, builder: (context) =>
-        Dialog(
-          child: Scaffold(
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView(
-                children: [
-                  Text("No.Bill-${bill_auction_data['id_bill_auctions']
-                      .toString()}"),
-                  Text("ชื่อสินค้า: ${bill_auction_data['name_product']}"),
-                  Text(
-                      "ชื่อผู้เปิดประมูล: ${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}"),
-                  Text("รายละเอียดสินค้า:"),
-                  Text("${bill_auction_data['detail_product']}")
-                ],
+    showDialog(
+      context: context,
+      builder:
+          (context) =>
+          Dialog(
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView(
+                  children: [
+                    Text(
+                      "No.Bill-${bill_auction_data['id_bill_auctions']
+                          .toString()}",
+                    ),
+                    Text("ชื่อสินค้า: ${bill_auction_data['name_product']}"),
+                    Text(
+                      "ชื่อผู้เปิดประมูล: ${bill_auction_data['first_name_users']} ${bill_auction_data['last_name_users']}",
+                    ),
+                    Text("รายละเอียดสินค้า:"),
+                    Text("${bill_auction_data['detail_product']}"),
+                  ],
+                ),
               ),
             ),
           ),
-        ),);
+    );
   }
 
   Widget buttonGoToChat() {
@@ -263,17 +286,156 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget buttonInsertReceipt() {
-    return ElevatedButton(onPressed: () => {}, child: Text("เพิ่มใบเสร็จ"));
+    return ElevatedButton(
+      onPressed: () => {selectReceiptImage()},
+      child: Text("เพิ่มใบเสร็จ"),
+    );
   }
 
-  void insertReceiptImages() {
+  void onInsertReceiptImages() async {
+    if (_receipt.length != 0) {
+      ApiPathLocal apiPathLocal = ApiPathLocal();
+      String api = apiPathLocal.getInsertReceiptBillAuctionLocalPost();
+      Uri uri = Uri.parse(api);
+      final request = http.MultipartRequest('POST', uri);
 
+      List<dynamic> stream = [];
+      List<dynamic> multiport = [];
+
+      for (int i = 0; i < _receipt.length; i++) {
+        stream.add(File(_receipt[i]!.path.toString()).readAsBytesSync());
+
+        multiport.add(
+          http.MultipartFile.fromBytes(
+            'image_${i + 1}',
+            stream[i],
+            filename: _receipt[i]!.path,
+          ),
+        );
+
+        request.files.add(multiport[i]);
+        request.fields['image_${i + 1}'] = request.files[i].toString();
+      }
+
+      Map<String, dynamic> data = {
+        'id_result_auctions': ShareProductData
+            .productData['id_result_auctions'],
+      };
+
+      request.fields['id_result_auctions'] =
+          data['id_result_auctions'].toString();
+      final response = await request.send();
+
+      if (response.statusCode == 201) {
+        // showDialog(
+        //     context: context,
+        //     builder: (context) => ,
+        // );
+      } else {
+        print("\n\n\n\n\n");
+
+        print("Error: StatusCode = ${response.statusCode.toString()}");
+
+        print("\n\n\n\n\n");
+      }
+    } else {
+      setState(() {
+        message = 'กรุณาเพิ่มใบเสร็จชำระเงิน';
+      });
+
+      showDialog(context: context, builder: (context) =>
+          AlertDialog(
+            title: Text("แจ้งเตือน"),
+            content: Text("กรุณาเพิ่มใบเสร็จชำระเงิน"),
+            actions: [
+              TextButton(onPressed: () =>
+              {
+                Navigator.of(context).pop()
+              }, child: Text("ตกลง"))
+            ],
+          ),
+      );
+    }
+  }
+
+  void selectReceiptImage() async {
+    int maxImageListLength = 2;
+    if (_receipt.length <= maxImageListLength - 1) {
+      final _picker = ImagePicker();
+
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _receipt.add(File(pickedFile.path));
+        });
+        print("end.aaaaa");
+      }
+    }
+  }
+
+  Widget displayReceiptImage() {
+    return Container(
+      width: 100,
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _receipt.length,
+        itemBuilder:
+            (context, index) =>
+            Card(
+              child: InkWell(
+                onTap:
+                    () =>
+                {
+                  showDialogReceiptImage(index)
+                },
+                child: Image.file(_receipt[index]!),
+              ),
+            ),
+      ),
+    );
+  }
+
+  void showDialogReceiptImage(int index) {
+    showDialog(
+      context: context, builder: (context) =>
+        Dialog(
+            child: Image.file(_receipt[index]!)
+        ),
+    );
+  }
+
+  Widget buttonDeleteReceiptImage() {
+    return ElevatedButton(onPressed: () =>
+    {
+      deleteReceiptImage()
+    }, child: Text("ลบรูปภาพ")
+    );
+  }
+
+  void deleteReceiptImage() {
+    _receipt.removeLast();
   }
 
   TextStyle textTopicStyle() {
-    return TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold
+    return TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  }
+
+  String paymentStatus(int payment_status) {
+    if (payment_status == 2) {
+      return "กำลังตรวจสอบ";
+    } else if (payment_status == 3) {
+      return "ยืนยันการชำระเงินแล้ว";
+    }
+    return "ยืนยันการชำระเงินแล้ว";
+  }
+
+  Widget buttonSubmit() {
+    return ElevatedButton(onPressed: () =>
+    {
+      onInsertReceiptImages()
+    }, child: Text("ยืนยันการชำระเงิน")
     );
   }
 }

@@ -7,6 +7,8 @@ class ApiPathLocal {
       'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/register';
   final String logout_api_local_get =
       'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/logout';
+  final String insert_receipt_bill_auction_local_post =
+      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/insert-receipt-bill-auction';
 
   String getLoginApiLocalPost() {
     return this.login_api_local_post;
@@ -22,5 +24,9 @@ class ApiPathLocal {
 
   String getLogoutApiLocalGet() {
     return this.logout_api_local_get;
+  }
+
+  String getInsertReceiptBillAuctionLocalPost() {
+    return insert_receipt_bill_auction_local_post;
   }
 }

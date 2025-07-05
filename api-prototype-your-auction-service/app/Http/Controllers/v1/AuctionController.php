@@ -576,25 +576,42 @@ class AuctionController extends Controller
     public function test(Request $request)
     {
         try {
-            $end_time = '2025-07-04 03:52:00';
+            $end_time = '2025-07-04 05:20:00';
             $dateTime = now('Asia/Bangkok');
             $now = date('Y-m-d H:i:s');
             $a = Carbon::now('Asia/Bangkok');
-            $b = Carbon::parse($end_time);
+            $b = Carbon::parse($end_time, 'Asia/Bangkok');
             $diff = $a->diffInMinutes($b);
 
-        $to = Carbon::createFromFormat('Y-m-d H:s:i', '2025-07-03 05:00:00');
+            $to = Carbon::createFromFormat('Y-m-d H:m:s', '2025-07-03 05:02:00');
 
-        $from = Carbon::createFromFormat('Y-m-d H:s:i', '2025-07-03 05:00:00');
+            $from = Carbon::createFromFormat('Y-m-d H:m:s', '2025-07-03 05:0:00');
+
+            $start = new DateTime('now');
+            $end = Carbon::parse("2025-07-04 09:00:00", 'Asia/Bangkok');
+
+            $total = $end->diffInMinutes($start);
+
+            return $total; //Output: 7
+
+            $diff_in_hours = $a->diffInRealMicroseconds($b);
+            return $diff_in_hours;
+            if ($diff_in_hours > 0) {
+                return [
+                    'message' => 'มากกว่า 0',
+                    'data' => $diff_in_hours
+                ];
+            } else {
+                return [
+                    'message' => 'น้อยกว่า 0',
+                    'data' => $diff_in_hours
+                ];
+            }
 
 
 
-        $diff_in_hours = $to->diffForHumans($from);
-
-
-
-        // dd($diff_in_hours);
-        return $diff_in_hours;
+            // dd($diff_in_hours);
+            return $diff_in_hours;
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,

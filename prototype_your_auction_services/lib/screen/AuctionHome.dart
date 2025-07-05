@@ -122,12 +122,6 @@ class AuctionHomeState extends State<AuctionHome> {
                               borderRadius: BorderRadius.vertical(
                                 top: Radius.circular(15),
                               ),
-                              // child: Image.network(
-                              //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
-                              //       data['image_path_1'],
-                              //   cacheHeight: 600,
-                              //   cacheWidth: 500,
-                              // ),
                               child: Image.network(
                                 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
                                     data['image_path_1'],
@@ -322,51 +316,10 @@ class AuctionHomeState extends State<AuctionHome> {
     }
   }
 
-  // Widget countdown(Map<String, dynamic> data) {
-  //   // print(end_date_time_data.toString());
-  //   // print(data.toString());
-  //   // Future.delayed(Duration(seconds: 1));
-  //   var end_date_time = DateTime.parse(data['end_date_time']);
-  //   var date_time_difference = end_date_time.difference(DateTime.now());
-  //
-  //   TimerCountdown countdown_date_time = TimerCountdown(
-  //     endTime: DateTime.now().add(
-  //       Duration(seconds: date_time_difference.inSeconds),
-  //     ),
-  //     onTick: (end_time) {
-  //       // print(end_time.inSeconds.toString());
-  //       end_date_time_check = end_time.inSeconds;
-  //       if (end_time.inSeconds == 0) {
-  //         print(
-  //             "+++++++++++++++++++++++++++++" + end_time.inSeconds.toString());
-  //       }
-  //     },
-  //     onEnd: () {
-  //       // saveTheWinnerAuctions(data);
-  //     },
-  //     format: CountDownTimerFormat.daysHoursMinutesSeconds,
-  //     enableDescriptions: false,
-  //     spacerWidth: 0,
-  //     timeTextStyle: TextStyle(fontSize: 18, color: Colors.red, height: 0),
-  //     daysDescription: "day",
-  //     hoursDescription: "hour",
-  //     minutesDescription: "min",
-  //     secondsDescription: "sec",
-  //     descriptionTextStyle: TextStyle(height: 0),
-  //     colonsTextStyle: TextStyle(fontSize: 18, color: Colors.red),
-  //   );
-  //
-  //   if (end_date_time_check == 0) {
-  //     saveTheWinnerAuctions(data);
-  //   }
-  //
-  //   return countdown_date_time;
-  // }
-
   Widget showDateTimeCountdown(Map<String, dynamic> data) {
-    DateTime dateTime = DateTime.parse(data['end_date_time']);
+    DateTime end_date_time = DateTime.parse(data['end_date_time']);
     return CountdownTimer(
-      endTime: dateTime.millisecondsSinceEpoch,
+      endTime: end_date_time.millisecondsSinceEpoch,
       widgetBuilder: (context, time) {
         if (time == null) {
           return Text('หมดเวลา', style: TextStyle(
@@ -395,51 +348,28 @@ class AuctionHomeState extends State<AuctionHome> {
     );
   }
 
-
-  // List<Map<String, dynamic>> checkEndDateTime(List<dynamic> data) {
-  //   // void checkEndDateTime(List<dynamic> data) async {
-  //   // print('Start.');
-  //   // var check_timeout = DateTime.parse(data['end_date_time']);
-  //   // Duration different_date_time = check_timeout.difference(DateTime.now());
-  //   // print(different_date_time.inMinutes.toString());
-  //
-  //   List<Map<String, dynamic>> newData = [];
-  //
-  //   for (int index = 0; index < data.length; index++) {
-  //     var check_timeout = DateTime.parse(data[index]['end_date_time']);
-  //     Duration different_date_time = check_timeout.difference(DateTime.now());
-  //     // print(different_date_time.inMinutes.toString());
-  //
-  //     if (different_date_time >= Duration.zero) {
-  //       newData.add(data[index]);
-  //     }
-  //   }
-  //
-  //   return newData;
-  //
-  //   print('End.');
-  // }
-
   void saveTheWinnerAuctions(Map<String, dynamic> data) async {
     // Map<String, dynamic> data = {'id_auctions': 1};
-    print(data.toString());
-
-    Map<String, dynamic> winner_data = {
-      'id_auctions': data['id_auctions']
-    };
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
-    final uri = Uri.parse(url);
-    final response = await http.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(winner_data),
-    );
-    if (response.statusCode == 201) {
-      final reActionData = jsonDecode(response.body);
-      print(reActionData['message']);
-    } else {
-      print(response.statusCode.toString());
+    // print(data.toString());
+    if (data['auctions_status'] != 0) {
+      Map<String, dynamic> winner_data = {
+        'id_auctions': data['id_auctions']
+      };
+      String url =
+          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+      final uri = Uri.parse(url);
+      final response = await http.post(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(winner_data),
+      );
+      if (response.statusCode == 201) {
+        final reActionData = jsonDecode(response.body);
+        print(reActionData['message']);
+      } else {
+        print(response.statusCode.toString());
+      }
     }
+
   }
 }
