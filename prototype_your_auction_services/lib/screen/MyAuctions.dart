@@ -3,28 +3,28 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 // import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/UserProductManage.dart';
+import 'package:prototype_your_auction_services/screen/MyAuctionDetail.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class AuctionListUser extends StatefulWidget {
-  State<AuctionListUser> createState() {
-    return AuctionListUserState();
+class MyAuctions extends StatefulWidget {
+  State<MyAuctions> createState() {
+    return MyAuctionsState();
   }
 }
 
-class AuctionListUserState extends State<AuctionListUser> {
+class MyAuctionsState extends State<MyAuctions> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("รายการประมูลของฉัน")),
-      body: displayUserProduct(context),
+      body: displayMyAuctions(context),
     );
   }
 
-  Widget displayUserProduct(BuildContext ctx) {
+  Widget displayMyAuctions(BuildContext ctx) {
     return StreamBuilder(
         stream: fetchUserProduct(),
         builder: (context, snapshot) {
@@ -37,6 +37,12 @@ class AuctionListUserState extends State<AuctionListUser> {
           if (snapshot.connectionState == ConnectionState.active) {
             return Center(
               child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.data == null) {
+            return Center(
+              child: Text("คุณไม่มีสินค้าที่เปิดประมูล"),
             );
           }
 
@@ -57,23 +63,22 @@ class AuctionListUserState extends State<AuctionListUser> {
                       onTap: () => goToUserProductManage(ctx, data),
                       leading: ClipRRect(
                         // borderRadius: BorderRadius.vertical(),
-                          child: Image.network(
-                            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public'
-                                +
-                                '${data['image_path_1']}',
-                            cacheHeight: 600,
-                            cacheWidth: 500,
-                          )
+                        child: Image.network(
+                          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                              data['image_path_1'],
+                          cacheHeight: 600,
+                          cacheWidth: 500,
+                        ),
                       ),
-                      title: Text(data['name_product']),
-                      subtitle: Text(
-                          "ราคาสูงสุด ฿${data['max_price'].toString()}"),
-                      trailing: Column(
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('เวลา'),
-                          countdown(data['end_date_time'])
+                          Text("${data['name_product']}"),
+                          Text("สถานะการประมูล: ${auctionStatus(
+                              data['auction_status'])}"),
                         ],
                       ),
+                      subtitle: Text(""),
                     ),
                   );
                 }
@@ -88,22 +93,26 @@ class AuctionListUserState extends State<AuctionListUser> {
   }
 
   Stream<dynamic> fetchUserProduct() async* {
-    print("Start");
+    print("Start MyAuction");
     // print(ShareData.userData['id_users']);
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-product/${ShareData.userData['id_users']}';
+    String url = ApiPathServer().getMyAuctionsServerGet(
+        id_users: ShareData.userData['id_users'].toString());
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     Map<String, dynamic> resData = jsonDecode(response.body);
 
     List<dynamic> data = resData['data'];
 
+    // if (data.length == 0) {
+    //   yield null;
+    // }
+
     // ShareProductData.productData = data;
 
     print(data.toString());
 
     yield data;
-    print("End.");
+    print("End. My Auction");
   }
 
   // Widget countdown(String end_date_time_data) {
@@ -139,28 +148,36 @@ class AuctionListUserState extends State<AuctionListUser> {
   // }
 
 
-  Widget countdown(String end_date_time_data) {
-    DateTime dateTime = DateTime.parse(end_date_time_data);
-    return CountdownTimer(
-      endTime: dateTime.millisecondsSinceEpoch,
-      widgetBuilder: (context, time) {
-        if (time == null) {
-          return Text('หมดเวลา', style: TextStyle(
-              color: Colors.red
-          ),);
-        }
-        String hour = time.hours.toString();
-        String min = time.min.toString();
-        String sec = time.sec.toString();
-        return Text("${hour} : ${min} : ${sec}");
-      },
-    );
+  // Widget countdown(String end_date_time_data) {
+  //   DateTime dateTime = DateTime.parse(end_date_time_data);
+  //   return CountdownTimer(
+  //     endTime: dateTime.millisecondsSinceEpoch,
+  //     widgetBuilder: (context, time) {
+  //       if (time == null) {
+  //         return Text('หมดเวลา', style: TextStyle(
+  //             color: Colors.red
+  //         ),);
+  //       }
+  //       String hour = time.hours.toString();
+  //       String min = time.min.toString();
+  //       String sec = time.sec.toString();
+  //       return Text("${hour} : ${min} : ${sec}");
+  //     },
+  //   );
+  // }
+
+  String auctionStatus(int auction_status) {
+    if (auction_status == 1) {
+      return "กำลังประมูล";
+    } else {
+      return "ปิดประมูลแล้ว";
+    }
   }
 
   void goToUserProductManage(BuildContext ctx, Map<String, dynamic> data) {
     ShareProductData.productData = data;
 
-    final route = MaterialPageRoute(builder: (ctx) => UserProductManage(),);
+    final route = MaterialPageRoute(builder: (ctx) => MyAuctionDetail(),);
 
     Navigator.push(ctx, route);
   }

@@ -18,6 +18,9 @@ class ApiPathServer {
   final String insert_receipt_bill_auction_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/insert-receipt-bill-auction';
 
+  final String my_auctions_server_get =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/my-auctions';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -47,5 +50,10 @@ class ApiPathServer {
 
   String getInsertReceiptBillAuctionPost() {
     return this.insert_receipt_bill_auction_server_post;
+  }
+
+  String getMyAuctionsServerGet({required id_users}) {
+    String path = this.my_auctions_server_get + '/' + id_users;
+    return path;
   }
 }

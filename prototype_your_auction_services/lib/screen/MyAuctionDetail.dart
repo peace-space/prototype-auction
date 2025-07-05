@@ -1,47 +1,149 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/AuctionListUser.dart';
+import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 import 'BidLists.dart';
 
-class UserProductManage extends StatefulWidget {
-  State<UserProductManage> createState() {
-    return UserProductManageState();
+class MyAuctionDetail extends StatefulWidget {
+  State<MyAuctionDetail> createState() {
+    return MyAuctionDetailState();
   }
 }
 
-class UserProductManageState extends State<UserProductManage> {
+class MyAuctionDetailState extends State<MyAuctionDetail> {
+  List<dynamic> _imageData = [];
+  int indexSelectImage = 0;
+  List<String> _receipt = [];
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(ShareProductData.productData['name_product']),
       ),
-      body: Container(
-        margin: EdgeInsets.all(20),
-        child: ListView(
-          children: [
-            Container(
-              color: Colors.lightBlueAccent,
-              height: 300,
-              width: 500,
-              child: displayImages(),
+      body: StreamBuilder(
+        stream: fetchMyAuctionDetail(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text("เกิดข้อผิดพลาด"));
+          }
+          if (snapshot.connectionState == ConnectionState.active) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                children: [
+                  showOneImage(),
+                  SizedBox(height: 8),
+                  showAndSelectImage(),
+                  SizedBox(height: 8),
+                  selectShowImage(),
+                  SizedBox(height: 8),
+                  SizedBox(height: 500),
+                ],
+              ),
+            );
+          }
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+
+  Widget showOneImage() {
+    return Container(
+      width: 500,
+      height: 300,
+      child:
+      (_imageData.length == 0)
+          ? Center(child: Text("ไม่พบรูปภาพ"))
+          : Image.network(
+        "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+            _imageData![indexSelectImage],
+      ),
+    );
+  }
+
+  Widget showAndSelectImage() {
+    return Container(
+      width: 100,
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _imageData.length,
+        itemBuilder:
+            (context, index) =>
+            Card(
+              child: InkWell(
+                onTap:
+                    () =>
+                {
+                  setState(() {
+                    indexSelectImage = index;
+                  }),
+                },
+                child: Image.network(
+                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+                      _imageData[index],
             ),
-            Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                buttonDeleteProduct(),
-              ],
+              ),
             ),
-            Divider(),
-            displayDataAuction(context),
-          ],
-        ),
+      ),
+    );
+  }
+
+  Widget selectShowImage() {
+    return Container(
+      // color: Colors.lightBlueAccent,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(
+            onPressed:
+                () =>
+            {
+              if (indexSelectImage > 0)
+                {
+                  setState(() {
+                    indexSelectImage -= 1;
+                  }),
+                },
+            },
+            icon: Icon(Icons.arrow_back_sharp),
+          ),
+          // Text("Start"),
+          Column(
+            children: [
+              // Text("ทดสอบต่ำแหน่ง: " + indexSelectImage.toString()),
+              Text(
+                _imageData.length == 0
+                    ? "ไม่มีรูปภาพ"
+                    : "รูปภาพที่: ${indexSelectImage + 1} / 10",
+              ),
+              // Text("จำนวนรูปภาพทั้งหมด: ${_imageData.length} / 10"),
+            ],
+          ),
+          // Text("End"),
+          IconButton(
+            onPressed:
+                () =>
+            {
+              if (indexSelectImage < _imageData.length - 1)
+                {
+                  setState(() {
+                    indexSelectImage += 1;
+                  }),
+                },
+            },
+            icon: Icon(Icons.arrow_forward_sharp),
+          ),
+        ],
       ),
     );
   }
@@ -49,7 +151,7 @@ class UserProductManageState extends State<UserProductManage> {
   Widget displayDataAuction(BuildContext ctx) {
     // print(_countDownDateTime);
     return StreamBuilder(
-      stream: fetchDataDetailAuctions(),
+      stream: fetchMyAuctionDetail(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Text("ERROR.");
@@ -119,39 +221,8 @@ class UserProductManageState extends State<UserProductManage> {
     );
   }
 
-  Widget displayImages() {
-    double left = 0.0;
-    double top = 0.0;
-    double right = 0.0;
-    double bottom = 0.0;
-    return StreamBuilder(
-      stream: fetchDataDetailAuctions(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: snapshot.data!['images'].length,
-            itemBuilder: (context, index) {
-              return Container(
-                width: 353,
-                height: 300,
-                padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                child: Image.network(
-                  'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public/' +
-                      '${snapshot.data!['images'][index]}',
-                  fit: BoxFit.cover,
-                ),
-              );
-            },
-          );
-        }
 
-        return Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
+  Stream<Map<String, dynamic>> fetchMyAuctionDetail() async* {
     await Future.delayed(Duration(seconds: 1));
     // print('Start.detailAuctions');
     String url =
@@ -165,7 +236,10 @@ class UserProductManageState extends State<UserProductManage> {
     // print(data.toString());
     // countdown();
     yield data;
-    setState(() {});
+    setState(() {
+      _imageData = data['images'];
+      _receipt = data['']
+    });
     // print('End.detialAuctions');
   }
 
@@ -275,7 +349,7 @@ class UserProductManageState extends State<UserProductManage> {
     final response = await http.delete(uri);
     if (response.statusCode == 200) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => AuctionListUser(),));
+          context, MaterialPageRoute(builder: (context) => MyAuctions(),));
       print("Successfully.");
     } else {
       showDialog(

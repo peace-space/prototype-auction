@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/screen/AddProduct.dart';
-import 'package:prototype_your_auction_services/screen/AuctionListUser.dart';
+import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class StoreManage extends StatefulWidget {
@@ -47,7 +47,7 @@ class StoreManageState extends State<StoreManage> {
 
   void goToUserProduct(BuildContext ctx) {
     {
-      final route = MaterialPageRoute(builder: (ctx) => AuctionListUser());
+      final route = MaterialPageRoute(builder: (ctx) => MyAuctions());
 
       Navigator.push(ctx, route);
     }

@@ -67,9 +67,10 @@ Route::prefix('/v1')->group(function () {
     Route::get('/high-bids/{id_auctions}', [BidController::class, 'highBids']);
     Route::post('/bidding', [BidController::class, 'bidding']);
 
-    // Auctions User Product -----------------------------------------------------------
+    // My Auctions User Product -----------------------------------------------------------
     Route::get('/my-auctions/{id_user}', [AuctionController::class, 'myAuctions']);
-    Route::delete('/user-procuct-delete/{id_users}/{id_auctions}', [AuctionController::class, 'userProductDelete']);
+    Route::get('/my-auction-detail/{id_user}', [AuctionController::class, 'myAuctionDetail']);
+    Route::delete('/delete-my-auctions/{id_users}/{id_auctions}', [AuctionController::class, 'deleteMyAuctions']);
 
     // Result -----------------------------------------------------------
     Route::get('/result-report-auction/{id_users}', [ResultAuctionController::class, 'resultReportAuction']);
