@@ -139,10 +139,11 @@ class BillAuctionController extends Controller
                     ->select('id_payment_proof_images')
                     ->where('created_at', '=', $last_time_image[0]->last_time)
                     ->get();
-
+            $id_payment_proof_images = $last_id_image[0]->id_payment_proof_images;
+            // return $id_result_auctions;
             $update_image_in_bill_auctions = DB::table('bill_auctions')
                     ->where('id_result_auctions', '=', $id_result_auctions)
-                    ->update(['id_payment_proof_images' => $last_id_image]);
+                    ->update(['id_payment_proof_images' => $id_payment_proof_images]);
 
 
           return response()->json([
