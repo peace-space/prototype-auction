@@ -77,7 +77,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
           Row(
             children: [
               Text("สถานะการแจ้งชำระเงิน: ${paymentStatus(
-                  bill_auction_data['payment_status'])}"),
+                  bill_auction_data['id_payment_status_types'])}"),
             ],
           ),
           Row(
@@ -307,14 +307,15 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
         multiport.add(
           http.MultipartFile.fromBytes(
-            'image_${i + 1}',
+            'payment_proof_images_path_${i + 1}',
             stream[i],
             filename: _receipt[i]!.path,
           ),
         );
 
         request.files.add(multiport[i]);
-        request.fields['image_${i + 1}'] = request.files[i].toString();
+        request.fields['payment_proof_images_path_${i + 1}'] =
+            request.files[i].toString();
       }
 
       Map<String, dynamic> data = {

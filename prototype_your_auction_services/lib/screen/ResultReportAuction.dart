@@ -61,7 +61,8 @@ class ReportAuctionState extends State<ReportAuction> {
                                 fontSize: 13
                             ),),
                           Text('ชื่อ: ${data['name_product'].toString()}'),
-                          Text('สถานะ: ${paymentStatus(data['payment_status'])
+                          Text('สถานะ: ${paymentStatus(
+                              data['id_payment_status_types'])
                               .toString()}'),
                           Text("จำนวนเงิน: ${data['debts'].toString()} บาท",
                             style: TextStyle(

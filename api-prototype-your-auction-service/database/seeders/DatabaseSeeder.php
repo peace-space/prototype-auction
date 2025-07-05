@@ -13,6 +13,7 @@ use App\Models\v1\BillAuction;
 use App\Models\v1\Chat;
 use App\Models\v1\ImageInChats;
 use App\Models\v1\PaymentProofImages;
+use App\Models\v1\PaymentStatusType;
 use App\Models\v1\PaymentType;
 use App\Models\v1\Product;
 use App\Models\v1\ResultAuction;
@@ -34,6 +35,7 @@ class DatabaseSeeder extends Seeder
         User::factory(10)->create();
         AuctionType::factory(2)->create();
         PaymentType::factory(3)->create();
+        PaymentStatusType::factory(3)->create();
         BankAccount::factory(10)->create();
         Image::factory(10)->create();
         Product::factory(10)->create();
