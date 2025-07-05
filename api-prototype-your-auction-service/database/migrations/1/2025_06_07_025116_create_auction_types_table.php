@@ -11,17 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('result_auctions', function (Blueprint $table) {
-            $table->id('id_result_auctions');
-            // $table->bigInteger('id_users');
-            $table->foreignId('id_bids');
+        Schema::create('auction_types', function (Blueprint $table) {
+            $table->id('id_auction_types');
+            $table->string('auction_types')->default('ประมูลแบบสาธารณะ');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
-
-            $table->foreignId('id_users');
-
-            $table->foreign('id_bids')->references('id_bids')->on('bids');
-            $table->foreign('id_users')->references('id_users')->on('users');
         });
     }
 
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('result_auctions');
+        Schema::dropIfExists('auction_types');
     }
 };

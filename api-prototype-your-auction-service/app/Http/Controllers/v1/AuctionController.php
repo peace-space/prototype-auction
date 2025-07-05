@@ -519,33 +519,52 @@ class AuctionController extends Controller
                 ->join('bids', function (JoinClause $join) {
                     $join->on('bids.id_auctions', '=', 'auctions.id_auctions');
                 })
-                ->join('result_auctions', function (JoinClause $join) {
-                    $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
-                })
-                ->join('bill_auctions', function (JoinClause $join) {
-                    $join->on('bill_auctions.id_result_auctions', '=', 'result_auctions.id_result_auctions');
-                })
-                ->join('payment_proof_images', function (JoinClause $join) {
-                    $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
-                })
+                // ->join('result_auctions', function (JoinClause $join) {
+                //     $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
+                // })
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'products.id_users');
                 })
                 ->where('products.id_users', '=', $id_users)
                 ->get();
 
-                // return $my_auction_detail[0];
+
+            // return $my_auction_detail[0];
             $select_data_my_auctions = $my_auction_detail[0];
 
+            return $select_data_my_auctions;
+
+            if ($select_data_my_auctions->id_payment_status_types == 2) {
+                $my_bill_data = DB::table('bill_auctions')
+                    ->select('*');
+                // ->join('payment_proof_images', function(JoinClause $join) {
+                //     $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                // })
+                // ->join('result_auctions', function(JoinClause $join) {
+                //     $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
+                // })
+                // ->where('result_auctions.id_users', '=', $id_users)
+                // ->get();
+                // return "AA";
+                return $my_bill_data;
+            }
+
+
+
             // return $select_data_my_auctions->payment_proof_images_path_1;
+
             $payment_proof_images = [];
 
-            if ($select_data_my_auctions->payment_proof_images_path_1) {
-                array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_1);
-            }
-            if ($select_data_my_auctions->payment_proof_images_path_2) {
-                array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_2);
-            }
+            // if ($select_data_my_auctions->payment_proof_images_path_1 != null) {
+            //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_1);
+            // } else {
+            //    $payment_proof_images = 'null';
+            // }
+            // if ($select_data_my_auctions->payment_proof_images_path_2 != null) {
+            //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_2);
+            // } else {
+            //    $payment_proof_images = 'null';
+            // }
 
             $images_model = [];
             // return $select_data_my_auctions;
@@ -586,7 +605,7 @@ class AuctionController extends Controller
                 'message' => 'Successfully.',
                 'data' => $my_auction_detail,
                 'images' => $images_model,
-                'payment_proof_images' => $payment_proof_images,
+                // 'payment_proof_images' => $payment_proof_images,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -599,29 +618,32 @@ class AuctionController extends Controller
 
     public function deleteMyAuctions($id_user, $id_auctions)
     {
-        try {
-            $user_product_delete = DB::table('auctions')
-                ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
-                ->delete();
+        // try {
+        // $user_product_delete = DB::table('auctions')
+        //     ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
+        //     ->delete();
 
-            if ($user_product_delete) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => "Successfully."
-                ], 200);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => "ไม่มีสินค้าในฐานข้อมูล"
-                ], 404);
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => "Error.",
-                'data' => $e
-            ], 500);
-        }
+        // $get_product_data = DB::table('auctions')
+        //                     ->select('*')
+
+        //     if ($user_product_delete) {
+        //         return response()->json([
+        //             'status' => 1,
+        //             'message' => "Successfully."
+        //         ], 200);
+        //     } else {
+        //         return response()->json([
+        //             'status' => 0,
+        //             'message' => "ไม่มีสินค้าในฐานข้อมูล"
+        //         ], 404);
+        //     }
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         'status' => 0,
+        //         'message' => "Error.",
+        //         'data' => $e
+        //     ], 500);
+        // }
     }
 
     public function historyProduct($id_users)

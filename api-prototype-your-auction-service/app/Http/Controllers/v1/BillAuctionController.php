@@ -110,6 +110,7 @@ class BillAuctionController extends Controller
             $payment_proof_images_1 = $request->payment_proof_images_path_1;
             $payment_proof_images_2 = $request->payment_proof_images_path_2;
             $id_result_auctions = $request->id_result_auctions;
+            $id_auctions = $request->id_auctions;
 
             if ($payment_proof_images_1 != null) {
                 $image_name_1 = Storage::disk('public')->put('images/payment-proof-images', $payment_proof_images_1);
@@ -153,6 +154,9 @@ class BillAuctionController extends Controller
                     ->where('id_result_auctions', '=', $id_result_auctions)
                     ->update($update_data);
 
+            $update_payment_status_types_auction = DB::table('auctions')
+                                                ->where('id_auctions', '=', $id_auctions)
+                                                ->update(['id_payment_status_types' => 2]);
 
           return response()->json([
             'status' => 1,

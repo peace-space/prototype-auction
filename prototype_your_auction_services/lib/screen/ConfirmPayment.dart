@@ -321,10 +321,13 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       Map<String, dynamic> data = {
         'id_result_auctions': ShareProductData
             .productData['id_result_auctions'],
+        'id_auctions': ShareProductData.productData['id_auctions']
       };
 
       request.fields['id_result_auctions'] =
           data['id_result_auctions'].toString();
+      request.fields['id_auctions'] = data['id_auctions'];
+
       final response = await request.send();
 
       if (response.statusCode == 201) {
@@ -436,6 +439,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   Widget buttonSubmit() {
     int id_payment_status_types = ShareProductData
         .productData['id_payment_status_types'];
+    print("AAAAAA: " + id_payment_status_types.toString());
     if (id_payment_status_types == 2 || id_payment_status_types == 3) {
       return Text("");
     }

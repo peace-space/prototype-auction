@@ -22,6 +22,7 @@ return new class extends Migration
             $table->foreignId('id_auction_types');
             $table->foreignId('id_payment_types');
             $table->foreignId('id_bank_accounts');
+            $table->foreignId('id_payment_status_types');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->foreign('id_auction_types')->references('id_auction_types')->on('auction_types');
             $table->foreign('id_payment_types')->references('id_payment_types')->on('payment_types');
             $table->foreign('id_bank_accounts')->references('id_bank_accounts')->on('bank_accounts');
+            $table->foreign('id_payment_status_types')->references('id_payment_status_types')->on('payment_status_types');
         });
     }
 
