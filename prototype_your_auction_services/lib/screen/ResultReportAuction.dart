@@ -107,12 +107,13 @@ class ReportAuctionState extends State<ReportAuction> {
     }
   }
 
-  String paymentStatus(int payment_status) {
-    if (payment_status == 1) {
+  String paymentStatus(int payment_status_types) {
+    if (payment_status_types == 2) {
+      return "กำลังตรวจสอบ";
+    } else if (payment_status_types == 3) {
       return "ชำระเงินแล้ว";
-    } else {
-      return "ยังไม่ชำระเงิน";
     }
+    return "รอการชำระเงิน";
   }
 
   void goToConfirmPayment(Map<String, dynamic> data) {

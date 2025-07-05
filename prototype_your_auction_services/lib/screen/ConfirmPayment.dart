@@ -212,7 +212,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Stream<List<dynamic>> fetchBillAuction() async* {
-    Future.delayed(Duration(seconds: 5));
+    // Future.delayed(Duration(seconds: 5));
     print("Start FetchBillAuction");
     // print(ShareProductData.productData['id_bill_auctions']);
     ApiPathServer apiServerPath = ApiPathServer();
@@ -320,8 +320,8 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
       Map<String, dynamic> data = {
         'id_result_auctions': ShareProductData
-            .productData['id_result_auctions'],
-        'id_auctions': ShareProductData.productData['id_auctions']
+            .productData['id_result_auctions'].toString(),
+        'id_auctions': ShareProductData.productData['id_auctions'].toString()
       };
 
       request.fields['id_result_auctions'] =
@@ -427,27 +427,29 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     return TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
   }
 
-  String paymentStatus(int payment_status) {
-    if (payment_status == 2) {
+  String paymentStatus(int payment_status_types) {
+    if (payment_status_types == 2) {
       return "กำลังตรวจสอบ";
-    } else if (payment_status == 3) {
+    } else if (payment_status_types == 3) {
       return "ยืนยันการชำระเงินแล้ว";
     }
     return "รอการชำระเงิน";
   }
 
   Widget buttonSubmit() {
-    int id_payment_status_types = ShareProductData
-        .productData['id_payment_status_types'];
+    int id_payment_status_types = bill_auction_data['id_payment_status_types'];
     print("AAAAAA: " + id_payment_status_types.toString());
-    if (id_payment_status_types == 2 || id_payment_status_types == 3) {
-      return Text("");
+
+    if (id_payment_status_types == 1) {
+      return ElevatedButton(
+          onPressed: () =>
+          {
+            onInsertReceiptImages()
+          }, child: Text("ยืนยันการชำระเงิน")
+      );
     }
-    return ElevatedButton(
-        onPressed: () =>
-        {
-          onInsertReceiptImages()
-        }, child: Text("ยืนยันการชำระเงิน")
-    );
+
+    return Text("");
+
   }
 }
