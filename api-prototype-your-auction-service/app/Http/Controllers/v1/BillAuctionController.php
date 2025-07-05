@@ -150,7 +150,7 @@ class BillAuctionController extends Controller
             'status' => 1,
             'message' => 'Successfully.',
             // 'data' => '',
-          ]);
+          ], 201);
 
 
         } catch (Exception $e) {

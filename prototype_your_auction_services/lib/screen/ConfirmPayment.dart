@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
@@ -294,8 +293,9 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   void onInsertReceiptImages() async {
     if (_receipt.length != 0) {
-      ApiPathLocal apiPathLocal = ApiPathLocal();
-      String api = apiPathLocal.getInsertReceiptBillAuctionLocalPost();
+      // ApiPathLocal apiPathLocal = ApiPathLocal();
+      // String api = apiPathLocal.getInsertReceiptBillAuctionLocalPost();
+      String api = ApiPathServer().getInsertReceiptBillAuctionPost();
       Uri uri = Uri.parse(api);
       final request = http.MultipartRequest('POST', uri);
 
@@ -327,6 +327,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       final response = await request.send();
 
       if (response.statusCode == 201) {
+        print("STATUS CODE: ${response.statusCode.toString()}");
         // showDialog(
         //     context: context,
         //     builder: (context) => ,
