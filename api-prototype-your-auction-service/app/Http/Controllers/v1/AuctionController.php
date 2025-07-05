@@ -388,32 +388,112 @@ class AuctionController extends Controller
         }
     }
 
-    public function userProduct($id_user)
+    public function myAuctions($id_user)
     {
         try {
-            $user_product = DB::table('auctions')
+            $my_auctions = DB::table('auctions')
                 ->select(
-                    'auctions.id_auctions',
-                    'images.id_images',
-                    'name_product',
-                    'images.image_path_1',
-                    'auctions.shipping_cost',
-                    'auctions.start_price',
-                    'auctions.start_date_time',
-                    'auctions.end_date_time',
-                    'max_price',
+                    '*',
                 )
+                ->join('products', function(JoinClause $join) {
+                    $join->on('products.id_products', '=', 'auctions.id_products');
+                })
                 ->join('images', function (JoinClause $join) {
-                    $join->on('auctions.id_images', '=', 'images.id_images');
+                    $join->on('images.id_images', '=', 'products.id_images');
                 })
                 ->orderByRaw('id_auctions')
-                ->where('id_users', '=', $id_user)
+                ->where('products.id_users', '=', $id_user)
                 ->get();
+                // return $my_auctions;
+                // if ($request->image_1 != null) {
+                //     if ($request->image_1 != null) {
+                //         $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
+                //         $image_path_1 = Storage::url($image_name_1);
+                //     } else {
+                //         $image_path_1 = null;
+                //     }
 
+                //     if ($request->image_2 != null) {
+                //         $image_name_2 = Storage::disk('public')->put('images/product-images', $request->image_2);
+                //         $image_path_2 = Storage::url($image_name_2);
+                //     } else {
+                //         $image_path_2 = null;
+                //     }
+
+                //     if ($request->image_3 != null) {
+                //         $image_name_3 = Storage::disk('public')->put('images/product-images', $request->image_3);
+                //         $image_path_3 = Storage::url($image_name_3);
+                //     } else {
+                //         $image_path_3 = null;
+                //     }
+
+                //     if ($request->image_4 != null) {
+                //         $image_name_4 = Storage::disk('public')->put('images/product-images', $request->image_4);
+                //         $image_path_4 = Storage::url($image_name_4);
+                //     } else {
+                //         $image_path_4 = null;
+                //     }
+
+                //     if ($request->image_5 != null) {
+                //         $image_name_5 = Storage::disk('public')->put('images/product-images', $request->image_5);
+                //         $image_path_5 = Storage::url($image_name_5);
+                //     } else {
+                //         $image_path_5 = null;
+                //     }
+
+                //     if ($request->image_6 != null) {
+                //         $image_name_6 = Storage::disk('public')->put('images/product-images', $request->image_6);
+                //         $image_path_6 = Storage::url($image_name_6);
+                //     } else {
+                //         $image_path_6 = null;
+                //     }
+
+                //     if ($request->image_7 != null) {
+                //         $image_name_7 = Storage::disk('public')->put('images/product-images', $request->image_7);
+                //         $image_path_7 = Storage::url($image_name_7);
+                //     } else {
+                //         $image_path_7 = null;
+                //     }
+
+                //     if ($request->image_8 != null) {
+                //         $image_name_8 = Storage::disk('public')->put('images/product-images', $request->image_8);
+                //         $image_path_8 = Storage::url($image_name_8);
+                //     } else {
+                //         $image_path_8 = null;
+                //     }
+
+                //     if ($request->image_9 != null) {
+                //         $image_name_9 = Storage::disk('public')->put('images/product-images', $request->image_9);
+                //         $image_path_9 = Storage::url($image_name_9);
+                //     } else {
+                //         $image_path_9 = null;
+                //     }
+
+                //     if ($request->image_10 != null) {
+                //         $image_name_10 = Storage::disk('public')->put('images/product-images', $request->image_10);
+                //         $image_path_10 = Storage::url($image_name_10);
+                //     } else {
+                //         $image_path_10 = null;
+                //     }
+                // }
+
+                // $image_model = [
+                //     'image_path_1' => $image_path_1,
+                //     'image_path_2' => $image_path_2,
+                //     'image_path_3' => $image_path_3,
+                //     'image_path_4' => $image_path_4,
+                //     'image_path_5' => $image_path_5,
+                //     'image_path_6' => $image_path_6,
+                //     'image_path_7' => $image_path_7,
+                //     'image_path_8' => $image_path_8,
+                //     'image_path_9' => $image_path_9,
+                //     'image_path_10' => $image_path_10,
+                // ];
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                'data' => $user_product
+                'data' => $my_auctions
+
             ]);
         } catch (Exception $e) {
             return response()->json([

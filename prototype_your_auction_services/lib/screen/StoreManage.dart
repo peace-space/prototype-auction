@@ -41,7 +41,7 @@ class StoreManageState extends State<StoreManage> {
   Widget buttonGoToUserProduct(BuildContext ctx) {
     return ElevatedButton(
         onPressed: () => goToUserProduct(ctx),
-        child: Text("รายการสินค้า")
+        child: Text("รายการสินค้าของฉัน")
     );
   }
 

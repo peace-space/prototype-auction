@@ -430,14 +430,20 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     } else if (payment_status == 3) {
       return "ยืนยันการชำระเงินแล้ว";
     }
-    return "ยืนยันการชำระเงินแล้ว";
+    return "รอการชำระเงิน";
   }
 
   Widget buttonSubmit() {
-    return ElevatedButton(onPressed: () =>
-    {
-      onInsertReceiptImages()
-    }, child: Text("ยืนยันการชำระเงิน")
+    int id_payment_status_types = ShareProductData
+        .productData['id_payment_status_types'];
+    if (id_payment_status_types == 2 || id_payment_status_types == 3) {
+      return Text("");
+    }
+    return ElevatedButton(
+        onPressed: () =>
+        {
+          onInsertReceiptImages()
+        }, child: Text("ยืนยันการชำระเงิน")
     );
   }
 }

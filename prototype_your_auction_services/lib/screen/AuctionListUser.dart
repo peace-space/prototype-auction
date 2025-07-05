@@ -19,7 +19,7 @@ class AuctionListUser extends StatefulWidget {
 class AuctionListUserState extends State<AuctionListUser> {
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("รายการประมูล")),
+      appBar: AppBar(title: Text("รายการประมูลของฉัน")),
       body: displayUserProduct(context),
     );
   }

@@ -37,12 +37,14 @@ class BillAuctionController extends Controller
                 ->join('bank_accounts', function (JoinClause $join) {
                     $join->on('bank_accounts.id_users', '=', 'products.id_users');
                 })
+
                 ->where('bill_auctions.id_bill_auctions', '=', $id_bill_result)
                 ->get();
 
+            // return $bill_auction;
             $get_data_bill_auction =  $bill_auction->first();
 
-            // return "Test";
+            // return $get_data_bill_auction;
             $images_model = [];
             // return $get_data_bill_auction;
 
