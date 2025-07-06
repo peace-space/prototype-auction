@@ -175,7 +175,7 @@ class BillAuctionController extends Controller
     }
 
 
-    public function myAuctionBill()
+    public function myAuctionBill($id_users_customer)
     {
         try {
             // return "AAA";
@@ -187,23 +187,23 @@ class BillAuctionController extends Controller
                 ->join('bids', function (JoinClause $join) {
                     $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                 })
-                ->join('auctions', function (JoinClause $join) {
-                    $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                })
-                ->join('products', function (JoinClause $join) {
-                    $join->on('products.id_products', '=', 'auctions.id_products');
-                })
-                ->join('images', function (JoinClause $join) {
-                    $join->on('images.id_images', '=', 'products.id_images');
-                })
-                ->join('users', function (JoinClause $join) {
-                    $join->on('users.id_users', '=', 'products.id_users');
-                })
-                ->join('bank_accounts', function (JoinClause $join) {
-                    $join->on('bank_accounts.id_users', '=', 'products.id_users');
-                })
+                // ->join('auctions', function (JoinClause $join) {
+                //     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
+                // })
+                // ->join('products', function (JoinClause $join) {
+                //     $join->on('products.id_products', '=', 'auctions.id_products');
+                // })
+                // ->join('images', function (JoinClause $join) {
+                //     $join->on('images.id_images', '=', 'products.id_images');
+                // })
+                // ->join('users', function (JoinClause $join) {
+                //     $join->on('users.id_users', '=', 'products.id_users');
+                // })
+                // ->join('bank_accounts', function (JoinClause $join) {
+                //     $join->on('bank_accounts.id_users', '=', 'products.id_users');
+                // })
 
-                ->where('auctions.id_auctions', '=', 1)
+                ->where('result_auctions.id_users', '=', $id_users_customer)
                 ->get();
 
             return $bill_auction;
