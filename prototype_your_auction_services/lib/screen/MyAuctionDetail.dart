@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -34,6 +35,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
             return Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
+            Map<String, dynamic> data = snapshot.data!;
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView(
@@ -45,6 +47,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   selectShowImage(),
                   SizedBox(height: 8),
                   myAuctionDetail(),
+                  SizedBox(height: 8),
+                  showDataBillAuction(data['data_bill']),
                   SizedBox(height: 8),
                   buttonConfirmVerification(),
                   SizedBox(height: 500),
@@ -227,24 +231,27 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   Stream<Map<String, dynamic>> fetchMyAuctionDetail() async* {
     await Future.delayed(Duration(seconds: 1));
     // print('Start.detailAuctions');
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
-        .productData['id_auctions']}';
+    // String url =
+    //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
+    //     .productData['id_auctions']}';
+    String api = ApiPathServer().getMyAuctionBillServerGet(
+        id_auctions: ShareProductData.productData['id_auctions'].toString());
 
+    print("SSSSSSSSSSSSSSSSSSSS: " + api);
 
-    final uri = Uri.parse(url);
+    final uri = Uri.parse(api);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
     // print("aaaaaaaaaaaaaaaaaaaa");
-    // print(data.toString());
+    // print("AAAAAAAAAAAAAAAAAAAAAAAAAAA: "+data['data_bill'].toString());
     // countdown();
     yield data;
     setState(() {
       _imageData = data['images'];
       // _receipt = data['payment_proof_images'];
     });
-    /// print('End.detialAuctions');
+    print('End.detialAuctions');
   }
 
   TextStyle headText() {
@@ -392,6 +399,45 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     return TextButton(onPressed: () =>
     {
     }, child: Text("รายละเอียดสินค้า")
+    );
+  }
+
+  Widget showDataBillAuction(dynamic data) {
+    print("ZZZZZZZZZZZZZZZZZZZZZZZZZ: " + data['image_bill'][0].toString());
+    // return ListView.builder(
+    //   itemCount: data['image_bill']!.length,
+    //   itemBuilder: (context, index) => Card(
+    //   child: Image.network('https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' + data['image_bill'][index]),
+    // ),);
+
+    return Container(
+        height: 255,
+        width: 255,
+        child: ListView.builder(
+
+          scrollDirection: Axis.horizontal,
+          itemCount: data['image_bill']!.length,
+          itemBuilder: (context, index) =>
+              InkWell(
+                onTap: () =>
+                {
+                  showOneBillImage(data['image_bill'], index)
+                },
+                child: Card(
+                  child: Image.network(
+                    'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                        data['image_bill'][index], width: 255, height: 255,),
+                ),
+              ),)
+    );
+  }
+
+  void showOneBillImage(String image_path, int index) {
+    showDialog(context: context,
+        builder: (context) =>
+            Scaffold(
+              body: Text("data"),
+            )
     );
   }
 

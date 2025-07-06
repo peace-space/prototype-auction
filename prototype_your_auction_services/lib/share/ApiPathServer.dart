@@ -21,6 +21,9 @@ class ApiPathServer {
   final String my_auctions_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/my-auctions';
 
+  final String my_auction_bill_server_get =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/my-auction-bill';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -54,6 +57,11 @@ class ApiPathServer {
 
   String getMyAuctionsServerGet({required id_users}) {
     String path = this.my_auctions_server_get + '/' + id_users;
+    return path;
+  }
+
+  String getMyAuctionBillServerGet({required id_auctions}) {
+    String path = this.my_auction_bill_server_get + '/' + id_auctions;
     return path;
   }
 }

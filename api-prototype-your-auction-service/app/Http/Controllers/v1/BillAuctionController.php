@@ -42,48 +42,48 @@ class BillAuctionController extends Controller
                 ->get();
 
             // return $bill_auction;
-            $get_data_bill_auction =  $bill_auction->first();
+            $ion =  $bill_auction->first();
 
-            // return $get_data_bill_auction;
+            // return $ion;
             $images_model = [];
-            // return $get_data_bill_auction;
+            // return $ion;
 
-            if ($get_data_bill_auction->image_path_1 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_1);
+            if ($ion->image_path_1 != null) {
+                array_push($images_model, $ion->image_path_1);
             }
-            if ($get_data_bill_auction->image_path_2 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_2);
+            if ($ion->image_path_2 != null) {
+                array_push($images_model, $ion->image_path_2);
             }
-            if ($get_data_bill_auction->image_path_3 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_3);
+            if ($ion->image_path_3 != null) {
+                array_push($images_model, $ion->image_path_3);
             }
-            if ($get_data_bill_auction->image_path_4 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_4);
+            if ($ion->image_path_4 != null) {
+                array_push($images_model, $ion->image_path_4);
             }
-            if ($get_data_bill_auction->image_path_5 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_5);
+            if ($ion->image_path_5 != null) {
+                array_push($images_model, $ion->image_path_5);
             }
-            if ($get_data_bill_auction->image_path_6 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_6);
+            if ($ion->image_path_6 != null) {
+                array_push($images_model, $ion->image_path_6);
             }
-            if ($get_data_bill_auction->image_path_7 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_7);
+            if ($ion->image_path_7 != null) {
+                array_push($images_model, $ion->image_path_7);
             }
-            if ($get_data_bill_auction->image_path_8 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_8);
+            if ($ion->image_path_8 != null) {
+                array_push($images_model, $ion->image_path_8);
             }
-            if ($get_data_bill_auction->image_path_9 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_9);
+            if ($ion->image_path_9 != null) {
+                array_push($images_model, $ion->image_path_9);
             }
-            if ($get_data_bill_auction->image_path_10 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_10);
+            if ($ion->image_path_10 != null) {
+                array_push($images_model, $ion->image_path_10);
             }
 
             // return $images_model;
 
 
             // $bill_auction_model = [
-            //     'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
+            //     'id_bill_auctions' => $ion->id_bill_auctions,
             //     // 'id_'
 
             // ];
@@ -175,11 +175,11 @@ class BillAuctionController extends Controller
     }
 
 
-    public function myAuctionBill($id_users_customer)
+    public function myAuctionBill($id_auctions)
     {
         try {
             // return "AAA";
-            $bill_auction = DB::table('bill_auctions')
+            $my_auction_bill = DB::table('bill_auctions')
                 ->select('*')
                 ->join('result_auctions', function (JoinClause $join) {
                     $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
@@ -187,78 +187,78 @@ class BillAuctionController extends Controller
                 ->join('bids', function (JoinClause $join) {
                     $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                 })
-                // ->join('auctions', function (JoinClause $join) {
-                //     $join->on('auctions.id_auctions', '=', 'bids.id_auctions');
-                // })
-                // ->join('products', function (JoinClause $join) {
-                //     $join->on('products.id_products', '=', 'auctions.id_products');
-                // })
-                // ->join('images', function (JoinClause $join) {
-                //     $join->on('images.id_images', '=', 'products.id_images');
-                // })
-                // ->join('users', function (JoinClause $join) {
-                //     $join->on('users.id_users', '=', 'products.id_users');
-                // })
-                // ->join('bank_accounts', function (JoinClause $join) {
-                //     $join->on('bank_accounts.id_users', '=', 'products.id_users');
-                // })
-
-                ->where('result_auctions.id_users', '=', $id_users_customer)
+                ->join('payment_proof_images', function (JoinClause $join) {
+                    $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                })
+                ->where('bids.id_auctions', '=', $id_auctions)
                 ->get();
 
-            return $bill_auction;
-            $get_data_bill_auction =  $bill_auction->first();
+            $my_auction_detail = DB::table('auctions')
+                                    ->join('products', function (JoinClause $join) {
+                                        $join->on('products.id_products', '=', 'auctions.id_products');
+                                    })
+                                    ->join('images', function (JoinClause $join) {
+                                        $join->on('images.id_images', '=', 'products.id_images');
+                                    })
+                                    ->where('auctions.id_auctions', '=', $id_auctions)
+                                    ->get();
 
-            // return $get_data_bill_auction;
+            $get_images = $my_auction_detail[0];
             $images_model = [];
-            // return $get_data_bill_auction;
+            // return $ion;
 
-            if ($get_data_bill_auction->image_path_1 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_1);
+            if ($get_images->image_path_1 != null) {
+                array_push($images_model, $get_images->image_path_1);
             }
-            if ($get_data_bill_auction->image_path_2 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_2);
+            if ($get_images->image_path_2 != null) {
+                array_push($images_model, $get_images->image_path_2);
             }
-            if ($get_data_bill_auction->image_path_3 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_3);
+            if ($get_images->image_path_3 != null) {
+                array_push($images_model, $get_images->image_path_3);
             }
-            if ($get_data_bill_auction->image_path_4 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_4);
+            if ($get_images->image_path_4 != null) {
+                array_push($images_model, $get_images->image_path_4);
             }
-            if ($get_data_bill_auction->image_path_5 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_5);
+            if ($get_images->image_path_5 != null) {
+                array_push($images_model, $get_images->image_path_5);
             }
-            if ($get_data_bill_auction->image_path_6 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_6);
+            if ($get_images->image_path_6 != null) {
+                array_push($images_model, $get_images->image_path_6);
             }
-            if ($get_data_bill_auction->image_path_7 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_7);
+            if ($get_images->image_path_7 != null) {
+                array_push($images_model, $get_images->image_path_7);
             }
-            if ($get_data_bill_auction->image_path_8 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_8);
+            if ($get_images->image_path_8 != null) {
+                array_push($images_model, $get_images->image_path_8);
             }
-            if ($get_data_bill_auction->image_path_9 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_9);
+            if ($get_images->image_path_9 != null) {
+                array_push($images_model, $get_images->image_path_9);
             }
-            if ($get_data_bill_auction->image_path_10 != null) {
-                array_push($images_model, $get_data_bill_auction->image_path_10);
+            if ($get_images->image_path_10 != null) {
+                array_push($images_model, $get_images->image_path_10);
             }
 
-            // return $images_model;
+            // return $get_images;
 
+            $image_bill = $my_auction_bill[0];
 
-            // $bill_auction_model = [
-            //     'id_bill_auctions' => $get_data_bill_auction->id_bill_auctions,
-            //     // 'id_'
+            $data_model_bill = [
+                'data' => $my_auction_bill[0],
+                'image_bill' => [
+                    $image_bill->payment_proof_images_path_1,
+                    $image_bill->payment_proof_images_path_2,
+                ]
+            ];
 
-            // ];
-
+            $data_model = [
+                'data_auction' => $my_auction_detail[0],
+                'data_bill' => $data_model_bill,
+                'images' => $images_model,
+            ];
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                // 'test' => $bill_auction,
-                'data' => $bill_auction,
-                'images' => $images_model,
+                'data' => $data_model,
             ], 200);
         } catch (Exception $e) {
             return response()->json([
