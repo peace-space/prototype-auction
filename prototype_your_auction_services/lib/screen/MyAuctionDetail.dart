@@ -44,6 +44,9 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   SizedBox(height: 8),
                   selectShowImage(),
                   SizedBox(height: 8),
+                  myAuctionDetail(),
+                  SizedBox(height: 8),
+                  buttonConfirmVerification(),
                   SizedBox(height: 500),
                 ],
               ),
@@ -227,6 +230,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     String url =
         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
         .productData['id_auctions']}';
+
+
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
@@ -234,9 +239,10 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print("aaaaaaaaaaaaaaaaaaaa");
     // print(data.toString());
     // countdown();
-    yield data;etState(() {
+    yield data;
+    setState(() {
       _imageData = data['images'];
-      /// _receipt = data['payment_proof_images'];
+      // _receipt = data['payment_proof_images'];
     });
     /// print('End.detialAuctions');
   }
@@ -367,6 +373,26 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       );
       throw Exception('Failed');
     }
+  }
+
+  Widget buttonDelete() {
+    return ElevatedButton(onPressed: () =>
+    {
+    }, child: Text("ลบสินค้าจากการประมูล"));
+  }
+
+  Widget buttonConfirmVerification() {
+    return ElevatedButton(onPressed: () =>
+    {
+    }, child: Text("ยืนยันการตรวจสอบ")
+    );
+  }
+
+  Widget myAuctionDetail() {
+    return TextButton(onPressed: () =>
+    {
+    }, child: Text("รายละเอียดสินค้า")
+    );
   }
 
 }

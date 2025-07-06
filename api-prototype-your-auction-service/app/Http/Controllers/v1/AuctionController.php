@@ -355,6 +355,7 @@ class AuctionController extends Controller
                     'start_price' => $request_data['start_price'],
                     'end_date_time' => $request_data['end_date_time'],
                     'max_price' => $current_highest_price,
+                    'id_payment_status_types' => 1,
                     'id_auction_types' => $request_data['id_auction_types'],
                     'id_payment_types' => $request_data['id_payment_types'],
                     'id_bank_accounts' => $request_data['id_bank_accounts']
@@ -538,7 +539,7 @@ class AuctionController extends Controller
             // return $my_auction_detail[0];
             $select_data_my_auctions = $my_auction_detail[0];
 
-            return $select_data_my_auctions;
+            // return $select_data_my_auctions;
 
             if ($select_data_my_auctions->id_payment_status_types == 2) {
                 $my_bill_data = DB::table('bill_auctions')
