@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
@@ -235,9 +234,9 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print("aaaaaaaaaaaaaaaaaaaa");
     // print(data.toString());
     // countdown();
-    yield data;
-    setState(() {imageData = data['images'];
-      // _receipt = data['payment_proof_images'];
+    yield data;etState(() {
+      _imageData = data['images'];
+      /// _receipt = data['payment_proof_images'];
     });
     /// print('End.detialAuctions');
   }

@@ -343,7 +343,7 @@ class AuctionHomeState extends State<AuctionHome> {
         );
       },
       onEnd: () {
-        saveTheWinnerAuctions(data);
+        // saveTheWinnerAuctions(data);
       },
     );
   }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Http\Controllers\algorithm\RunAuctionSystem;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\v1\BidController;
 use App\Models\ResultReportAuction;
@@ -20,6 +21,11 @@ class AuctionController extends Controller
     public function index()
     {
         try {
+
+            $run_auction_system = new RunAuctionSystem();
+
+            $run_auction_system->runAuctionSystem();
+
             $auctions_list = DB::table('auctions')
                 ->select(
                     'auctions.id_auctions',
@@ -771,38 +777,64 @@ class AuctionController extends Controller
     public function test(Request $request)
     {
         try {
-            $end_time = '2025-07-04 05:20:00';
-            $dateTime = now('Asia/Bangkok');
-            $now = date('Y-m-d H:i:s');
-            $a = Carbon::now('Asia/Bangkok');
-            $b = Carbon::parse($end_time, 'Asia/Bangkok');
-            $diff = $a->diffInMinutes($b);
 
-            $to = Carbon::createFromFormat('Y-m-d H:m:s', '2025-07-03 05:02:00');
+            $test_date_time = DB::table('auctions')
+                            ->select('*')
+                            // ->where('id_auctions', '=', 1)
+                            ->get();
+            // return $test_date_time;
+            $end_date_time_auctions = Carbon::parse($test_date_time[0]->end_date_time, 'Asia/Bangkok');
 
-            $from = Carbon::createFromFormat('Y-m-d H:m:s', '2025-07-03 05:0:00');
 
-            $start = new DateTime('now');
-            $end = Carbon::parse("2025-07-04 09:00:00", 'Asia/Bangkok');
+            $current_date_time = Carbon::now('Asia/Bangkok');
 
-            $total = $end->diffInMinutes($start);
+            $end_date_time_auctions->toPeriod();
 
-            return $total; //Output: 7
+            $data = [
+                'test' => $end_date_time_auctions.' เปรียบเทียบ '.$current_date_time,
+                'CurrentDateTime' => $current_date_time->toDateTimeString(),
+                'EndDateTime' => $end_date_time_auctions->toDateTimeString(),
+            ];
 
-            $diff_in_hours = $a->diffInRealMicroseconds($b);
-            return $diff_in_hours;
-            if ($diff_in_hours > 0) {
-                return [
-                    'message' => 'มากกว่า 0',
-                    'data' => $diff_in_hours
-                ];
+            $a = $this->test1($test_date_time);
+            return $a;
+
+            // return view('welcome', [
+
+            // ]));
+                sleep(1);
+            if ($end_date_time_auctions <= $current_date_time) {
+
+
+                return view('welcome', [
+                    'status' => 'หมดเวลา',
+                    'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+                    'message' => 'end น้อยกว่า current',
+                    'data' => $data
+                ]);
+
+                return response()->json([
+                    'status' => 'หมดเวลา',
+                    'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+                    'message' => 'end น้อยกว่า current',
+                    'data' => $data
+                ], 200);
             } else {
-                return [
-                    'message' => 'น้อยกว่า 0',
-                    'data' => $diff_in_hours
-                ];
-            }
 
+                return view('welcome', [
+                    'status' => $end_date_time_auctions->toDateTimeString(),
+                    'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+                    'message' => 'end มากกว่า current',
+                    'data' => $data
+                ]);
+
+                return response()->json([
+                    'status' => $end_date_time_auctions->toDateTimeString(),
+                    'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+                    'message' => 'end มากกว่า current',
+                    'data' => $data
+                ], 200);
+            }
 
 
             // dd($diff_in_hours);
@@ -814,5 +846,35 @@ class AuctionController extends Controller
                 'data' => $e
             ]);
         }
+    }
+
+ public function test1($data) {
+        $newData = [];
+        // $count = 0;
+        if ($data != '') {
+            foreach ($data as $d) {
+                // return $d->end_date_time;
+                $end_date_time_auctions = Carbon::parse($d->end_date_time, 'Asia/Bangkok');
+                $current_date_time = Carbon::now('Asia/Bangkok');
+
+                if ($end_date_time_auctions <= $current_date_time) {
+                    // $count += 1;
+                    // return $d->id_auctions;
+                    $auctions_timeout = DB::table('auctions')
+                                            ->where('id_auctions', '=', $d->id_auctions)
+                                            ->update(['auction_status' => false]);
+
+                    array_push($newData, $auctions_timeout);
+
+                    // return $count;
+                }
+
+            }
+                // return $count;
+                return $newData;
+        }
+
+        return $data;
+
     }
 }
