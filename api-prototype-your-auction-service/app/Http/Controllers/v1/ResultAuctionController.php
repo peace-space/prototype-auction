@@ -52,7 +52,7 @@ class ResultAuctionController extends Controller
     {
         try {
             $id_auctions = $request->id_auctions;
-            return $id_auctions;
+            // return $id_auctions;
 
             $update_auction_status = DB::table('auctions')
                 ->where('id_auctions', '=', $id_auctions)
@@ -75,7 +75,7 @@ class ResultAuctionController extends Controller
                 ->get();
 
             $the_winner_auctions = $high_bid->first();
-            // return $high_bid->first();
+            return $high_bid->first();
 
             $data = [
                 'id_users' => $the_winner_auctions->id_users,
@@ -89,7 +89,7 @@ class ResultAuctionController extends Controller
                 //   'bank_account_number' => '',
             ];
             // return $data;
-            DB::table('result_auctions')->insert($data);
+            $save_result_auction = DB::table('result_auctions')->insert($data);
 
             $result_auction_datas = [];
 
@@ -112,6 +112,8 @@ class ResultAuctionController extends Controller
             $id_result_auctions = $result_auction_datas->first()->id_result_auctions;
 
             // return $id_result_auctions;
+
+            $shipping_cost = $result_auction_datas->
 
             $bill_auction_data = [
                 'id_result_auctions' => $id_result_auctions,
@@ -201,12 +203,15 @@ class ResultAuctionController extends Controller
             $id_result_auctions = $result_auction_datas->first()->id_result_auctions;
 
             // return $id_result_auctions;
+            $max_price = $the_winner_auctions->bid_price;
+            $shipping_cost = $the_winner_auctions->shipping_cost;
+            $total_debts = $max_price + $shipping_cost;
 
             $bill_auction_data = [
                 'id_result_auctions' => $id_result_auctions,
                 'id_payment_status_types' => 1,
-                'debts' => $the_winner_auctions->bid_price,
-                'shipping_number' => $the_winner_auctions->shipping_cost,
+                'debts' => $total_debts,
+                'shipping_number' => null,
                 'delivery_status' => false,
                 'id_payment_proof_images' => null,
             ];

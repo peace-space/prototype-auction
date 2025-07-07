@@ -190,6 +190,9 @@ class BillAuctionController extends Controller
                 ->join('payment_proof_images', function (JoinClause $join) {
                     $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
                 })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'result_auctions.id_users');
+                })
                 ->where('bids.id_auctions', '=', $id_auctions)
                 ->get();
 
@@ -199,6 +202,9 @@ class BillAuctionController extends Controller
                                     })
                                     ->join('images', function (JoinClause $join) {
                                         $join->on('images.id_images', '=', 'products.id_images');
+                                    })
+                                    ->join('bank_accounts', function (JoinClause $join) {
+                                        $join->on('bank_accounts.id_bank_accounts', '=', 'auctions.id_bank_accounts');
                                     })
                                     ->where('auctions.id_auctions', '=', $id_auctions)
                                     ->get();
@@ -267,5 +273,10 @@ class BillAuctionController extends Controller
                 'data' => $e
             ], 404);
         }
+    }
+
+
+    public function confirmVerification() {
+        return "AAA";
     }
 }
