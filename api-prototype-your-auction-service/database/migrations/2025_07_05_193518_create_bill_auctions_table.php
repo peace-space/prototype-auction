@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('id_bill_auctions');
             $table->foreignId('id_result_auctions');
             $table->foreignId('id_payment_status_types');
-            $table->string('shipping_number');
+            $table->string('shipping_number')->nullable()->default(null);
             $table->integer('debts');
             $table->boolean('delivery_status')->default(false);
             $table->foreignId('id_payment_proof_images')->nullable();
