@@ -15,6 +15,7 @@ class ConfirmPayment extends StatefulWidget {
 
 class ConfirmPaymentState extends State<ConfirmPayment> {
   List<dynamic> _imageData = [];
+  List<dynamic> _bill_images = [];
   List<File?> _receipt = [];
   int indexSelectImage = 0;
   Map<String, dynamic> bill_auction_data = {};
@@ -118,6 +119,26 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
               Text("${bill_auction_data['prompt_pay']}"),
             ],
           ),
+          Divider(),
+          Row(
+            children: [
+              Text("ราคา: "),
+              Text("${bill_auction_data['debts']} "),
+              Text("บาท"),
+            ],
+          ),
+          Row(
+            children: [
+              Text("สถานะการจัดส่ง: "),
+              Text("${deliveryStatus(bill_auction_data['delivery_status'])}"),
+            ],
+          ),
+          Row(
+            children: [
+              Text("เลขพัสดุ: "),
+              Text("${shippingNumber()}"),
+            ],
+          ),
         ],
       ),
     );
@@ -211,7 +232,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     );
   }
 
-  Stream<List<dynamic>> fetchBillAuction() async* {
+  Stream<Map<String, dynamic>> fetchBillAuction() async* {
     // Future.delayed(Duration(seconds: 5));
     print("Start FetchBillAuction");
     // print(ShareProductData.productData['id_bill_auctions']);
@@ -233,7 +254,8 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       yield data['data'];
       setState(() {
         _imageData = data['images'];
-        bill_auction_data = data['data'][0];
+        bill_auction_data = data['data'];
+        _bill_images = data['bill_images'];
       });
     } else {
       print(
@@ -285,10 +307,15 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget buttonInsertReceipt() {
-    return ElevatedButton(
-      onPressed: () => {selectReceiptImage()},
-      child: Text("เพิ่มใบเสร็จ"),
-    );
+    int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+    if (id_payment_status_types == 1) {
+      return ElevatedButton(
+        onPressed: () => {selectReceiptImage()},
+        child: Text("เพิ่มใบเสร็จ"),
+      );
+    }
+
+    return Text("");
   }
 
   void onInsertReceiptImages() async {
@@ -380,43 +407,99 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget displayReceiptImage() {
-    return Container(
-      width: 100,
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _receipt.length,
-        itemBuilder:
-            (context, index) =>
-            Card(
-              child: InkWell(
-                onTap:
-                    () =>
-                {
-                  showDialogReceiptImage(index)
-                },
-                child: Image.file(_receipt[index]!),
+    int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+    if (id_payment_status_types == 1) {
+      return Container(
+        width: 100,
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: _receipt.length,
+          itemBuilder:
+              (context, index) =>
+              Card(
+                child: InkWell(
+                  onTap:
+                      () =>
+                  {
+                    showDialogReceiptImage(index)
+                  },
+                  child: (_receipt.length == 0) ? Center(
+                      child: Text("เกิดข้อผิดพลาด")) : Image.file(
+                      _receipt[index]!),
+                ),
               ),
-            ),
-      ),
-    );
+        ),
+      );
+    }
+    if (id_payment_status_types == 2 || id_payment_status_types == 3) {
+      return Container(
+        width: 100,
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: _bill_images.length,
+          itemBuilder:
+              (context, index) =>
+              Card(
+                child: InkWell(
+                  onTap:
+                      () =>
+                  {
+                    showDialogReceiptImage(index)
+                  },
+                  child: (_bill_images.length == 0) ? Center(
+                      child: Text("เกิดข้อผิดพลาด")) : Image.network(
+                    "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+                        _bill_images![index],
+                  ),
+                ),
+              ),
+        ),
+      );
+    }
+
+    return Text("");
   }
 
   void showDialogReceiptImage(int index) {
-    showDialog(
-      context: context, builder: (context) =>
-        Dialog(
-            child: Image.file(_receipt[index]!)
-        ),
-    );
+    int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+    if (id_payment_status_types == 1) {
+      showDialog(
+        context: context, builder: (context) =>
+          Dialog(
+              child: (_bill_images.length == 0) ? Center(
+                  child: Text("เกิดข้อผิดพลาด")) : Image.file(_receipt[index]!)
+          ),
+      );
+    }
+
+    if (id_payment_status_types == 2 || id_payment_status_types == 3) {
+      showDialog(
+        context: context, builder: (context) =>
+          Dialog(
+            child: (_bill_images.length == 0) ? Center(
+                child: Text("เกิดข้อผิดพลาด")) : Image.network(
+              "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+                  _bill_images![index],
+            ),
+          ),
+      );
+    }
+
   }
 
   Widget buttonDeleteReceiptImage() {
-    return ElevatedButton(onPressed: () =>
-    {
-      deleteReceiptImage()
-    }, child: Text("ลบรูปภาพ")
-    );
+    int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+    if (id_payment_status_types == 1) {
+      return ElevatedButton(onPressed: () =>
+      {
+        deleteReceiptImage()
+      }, child: Text("ลบรูปภาพ")
+      );
+    }
+
+    return Text("");
   }
 
   void deleteReceiptImage() {
@@ -451,5 +534,20 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
     return Text("");
 
+  }
+
+  String deliveryStatus(int delivery_status) {
+    if (delivery_status == 1) {
+      return "จัดส่งสินค้าแล้ว";
+    }
+    return "รอการชำระเงิน";
+  }
+
+  String shippingNumber() {
+    String shipping_number = bill_auction_data['shipping_number'];
+    if (shipping_number != '') {
+      return shipping_number;
+    }
+    return "-";
   }
 }

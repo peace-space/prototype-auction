@@ -61,7 +61,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   SizedBox(height: 8),
                   showDataBillAuction(data['data_bill']),
                   SizedBox(height: 8),
-                  buttonConfirmVerification(data['data_auction']),
+                  buttonConfirmVerification(data['data_bill']),
                   SizedBox(height: 8),
                   buttonGoToChat(),
                   SizedBox(height: 500),
@@ -321,13 +321,15 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     }
   }
 
-  Widget buttonConfirmVerification(Map<String, dynamic> data_auction) {
+  Widget buttonConfirmVerification(Map<String, dynamic> data_bill) {
     // print("${id_payment_status_types}");
-    int id_payment_status_types = data_auction['id_payment_status_types'];
+    Map<String, dynamic> data = data_bill['data'];
+    var id_payment_status_types = data['id_payment_status_types'];
+
     if (id_payment_status_types == 2) {
       return ElevatedButton(onPressed: () =>
       {
-        showInputDataConfirmVerification(data_auction)
+        showInputDataConfirmVerification(data)
       }, child: Text("ยืนยันการตรวจสอบ")
       );
     }
@@ -336,8 +338,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
 
   }
 
-  void showInputDataConfirmVerification(
-      Map<String, dynamic> data_auction) async {
+  void showInputDataConfirmVerification(Map<String, dynamic> data_bill) async {
     // if (data_auction['']) {
     //
     // }
@@ -356,7 +357,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   SizedBox(height: 8,),
                   inputShippingNumber(),
                   SizedBox(height: 8,),
-                  sendShippingNumberAndConfirmVerification(),
+                  submitButtonShippingNumberAndConfirmVerification(data_bill),
                 ],
               ),
             ),
@@ -375,11 +376,77 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     );
   }
 
-  ElevatedButton sendShippingNumberAndConfirmVerification() {
+  ElevatedButton submitButtonShippingNumberAndConfirmVerification(
+      Map<String, dynamic> data_bill) {
     return ElevatedButton(onPressed: () =>
     {
+      showDialog(
+        barrierDismissible: false,
+        context: context, builder: (context) =>
+          AlertDialog(
+            title: Text("แจ้งเตือน"),
+            content: Text("ยืนยันการตรวจสอบ"),
+            actions: [
+              TextButton(onPressed: () =>
+              {
+                Navigator.of(context).pop()
+              }, child: Text("ยกเลิก")),
+              TextButton(onPressed: () =>
+              {
+                Navigator.of(context).pop(),
+                onSubmitShippingNumberAndConfirmVerification(data_bill)
+              }, child: Text("ตกลง")),
+            ],
+          ),),
     }, child: Text("ยืนยัน")
     );
+  }
+
+  void onSubmitShippingNumberAndConfirmVerification(
+      Map<String, dynamic> data_bill) async {
+    Map<String, dynamic> data = {
+      'id_bill_auctions': data_bill['id_bill_auctions'],
+      'id_auctions': data_bill['id_auctions'],
+      'shipping_number': _shipping_number.text,
+    };
+    String api = ApiPathServer().getConfirmVerificationServerPost();
+    Uri uri = Uri.parse(api);
+    final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data)
+    );
+
+    if (response.statusCode == 201) {
+      Navigator.of(context).pop();
+      showDialog(
+        barrierDismissible: false,
+        context: context, builder: (context) =>
+          AlertDialog(
+            title: Text("แจ้งเตือน"),
+            content: Text("ยืนยันการตรวจสอบเรียบร้อย"),
+            actions: [
+              TextButton(onPressed: () =>
+              {
+                Navigator.of(context).pop()
+              }, child: Text("ตกลง"))
+            ],
+          ),);
+    } else {
+      showDialog(
+        barrierDismissible: false,
+        context: context, builder: (context) =>
+          AlertDialog(
+            title: Text("ล้มเหลว"),
+            content: Text("กรุณาตรวจสอบความถูกต้องอีกครั้ง"),
+            actions: [
+              TextButton(onPressed: () =>
+              {
+                Navigator.of(context).pop()
+              }, child: Text("ตกลง"))
+            ],
+          ),);
+    }
   }
 
   Widget myAuctionDetail(Map<String, dynamic> auction_detail_data) {
