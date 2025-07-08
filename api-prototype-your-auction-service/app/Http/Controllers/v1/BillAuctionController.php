@@ -276,7 +276,42 @@ class BillAuctionController extends Controller
     }
 
 
-    public function confirmVerification() {
-        return "AAA";
+    public function confirmVerification(Request $request) {
+        try {
+            $shipping_number = $request->shipping_number;
+            $id_bill_auctions = $request->id_bill_auctions;
+
+
+            if ($shipping_number != '' &&
+                $id_bill_auctions != ''
+            ) {
+
+                $data_for_save = [
+                    'shipping_number' => $shipping_number,
+                ];
+
+                $save_shipping_number = DB::table('bill_auctions')
+                                            ->where('id_bill_auctions', '=', $id_bill_auctions)
+                                            ->update($data_for_save);
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Sucessfully.',
+                ], 201);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ข้อมูลไม่ครบท่วน',
+                ], 404);
+            }
+
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => 'Error.',
+                'data' => $e
+            ], 500);
+        }
     }
 }

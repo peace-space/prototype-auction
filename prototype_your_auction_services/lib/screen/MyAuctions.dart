@@ -40,12 +40,6 @@ class MyAuctionsState extends State<MyAuctions> {
             );
           }
 
-          if (snapshot.data == null) {
-            return Center(
-              child: Text("คุณไม่มีสินค้าที่เปิดประมูล"),
-            );
-          }
-
           if (snapshot.hasData) {
             return ListView.builder(
                 itemCount: snapshot.data?.length,
@@ -82,6 +76,12 @@ class MyAuctionsState extends State<MyAuctions> {
                     ),
                   );
                 }
+            );
+          }
+
+          if (snapshot.data == null) {
+            return Center(
+              child: Text("คุณไม่มีสินค้าที่เปิดประมูล"),
             );
           }
 
