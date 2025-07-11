@@ -35,11 +35,13 @@ Route::prefix('/v1')->group(function () {
     Route::post('/login', [UserController::class, 'login']);
     Route::get('/check-login', [UserController::class, 'checkLogin']);
     Route::get('logout', [UserController::class, 'onLogout']);
-    Route::post('/edit-user-profile/{index}', [UserController::class, 'editUserProfile']);
+    Route::post('/edit-user-profile', [UserController::class, 'editUserProfile']);
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
     Route::post('/change-password', [UserController::class, 'changePassWord']);
+    Route::post('/verify-password', [UserController::class, 'verifyPassWord']);
 
 
+    Route::post('/test-delete', [UserController::class, 'test']);
 
     // AuctionController -----------------------------------------------------------
     Route::get('/auction', [AuctionController::class, 'index']);

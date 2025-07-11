@@ -27,6 +27,12 @@ class ApiPathServer {
   final String confirm_verification_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/confirm-verification';
 
+  final String my_user_profile_server_get =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user';
+
+  final String edit_my_user_profile_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/edit-user-profile';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -70,5 +76,14 @@ class ApiPathServer {
 
   String getConfirmVerificationServerPost() {
     return this.confirm_verification_server_post;
+  }
+
+  String getMyUserProfileApiServerGet(String id_users) {
+    String path = this.my_user_profile_server_get + '/' + id_users;
+    return path;
+  }
+
+  String getEditMyUserProfileServerPost() {
+    return this.edit_my_user_profile_server_post;
   }
 }

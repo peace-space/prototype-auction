@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -19,7 +20,7 @@ class UserProfileState extends State<UserProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ข้อมูลผู้ใช้งาน: ${ShareData.logedIn}"),
+        title: Text("ข้อมูลผู้ใช้งาน"),
       ),
       body: Container(
         // color: Colors.lightBlueAccent,
@@ -51,44 +52,80 @@ class UserProfileState extends State<UserProfile> {
           }
 
           if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Map<String, dynamic> data = snapshot.data!;
+            return ListView(
               children: [
-                Text("ชื่อ: ", style: textPrefixStyle(),),
-                Text("${snapshot.data?['name']}",
-                  style: textStyleUserProfile(),),
+                // Text(userData.toString()),
+                CircleAvatar(
+                  radius: 150,
+                  backgroundImage: NetworkImage(
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile' +
+                          ShareData.userData['image_profile']
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text("ชื่อ: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['first_name_users']} ${snapshot
+                        .data?['last_name_users']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
                 SizedBox(height: height,),
+                Row(
+                  children: [
+                    Text("เบอร์โทร: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['phone']}",
+                      style: textStyleUserProfile(),),
+                    SizedBox(height: height,),
+                  ],
+                ),
 
-                Text("เบอร์โทร: ", style: textPrefixStyle(),),
-                Text("${snapshot.data?['phone']}",
-                  style: textStyleUserProfile(),),
-                SizedBox(height: height,),
-
-                Text("อีเมล: ", style: textPrefixStyle(),),
-                Text("${snapshot.data?['email']}",
-                  style: textStyleUserProfile(),),
-                SizedBox(height: height,),
+                Row(
+                  children: [
+                    Text("อีเมล: ", style: textPrefixStyle(),),
+                    Text("${snapshot.data?['email']}",
+                      style: textStyleUserProfile(),),
+                    SizedBox(height: height,),
+                  ],
+                ),
 
                 Text("ที่อยู่ในการรับสินค้า: ", style: textPrefixStyle(),),
 
                 Text("${snapshot.data?['address']}",
                   style: textStyleUserProfile(),),
 
-                Text("บัญชีธนาคาร: ", style: textPrefixStyle(),),
-                Text("data",
-                  style: textStyleUserProfile(),),
+                Row(
+                  children: [
+                    Text("ชื่อธนาคาร: ", style: textPrefixStyle(),),
+                    Text("${data['name_bank_account']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
 
-                Text("ชื่อบัญชี: ", style: textPrefixStyle(),),
-                Text("data",
-                  style: textStyleUserProfile(),),
+                Row(
+                  children: [
+                    Text("ชื่อบัญชี: ", style: textPrefixStyle(),),
+                    Text("ชื่อในบัญชีธนาคาร",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
 
-                Text("เลขบัญชี: ", style: textPrefixStyle(),),
-                Text("data",
-                  style: textStyleUserProfile(),),
+                Row(
+                  children: [
+                    Text("เลขบัญชี: ", style: textPrefixStyle(),),
+                    Text("${data['bank_account_number']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
 
-                Text("พร้อมเพย์: ", style: textPrefixStyle(),),
-                Text("data",
-                  style: textStyleUserProfile(),),
+                Row(
+                  children: [
+                    Text("พร้อมเพย์: ", style: textPrefixStyle(),),
+                    Text("${data['prompt_pay']}",
+                      style: textStyleUserProfile(),),
+                  ],
+                ),
 
                 Center(
                   child: Column(
@@ -99,7 +136,12 @@ class UserProfileState extends State<UserProfile> {
                       changePassWord(ctx),
                     ],
                   ),
-                )
+                ),
+
+                SizedBox(
+                  height: 200,
+                  width: 200,
+                ),
               ],
             );
           }
@@ -117,7 +159,7 @@ class UserProfileState extends State<UserProfile> {
 
   TextStyle textStyleUserProfile() {
     return TextStyle(
-      fontSize: 25,
+      fontSize: 16,
     );
   }
 
@@ -136,6 +178,7 @@ class UserProfileState extends State<UserProfile> {
   }
 
   void goToEditUserProfile(BuildContext ctx) {
+
     final route = MaterialPageRoute(
       builder: (ctx) => EditUserProfile(),
     );
@@ -144,14 +187,14 @@ class UserProfileState extends State<UserProfile> {
 
   Stream<Map<String, dynamic>> streamUserData() async* {
     print("Start.");
-    String url = 'https://your-auction-services.com/prototype-auction/api-pa/api/user/${ShareData
-        .userData['id_users']}';
+    String url = ApiPathServer().getMyUserProfileApiServerGet(
+        ShareData.userData['id_users'].toString());
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
-    // print(resData.toString());
     await Future.delayed(Duration(seconds: 1));
     Map<String, dynamic> data = resData['data'];
+    ShareData.userData = data;
     yield data;
     setState(() {});
     print("End.");

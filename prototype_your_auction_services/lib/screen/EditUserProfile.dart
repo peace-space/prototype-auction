@@ -1,7 +1,9 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -19,12 +21,14 @@ class EditUserProfileState extends State<EditUserProfile> {
   var _address = TextEditingController();
 
   int id_user = ShareData.userData['id_users'];
+  Map<String, dynamic> userData = ShareData.userData;
   String firstName = '';
   String lastName = '';
   String phone = '';
   String email = '';
   String address = '';
   String _confirmPassWord = '';
+  var _imageData;
 
   @override
   void initState() {
@@ -41,6 +45,11 @@ class EditUserProfileState extends State<EditUserProfile> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
+          showImage(),
+          SizedBox(height: 8,),
+          buttonSelectImage(),
+          buttonDeleteImage(),
+          SizedBox(height: 8,),
           firstNameEdit(),
           SizedBox(height: 8),
           lastNameEdit(),
@@ -48,10 +57,11 @@ class EditUserProfileState extends State<EditUserProfile> {
           phoneEdit(),
           SizedBox(height: 8),
           emailEdit(),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           addressEdit(),
           SizedBox(height: 8),
           submit(context),
+          SizedBox(height: 100,),
         ],
       ),
     );
@@ -61,9 +71,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     return TextField(
       controller: _firstNameController,
       decoration: InputDecoration(
-        labelText: "ชื่อ",
+        labelText: "ชื่อเดิม: " + userData['first_name_users'],
         border: OutlineInputBorder(),
-        hintText: ShareData.userData['name'],
+        hintText: 'ชื่อ',
       ),
       onChanged: (value) {
         setState(() {
@@ -77,9 +87,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     return TextField(
       controller: _lastNameController,
       decoration: InputDecoration(
-        labelText: "นามสกุล",
+        labelText: "นามสกุลเดิม: " + userData['last_name_users'],
         border: OutlineInputBorder(),
-        hintText: ShareData.userData['name'],
+        hintText: "นามสกุล",
       ),
       onChanged: (value) {
         setState(() {
@@ -93,9 +103,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     return TextField(
       controller: _phoneController,
       decoration: InputDecoration(
-        labelText: "เบอร์โทรศัพท์",
+        labelText: "เบอร์โทรศัพท์เดิม: " + userData['phone'],
         border: OutlineInputBorder(),
-        hintText: ShareData.userData['phone'],
+        hintText: 'เบอร์โทรศัพท์',
       ),
       onChanged: (value) {
         setState(() {
@@ -109,9 +119,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     return TextField(
       controller: _emailController,
       decoration: InputDecoration(
-        labelText: "อีเมล",
+        labelText: "อีเมลเดิม: " + userData['email'],
         border: OutlineInputBorder(),
-        hintText: ShareData.userData['email'],
+        hintText: "อีเมล",
       ),
       onChanged: (value) {
         setState(() {
@@ -125,9 +135,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     return TextField(
       controller: _address,
       decoration: InputDecoration(
-        labelText: "ที่อยู่ในการจัดส่งสินค้า",
+        labelText: "ที่อยู่ในการจัดส่งสินค้าเดิม: " + userData['address'],
         border: OutlineInputBorder(),
-        hintText: ShareData.userData['address'],
+        hintText: "ที่อยู่ในการจัดส่งสินค้า",
       ),
       onChanged: (value) {
         setState(() {
@@ -139,42 +149,90 @@ class EditUserProfileState extends State<EditUserProfile> {
 
   Widget submit(BuildContext ctx) {
     return ElevatedButton(
-      onPressed: () => {confirmChangeUserData(ctx)},
+      onPressed: () =>
+      {
+        // onSave(ctx),
+        confirmChangeUserData(ctx)
+      },
       child: Text("บันทึกการแก้ไข"),
     );
   }
 
   void onSave(BuildContext ctx) async {
     print("Start");
-    final data = {
-      "first_name": firstName,
-      "last_name": lastName,
+    Map<String, dynamic> data = {
+      'id_users': ShareData.userData['id_users'],
+      'email': ShareData.userData['email'],
+      'password': _confirmPassWord,
+      "first_name_users": firstName,
+      "last_name_users": lastName,
       "phone": phone,
-      "email": email,
       "address": address,
       // "confirm_password" : _confirmPassWord,
     };
 
-    String url =
-        'https://your-auction-services.com/prototype-auction/api-pa/api/edit-user-profile/${id_user}';
+
+    // print(":::::::::::::::::::::: ${data.toString()}");
+    String url = ApiPathServer().getEditMyUserProfileServerPost();
     final uri = Uri.parse(url);
 
-    final response = await http.post(
-      uri,
-      headers: {"content-type": "application/json"},
-      body: jsonEncode(data),
-    );
+    // final response = await http.post(
+    //   uri,
+    //   headers: {"Content-Type": "application/json"},
+    //   body: jsonEncode(data),
+    // );
 
-    final resData = jsonDecode(response.body);
-    Map<String, dynamic> newUserData = resData['data'];
-    print(resData['data']);
+    final request = http.MultipartRequest('POST', uri);
 
-    ShareData.userData = resData['data'] as Map<String, dynamic>;
-    print(ShareData.userData);
+    request.headers['Content-Type'] = 'application/json';
+
+    if (_imageData != null) {
+      File? _imageDataFile = _imageData as File;
+      var stream = File(_imageDataFile!.path.toString())
+          .readAsBytesSync();
+      var multiport = http.MultipartFile.fromBytes(
+          'image_profile', stream, filename: _imageDataFile!.path);
+      request.files.add(multiport);
+      request.fields['image_profile'] = request.files.toString();
+    }
+    request.fields['id_users'] = data['id_users'].toString();
+    request.fields['email'] = data['email'].toString();
+    request.fields['password'] = data['password'];
+
+    request.fields['first_name_users'] = data['first_name_users'].toString();
+    request.fields['last_name_users'] = data['last_name_users'].toString();
+    request.fields['phone'] = data['phone'].toString();
+    request.fields['address'] = data['address'].toString();
+    // final resData = jsonDecode(response.body);
+    // Map<String, dynamic> newUserData = resData['data'];
+    // print(resData['data']);
+
+    // ShareData.userData = resData['data'] as Map<String, dynamic>;
+    // print(ShareData.userData);
+    // print("object::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+    final response = await request.send();
     if (response.statusCode == 200) {
       print("Successfully.");
-      Navigator.pop(ctx);
+      // Navigator.pop(ctx);
+      Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
     } else {
+      print(
+          "object::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
+      showDialog(context: context,
+        builder: (context) =>
+            AlertDialog(
+              title: Text("ล้มเหลว"),
+              content: Text("รหัสผ่านไม่ถูกต้อง"),
+              actions: [
+                TextButton(onPressed: () =>
+                {
+                  Navigator.of(context).pop()
+                }, child: Text("ตกลง"))
+              ],
+            ),
+      );
       throw Exception("err");
     }
     print("End.");
@@ -186,6 +244,7 @@ class EditUserProfileState extends State<EditUserProfile> {
     String confirmPhone = phone;
     String confirmEmail = email;
     String confirmAddress = address;
+    String confirmImage = '-';
 
     if (firstName == '') {
       confirmFirstName = '-';
@@ -201,6 +260,10 @@ class EditUserProfileState extends State<EditUserProfile> {
     }
     if (address == '') {
       confirmAddress = '-';
+    }
+
+    if (_address != null) {
+      confirmImage = 'เลือกรูปภาพแล้ว';
     }
 
     showDialog(
@@ -224,6 +287,10 @@ class EditUserProfileState extends State<EditUserProfile> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
+                        Text("รูปภาพ: ",
+                          style: textStyleSubjectConfirmChangeUserData(),),
+                        Text("${confirmImage}",
+                          style: textStyleConfirmChangeUserData(),),
                         Text(
                           "ชื่อ: ",
                           style: textStyleSubjectConfirmChangeUserData(),
@@ -319,9 +386,11 @@ class EditUserProfileState extends State<EditUserProfile> {
               TextButton(
                 onPressed: () =>
                 {
+                  // Navigator.pop(context),
+                  // Navigator.pop(context),
+                  // Navigator.pop(context),
                   onSave(ctx),
-                  Navigator.pop(context),
-                  Navigator.pop(context)},
+                },
                 child: Text("OK"),
               ),
             ],
@@ -339,5 +408,54 @@ class EditUserProfileState extends State<EditUserProfile> {
       fontWeight: FontWeight.bold,
       color: Colors.blue,
     );
+  }
+
+  TextButton buttonSelectImage() {
+    return TextButton(onPressed: () =>
+    {
+      selectImage()
+    }, child: Text("เลือกรูปภาพที่ต้องการเปลี่ยน"));
+  }
+
+  void selectImage() async {
+    ImagePicker selectImage = ImagePicker();
+
+    final imageFile = await selectImage.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (imageFile != null) {
+      setState(() {
+        _imageData = File(imageFile.path);
+      });
+    }
+  }
+
+
+  Widget showImage() {
+    if (_imageData == null) {
+      return Text("");
+    }
+
+    if (_imageData != null) {
+      return CircleAvatar(
+        radius: 150,
+        backgroundImage: FileImage(_imageData),
+      );
+    }
+
+    return Text("");
+  }
+
+  TextButton buttonDeleteImage() {
+    return TextButton(onPressed: () =>
+    {
+      onDeleteImage()
+    }, child: Text("ลบรูปภาพที่เลือก"));
+  }
+
+  void onDeleteImage() {
+    _imageData = null;
+    setState(() {});
   }
 }
