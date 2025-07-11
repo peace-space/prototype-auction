@@ -31,7 +31,7 @@ class ReportAuctionState extends State<ReportAuction> {
               itemCount: snapshot.data?.length,
               itemBuilder: (context, index) {
                 if (snapshot.hasError) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: Text("เกิดข้อผิดพลาด"));
                 }
 
                 if (snapshot.connectionState == ConnectionState.active) {

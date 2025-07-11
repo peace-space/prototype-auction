@@ -82,22 +82,37 @@ class BillAuctionController extends Controller
             }
 
             $image_bill = $bill_auction[0];
-
             $payment_proof_images_model = [];
+            // return $image_bill->id_payment_proof_images;
 
-            if ($image_bill->payment_proof_images_path_1 != null) {
-                array_push($payment_proof_images_model, $image_bill->payment_proof_images_path_1);
-            }
 
-            if ($image_bill->payment_proof_images_path_2 != null) {
-                array_push($payment_proof_images_model, $image_bill->payment_proof_images_path_2);
+            if ($image_bill->id_payment_proof_images != null) {
+                $get_payment_proof_images = DB::table('bill_auctions')
+                    ->select('bill_auctions.id_payment_proof_images', 'payment_proof_images_path_1', 'payment_proof_images_path_2')
+                    ->join('payment_proof_images', function (JoinClause $join) {
+                        $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                    })
+                    ->where('bill_auctions.id_bill_auctions', '=', $id_bill_auctions)
+                    ->get();
+
+                // return $get_payment_proof_images[0]->payment_proof_images_path_1;
+                if ($get_payment_proof_images[0]->payment_proof_images_path_1 != null) {
+                    array_push($payment_proof_images_model, $get_payment_proof_images[0]->payment_proof_images_path_1);
+                }
+
+                if ($get_payment_proof_images[0]->payment_proof_images_path_2 != null) {
+                    array_push($payment_proof_images_model, $get_payment_proof_images[0]->payment_proof_images_path_2);
+                }
+
+                // return "AAA";
+            } else {
+                $payment_proof_images_model = null;
             }
 
 
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                // 'test' => $bill_auction,
                 'data' => $bill_auction[0],
                 'images' => $images_model,
                 'bill_images' => $payment_proof_images_model,
@@ -112,7 +127,8 @@ class BillAuctionController extends Controller
     }
 
 
-    public function insertReceiptBillAuction(Request $request) {
+    public function insertReceiptBillAuction(Request $request)
+    {
         try {
             $payment_proof_images_1 = $request->payment_proof_images_path_1;
             $payment_proof_images_2 = $request->payment_proof_images_path_2;
@@ -139,16 +155,16 @@ class BillAuctionController extends Controller
             ];
 
             $save_images = DB::table('payment_proof_images')
-                    ->insert($image_model);
+                ->insert($image_model);
 
             $last_time_image = DB::table('payment_proof_images')
-                    ->select(DB::raw('MAX(created_at) as last_time'))
-                    ->get();
+                ->select(DB::raw('MAX(created_at) as last_time'))
+                ->get();
 
             $last_id_image = DB::table('payment_proof_images')
-                    ->select('id_payment_proof_images')
-                    ->where('created_at', '=', $last_time_image[0]->last_time)
-                    ->get();
+                ->select('id_payment_proof_images')
+                ->where('created_at', '=', $last_time_image[0]->last_time)
+                ->get();
             $id_payment_proof_images = $last_id_image[0]->id_payment_proof_images;
             // return $id_result_auctions;
 
@@ -158,20 +174,18 @@ class BillAuctionController extends Controller
             ];
 
             $update_image_in_bill_auctions = DB::table('bill_auctions')
-                    ->where('id_result_auctions', '=', $id_result_auctions)
-                    ->update($update_data);
+                ->where('id_result_auctions', '=', $id_result_auctions)
+                ->update($update_data);
 
             $update_payment_status_types_auction = DB::table('auctions')
-                                                ->where('id_auctions', '=', $id_auctions)
-                                                ->update(['id_payment_status_types' => 2]);
+                ->where('id_auctions', '=', $id_auctions)
+                ->update(['id_payment_status_types' => 2]);
 
-          return response()->json([
-            'status' => 1,
-            'message' => 'Successfully.',
-            // 'data' => '',
-          ], 201);
-
-
+            return response()->json([
+                'status' => 1,
+                'message' => 'Successfully.',
+                // 'data' => '',
+            ], 201);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -194,31 +208,35 @@ class BillAuctionController extends Controller
                 ->join('bids', function (JoinClause $join) {
                     $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                 })
-                ->join('payment_proof_images', function (JoinClause $join) {
-                    $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
-                })
+                //->join('payment_proof_images', function (JoinClause $join) {
+                // $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                //})
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'result_auctions.id_users');
                 })
                 ->where('bids.id_auctions', '=', $id_auctions)
                 ->get();
+            $my_auction_bill = [];
+
+            // return $my_auction_bill;
 
             $my_auction_detail = DB::table('auctions')
-                                    ->join('products', function (JoinClause $join) {
-                                        $join->on('products.id_products', '=', 'auctions.id_products');
-                                    })
-                                    ->join('images', function (JoinClause $join) {
-                                        $join->on('images.id_images', '=', 'products.id_images');
-                                    })
-                                    ->join('bank_accounts', function (JoinClause $join) {
-                                        $join->on('bank_accounts.id_bank_accounts', '=', 'auctions.id_bank_accounts');
-                                    })
-                                    ->where('auctions.id_auctions', '=', $id_auctions)
-                                    ->get();
-
+                ->join('products', function (JoinClause $join) {
+                    $join->on('products.id_products', '=', 'auctions.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->join('bank_accounts', function (JoinClause $join) {
+                    $join->on('bank_accounts.id_bank_accounts', '=', 'auctions.id_bank_accounts');
+                })
+                ->where('auctions.id_auctions', '=', $id_auctions)
+                ->get();
+            // return "aa";
             $get_images = $my_auction_detail[0];
             $images_model = [];
             // return $get_images;
+            // return $get_images->image_path_1;
 
             if ($get_images->image_path_1 != null) {
                 array_push($images_model, $get_images->image_path_1);
@@ -250,19 +268,41 @@ class BillAuctionController extends Controller
             if ($get_images->image_path_10 != null) {
                 array_push($images_model, $get_images->image_path_10);
             }
+            /// ----------------------------------------------------------------------
 
-            // return $get_images;
+            try {
+                $image_bill = $my_auction_bill[0];
+                $payment_proof_images_model = [];
+                // return $image_bill;
+                // return $image_bill->id_payment_proof_images;
 
-            $image_bill = $my_auction_bill[0];
+                if ($image_bill->id_payment_proof_images != null) {
+                    $get_payment_proof_images = DB::table('bill_auctions')
+                        ->select('bill_auctions.id_payment_proof_images', 'payment_proof_images_path_1', 'payment_proof_images_path_2')
+                        ->join('payment_proof_images', function (JoinClause $join) {
+                            $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                        })
+                        ->where('bill_auctions.id_bill_auctions', '=', $image_bill->id_bill_auctions)
+                        ->get();
 
-            $payment_proof_images_model = [];
+                    //return $get_payment_proof_images[0]->payment_proof_images_path_1;
+                    if ($get_payment_proof_images[0]->payment_proof_images_path_1 != null) {
+                        array_push($payment_proof_images_model, $get_payment_proof_images[0]->payment_proof_images_path_1);
+                    }
 
-            if ($image_bill->payment_proof_images_path_1 != null) {
-                array_push($payment_proof_images_model, $image_bill->payment_proof_images_path_1);
-            }
+                    if ($get_payment_proof_images[0]->payment_proof_images_path_2 != null) {
+                        array_push($payment_proof_images_model, $get_payment_proof_images[0]->payment_proof_images_path_2);
+                    }
 
-            if ($image_bill->payment_proof_images_path_2 != null) {
-                array_push($payment_proof_images_model, $image_bill->payment_proof_images_path_2);
+                    // return "True";
+                } else {
+                    $payment_proof_images_model = null;
+                    // return "False";
+                }
+            } catch (Exception $e) {
+                $payment_proof_images_model = null;
+				$my_auction_bill[0] = null;
+                // return "false";
             }
 
             $data_model_bill = [
@@ -290,14 +330,16 @@ class BillAuctionController extends Controller
     }
 
 
-    public function confirmVerification(Request $request) {
+    public function confirmVerification(Request $request)
+    {
         try {
             $shipping_number = $request->shipping_number;
             $id_bill_auctions = $request->id_bill_auctions;
             $id_auctions = $request->id_auctions;
 
 
-            if ($shipping_number != '' &&
+            if (
+                $shipping_number != '' &&
                 $id_bill_auctions != '' &&
                 $id_auctions != ''
             ) {
@@ -313,12 +355,12 @@ class BillAuctionController extends Controller
                 ];
 
                 $update_shipping_number_and_id_payment_status_types_and_delevery_status = DB::table('bill_auctions')
-                                            ->where('id_bill_auctions', '=', $id_bill_auctions)
-                                            ->update($data_for_update_in_bill_auctions_table);
+                    ->where('id_bill_auctions', '=', $id_bill_auctions)
+                    ->update($data_for_update_in_bill_auctions_table);
 
                 $update_id_payment_status_types_in_aucions_table = DB::table('auctions')
-                                            ->where('id_auctions', '=', $id_auctions)
-                                            ->update($data_for_update_in_auctions_table);
+                    ->where('id_auctions', '=', $id_auctions)
+                    ->update($data_for_update_in_auctions_table);
 
                 return response()->json([
                     'status' => 1,
@@ -330,8 +372,6 @@ class BillAuctionController extends Controller
                     'message' => 'ข้อมูลไม่ครบท่วน',
                 ], 404);
             }
-
-
         } catch (Exception $e) {
             return response()->json([
                 'status' => 1,

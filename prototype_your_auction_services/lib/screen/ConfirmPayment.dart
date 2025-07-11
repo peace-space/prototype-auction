@@ -251,11 +251,13 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       // print(data['message'].toString());
 
       // print("aaaaaaaaa: " + _imageData[1].toString());
+      if (data['bill_images'] != null) {
+        _bill_images = data['bill_images'];
+      }
       yield data['data'];
       setState(() {
         _imageData = data['images'];
         bill_auction_data = data['data'];
-        _bill_images = data['bill_images'];
       });
     } else {
       print(
@@ -407,7 +409,14 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget displayReceiptImage() {
+    print("ssssssssssssssssssssssssssssssssssssssss" +
+        bill_auction_data['id_payment_proof_images'].toString());
     int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+
+    if (_bill_images == null) {
+      return Text('');
+    }
+
     if (id_payment_status_types == 1) {
       return Container(
         width: 100,
@@ -464,6 +473,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   void showDialogReceiptImage(int index) {
     int id_payment_status_types = bill_auction_data['id_payment_status_types'];
+
     if (id_payment_status_types == 1) {
       showDialog(
         context: context, builder: (context) =>
@@ -544,9 +554,11 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   String shippingNumber() {
-    String shipping_number = bill_auction_data['shipping_number'];
-    if (shipping_number != '') {
-      return shipping_number;
+    if (bill_auction_data['shipping_number'] != null) {
+      String shipping_number = bill_auction_data['shipping_number'];
+      if (shipping_number != '') {
+        return shipping_number;
+      }
     }
     return "-";
   }

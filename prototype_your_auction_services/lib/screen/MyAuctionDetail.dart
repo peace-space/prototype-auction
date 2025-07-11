@@ -18,7 +18,7 @@ class MyAuctionDetail extends StatefulWidget {
 class MyAuctionDetailState extends State<MyAuctionDetail> {
   List<dynamic> _imageData = [];
   int indexSelectImage = 0;
-  List<String> _receipt = [];
+  List<dynamic> _receipt = [];
   var _shipping_number = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +57,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                       fontWeight: FontWeight.bold
                   ),)),
                   SizedBox(height: 8),
-                  showDataBillAuctionImages(data['data_bill']),
+                  // showDataBillAuctionImages(data['data_bill']),
                   SizedBox(height: 8),
                   showDataBillAuction(data['data_bill']),
                   SizedBox(height: 8),
@@ -182,13 +182,17 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
-    // print("aaaaaaaaaaaaaaaaaaaa");
-    // print("AAAAAAAAAAAAAAAAAAAAAAAAAAA: "+data['data_bill'].toString());
-    // countdown();
+    // print("AAAAAAAAAAAAAAAAAAAAAAAAAAA: "+ data['data_bill'].length.toString());
+    if (data['data_bill'] != null) {
+      if (data['data_bill']['image_bill'] != null) {
+        _receipt = data['data_bill']['image_bill'];
+        // print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: " + _receipt.length.toString());
+      }
+    }
+    print("nnnnn");
     yield data;
     setState(() {
       _imageData = data['images'];
-      // _receipt = data['payment_proof_images'];
     });
     print('End.detialAuctions');
   }
@@ -321,24 +325,33 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     }
   }
 
-  Widget buttonConfirmVerification(Map<String, dynamic> data_bill) {
+  Widget buttonConfirmVerification(dynamic data_bill) {
     // print("${id_payment_status_types}");
-    Map<String, dynamic> data = data_bill['data'];
-    var id_payment_status_types = data['id_payment_status_types'];
+    try {
+      var data = data_bill['data'];
 
-    if (id_payment_status_types == 2) {
-      return ElevatedButton(onPressed: () =>
-      {
-        showInputDataConfirmVerification(data)
-      }, child: Text("ยืนยันการตรวจสอบ")
-      );
+      if (data != null) {
+        var id_payment_status_types = data['id_payment_status_types'];
+
+        if (id_payment_status_types == 2) {
+          return ElevatedButton(onPressed: () =>
+          {
+            showInputDataConfirmVerification(data)
+          }, child: Text("ยืนยันการตรวจสอบ")
+          );
+        }
+      } else {
+        return Center(child: Text("ไม่มีข้อมูลการชำระเงิน"));
+      }
+    } on Exception catch (e) {
+      return Text("");
     }
 
     return Text("");
 
   }
 
-  void showInputDataConfirmVerification(Map<String, dynamic> data_bill) async {
+  void showInputDataConfirmVerification(dynamic data_bill) async {
     // if (data_auction['']) {
     //
     // }
@@ -377,7 +390,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   }
 
   ElevatedButton submitButtonShippingNumberAndConfirmVerification(
-      Map<String, dynamic> data_bill) {
+      dynamic data_bill) {
     return ElevatedButton(onPressed: () =>
     {
       showDialog(
@@ -542,33 +555,40 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   // }
 
   Widget showDataBillAuctionImages(dynamic data) {
-    print("ZZZZZZZZZZZZZZZZZZZZZZZZZ: " + data['image_bill'][0].toString());
+    // print("ZZZZZZZZZZZZZZZZZZZZZZZZZ: " + data['image_bill'][0].toString());
     // return ListView.builder(
     //   itemCount: data['image_bill']!.length,
     //   itemBuilder: (context, index) => Card(
     //   child: Image.network('https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' + data['image_bill'][index]),
     // ),);
+    if (_receipt.length == 0) {
+      return Center(child: Text("รอการชำระเงิน"));
+    }
+    if (_receipt.length != 0) {
+      return Container(
+          height: 255,
+          width: 255,
+          child: ListView.builder(
 
-    return Container(
-        height: 255,
-        width: 255,
-        child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _receipt!.length,
+            itemBuilder: (context, index) =>
+                InkWell(
+                  onTap: () =>
+                  {
+                    showOneBillImage(_receipt[index].toString())
+                  },
+                  child: Card(
+                    child: Image.network(
+                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
+                          _receipt[index], width: 255, height: 255,),
+                  ),
+                ),)
+      );
+    }
 
-          scrollDirection: Axis.horizontal,
-          itemCount: data['image_bill']!.length,
-          itemBuilder: (context, index) =>
-              InkWell(
-                onTap: () =>
-                {
-                  showOneBillImage(data['image_bill'][index].toString())
-                },
-                child: Card(
-                  child: Image.network(
-                    'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
-                        data['image_bill'][index], width: 255, height: 255,),
-                ),
-              ),)
-    );
+
+    return Text("รอการชำระเงิน");
   }
 
   void showOneBillImage(String image_path) {
@@ -589,28 +609,36 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     }, child: Text('แชท'));
   }
 
-  Widget showDataBillAuction(Map<String, dynamic> data) {
-    Map<String, dynamic> customer_data = data['data'];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Divider(),
-        // Text("${customer_data.toString()}"),
-        Text("รหัสใบเสร็จ: Bill-${customer_data['id_bill_auctions']}"),
-        Text(
-            "ชื่อผู้รับ: ${customer_data['first_name_users']} ${customer_data['last_name_users']}"),
-        Text("อีเมล: ${customer_data['email']}"),
-        Text("เบอร์โทร: ${customer_data['phone']}"),
-        Text("ที่อยู่ในการจัดส่ง: ${customer_data['address']}"),
-        Divider(),
-        SizedBox(height: 8,),
-        Text("สถานะการจัดส่ง: ${deliveryStatus(
-            customer_data['delivery_status'])}"),
-        Text("หมายเลขพัสดุ: ${customer_data['shipping_number']}"),
-        Text("ราคารวม: ${customer_data['debts']} บาท"),
+  Widget showDataBillAuction(dynamic data) {
+    try {
+      var customer_data = data['data'];
+      if (customer_data != null) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Divider(),
+            // Text("${customer_data.toString()}"),
+            Text("รหัสใบเสร็จ: Bill-${customer_data['id_bill_auctions']}"),
+            Text(
+                "ชื่อผู้รับ: ${customer_data['first_name_users']} ${customer_data['last_name_users']}"),
+            Text("อีเมล: ${customer_data['email']}"),
+            Text("เบอร์โทร: ${customer_data['phone']}"),
+            Text("ที่อยู่ในการจัดส่ง: ${customer_data['address']}"),
+            Divider(),
+            SizedBox(height: 8,),
+            Text("สถานะการจัดส่ง: ${deliveryStatus(
+                customer_data['delivery_status'])}"),
+            Text("หมายเลขพัสดุ: ${shippingNumber(customer_data)}"),
+            Text("ราคารวม: ${customer_data['debts']} บาท"),
 
-      ],
-    );
+          ],
+        );
+      }
+    } on Exception catch (e) {
+      return Text("");
+    }
+
+    return Text("");
   }
 
   String deliveryStatus(int delivery_status) {
@@ -620,4 +648,13 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     return "กรุณายืนยันการตรวจสอบ";
   }
 
+  String shippingNumber(Map<String, dynamic> customer_data) {
+    if (customer_data['shipping_number'] != null) {
+      String shipping_number = customer_data['shipping_number'];
+      if (shipping_number != '') {
+        return shipping_number;
+      }
+    }
+    return "-";
+  }
 }
