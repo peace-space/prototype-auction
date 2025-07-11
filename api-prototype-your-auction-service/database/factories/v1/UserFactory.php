@@ -26,7 +26,7 @@ class UserFactory extends Factory
             // 'password' => static::$password ??= Hash::make('password'),
             'password' => Hash::make('1'),
             'admin_status' => fake()->boolean(),
-            'image_profile' => "/storage/images/user-profile-image/public/storage/images/user-profile-image/profile-default-image.png"
+            'image_profile' => "/storage/images/user-profile-image/profile-default-image.png"
         ];
     }
 }
