@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/screen/CreateBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
@@ -17,7 +18,7 @@ class UserProfile extends StatefulWidget {
 
 class UserProfileState extends State<UserProfile> {
   Map<String, dynamic> userData = ShareData.userData;
-  var bank_account_user = {};
+  var bank_account_user;
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +98,10 @@ class UserProfileState extends State<UserProfile> {
                 Text("${user_data?['address']}",
                   style: textStyleUserProfile(),),
                 Divider(),
+                SizedBox(height: 8,),
                 bankAccount(),
+                Divider(),
+                SizedBox(height: 8,),
                 Center(
                   child: Column(
                     children: [
@@ -168,8 +172,9 @@ class UserProfileState extends State<UserProfile> {
     await Future.delayed(Duration(seconds: 1));
     Map<String, dynamic> data = resData['data'];
     ShareData.userData = data['user_data'];
-    print(data.toString());
-    bank_account_user = data['bank_account'];
+    ShareData.image_user_profile = data['user_data']['image_profile'];
+    // print(data.toString());
+    bank_account_user = data['bank_account']['data'];
     ShareData.bankAccountUser = data['bank_account'];
     yield data['user_data'];
     setState(() {});
@@ -177,11 +182,19 @@ class UserProfileState extends State<UserProfile> {
   }
 
   ElevatedButton buttonGoToChangeBankAccount() {
-    return ElevatedButton(
-        onPressed: () =>
-        {
-          goToEditBankAccountUser()
-        }, child: Text("เปลี่ยนข้อมูลบัญชีธนาคาร"));
+    if (bank_account_user != null) {
+      return ElevatedButton(
+          onPressed: () =>
+          {
+            goToEditBankAccountUser()
+          }, child: Text("เปลี่ยนข้อมูลบัญชีธนาคาร"));
+    }
+
+    return ElevatedButton(onPressed: () =>
+    {
+      goToCreateBankAccountUser()
+    }, child: Text("เพิ่มบัญชีธนาคาร"));
+
   }
 
   Widget bankAccount() {
@@ -215,19 +228,30 @@ class UserProfileState extends State<UserProfile> {
           Row(
             children: [
               Text("พร้อมเพย์: ", style: textPrefixStyle(),),
-              Text("${bank_account_user['prompt_pay']}",
+              Text("${bank_account_user['prompt_pay'].toString()}",
                 style: textStyleUserProfile(),),
             ],
           ),
         ],
       );
     }
-
+    if (bank_account_user == null) {
+      return Column(
+        children: [
+          Center(child: Text("กรุณาเพิ่มบัญชีธนาคาร")),
+        ],
+      );
+    }
     return Center(child: Text("กรุณาเพิ่มบัญชีธนาคาร"));
   }
 
   void goToEditBankAccountUser() {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => EditBankAccountUser(),));
+  }
+
+  void goToCreateBankAccountUser() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => CreateBankAccountUser(),));
   }
 }

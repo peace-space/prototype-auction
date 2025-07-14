@@ -197,7 +197,7 @@ class EditUserProfileState extends State<EditUserProfile> {
     }
     request.fields['id_users'] = data['id_users'].toString();
     request.fields['email'] = data['email'].toString();
-    request.fields['password'] = data['password'];
+    request.fields['password'] = data['password'].toString();
 
     request.fields['first_name_users'] = data['first_name_users'].toString();
     request.fields['last_name_users'] = data['last_name_users'].toString();

@@ -33,6 +33,12 @@ class ApiPathServer {
   final String edit_my_user_profile_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/edit-user-profile';
 
+  final String create_bank_account_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-bank-account';
+
+  final String insert_bank_account_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/insert-bank-account';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -85,5 +91,13 @@ class ApiPathServer {
 
   String getEditMyUserProfileServerPost() {
     return this.edit_my_user_profile_server_post;
+  }
+
+  String getCreateBankAccountServerPost() {
+    return this.create_bank_account_server_post;
+  }
+
+  String getInsertBankAccountServerPost() {
+    return this.insert_bank_account_server_post;
   }
 }

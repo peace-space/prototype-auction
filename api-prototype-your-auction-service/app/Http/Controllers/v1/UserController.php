@@ -71,7 +71,7 @@ class UserController extends Controller
                 "message" => "Successfully.",
                 "data" => [
                     'user_data' => $user_data,
-                    'bank_account' => $bank_account
+                    'bank_account' => ['data' => $bank_account]
                 ]
             ], 200);
         } catch (Exception $e) {
@@ -299,10 +299,16 @@ class UserController extends Controller
             if ($user_data) {
                 $token = auth()->login($user_data);
 
+                $bank_account = null;
+
+
                 return response()->json([
                     'status' => 1,
                     'message' => "Successfully.",
-                    'data' => $data,
+                    'data' => [
+                        'user_data' => $user_data,
+                        'bank_account' => ['data' => $bank_account],
+                    ],
                     'authorisation' => [
                         'token' => $token,
                         'type' => 'bearer'
@@ -392,13 +398,13 @@ class UserController extends Controller
                 } catch (Exception $e) {
                     $bank_account = null;
                 }
-
+                // return $bank_account;
                 return response()->json([
                     'status' => 1,
                     'message' => 'Successfully.',
                     'data' => [
                         'user_data' => $user_data,
-                        'bank_account' => $bank_account,
+                        'bank_account' => ['data' => $bank_account],
                     ],
                     'authorisation' => [
                         'token' => $user_token_data,
@@ -621,3 +627,4 @@ class UserController extends Controller
         //
     }
 }
+

@@ -3,13 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class EditBankAccountUser extends StatefulWidget {
-  State<EditBankAccountUser> createState() {
-    return EditBankAccountUserState();
+class CreateBankAccountUser extends StatefulWidget {
+  State<CreateBankAccountUser> createState() {
+    return CreateBankAccountUserState();
   }
 }
 
-class EditBankAccountUserState extends State<EditBankAccountUser> {
+class CreateBankAccountUserState extends State<CreateBankAccountUser> {
   var _confirmPassWordController = TextEditingController();
   var _nameBankAccountController = TextEditingController();
   var _nameAccountController = TextEditingController();
@@ -18,7 +18,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
 
   int id_user = ShareData.userData['id_users'];
   Map<String, dynamic> userData = ShareData.userData;
-  Map<String, dynamic> bankAccountUser = ShareData.bankAccountUser['data'];
+  Map<String, dynamic> bankAccountUser = ShareData.bankAccountUser;
   String name_bank_account = '';
   String name_account = '';
   String bank_account_number = '';
@@ -35,7 +35,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("แก้ไขข้อมูลบัญชี"),
+        title: Text("เพิ่มบัญชีธนาคาร ${ShareData.userData['id_users']}"),
       ),
       body: ListView(
         padding: EdgeInsets.all(20),
@@ -60,8 +60,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     return TextField(
       controller: _nameBankAccountController,
       decoration: InputDecoration(
-        labelText: "ชื่อธนาคาร: " +
-            bankAccountUser!['name_bank_account'].toString(),
+        labelText: "ชื่อธนาคาร",
         border: OutlineInputBorder(),
         hintText: 'ชื่อธนาคาร',
       ),
@@ -77,7 +76,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     return TextField(
       controller: _nameAccountController,
       decoration: InputDecoration(
-        labelText: "ชื่อบัญชี: " + bankAccountUser['name_account'].toString(),
+        labelText: "ชื่อบัญชี",
         border: OutlineInputBorder(),
         hintText: "ชื่อบัญชี",
       ),
@@ -93,8 +92,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     return TextField(
       controller: _bankAccountNumberController,
       decoration: InputDecoration(
-        labelText: "เลขบัญชีธนาคาร: " +
-            bankAccountUser['bank_account_number'].toString(),
+        labelText: "เลขบัญชีธนาคาร",
         border: OutlineInputBorder(),
         hintText: 'เลขบัญชีธนาคาร',
       ),
@@ -110,9 +108,9 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     return TextField(
       controller: _promptPayController,
       decoration: InputDecoration(
-        labelText: "พร้อมเพย์: " + bankAccountUser['prompt_pay'].toString(),
+        labelText: "พร้อมเพย์",
         border: OutlineInputBorder(),
-        hintText: "พร้อมเพย์",
+        hintText: "อีเมล",
       ),
       onChanged: (value) {
         setState(() {
@@ -148,7 +146,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA: ${data.toString()}');
 
     // print(":::::::::::::::::::::: ${data.toString()}");
-    String url = ApiPathServer().getInsertBankAccountServerPost();
+    String url = ApiPathServer().getCreateBankAccountServerPost();
     final uri = Uri.parse(url);
 
     // final response = await http.post(
@@ -186,7 +184,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
         builder:
             (context) => AlertDialog(
               title: Text("ล้มเหลว"),
-              content: Text("รหัสผ่านไม่ถูกต้อง"),
+              content: Text("รหัสผ่านไม่ถูกต้อง/ข้อมูลไม่ครบ"),
               actions: [
                 TextButton(
                   onPressed: () => {Navigator.of(context).pop()},
