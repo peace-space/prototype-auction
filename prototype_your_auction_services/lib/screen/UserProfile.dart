@@ -133,6 +133,8 @@ class UserProfileState extends State<UserProfile> {
                       SizedBox(height: height,),
                       editProfile(ctx),
                       SizedBox(height: height,),
+                      buttonGoToChangeBankAccount(),
+                      SizedBox(height: height,),
                       changePassWord(ctx),
                     ],
                   ),
@@ -200,4 +202,8 @@ class UserProfileState extends State<UserProfile> {
     print("End.");
   }
 
+  ElevatedButton buttonGoToChangeBankAccount() {
+    return ElevatedButton(
+        onPressed: () => {}, child: Text("เปลี่ยนข้อมูลบัญชีธนาคาร"));
+  }
 }

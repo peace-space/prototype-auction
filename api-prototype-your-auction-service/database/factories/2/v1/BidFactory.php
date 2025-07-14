@@ -5,9 +5,9 @@ namespace Database\Factories\v1;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\v1\Image_in_chats>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class ImageInChatsFactory extends Factory
+class BidFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,9 @@ class ImageInChatsFactory extends Factory
     public function definition(): array
     {
         return [
-            'image_in_chat_path' => 'null',
+            'id_users' => fake()->numberBetween(1, 10),
+            'id_auctions' => fake()->numberBetween(1, 10),
+            'bid_price' => fake()->numberBetween(1, 1000)
         ];
     }
 }

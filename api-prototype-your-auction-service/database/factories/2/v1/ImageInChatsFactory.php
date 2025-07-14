@@ -17,7 +17,8 @@ class ImageInChatsFactory extends Factory
     public function definition(): array
     {
         return [
-            'image_in_chat_path' => 'null',
+            'id_chats' => fake()->numberBetween(1, 10),
+            'image_in_chat_path' => "null",
         ];
     }
 }

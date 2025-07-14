@@ -18,7 +18,6 @@ class ProductFactory extends Factory
     {
         return [
             'id_users' => fake()->numberBetween(1, 10),
-            'id_product_types' => fake()->numberBetween(1, 10),
             // 'id_users' => 1,
             'name_product' => fake()->word(10),
             'detail_product' => fake()->sentence(45),
