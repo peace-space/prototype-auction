@@ -39,6 +39,9 @@ class ApiPathServer {
   final String insert_bank_account_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/insert-bank-account';
 
+  final String create_product_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -99,5 +102,9 @@ class ApiPathServer {
 
   String getInsertBankAccountServerPost() {
     return this.insert_bank_account_server_post;
+  }
+
+  String getCreateProducServerPost() {
+    return this.create_product_server_post;
   }
 }

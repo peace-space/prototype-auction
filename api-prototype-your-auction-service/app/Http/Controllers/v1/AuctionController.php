@@ -211,10 +211,13 @@ class AuctionController extends Controller
                 && $request->detail_product != ''
                 && $request->start_price != ''
                 && $request->end_date_time != ''
+                && $request->id_product_types != ''
+                && $request->id_auction_types != ''
             ) {
 
                 $request_data = [
                     'id_users' => $request->id_users,
+                    'id_product_types' => $request->id_product_types,
                     'name_product' => $request->name_product,
                     'detail_product' => $request->detail_product,
                     'shipping_cost' => $request->shipping_cost,
@@ -326,6 +329,7 @@ class AuctionController extends Controller
 
                 $product_data = [
                     'id_users' => $request_data['id_users'],
+                    'id_product_types' => $request_data['id_product_types'],
                     'name_product' => $request_data['name_product'],
                     'detail_product' => $request_data['detail_product'],
                     'id_images' => $last_id_image[0]->id_images,
@@ -384,14 +388,14 @@ class AuctionController extends Controller
                 return response()->json([
                     'status' => 0,
                     'message' => "Not Data",
-                ]);
+                ], 404);
             }
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => "Error.",
                 'data' => $e
-            ]);
+            ], 500);
         }
     }
 
@@ -511,117 +515,120 @@ class AuctionController extends Controller
         }
     }
 
-    public function myAuctionDetail($id_users)
-    {
-        try {
-
-            $my_auction_detail = DB::table('auctions')
-                ->select('*')
-                ->join('products', function (JoinClause $join) {
-                    $join->on('products.id_products', '=', 'auctions.id_products');
-                })
-                ->join('images', function (JoinClause $join) {
-                    $join->on('images.id_images', '=', 'products.id_images');
-                })
-                ->join('bids', function (JoinClause $join) {
-                    $join->on('bids.id_auctions', '=', 'auctions.id_auctions');
-                })
-                // ->join('result_auctions', function (JoinClause $join) {
-                //     $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
-                // })
-                ->join('users', function (JoinClause $join) {
-                    $join->on('users.id_users', '=', 'products.id_users');
-                })
-                ->where('products.id_users', '=', $id_users)
-                ->get();
-
-
-            // return $my_auction_detail[0];
-            $select_data_my_auctions = $my_auction_detail[0];
-
-            // return $select_data_my_auctions;
-
-            if ($select_data_my_auctions->id_payment_status_types == 2) {
-                $my_bill_data = DB::table('bill_auctions')
-                    ->select('*');
-                // ->join('payment_proof_images', function(JoinClause $join) {
-                //     $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
-                // })
-                // ->join('result_auctions', function(JoinClause $join) {
-                //     $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
-                // })
-                // ->where('result_auctions.id_users', '=', $id_users)
-                // ->get();
-                // return "AA";
-                return $my_bill_data;
-            }
+    // public function myAuctionDetail($id_users)
+    // {
+    //     try {
+    //         // return "AAA";
+    //         $my_auction_detail = DB::table('auctions')
+    //             ->select('*')
+    //             ->join('products', function (JoinClause $join) {
+    //                 $join->on('products.id_products', '=', 'auctions.id_products');
+    //             })
+    //             ->join('images', function (JoinClause $join) {
+    //                 $join->on('images.id_images', '=', 'products.id_images');
+    //             })
+    //             ->join('bids', function (JoinClause $join) {
+    //                 $join->on('bids.id_auctions', '=', 'auctions.id_auctions');
+    //             })
+    //             // ->join('result_auctions', function (JoinClause $join) {
+    //             //     $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
+    //             // })
+    //             ->join('users', function (JoinClause $join) {
+    //                 $join->on('users.id_users', '=', 'products.id_users');
+    //             })
+    //             ->where('products.id_users', '=', $id_users)
+    //             ->get();
 
 
+    //         // return $my_auction_detail[0];
+    //         $select_data_my_auctions = $my_auction_detail[0];
 
-            // return $select_data_my_auctions->payment_proof_images_path_1;
+    //         // return $select_data_my_auctions;
 
-            $payment_proof_images = [];
+    //         if ($select_data_my_auctions->id_payment_status_types == 2) {
+    //             $my_bill_data = DB::table('bill_auctions')
+    //                 ->select('*')
+    //             ->join('payment_proof_images', function(JoinClause $join) {
+    //                 $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+    //             })
+    //             ->join('result_auctions', function(JoinClause $join) {
+    //                 $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
+    //             })
+    //             ->join('bids', function(JoinClause $join) {
+    //                 $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
+    //             })
+    //             ->where('bids.id_auctions', '=', $select_data_my_auctions->id_auctions)
+    //             ->get();
+    //             // return "AA";
+    //             // return $my_bill_data;
+    //         }
 
-            // if ($select_data_my_auctions->payment_proof_images_path_1 != null) {
-            //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_1);
-            // } else {
-            //    $payment_proof_images = 'null';
-            // }
-            // if ($select_data_my_auctions->payment_proof_images_path_2 != null) {
-            //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_2);
-            // } else {
-            //    $payment_proof_images = 'null';
-            // }
 
-            $images_model = [];
-            // return $select_data_my_auctions;
 
-            if ($select_data_my_auctions->image_path_1 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_1);
-            }
-            if ($select_data_my_auctions->image_path_2 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_2);
-            }
-            if ($select_data_my_auctions->image_path_3 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_3);
-            }
-            if ($select_data_my_auctions->image_path_4 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_4);
-            }
-            if ($select_data_my_auctions->image_path_5 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_5);
-            }
-            if ($select_data_my_auctions->image_path_6 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_6);
-            }
-            if ($select_data_my_auctions->image_path_7 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_7);
-            }
-            if ($select_data_my_auctions->image_path_8 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_8);
-            }
-            if ($select_data_my_auctions->image_path_9 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_9);
-            }
-            if ($select_data_my_auctions->image_path_10 != null) {
-                array_push($images_model, $select_data_my_auctions->image_path_10);
-            }
+    //         // return $select_data_my_auctions->payment_proof_images_path_1;
 
-            return response()->json([
-                'status' => 1,
-                'message' => 'Successfully.',
-                'data' => $my_auction_detail,
-                'images' => $images_model,
-                // 'payment_proof_images' => $payment_proof_images,
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'ERROR.',
-                'data' => $e,
-            ], 500);
-        }
-    }
+    //         // $payment_proof_images = [];
+
+    //         // if ($select_data_my_auctions->payment_proof_images_path_1 != null) {
+    //         //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_1);
+    //         // } else {
+    //         //    $payment_proof_images = 'null';
+    //         // }
+    //         // if ($select_data_my_auctions->payment_proof_images_path_2 != null) {
+    //         //     array_push($payment_proof_images, $select_data_my_auctions->payment_proof_images_path_2);
+    //         // } else {
+    //         //    $payment_proof_images = 'null';
+    //         // }
+
+    //         $images_model = [];
+    //         // return $select_data_my_auctions;
+
+    //         if ($select_data_my_auctions->image_path_1 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_1);
+    //         }
+    //         if ($select_data_my_auctions->image_path_2 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_2);
+    //         }
+    //         if ($select_data_my_auctions->image_path_3 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_3);
+    //         }
+    //         if ($select_data_my_auctions->image_path_4 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_4);
+    //         }
+    //         if ($select_data_my_auctions->image_path_5 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_5);
+    //         }
+    //         if ($select_data_my_auctions->image_path_6 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_6);
+    //         }
+    //         if ($select_data_my_auctions->image_path_7 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_7);
+    //         }
+    //         if ($select_data_my_auctions->image_path_8 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_8);
+    //         }
+    //         if ($select_data_my_auctions->image_path_9 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_9);
+    //         }
+    //         if ($select_data_my_auctions->image_path_10 != null) {
+    //             array_push($images_model, $select_data_my_auctions->image_path_10);
+    //         }
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => 'Successfully.',
+    //             'data' => $my_auction_detail,
+    //             'images' => $images_model,
+    //             // 'payment_proof_images' => $payment_proof_images,
+    //         ], 200);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'ERROR.',
+    //             'data' => $e,
+    //         ], 500);
+    //     }
+    // }
 
     public function deleteMyAuctions($id_user, $id_auctions)
     {
@@ -879,3 +886,4 @@ class AuctionController extends Controller
 
     }
 }
+

@@ -409,10 +409,10 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget displayReceiptImage() {
-    print("ssssssssssssssssssssssssssssssssssssssss" +
+    print("ssssssssssssssssssssssssssssssssssssssss: " +
         bill_auction_data['id_payment_proof_images'].toString());
     int id_payment_status_types = bill_auction_data['id_payment_status_types'];
-
+    print(_receipt.length.toString());
     if (_bill_images == null) {
       return Text('');
     }
@@ -478,7 +478,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       showDialog(
         context: context, builder: (context) =>
           Dialog(
-              child: (_bill_images.length == 0) ? Center(
+              child: (_receipt.length == 0) ? Center(
                   child: Text("เกิดข้อผิดพลาด")) : Image.file(_receipt[index]!)
           ),
       );

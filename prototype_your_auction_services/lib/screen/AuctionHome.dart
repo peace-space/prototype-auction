@@ -335,7 +335,7 @@ class AuctionHomeState extends State<AuctionHome> {
         String sec = (time.sec == null) ? "00" : time.sec.toString();
 
         return Text(
-          "เวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
+          "เหลือเวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.bold,
             color: Colors.red

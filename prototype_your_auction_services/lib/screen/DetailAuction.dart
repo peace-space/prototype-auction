@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
-// import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class DetailAuction extends StatefulWidget {
   State<DetailAuction> createState() {
@@ -185,8 +186,9 @@ class DetailAuctionState extends State<DetailAuction> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("เวลา: ", style: headText()),
+              Text("เหลือเวลา: ", style: headText()),
               // showDateTimeCountdown(),
+              countdown(),
               Text(" วินาที", style: redText()),
             ],
           ),
@@ -419,56 +421,57 @@ class DetailAuctionState extends State<DetailAuction> {
   //   return true;
   // }
 
-  // Widget countdown() {
-  //   // final start_date_time_data = detailAuctionData['start_date_time'];
-  //   final end_date_time_data = detailAuctionData['end_date_time'];
-  //   // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
-  //   // var min;
-  //   var end_date_time = DateTime.parse(end_date_time_data);
-  //
-  //   var date_tiem_difference = end_date_time.difference(DateTime.now());
-  //   // print("ความต่างของเวลา: " + date_tiem_difference.toString());
-  //   var countdown = TimerCountdown(
-  //     endTime: DateTime.now().add(
-  //       Duration(seconds: date_tiem_difference.inSeconds),
-  //     ),
-  //     onTick: (remainingTime) {
-  //       // print("Test: " + remainingTime.inMinutes.toString());
-  //       // _countDownDateTime = remainingTime.inDays;
-  //     },
-  //     format: CountDownTimerFormat.daysHoursMinutesSeconds,
-  //     enableDescriptions: true,
-  //     spacerWidth: 5,
-  //     timeTextStyle: TextStyle(fontSize: 21, color: Colors.red, height: 0),
-  //     daysDescription: "day",
-  //     hoursDescription: "hour",
-  //     minutesDescription: "min",
-  //     secondsDescription: "sec",
-  //     descriptionTextStyle: TextStyle(height: 0),
-  //     colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
-  //     onEnd: () {
-  //       Navigator.pushReplacement(
-  //           context, MaterialPageRoute(builder: (context) => AuctionHome(),));
-  //       showDialog(
-  //         context: context,
-  //         builder:
-  //             (context) => AlertDialog(
-  //               title: Text('หมดเวลา'),
-  //               content: Text("สามารถตรวจสอบผลการประมูล"),
-  //               actions: [
-  //                 TextButton(
-  //                   onPressed: () => {Navigator.of(context).pop()},
-  //                   child: Text('ตกลง'),
-  //                 ),
-  //               ],
-  //             ),
-  //       );
-  //     },
-  //   );
+  Widget countdown() {
+    // final start_date_time_data = detailAuctionData['start_date_time'];
+    final end_date_time_data = detailAuctionData['end_date_time'];
+    // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
+    // var min;
+    var end_date_time = DateTime.parse(end_date_time_data);
+
+    var date_tiem_difference = end_date_time.difference(DateTime.now());
+    // print("ความต่างของเวลา: " + date_tiem_difference.toString());
+    var countdown = TimerCountdown(
+      endTime: DateTime.now().add(
+        Duration(seconds: date_tiem_difference.inSeconds),
+      ),
+      onTick: (remainingTime) {
+        // print("Test: " + remainingTime.inMinutes.toString());
+        // _countDownDateTime = remainingTime.inDays;
+      },
+      format: CountDownTimerFormat.daysHoursMinutesSeconds,
+      enableDescriptions: true,
+      spacerWidth: 5,
+      timeTextStyle: TextStyle(fontSize: 21, color: Colors.red, height: 0),
+      daysDescription: "day",
+      hoursDescription: "hour",
+      minutesDescription: "min",
+      secondsDescription: "sec",
+      descriptionTextStyle: TextStyle(height: 0),
+      colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
+      onEnd: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => AuctionHome(),));
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+              AlertDialog(
+                title: Text('หมดเวลา'),
+                content: Text("สามารถตรวจสอบผลการประมูล"),
+                actions: [
+                  TextButton(
+                    onPressed: () => {Navigator.of(context).pop()},
+                    child: Text('ตกลง'),
+                  ),
+                ],
+              ),
+        );
+      },
+    );
   // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
-  //
-  //   return countdown;
-  // }
+
+    return countdown;
+  }
 
   // Widget showDateTimeCountdown(Map<String, dynamic> data) {
   // Widget showDateTimeCountdown() {

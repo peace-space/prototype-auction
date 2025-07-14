@@ -5,7 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:prototype_your_auction_services/screen/StoreManage.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 
 import '../share/ShareUserData.dart';
 
@@ -513,7 +514,7 @@ class AddProductState extends State<AddProduct> {
       hint: Text("ประเภทสินค้า"),
       isExpanded: true,
       padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-      value: _dataAuctionTypeValue,
+      value: _productTypeValues,
       items:
       product_types.map((data) {
         return DropdownMenuItem(
@@ -681,8 +682,7 @@ class AddProductState extends State<AddProduct> {
         );
 
         // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/create-product';
-        String url =
-            'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
+        String url = ApiPathServer().getCreateProducServerPost();
 
         final uri = Uri.parse(url);
         final request = http.MultipartRequest('POST', uri);
@@ -761,6 +761,7 @@ class AddProductState extends State<AddProduct> {
         print(data.toString());
 
         request.fields['id_users'] = data['id_users'];
+        request.fields['id_product_types'] = data['id_product_types'];
         request.fields['name_product'] = data['name_product'];
         request.fields['detail_product'] = data['detail_product'];
         request.fields['start_price'] = data['start_price'];
@@ -784,7 +785,7 @@ class AddProductState extends State<AddProduct> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => StoreManage()),
+            MaterialPageRoute(builder: (context) => AuctionHome()),
           );
         } else {
           Navigator.pushReplacement(
@@ -806,9 +807,14 @@ class AddProductState extends State<AddProduct> {
           message = '';
         });
 
-        print(
-            "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" + ShareData.userData.toString());
+        // print(
+        // "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" + ShareData.userData.toString());
 
+        if (_imageData.length <= 0) {
+          setState(() {
+            message += "- กรุณาเพิ่มรูปภาพอย่างน้อย 1 ภาพ\n";
+          });
+        }
         if (_dataAuctionTypeValue == null) {
           setState(() {
             message += ShareData.userData.toString();
@@ -818,11 +824,6 @@ class AddProductState extends State<AddProduct> {
         if (_productTypeValues == null) {
           setState(() {
             message += '- กรุณาเลือกประเภทสินค้า\n';
-          });
-        }
-        if (_imageData.length <= 0) {
-          setState(() {
-            message += "- กรุณาเพิ่มรูปภาพอย่างน้อย 1 ภาพ\n";
           });
         }
         if (_nameProduct.text == '') {

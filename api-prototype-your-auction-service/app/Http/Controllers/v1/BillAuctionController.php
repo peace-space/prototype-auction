@@ -31,15 +31,15 @@ class BillAuctionController extends Controller
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
-                ->join('users', function (JoinClause $join) {
-                    $join->on('users.id_users', '=', 'products.id_users');
-                })
-                ->join('bank_accounts', function (JoinClause $join) {
-                    $join->on('bank_accounts.id_users', '=', 'products.id_users');
-                })
-                ->join('payment_proof_images', function (JoinClause $join) {
-                    $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
-                })
+                // ->join('users', function (JoinClause $join) {
+                //     $join->on('users.id_users', '=', 'products.id_users');
+                // })
+                // ->join('bank_accounts', function (JoinClause $join) {
+                //     $join->on('bank_accounts.id_users', '=', 'products.id_users');
+                // })
+                // ->join('payment_proof_images', function (JoinClause $join) {
+                //     $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
+                // })
                 ->where('bill_auctions.id_bill_auctions', '=', $id_bill_auctions)
                 ->get();
 
@@ -115,7 +115,7 @@ class BillAuctionController extends Controller
                 'message' => 'Successfully.',
                 'data' => $bill_auction[0],
                 'images' => $images_model,
-                'bill_images' => $payment_proof_images_model,
+                'bill_images' => ['data' => $payment_proof_images_model,]
             ], 200);
         } catch (Exception $e) {
             return response()->json([
