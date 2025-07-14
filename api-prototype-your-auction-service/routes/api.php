@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\BankAccountController;
 use App\Http\Controllers\v1\BillAuctionController;
 use App\Http\Controllers\v1\ResultAuctionController;
 use App\Http\Controllers\v1\ProductController;
@@ -38,8 +39,11 @@ Route::prefix('/v1')->group(function () {
     Route::post('/edit-user-profile', [UserController::class, 'editUserProfile']);
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
     Route::post('/change-password', [UserController::class, 'changePassWord']);
-    Route::post('/verify-password', [UserController::class, 'verifyPassWord']);
 
+
+    // Bank Account -----------------------------------------------------------
+    Route::post('/create-bank-account', [BankAccountController::class, 'createBankAccount']);
+    Route::post('/insert-bank-account', [BankAccountController::class, 'insertBankAccount']);
 
     Route::post('/test-delete', [UserController::class, 'test']);
 

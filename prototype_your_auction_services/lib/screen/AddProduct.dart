@@ -22,6 +22,7 @@ class AddProductState extends State<AddProduct> {
 
   var _dataAuctionTypeValue;
   String? _dataPaymentTypesValue;
+  var _productTypeValues;
 
   String _inputEndTimeData = '';
   var _inputEndTimeController = TextEditingController();
@@ -199,6 +200,9 @@ class AddProductState extends State<AddProduct> {
         SizedBox(height: 8),
         Text("ประเภทการประมูล", style: subjectTextStyle()),
         inputAuctionTypes(),
+        SizedBox(height: 8),
+        Text("ประเภทสินค้า", style: subjectTextStyle()),
+        inputProductTypes(),
         SizedBox(height: 8),
         Text("ชื่อสินค้า:", style: subjectTextStyle()),
         inputNameProduct(),
@@ -488,6 +492,45 @@ class AddProductState extends State<AddProduct> {
     );
   }
 
+  Widget inputProductTypes() {
+    List<String>? product_types = [
+      'ทั่วไป',
+      'ของเก่า',
+      'เสื้อผ้า',
+      'ของใช้',
+      'เทคโนโลยี',
+      'เครื่องดนตรี',
+      'นาฬิกา',
+      'เครื่องประดับ',
+      'จักรยานยนต์',
+      'รถยนต์',
+    ];
+    double left = 20,
+        top = 0,
+        right = 20,
+        bottom = 0;
+    return DropdownButton(
+      hint: Text("ประเภทสินค้า"),
+      isExpanded: true,
+      padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+      value: _dataAuctionTypeValue,
+      items:
+      product_types.map((data) {
+        return DropdownMenuItem(
+          value: data,
+          child: Center(child: Text(data)),
+        );
+      }).toList(),
+      onChanged:
+          (value) =>
+      {
+        setState(() {
+          _productTypeValues = value.toString();
+        }),
+      },
+    );
+  }
+
   // Widget inputBankAccount() {
   //   return Column(
   //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -579,12 +622,20 @@ class AddProductState extends State<AddProduct> {
         check_integer_shipping_cost = int.parse(_shippingCost.text);
         print(check_integer_shipping_cost.toString());
       } on Exception catch (e) {
+        message += 'ราคาการจัดส่งต้องเป็นตัวเลขเท่านั้น\n';
+        setState(() {});
         showDialog(
           context: context,
           builder:
               (context) => AlertDialog(
                 title: Text('แจ้งเตือน'),
                 content: Text("ราคาการจัดส่งต้องเป็นตัวเลขเท่านั้น"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop()
+                  }, child: Text("ตกลง"))
+                ],
               ),
         );
       }
@@ -592,12 +643,22 @@ class AddProductState extends State<AddProduct> {
         check_integer_start_price = int.parse(_startPrice.text);
         print(check_integer_start_price.toString());
       } on Exception catch (e) {
+        message += "- ราคาเริ่มต้นต้องเป็นต้วเลขเท่านั้น\n";
+        setState(() {
+          message += "- ราคาเริ่มต้นต้องเป็นต้วเลขเท่านั้น\n";
+        });
         showDialog(
           context: context,
           builder:
               (context) => AlertDialog(
                 title: Text('แจ้งเตือน'),
                 content: Text("ราคาเริ่มต้นต้องเป็นต้วเลขเท่านั้น"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop()
+                  }, child: Text("ตกลง"))
+                ],
               ),
         );
       }
@@ -609,6 +670,8 @@ class AddProductState extends State<AddProduct> {
           _startPrice.text != '' &&
           _inputEndTimeData != '' &&
           _inputEndDateData != '' &&
+          _dataAuctionTypeValue != '' &&
+          _productTypeValues != '' &&
           check_integer_shipping_cost != null &&
           check_integer_start_price != null) {
         showDialog(
@@ -634,19 +697,6 @@ class AddProductState extends State<AddProduct> {
           // print(_imageData[0]! as PlatformFile);
           print("Web" + "\n\n\n\n\n");
 
-          // FilePickerResult? result = await FilePicker.platform.pickFiles();
-          //
-          // if (result != null) {
-          //   PlatformFile file = result.files.first;
-          //
-          //   print(file.name);
-          //   print(file.bytes);
-          //   print(file.size);
-          //   print(file.extension);
-          //   print(file.path);
-          // } else {
-          //   // User canceled the picker
-          // }
           Map data = {"image_1": "ข้อมูลรูปภาพ"};
 
           for (int i = 0; i < _imageData.length; i++) {
@@ -685,16 +735,12 @@ class AddProductState extends State<AddProduct> {
 
         print("\n\n\n\n" + request.fields.toString() + "\n\n\n\n\n");
 
-        if (_dataAuctionTypeValue == 'ประมูลปกติ') {
-          _dataAuctionTypeValue = "1";
-        } else if (_dataAuctionTypeValue == 'ประมูลแบบส่วนตัว') {
-          _dataAuctionTypeValue = "2";
-        }
 
         Map<String, dynamic> data = {
           // "data" : "test",
           // "id_users": '2',
           "id_users": ShareData.userData['id_users'].toString(),
+          "id_product_types": selectProductType(_productTypeValues),
           // "name_product": "Submit Flutter Test",
           "name_product": _nameProduct.text,
           // "detail_product": "Flutter Detail Test",
@@ -705,7 +751,7 @@ class AddProductState extends State<AddProduct> {
           "start_price": _startPrice.text,
           // "end_date_time": "2025-04-25 01:26:00",
           "end_date_time": _inputEndDateData + " " + _inputEndTimeData,
-          "id_auction_types": _dataAuctionTypeValue,
+          "id_auction_types": auctionTypes(_dataAuctionTypeValue),
           // "id_payment_types": ShareData.userData['id_payment_types'],
           "id_payment_types": '1',
           // "id_bank_accounts": ShareData.userData['id_bank_accounts'],
@@ -746,11 +792,11 @@ class AddProductState extends State<AddProduct> {
             MaterialPageRoute(builder: (context) => AddProduct()),
           );
 
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(title: Text("ล้มเหลว")),
-          );
-
+          // showDialog(
+          //   context: context,
+          //   builder: (context) => AlertDialog(title: Text("ล้มเหลว")),
+          // );
+          //
           print("\n\n\n");
           print("False Status Code: " + response.statusCode.toString());
           print("\n\n\n");
@@ -759,6 +805,21 @@ class AddProductState extends State<AddProduct> {
         setState(() {
           message = '';
         });
+
+        print(
+            "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" + ShareData.userData.toString());
+
+        if (_dataAuctionTypeValue == null) {
+          setState(() {
+            message += ShareData.userData.toString();
+            message += "- กรุณาเลือกประเภทการประมูล\n";
+          });
+        }
+        if (_productTypeValues == null) {
+          setState(() {
+            message += '- กรุณาเลือกประเภทสินค้า\n';
+          });
+        }
         if (_imageData.length <= 0) {
           setState(() {
             message += "- กรุณาเพิ่มรูปภาพอย่างน้อย 1 ภาพ\n";
@@ -794,6 +855,18 @@ class AddProductState extends State<AddProduct> {
             message += "- กรุณาเพิ่มวันที่ปิดประมูล\n";
           });
         }
+
+        showDialog(context: context, builder: (context) =>
+            AlertDialog(
+              title: Text("แจ้งเตือน"),
+              content: Text("${message}"),
+              actions: [
+                TextButton(onPressed: () =>
+                {
+                  Navigator.of(context).pop()
+                }, child: Text("ตกลง"))
+              ],
+            ));
       }
     } on Exception catch (e) {
       print("\n\n\n");
@@ -813,6 +886,42 @@ class AddProductState extends State<AddProduct> {
 
   TextStyle subjectTextStyle() {
     return TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
+  }
+
+  String selectProductType(String product_type) {
+    if (product_type == 'ทั่วไป') {
+      return '1';
+    } else if (product_type == 'ของเก่า') {
+      return '2';
+    } else if (product_type == 'เสื้อผ้า') {
+      return '3';
+    } else if (product_type == 'ของใช้') {
+      return '4';
+    } else if (product_type == 'เทคโนโลยี') {
+      return '5';
+    } else if (product_type == 'เครื่องดนตรี') {
+      return '6';
+    } else if (product_type == 'นาฬิกา') {
+      return '7';
+    } else if (product_type == 'เครื่องประดับ') {
+      return '8';
+    } else if (product_type == 'จักรยานยนต์') {
+      return '9';
+    } else if (product_type == 'รถยนต์') {
+      return '10';
+    }
+    return '1';
+  }
+
+  String auctionTypes(String auction_types) {
+    if (auction_types == null) {
+      return "1";
+    } else if (_dataAuctionTypeValue == 'ประมูลปกติ') {
+      return "1";
+    } else if (_dataAuctionTypeValue == 'ประมูลแบบส่วนตัว') {
+      return "2";
+    }
+    return "1";
   }
 
   // Future<void> onSaveProduct() async {

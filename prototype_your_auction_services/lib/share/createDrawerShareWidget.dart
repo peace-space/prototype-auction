@@ -97,11 +97,11 @@ Drawer createDrawer(BuildContext ctx) {
 
 Widget showImageProfile() {
   // if (ShareData.logedIn != false) {
-  if (ShareData.userData['image_profile'] != null) {
+  if (ShareData.image_user_profile != null) {
     return CircleAvatar(
       backgroundImage: NetworkImage(
           'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile' +
-              ShareData.userData['image_profile']
+              ShareData.image_user_profile
       ),
     );
 

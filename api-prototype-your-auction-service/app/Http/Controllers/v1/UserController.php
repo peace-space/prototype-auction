@@ -42,23 +42,37 @@ class UserController extends Controller
         }
     }
 
-    public function oneIndex($index)
+    public function oneIndex($id_users)
     {
         try {
             $user_data = DB::table('users')
                 // ->select('id_users', 'first_name_users', 'last_name_users', 'phone', 'address', 'email', 'admin')
                 ->select('*')
-                ->join('bank_accounts', function (JoinClause $join) {
-                    $join->on('bank_accounts.id_users', '=', 'users.id_users');
-                })
-                ->where('users.id_users', '=', $index)
-                ->get();
+                // ->join('bank_accounts', function (JoinClause $join) {
+                //     $join->on('bank_accounts.id_users', '=', 'users.id_users');
+                // })
+                ->where('users.id_users', '=', $id_users)
+                ->first();
             // return "tsets";
+
+
+
+            try {
+                $bank_account = DB::table('bank_accounts')
+                    ->select('*')
+                    ->where('id_users', '=', $id_users)
+                    ->first();
+            } catch (Exception $e) {
+                $bank_account = null;
+            }
 
             return response()->json([
                 "status" => 1,
                 "message" => "Successfully.",
-                "data" => $user_data[0]
+                "data" => [
+                    'user_data' => $user_data,
+                    'bank_account' => $bank_account
+                ]
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -153,7 +167,7 @@ class UserController extends Controller
                         ->update(['address' => $user_data['address']]);
                 }
 
-               if ($request->image_profile != "") {
+                if ($request->image_profile != "") {
                     $old_path_image_profile = DB::table('users')
                         ->select("*")
                         ->where('id_users', '=', $user_data['id_users'])
@@ -165,9 +179,7 @@ class UserController extends Controller
                             $local_path = public_path($old_path_image_profile->image_profile);
                             unlink($local_path);
                         } catch (Exception $e) {
-
                         }
-
                     }
 
                     if ($request->image_profile != null) {
@@ -371,10 +383,23 @@ class UserController extends Controller
 
                 $user_data = auth()->user();
 
+
+                try {
+                    $bank_account = DB::table('bank_accounts')
+                        ->select('*')
+                        ->where('id_users', '=', $data['id_users'])
+                        ->first();
+                } catch (Exception $e) {
+                    $bank_account = null;
+                }
+
                 return response()->json([
                     'status' => 1,
                     'message' => 'Successfully.',
-                    'data' => $user_data,
+                    'data' => [
+                        'user_data' => $user_data,
+                        'bank_account' => $bank_account,
+                    ],
                     'authorisation' => [
                         'token' => $user_token_data,
                         'type' => 'bearer'
@@ -401,10 +426,22 @@ class UserController extends Controller
             $user_data = auth()->user();
             // return $user;
             if ($user_data) {
+                try {
+                    $bank_account = DB::table('bank_accounts')
+                        ->select('*')
+                        ->where('id_users', '=', $user_data->id_users)
+                        ->first();
+                } catch (Exception $e) {
+                    $bank_account = null;
+                }
+
                 return response()->json([
-                    'status' => 1,
-                    'message' => 'Successfully.',
-                    'data' => $user_data,
+                    "status" => 1,
+                    "message" => "Successfully.",
+                    "data" => [
+                        'user_data' => $user_data,
+                        'bank_account' => $bank_account
+                    ]
                 ], 200);
             } else {
                 return response()->json([

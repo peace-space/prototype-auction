@@ -181,8 +181,9 @@ class LoginState extends State<Login>{
             key: 'user_token_type', value: resData['authorisation']['type']);
 
         Map<String, dynamic> data = resData['data'];
+        // print(data.toString());
         // print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" + data['admin_status'].runtimeType.toString() + "\n\n\n\n");
-        if (data['admin_status'] == '1') {
+        if (data['user_data']['admin_status'] == '1') {
           ShareData.admin = true;
         } else {
           ShareData.admin = false;
@@ -190,10 +191,13 @@ class LoginState extends State<Login>{
         // print("Admin Status: " + ShareData.admin.toString());
 
         ShareData.logedIn = true;
-
-        ShareData.userData = data;
-        print(ShareData.userData['image_profile'].toString());
-        // print(ShareData.userData.toString());
+        // print("\n\n\n\n+++++++++++++++++++++++++++++++++++${data.toString()}\n\n\n\n\n");
+        ShareData.userData = data['user_data'];
+        ShareData.bankAccountUser = data['bank_account'];
+        ShareData.image_user_profile =
+            data['user_data']['image_profile'].toString();
+        // print(ShareData.userData['user_data']['image_profile'].toString());
+        // print("SSSSSSSSSSSSSSSS: " + ShareData.userData.toString() + "SSSSSSSSSSSSSSSSSSSSSS");
 
         goToAuctionHome(ctx);
 

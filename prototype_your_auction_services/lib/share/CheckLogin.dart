@@ -42,7 +42,8 @@ class CheckLogin {
         Map<String, dynamic> data = responseData['data'];
         print(responseData['message']);
 
-        ShareData.userData = data;
+        ShareData.userData = data['user_data'];
+        ShareData.bankAccountUser = data['bank_account'];
         ShareData.logedIn = true;
 
         // showDialog(context: ctx, builder: (context) => AlertDialog(
