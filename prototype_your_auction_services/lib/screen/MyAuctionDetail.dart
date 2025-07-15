@@ -57,13 +57,13 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                       fontWeight: FontWeight.bold
                   ),)),
                   SizedBox(height: 8),
-                  // showDataBillAuctionImages(data['data_bill']),
+                  showDataBillAuctionImages(),
                   SizedBox(height: 8),
                   showDataBillAuction(data['data_bill']),
                   SizedBox(height: 8),
                   buttonConfirmVerification(data['data_bill']),
                   SizedBox(height: 8),
-                  buttonGoToChat(),
+                  buttonGoToChat(data['data_bill']['data']),
                   SizedBox(height: 500),
                 ],
               ),
@@ -110,7 +110,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                 child: Image.network(
                   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
-            ),
+                ),
               ),
             ),
       ),
@@ -169,24 +169,25 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
 
   Stream<Map<String, dynamic>> fetchMyAuctionDetail() async* {
     await Future.delayed(Duration(seconds: 1));
-    // print('Start.detailAuctions');
+    print('Start.detailAuctions');
     // String url =
     //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
     //     .productData['id_auctions']}';
     String api = ApiPathServer().getMyAuctionBillServerGet(
         id_auctions: ShareProductData.productData['id_auctions'].toString());
 
-    print("SSSSSSSSSSSSSSSSSSSS: " + api);
+    // print("SSSSSSSSSSSSSSSSSSSS: " + api);
 
     final uri = Uri.parse(api);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     Map<String, dynamic> data = resData['data'];
-    // print("AAAAAAAAAAAAAAAAAAAAAAAAAAA: "+ data['data_bill'].length.toString());
-    if (data['data_bill'] != null) {
-      if (data['data_bill']['image_bill'] != null) {
+    // print("AAAAAAAAAAAAAAAAAAAAAAAAAAA: "+ data['data_bill'].toString());
+    if (data['data_bill']['image_bill'] != null) {
+      // print("++++++++++++++++++++++++" + data['data_bill']['image_bill'].length);
+      if (data['data_bill']['image_bill'][0] != null) {
         _receipt = data['data_bill']['image_bill'];
-        // print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: " + _receipt.length.toString());
+        // print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: " + _receipt.toString());
       }
     }
     print("nnnnn");
@@ -329,10 +330,9 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print("${id_payment_status_types}");
     try {
       var data = data_bill['data'];
-
+      print(data.toString());
       if (data != null) {
-        var id_payment_status_types = data['id_payment_status_types'];
-
+        int id_payment_status_types = data['id_payment_status_types'];
         if (id_payment_status_types == 2) {
           return ElevatedButton(onPressed: () =>
           {
@@ -554,13 +554,14 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   //   if ()
   // }
 
-  Widget showDataBillAuctionImages(dynamic data) {
+  Widget showDataBillAuctionImages() {
     // print("ZZZZZZZZZZZZZZZZZZZZZZZZZ: " + data['image_bill'][0].toString());
     // return ListView.builder(
     //   itemCount: data['image_bill']!.length,
     //   itemBuilder: (context, index) => Card(
     //   child: Image.network('https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' + data['image_bill'][index]),
     // ),);
+
     if (_receipt.length == 0) {
       return Center(child: Text("รอการชำระเงิน"));
     }
@@ -603,10 +604,13 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     );
   }
 
-  Widget buttonGoToChat() {
-    return ElevatedButton(onPressed: () =>
-    {
-    }, child: Text('แชท'));
+  Widget buttonGoToChat(dynamic customer_data) {
+    if (customer_data != null) {
+      return ElevatedButton(onPressed: () =>
+      {
+      }, child: Text('แชท'));
+    }
+    return Text('');
   }
 
   Widget showDataBillAuction(dynamic data) {

@@ -53,7 +53,8 @@ class AuctionController extends Controller
                     $join->on('users.id_users', '=', 'products.id_users');
                 })
                 ->where('auctions.auction_status', '=', true)
-                ->orderByRaw('id_auctions')
+                // ->orderByRaw('id_auctions')
+                ->orderByDesc('id_auctions')
                 ->get();
 
             // $high_bit = DB::table('bids')
@@ -402,6 +403,7 @@ class AuctionController extends Controller
     public function myAuctions($id_user)
     {
         try {
+            // return "A";
             $my_auctions = DB::table('auctions')
                 ->select(
                     '*',
@@ -412,10 +414,18 @@ class AuctionController extends Controller
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
+                // ->join('bids', function (JoinClause $join) {
+                //     $join->on('bids.id_auctions', '=', 'auctions.id_auctions');
+                // })
+                // ->join('result_auctions', function (JoinClause $join) {
+                //     $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
+                // })
                 ->orderByRaw('id_auctions')
                 ->where('products.id_users', '=', $id_user)
                 ->get();
-            // return $my_auctions;
+            // return "AA";
+            // return $my_auctions[0]->id_auctions;
+
             // if ($request->image_1 != null) {
             //     if ($request->image_1 != null) {
             //         $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
@@ -886,4 +896,5 @@ class AuctionController extends Controller
 
     }
 }
+
 

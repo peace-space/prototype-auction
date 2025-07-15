@@ -31,12 +31,12 @@ class BillAuctionController extends Controller
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
-                // ->join('users', function (JoinClause $join) {
-                //     $join->on('users.id_users', '=', 'products.id_users');
-                // })
-                // ->join('bank_accounts', function (JoinClause $join) {
-                //     $join->on('bank_accounts.id_users', '=', 'products.id_users');
-                // })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->join('bank_accounts', function (JoinClause $join) {
+                    $join->on('bank_accounts.id_users', '=', 'products.id_users');
+                })
                 // ->join('payment_proof_images', function (JoinClause $join) {
                 //     $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
                 // })
@@ -115,7 +115,8 @@ class BillAuctionController extends Controller
                 'message' => 'Successfully.',
                 'data' => $bill_auction[0],
                 'images' => $images_model,
-                'bill_images' => ['data' => $payment_proof_images_model,]
+                // 'bill_images' => ['data' => $payment_proof_images_model,]
+                'bill_images' => $payment_proof_images_model
             ], 200);
         } catch (Exception $e) {
             return response()->json([
@@ -200,23 +201,19 @@ class BillAuctionController extends Controller
     {
         try {
             // return "AAA";
-            $my_auction_bill = DB::table('bill_auctions')
+            $my_auction_bill = DB::table('result_auctions')
                 ->select('*')
-                ->join('result_auctions', function (JoinClause $join) {
-                    $join->on('result_auctions.id_result_auctions', '=', 'bill_auctions.id_result_auctions');
+                ->join('bill_auctions', function (JoinClause $join) {
+                    $join->on('bill_auctions.id_bill_auctions', '=', 'result_auctions.id_result_auctions');
                 })
                 ->join('bids', function (JoinClause $join) {
                     $join->on('bids.id_bids', '=', 'result_auctions.id_bids');
                 })
-                //->join('payment_proof_images', function (JoinClause $join) {
-                // $join->on('payment_proof_images.id_payment_proof_images', '=', 'bill_auctions.id_payment_proof_images');
-                //})
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'result_auctions.id_users');
                 })
                 ->where('bids.id_auctions', '=', $id_auctions)
                 ->get();
-            $my_auction_bill = [];
 
             // return $my_auction_bill;
 
@@ -272,6 +269,7 @@ class BillAuctionController extends Controller
 
             try {
                 $image_bill = $my_auction_bill[0];
+                // return $my_auction_bill[0];
                 $payment_proof_images_model = [];
                 // return $image_bill;
                 // return $image_bill->id_payment_proof_images;
@@ -381,3 +379,5 @@ class BillAuctionController extends Controller
         }
     }
 }
+
+
