@@ -571,9 +571,9 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   String shippingConpany() {
     if (bill_auction_data['shipping_company'] != null) {
-      String shipping_number = bill_auction_data['shipping_company'];
-      if (shipping_number != '') {
-        return shipping_number;
+      String shipping_company = bill_auction_data['shipping_company'];
+      if (shipping_company != '') {
+        return shipping_company;
       }
     }
     return "-";
