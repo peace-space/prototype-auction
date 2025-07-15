@@ -135,6 +135,12 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
           ),
           Row(
             children: [
+              Text("บริษัทขนส่ง: "),
+              Text("${shippingConpany()}"),
+            ],
+          ),
+          Row(
+            children: [
               Text("เลขพัสดุ: "),
               Text("${shippingNumber()}"),
             ],
@@ -556,6 +562,16 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   String shippingNumber() {
     if (bill_auction_data['shipping_number'] != null) {
       String shipping_number = bill_auction_data['shipping_number'];
+      if (shipping_number != '') {
+        return shipping_number;
+      }
+    }
+    return "-";
+  }
+
+  String shippingConpany() {
+    if (bill_auction_data['shipping_company'] != null) {
+      String shipping_number = bill_auction_data['shipping_company'];
       if (shipping_number != '') {
         return shipping_number;
       }

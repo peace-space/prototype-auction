@@ -20,6 +20,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   int indexSelectImage = 0;
   List<dynamic> _receipt = [];
   var _shipping_number = TextEditingController();
+  var _shipping_company = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -296,8 +297,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   }
 
   void onUserProductDelete() async {
-    print(ShareData.userData['id_users']);
-    print(ShareProductData.productData['id_auctions']);
+    // print(ShareData.userData['id_users']);
+    // print(ShareProductData.productData['id_auctions']);
     String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
         .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
     final uri = Uri.parse(url);
@@ -330,7 +331,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print("${id_payment_status_types}");
     try {
       var data = data_bill['data'];
-      print(data.toString());
+      // print(data.toString());
       if (data != null) {
         int id_payment_status_types = data['id_payment_status_types'];
         if (id_payment_status_types == 2) {
@@ -368,6 +369,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                 children: [
                   Text("กรุณาเพิ่มหมายเลขพัสดุก่อนยืนยันการตรวจสอบ"),
                   SizedBox(height: 8,),
+                  inputShippingCompany(),
+                  SizedBox(height: 8,),
                   inputShippingNumber(),
                   SizedBox(height: 8,),
                   submitButtonShippingNumberAndConfirmVerification(data_bill),
@@ -385,6 +388,17 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
           border: OutlineInputBorder(),
           label: Text("กรอกเลขพัสดุ"),
           hintText: "กรอกเลขพัสดุ"
+      ),
+    );
+  }
+
+  TextField inputShippingCompany() {
+    return TextField(
+      controller: _shipping_company,
+      decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          label: Text("กรอกชื่อบริษัทขนส่ง"),
+          hintText: "ชื่อบริษัทขนส่ง"
       ),
     );
   }
@@ -421,6 +435,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       'id_bill_auctions': data_bill['id_bill_auctions'],
       'id_auctions': data_bill['id_auctions'],
       'shipping_number': _shipping_number.text,
+      'shipping_company': _shipping_company.text,
     };
     String api = ApiPathServer().getConfirmVerificationServerPost();
     Uri uri = Uri.parse(api);
@@ -593,7 +608,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   }
 
   void showOneBillImage(String image_path) {
-    print("AAA:::::::::::::::::::::::::::::::::");
+    // print("AAA:::::::::::::::::::::::::::::::::");
     showDialog(context: context,
         builder: (context) =>
             Dialog(
@@ -632,6 +647,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
             SizedBox(height: 8,),
             Text("สถานะการจัดส่ง: ${deliveryStatus(
                 customer_data['delivery_status'])}"),
+            Text("บริษัทขนส่ง: ${shippingCompany(customer_data)}"),
             Text("หมายเลขพัสดุ: ${shippingNumber(customer_data)}"),
             Text("ราคารวม: ${customer_data['debts']} บาท"),
 
@@ -657,6 +673,16 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       String shipping_number = customer_data['shipping_number'];
       if (shipping_number != '') {
         return shipping_number;
+      }
+    }
+    return "-";
+  }
+
+  String shippingCompany(Map<String, dynamic> customer_data) {
+    if (customer_data['shipping_company'] != null) {
+      String shipping_company = customer_data['shipping_company'];
+      if (shipping_company != '') {
+        return shipping_company;
       }
     }
     return "-";

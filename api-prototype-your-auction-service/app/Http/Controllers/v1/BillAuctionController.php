@@ -332,18 +332,20 @@ class BillAuctionController extends Controller
     {
         try {
             $shipping_number = $request->shipping_number;
+            $shipping_company = $request->shipping_company;
             $id_bill_auctions = $request->id_bill_auctions;
             $id_auctions = $request->id_auctions;
 
-
             if (
                 $shipping_number != '' &&
+                $shipping_company != '' &&
                 $id_bill_auctions != '' &&
                 $id_auctions != ''
             ) {
 
                 $data_for_update_in_bill_auctions_table = [
                     'shipping_number' => $shipping_number,
+                    'shipping_company' => $shipping_company,
                     'id_payment_status_types' => 3,
                     'delivery_status' => 1,
                 ];
@@ -379,5 +381,7 @@ class BillAuctionController extends Controller
         }
     }
 }
+
+
 
 
