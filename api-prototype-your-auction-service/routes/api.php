@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\PasswordResetController;
 use App\Http\Controllers\v1\BankAccountController;
 use App\Http\Controllers\v1\BillAuctionController;
 use App\Http\Controllers\v1\ResultAuctionController;
@@ -40,6 +41,10 @@ Route::prefix('/v1')->group(function () {
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
     Route::post('/change-password', [UserController::class, 'changePassWord']);
 
+    // Password Reset
+    Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);
+    Route::post('password-reset', [PasswordResetController::class, 'passwordReset']);
+    Route::post('test-send-email', [PasswordResetController::class, 'test']);
 
     // Bank Account -----------------------------------------------------------
     Route::post('/create-bank-account', [BankAccountController::class, 'createBankAccount']);
@@ -61,6 +66,9 @@ Route::prefix('/v1')->group(function () {
 
     // Email -----------------------------------------------------------
     // Route::get('/test', [EmailController::class, 'index']);
+
+
+    //Image ------------------------------------------------------------
     // Route::get('/image', [ImageController::class, 'index']);
     // Route::get('/image/{id_auctions}&{index}', [ImageController::class, 'oneImage']);
     Route::get('/get-image/{storage}/{images}/{user_profile_image}/{image_path}', [ImageController::class, 'getImage']);
