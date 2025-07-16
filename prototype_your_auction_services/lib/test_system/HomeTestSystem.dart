@@ -215,9 +215,9 @@ class HomeTestSystemState extends State<HomeTestSystem> {
       controller: testEmailValidatorTextFormFieldController,
       validator: (email) {
         if (!EmailValidator.validate(email!)) {
-          // return "ไม่ใช้อีเมล";
+          // return "ไม่ใช่อีเมล";
           setState(() {
-            testEmail = "ไม่ใช้อีเมล";
+            testEmail = "ไม่ใช่อีเมล";
           });
         } else {
           return null;

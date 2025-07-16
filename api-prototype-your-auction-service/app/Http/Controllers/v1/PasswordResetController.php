@@ -22,26 +22,39 @@ class PasswordResetController extends Controller
                 'email' => 'required',
             ]);
 
-            $token = Str::random(6);
+            $check_email = DB::table('users')
+                ->select('*')
+                ->where('email', '=', $request->email)
+                ->first();
+            // return $check_email;
+            if ($check_email) {
+                $token = Str::random(6);
 
-            $data_for_password_reset = [
-                'email' => $request->email,
-                'token' => $token,
-            ];
+                $data_for_password_reset = [
+                    'email' => $request->email,
+                    'token' => $token,
+                ];
 
-            $insert_token_for_password_reset = DB::table('password_resets')
-                ->insert($data_for_password_reset);
+                $insert_token_for_password_reset = DB::table('password_resets')
+                    ->insert($data_for_password_reset);
 
-            // view('forgot-password', ['token' => $token]);
+                // view('forgot-password', ['token' => $token]);
 
-            Mail::to($request->email)->send(new ForgotPasswordMail($token));
+                Mail::to($request->email)->send(new ForgotPasswordMail($token));
 
-            // return "AAA";
-            return response()->json([
-                'status' => 1,
-                'message' => "Successfully.",
-                // 'data' => $request->email,
-            ], 200);
+                // return "AAA";
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    // 'data' => $request->email,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ERROR.',
+                    'data' => "ไม่มีข้อมูลผู้ใช้งาน",
+                ], 404);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
@@ -65,11 +78,16 @@ class PasswordResetController extends Controller
             $check_token_and_email = DB::table('password_resets')
                 ->select('*')
                 ->where(
-                    'token', '=', $request->token_for_password_reset, 'and',
-                    'email', '=', $request->email
+                    'token',
+                    '=',
+                    $request->token_for_password_reset,
+                    'and',
+                    'email',
+                    '=',
+                    $request->email
                 )->first();
 
-                // return $check_token_and_email;
+            // return $check_token_and_email;
             if ($check_token_and_email == true) {
                 $password_hashed = Hash::make($request->password);
 
@@ -114,3 +132,4 @@ class PasswordResetController extends Controller
         // return "sss";
     }
 }
+

@@ -42,6 +42,14 @@ class ApiPathServer {
   final String create_product_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-product';
 
+  final String forgot_password_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/forgot-password';
+
+  final String password_reset_server_post =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/password-reset';
+
+  final String change_password_server_post = '';
+
   String getLoginApiServerPost() {
     return this.login_api_server_post;
   }
@@ -106,5 +114,13 @@ class ApiPathServer {
 
   String getCreateProducServerPost() {
     return this.create_product_server_post;
+  }
+
+  String getForgotPasswordServerPost() {
+    return this.forgot_password_server_post;
+  }
+
+  String getPasswordResetServerPost() {
+    return this.password_reset_server_post;
   }
 }
