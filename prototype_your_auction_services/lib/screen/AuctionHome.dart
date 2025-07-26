@@ -348,28 +348,28 @@ class AuctionHomeState extends State<AuctionHome> {
     );
   }
 
-  void saveTheWinnerAuctions(Map<String, dynamic> data) async {
-    // Map<String, dynamic> data = {'id_auctions': 1};
-    // print(data.toString());
-    if (data['auctions_status'] != 0) {
-      Map<String, dynamic> winner_data = {
-        'id_auctions': data['id_auctions']
-      };
-      String url =
-          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
-      final uri = Uri.parse(url);
-      final response = await http.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode(winner_data),
-      );
-      if (response.statusCode == 201) {
-        final reActionData = jsonDecode(response.body);
-        print(reActionData['message']);
-      } else {
-        print(response.statusCode.toString());
-      }
-    }
-
-  }
+// void saveTheWinnerAuctions(Map<String, dynamic> data) async {
+//   // Map<String, dynamic> data = {'id_auctions': 1};
+//   // print(data.toString());
+//   if (data['auctions_status'] != 0) {
+//     Map<String, dynamic> winner_data = {
+//       'id_auctions': data['id_auctions']
+//     };
+//     String url =
+//         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
+//     final uri = Uri.parse(url);
+//     final response = await http.post(
+//       uri,
+//       headers: {'Content-Type': 'application/json'},
+//       body: jsonEncode(winner_data),
+//     );
+//     if (response.statusCode == 201) {
+//       final reActionData = jsonDecode(response.body);
+//       print(reActionData['message']);
+//     } else {
+//       print(response.statusCode.toString());
+//     }
+//   }
+//
+// }
 }

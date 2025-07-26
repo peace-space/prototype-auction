@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('id_result_auctions')->references('id_result_auctions')->on('result_auctions');
+            $table->foreign('id_result_auctions')->references('id_result_auctions')->on('result_auctions')->onDelete('cascade');
             $table->foreign('id_payment_status_types')->references('id_payment_status_types')->on('payment_status_types');
             $table->foreign('id_payment_proof_images')->references('id_payment_proof_images')->on('payment_proof_images');
         });

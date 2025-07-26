@@ -26,7 +26,7 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('id_products')->references('id_products')->on('products');
+            $table->foreign('id_products')->references('id_products')->on('products')->onDelete('cascade');
             $table->foreign('id_auction_types')->references('id_auction_types')->on('auction_types');
             $table->foreign('id_payment_types')->references('id_payment_types')->on('payment_types');
             $table->foreign('id_bank_accounts')->references('id_bank_accounts')->on('bank_accounts');

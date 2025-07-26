@@ -640,35 +640,7 @@ class AuctionController extends Controller
     //     }
     // }
 
-    public function deleteMyAuctions($id_user, $id_auctions)
-    {
-        // try {
-        // $user_product_delete = DB::table('auctions')
-        //     ->where('id_auctions', '=', $id_auctions, 'and', 'id_users', '=', $id_user)
-        //     ->delete();
 
-        // $get_product_data = DB::table('auctions')
-        //                     ->select('*')
-
-        //     if ($user_product_delete) {
-        //         return response()->json([
-        //             'status' => 1,
-        //             'message' => "Successfully."
-        //         ], 200);
-        //     } else {
-        //         return response()->json([
-        //             'status' => 0,
-        //             'message' => "ไม่มีสินค้าในฐานข้อมูล"
-        //         ], 404);
-        //     }
-        // } catch (Exception $e) {
-        //     return response()->json([
-        //         'status' => 0,
-        //         'message' => "Error.",
-        //         'data' => $e
-        //     ], 500);
-        // }
-    }
 
     public function historyProduct($id_users)
     {
@@ -792,109 +764,114 @@ class AuctionController extends Controller
         }
     }
 
-    public function test(Request $request)
-    {
-        try {
-
-            $test_date_time = DB::table('auctions')
-                            ->select('*')
-                            // ->where('id_auctions', '=', 1)
-                            ->get();
-            // return $test_date_time;
-            $end_date_time_auctions = Carbon::parse($test_date_time[0]->end_date_time, 'Asia/Bangkok');
-
-
-            $current_date_time = Carbon::now('Asia/Bangkok');
-
-            $end_date_time_auctions->toPeriod();
-
-            $data = [
-                'test' => $end_date_time_auctions.' เปรียบเทียบ '.$current_date_time,
-                'CurrentDateTime' => $current_date_time->toDateTimeString(),
-                'EndDateTime' => $end_date_time_auctions->toDateTimeString(),
-            ];
-
-            $a = $this->test1($test_date_time);
-            return $a;
-
-            // return view('welcome', [
-
-            // ]));
-                sleep(1);
-            if ($end_date_time_auctions <= $current_date_time) {
-
-
-                return view('welcome', [
-                    'status' => 'หมดเวลา',
-                    'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
-                    'message' => 'end น้อยกว่า current',
-                    'data' => $data
-                ]);
-
-                return response()->json([
-                    'status' => 'หมดเวลา',
-                    'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
-                    'message' => 'end น้อยกว่า current',
-                    'data' => $data
-                ], 200);
-            } else {
-
-                return view('welcome', [
-                    'status' => $end_date_time_auctions->toDateTimeString(),
-                    'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
-                    'message' => 'end มากกว่า current',
-                    'data' => $data
-                ]);
-
-                return response()->json([
-                    'status' => $end_date_time_auctions->toDateTimeString(),
-                    'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
-                    'message' => 'end มากกว่า current',
-                    'data' => $data
-                ], 200);
-            }
-
-
-            // dd($diff_in_hours);
-            return $diff_in_hours;
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => "Error",
-                'data' => $e
-            ]);
-        }
+    public function closeAuctions() {
+        return "TEST";
     }
 
- public function test1($data) {
-        $newData = [];
-        // $count = 0;
-        if ($data != '') {
-            foreach ($data as $d) {
-                // return $d->end_date_time;
-                $end_date_time_auctions = Carbon::parse($d->end_date_time, 'Asia/Bangkok');
-                $current_date_time = Carbon::now('Asia/Bangkok');
+//     public function test(Request $request)
+//     {
+//         try {
 
-                if ($end_date_time_auctions <= $current_date_time) {
-                    // $count += 1;
-                    // return $d->id_auctions;
-                    $auctions_timeout = DB::table('auctions')
-                                            ->where('id_auctions', '=', $d->id_auctions)
-                                            ->update(['auction_status' => false]);
+//             $test_date_time = DB::table('auctions')
+//                             ->select('*')
+//                             // ->where('id_auctions', '=', 1)
+//                             ->get();
+//             // return $test_date_time;
+//             $end_date_time_auctions = Carbon::parse($test_date_time[0]->end_date_time, 'Asia/Bangkok');
 
-                    array_push($newData, $auctions_timeout);
 
-                    // return $count;
-                }
+//             $current_date_time = Carbon::now('Asia/Bangkok');
 
-            }
-                // return $count;
-                return $newData;
-        }
+//             $end_date_time_auctions->toPeriod();
 
-        return $data;
+//             $data = [
+//                 'test' => $end_date_time_auctions.' เปรียบเทียบ '.$current_date_time,
+//                 'CurrentDateTime' => $current_date_time->toDateTimeString(),
+//                 'EndDateTime' => $end_date_time_auctions->toDateTimeString(),
+//             ];
 
-    }
+//             $a = $this->test1($test_date_time);
+//             return $a;
+
+//             // return view('welcome', [
+
+//             // ]));
+//                 sleep(1);
+//             if ($end_date_time_auctions <= $current_date_time) {
+
+
+//                 return view('welcome', [
+//                     'status' => 'หมดเวลา',
+//                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+//                     'message' => 'end น้อยกว่า current',
+//                     'data' => $data
+//                 ]);
+
+//                 return response()->json([
+//                     'status' => 'หมดเวลา',
+//                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+//                     'message' => 'end น้อยกว่า current',
+//                     'data' => $data
+//                 ], 200);
+//             } else {
+
+//                 return view('welcome', [
+//                     'status' => $end_date_time_auctions->toDateTimeString(),
+//                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+//                     'message' => 'end มากกว่า current',
+//                     'data' => $data
+//                 ]);
+
+//                 return response()->json([
+//                     'status' => $end_date_time_auctions->toDateTimeString(),
+//                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+//                     'message' => 'end มากกว่า current',
+//                     'data' => $data
+//                 ], 200);
+//             }
+
+
+//             // dd($diff_in_hours);
+//             return $diff_in_hours;
+//         } catch (Exception $e) {
+//             return response()->json([
+//                 'status' => 0,
+//                 'message' => "Error",
+//                 'data' => $e
+//             ]);
+//         }
+//     }
+
+//  public function test1($data) {
+//         $newData = [];
+//         // $count = 0;
+//         if ($data != '') {
+//             foreach ($data as $d) {
+//                 // return $d->end_date_time;
+//                 $end_date_time_auctions = Carbon::parse($d->end_date_time, 'Asia/Bangkok');
+//                 $current_date_time = Carbon::now('Asia/Bangkok');
+
+//                 if ($end_date_time_auctions <= $current_date_time) {
+//                     // $count += 1;
+//                     // return $d->id_auctions;
+//                     $auctions_timeout = DB::table('auctions')
+//                                             ->where('id_auctions', '=', $d->id_auctions)
+//                                             ->update(['auction_status' => false]);
+
+//                     array_push($newData, $auctions_timeout);
+
+//                     // return $count;
+//                 }
+
+//             }
+//                 // return $count;
+//                 return $newData;
+//         }
+
+//         return $data;
+
+//     }
+
 }
 
 

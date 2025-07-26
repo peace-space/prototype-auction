@@ -4,8 +4,10 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -116,5 +118,62 @@ class ProductController extends Controller
             ], 500);
         }
 
+    }
+
+
+public function userProductDelete($id_users, $id_products)
+    {
+        try {
+            $product_images = DB::table('products')
+                                    ->select('*')
+                                    ->join('images', function (JoinClause $join) {
+                                        $join->on('images.id_images', '=', 'products.id_images');
+                                    })
+                                    ->where('products.id_products', '=', $id_products)
+                                    ->first();
+            // return $product_images->image_path_2;
+
+            // for ($index = 1; $index <= 10; $index++) {
+            //     // if ($product_images->images_path_.$index )
+            // }
+
+            // return $product_images['image_path_1'];
+
+            $images_model = [
+                $product_images->image_path_1,
+                $product_images->image_path_2,
+                $product_images->image_path_3,
+                $product_images->image_path_4,
+                $product_images->image_path_5,
+                $product_images->image_path_6,
+                $product_images->image_path_7,
+                $product_images->image_path_8,
+                $product_images->image_path_9,
+                $product_images->image_path_10,
+            ];
+
+            for ($index = 0; $index < 10; $index++) {
+                if ($images_model[$index] != '') {
+                    $local_path = public_path($images_model[$index]);
+                    unlink($local_path);
+                }
+            }
+
+            // return $images_model;
+
+            $delete_products = DB::table('products')->where('id_products', '=', $id_products)->delete();
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $delete_products,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
     }
 }
