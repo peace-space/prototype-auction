@@ -1,3 +1,5 @@
+
+
 class ApiPathServer {
   final String login_api_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login';
@@ -47,6 +49,9 @@ class ApiPathServer {
 
   final String password_reset_server_post =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/password-reset';
+
+  final String user_delete_product_delete =
+      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-product-delete';
 
   final String change_password_server_post = '';
 
@@ -122,5 +127,11 @@ class ApiPathServer {
 
   String getPasswordResetServerPost() {
     return this.password_reset_server_post;
+  }
+
+  String getUserDeleteProductDelete({required var id_products}) {
+    String path =
+        this.user_delete_product_delete + '/' + id_products.toString();
+    return path;
   }
 }

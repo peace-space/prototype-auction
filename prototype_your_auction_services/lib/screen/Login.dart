@@ -181,8 +181,10 @@ class LoginState extends State<Login>{
             key: 'user_token_type', value: resData['authorisation']['type']);
 
         Map<String, dynamic> data = resData['data'];
-        // print(data.toString());
-        // print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" + data['admin_status'].runtimeType.toString() + "\n\n\n\n");
+        print(data.toString());
+        print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" +
+            data['user_data']['admin_status'].runtimeType.toString() +
+            "\n\n\n\n");
         if (data['user_data']['admin_status'] == '1') {
           ShareData.admin = true;
         } else {

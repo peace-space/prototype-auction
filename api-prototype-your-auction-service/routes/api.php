@@ -55,7 +55,7 @@ Route::prefix('/v1')->group(function () {
     // AuctionController -----------------------------------------------------------
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
-    Route::delete('/user-product-delete/{id_users}/{id_products}', [ProductController::class, 'userProductDelete']);
+    Route::delete('/user-product-delete/{id_products}', [ProductController::class, 'userProductDelete']);
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     // Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);

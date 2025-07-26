@@ -121,7 +121,7 @@ class ProductController extends Controller
     }
 
 
-public function userProductDelete($id_users, $id_products)
+public function userProductDelete($id_products)
     {
         try {
             $product_images = DB::table('products')

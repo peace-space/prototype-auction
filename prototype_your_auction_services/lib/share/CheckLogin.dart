@@ -50,7 +50,7 @@ class CheckLogin {
         //   title: Text(response.statusCode.toString()),
         // ),);
 
-        if (data['admin_status'] == '1') {
+        if (data['user_data']['admin_status'] == '1') {
           ShareData.admin = true;
         } else {
           ShareData.admin = false;

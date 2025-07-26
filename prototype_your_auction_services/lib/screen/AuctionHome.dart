@@ -243,7 +243,7 @@ class AuctionHomeState extends State<AuctionHome> {
   Stream<List<dynamic>> fetchAuctionData() async* {
     try {
       // await Future.delayed(Duration(seconds: 5));
-      print("Start");
+      // print("Start");
       String url =
           'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/auction';
@@ -334,42 +334,20 @@ class AuctionHomeState extends State<AuctionHome> {
             .toString();
         String sec = (time.sec == null) ? "00" : time.sec.toString();
 
-        return Text(
-          "เหลือเวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Colors.red
-        ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text("เหลือเวลาอีก (วัน:ช:น:ว)"),
+            Text(
+              "${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Colors.red
+            ),
+            ),
+          ],
         );
-      },
-      onEnd: () {
-        // saveTheWinnerAuctions(data);
       },
     );
   }
-
-// void saveTheWinnerAuctions(Map<String, dynamic> data) async {
-//   // Map<String, dynamic> data = {'id_auctions': 1};
-//   // print(data.toString());
-//   if (data['auctions_status'] != 0) {
-//     Map<String, dynamic> winner_data = {
-//       'id_auctions': data['id_auctions']
-//     };
-//     String url =
-//         'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/save-the-winners';
-//     final uri = Uri.parse(url);
-//     final response = await http.post(
-//       uri,
-//       headers: {'Content-Type': 'application/json'},
-//       body: jsonEncode(winner_data),
-//     );
-//     if (response.statusCode == 201) {
-//       final reActionData = jsonDecode(response.body);
-//       print(reActionData['message']);
-//     } else {
-//       print(response.statusCode.toString());
-//     }
-//   }
-//
-// }
 }

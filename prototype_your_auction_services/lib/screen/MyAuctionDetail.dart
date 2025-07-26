@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
-import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 import 'BidLists.dart';
 
@@ -299,8 +298,10 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   void onUserProductDelete() async {
     // print(ShareData.userData['id_users']);
     // print(ShareProductData.productData['id_auctions']);
-    String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
-        .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
+    // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
+    //     .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
+    String url = ApiPathServer().getUserDeleteProductDelete(
+        id_products: ShareProductData.productData['id_products'].toString());
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     if (response.statusCode == 200) {
@@ -505,7 +506,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                           fontWeight: FontWeight.bold
                       ),)),
                       Text(
-                          "รหัสการประมูล: A-${auction_detail_data['id_auctions']}"),
+                          "รหัสการประมูล: A-${auction_detail_data['id_products']}"),
                       Text("ประเภทการประมูล: ${auctionType(
                           auction_detail_data['id_auction_types'])}"),
                       Text("ชื่อ: ${auction_detail_data['name_product']}"),
