@@ -104,6 +104,7 @@ Route::prefix('/v1')->group(function () {
 
     //Chat Rooms -----------------------------------------------------------
     Route::get('/chat-rooms/{id_users_sender}', [ChatRoomController::class, 'chatRooms']);
+    Route::post('/create-chat-rooms', [ChatRoomController::class, 'createChatRooms']);
 
     // Chat -----------------------------------------------------------
     Route::get('/chat/{id_chat_rooms}', [ChatController::class, 'chat']);

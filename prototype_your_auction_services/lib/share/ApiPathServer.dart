@@ -58,6 +58,10 @@ class ApiPathServer {
 
   final String chat_rooms_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/chat-rooms';
 
+  final String chat_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/chat';
+
+  final String send_message_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/send-message';
+
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
@@ -149,5 +153,14 @@ class ApiPathServer {
   String getChatRoomsServerGet({required var id_users}) {
     String path = this.chat_rooms_server_get + '/' + id_users.toString();
     return path;
+  }
+
+  String getChatServerGet({required var id_chat_rooms}) {
+    String path = this.chat_server_get + '/' + id_chat_rooms.toString();
+    return path;
+  }
+
+  String getSendMessageServerPost() {
+    return this.send_message_post;
   }
 }

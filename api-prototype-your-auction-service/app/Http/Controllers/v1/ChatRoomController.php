@@ -37,4 +37,55 @@ class ChatRoomController extends Controller
             ], 500);
         }
     }
+
+    public function createChatRooms(Request $request) {
+        try {
+            $request->validate([
+              'id_users_chat_1' => 'required',
+              'id_users_chat_2' => 'required'
+            ]);
+
+
+            $check_chat_rooms = DB::table('chat_rooms')
+                                        ->select('*')
+                                        ->where('id_users_chat_1', $request->id_users_chat_1)
+                                        ->where('id_users_chat_2', $request->id_users_chat_2)
+                                        ->first();
+
+            if ($check_chat_rooms == '') {
+
+                $chat_rooms_data = [
+                    'id_users_chat_1' => $request->id_users_chat_1,
+                    'id_users_chat_2' => $request->id_users_chat_2
+                ];
+
+                $create_chat_room = DB::table('chat_rooms')
+                                        ->insert($chat_rooms_data);
+
+                $check_chat_rooms = DB::table('chat_rooms')
+                                        ->select('*')
+                                        ->where('id_users_chat_1', $request->id_users_chat_1)
+                                        ->where('id_users_chat_2', $request->id_users_chat_2)
+                                        ->first();
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    'data' => $check_chat_rooms,
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $check_chat_rooms,
+            ], 200);
+        } catch (Exception $e) {
+            return response()->josn([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ], 500);
+        }
+    }
 }
