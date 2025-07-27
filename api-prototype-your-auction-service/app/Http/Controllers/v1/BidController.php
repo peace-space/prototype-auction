@@ -93,12 +93,25 @@ class BidController extends Controller
         }
     }
 
-    public function userBidDelete($id_bids) {
+    public function userBidDelete($id_bids, $id_auctions) {
         try {
             $delete_bid = DB::table('bids')
                                 ->where('id_bids', '=', $id_bids)
                                 ->delete();
 
+            $max_price = $this->highBids($id_auctions);
+
+
+            $update_max_price_auctions =  DB::table('auctions')
+                                            ->where('id_auctions', '=', $id_auctions)
+                                            ->update(['max_price', '=', $max_price]);
+
+            if ($delete_bid == false) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => "ไม่มีข้อมูล",
+                ], 404);
+            }
 
             return response()->json([
                 'status' => 1,

@@ -61,10 +61,17 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
                           'จำนวนเงิน: ${data['bid_price'].toString()} บาท',
                           style: TextStyle(fontSize: 13),
                         ),
+                        buttonDeleteBid(data['id_bids'], data['id_auctions'],
+                            data['end_date_time']),
                       ],
                     ),
                     trailing: Column(
-                      children: [Text(data['created_at'].toString())],
+                      children: [Column(
+                        children: [
+                          Text(data['created_at'].toString()),
+                        ],
+                      )
+                      ],
                     ),
                   ),
                 );
@@ -88,23 +95,86 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     print(response.statusCode.toString());
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       // print(data['data']);
       yield data['data'];
       // setState(() {});
     }
+
+    setState(() {});
     print("End.");
   }
 
-  ElevatedButton buttonDeleteBid() {
-    return ElevatedButton(onPressed: () =>
-    {
-      // onDeleteBid(id_bids)
-    }, child: Text('ลบการเสนอราคา'));
+  Widget buttonDeleteBid(var id_bids, var id_auctions, String end_date_time) {
+    print(end_date_time.toString());
+
+    // end_date_time = '2025-07-27 13:30:00';
+
+    // print("Cuurent Date Time: ${DateTime.now()}");
+    var date_time = DateTime.parse(end_date_time);
+    var check_date_time = date_time.difference(DateTime.now());
+    // print(":::::::::::::::::: ${check_date_time.inMinutes}");
+
+    if (check_date_time >= Duration(minutes: 30)) {
+      return OutlinedButton(onPressed: () {
+        showDialog(context: context, builder: (context) =>
+            AlertDialog(
+              title: Text("ยืนยันการลบ"),
+              content: Text(
+                  "หากลบข้อมูลการประมูลจะหายไป\nแม้ว่าราคาที่คุณเสนอจะสูงที่สุดก็ตาม\nคุณยืนยันที่จะลบหรือไม่ ??"),
+              actions: [
+                TextButton(onPressed: () {
+                  Navigator.of(context).pop();
+                }, child: Text("ยกเลิก")),
+                TextButton(onPressed: () {
+                  Navigator.of(context).pop();
+                  onDeleteBid(id_bids, id_auctions);
+                }, child: Text('ยืนยัน'))
+              ],
+            ),);
+      }, child: Text('ยกเลิกเสนอราคา', style: TextStyle(
+          color: Colors.red,
+          fontSize: 13
+      ),
+      ));
+    } else {
+      return Text("หมดเวลายกเลิกเสนอราคา", style: TextStyle(
+          fontSize: 13,
+          color: Colors.orange
+      ),);
+    }
   }
 
-  void onDeleteBid(id_bids) {
-    String api = ApiPathServer().getUserBidDeleteServerDelete(id_bids: id_bids);
+  void onDeleteBid(var id_bids, var id_auctions) async {
+    print("Delete");
+    String api = ApiPathServer().getUserBidDeleteServerDelete(
+        id_bids: id_bids, id_auctions: id_auctions);
+    Uri uri = Uri.parse(api);
+    final response = await http.delete(uri);
+    if (response.statusCode == 200) {
+      showDialog(context: context, builder: (context) =>
+          AlertDialog(
+            title: Text('แจ้งเตือน'),
+            content: Text('ยกเลิกการเสนอราคาสำเร็จ'),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: Text("ตกลง"))
+            ],
+          ),);
+    } else {
+      showDialog(context: context, builder: (context) =>
+          AlertDialog(
+            title: Text("แจ้งเตือน"),
+            content: Text("ยกเลิกการเสนอราคาล้มเหลว"),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.of(context).pop();
+              }, child: Text('ตกลง'))
+            ],
+          ),);
+    }
   }
 }

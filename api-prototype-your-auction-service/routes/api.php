@@ -81,7 +81,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/bids/{id_auctions}', [BidController::class, 'index']);
     Route::get('/high-bids/{id_auctions}', [BidController::class, 'highBids']);
     Route::post('/bidding', [BidController::class, 'bidding']);
-    Route::delete('/user-bid-delete/{id_bids}', [BidController::class, 'userBidDelete']);
+    Route::delete('/user-bid-delete/{id_bids}/{id_auctiobs}', [BidController::class, 'userBidDelete']);
 
     // My Auctions User Product -----------------------------------------------------------
     Route::get('/my-auctions/{id_user}', [AuctionController::class, 'myAuctions']);

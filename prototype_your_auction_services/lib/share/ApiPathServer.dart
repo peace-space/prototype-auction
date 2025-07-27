@@ -138,8 +138,10 @@ class ApiPathServer {
     return path;
   }
 
-  String getUserBidDeleteServerDelete({required var id_bids}) {
-    String path = this.user_bid_delete_server_delete + '/' + id_bids.toString();
+  String getUserBidDeleteServerDelete(
+      {required var id_bids, required var id_auctions}) {
+    String path = this.user_bid_delete_server_delete + '/' +
+        id_bids.toString() + '/' + id_auctions.toString();
     return path;
   }
 }
