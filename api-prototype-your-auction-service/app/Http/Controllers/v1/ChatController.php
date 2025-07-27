@@ -16,9 +16,6 @@ class ChatController extends Controller
             $chat_list = DB::table('chats')
                                 ->select('*')
                                 ->where('id_chat_rooms', '=', $id_chat_rooms)
-                                ->join('users', function(JoinClause $join) {
-                                    $join->on('users.id_users')
-                                })
                                 ->get();
             return response()->json([
                 'status' => 1,

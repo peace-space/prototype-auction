@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class Chat extends StatefulWidget {
+class ChatTest extends StatefulWidget {
 
-  State<Chat> createState() {
-    return ChatState();
+  State<ChatTest> createState() {
+    return ChatTestState();
   }
 }
 
-class ChatState extends State<Chat> {
+class ChatTestState extends State<ChatTest> {
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("data: {id_user} | ${ShareData.userData['id_users']}"),
+        title: Text("data: ${ShareData.userData['id_users']} | ${ShareChatData
+            .chatData['id_users_chat_2']}"),
       ),
-    );
+        body: Text('A'));
   }
   Widget streamMessageList() {
     // var alignment = ()

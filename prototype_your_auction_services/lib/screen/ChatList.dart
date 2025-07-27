@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/Chat.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -62,9 +63,19 @@ class ChatListState extends State<ChatList> {
                 return Card(
                   margin: EdgeInsets.all(5),
                   child: ListTile(
-                    onTap: () => goToChat(),
-                    title: Text("${data}"),
-                  ),
+                      onTap: () => goToChat(data),
+                      title: Column(
+                        children: [
+                          Image.network(
+                            ApiPathServer().getImageApiServerGet(
+                              image_profile_path: data['image_profile'],
+                            ),
+                          ),
+                          Text(
+                            "ชื่อ: ${data['first_name_users']} ${data['last_name_users']}",
+                          ),
+                        ],
+                      )),
                 );
             },
             );
@@ -77,9 +88,10 @@ class ChatListState extends State<ChatList> {
     );
   }
 
-  void goToChat() {
+  void goToChat(Map<String, dynamic> data) {
+    ShareChatData.chatData = data;
     var route = MaterialPageRoute(
-      builder: (ctx) => Chat(),
+      builder: (ctx) => ChatTest(),
     );
     Navigator.push(context, route);
   }

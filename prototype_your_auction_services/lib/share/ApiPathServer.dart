@@ -76,9 +76,8 @@ class ApiPathServer {
     return this.logout_api_server_get;
   }
 
-  String getImageApiServerGet(String image_profile_path) {
+  String getImageApiServerGet({required String image_profile_path}) {
     String path = this.image_profile_api_server_get + image_profile_path;
-    print(path);
     return path!;
   }
 
