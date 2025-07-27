@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\ChatController;
 use App\Http\Controllers\v1\PasswordResetController;
 use App\Http\Controllers\v1\BankAccountController;
 use App\Http\Controllers\v1\BillAuctionController;
@@ -8,6 +9,7 @@ use App\Http\Controllers\v1\ProductController;
 use App\Http\Controllers\v1\AuctionController;
 use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\BidController;
+use App\Http\Controllers\v1\ChatRoomController;
 use App\Http\Controllers\v1\ImageController;
 use App\Http\Controllers\v1\ResultReportAuctionController;
 use App\Models\ResultReportAuction;
@@ -98,4 +100,14 @@ Route::prefix('/v1')->group(function () {
     Route::post('/insert-receipt-bill-auction', [BillAuctionController::class, 'insertReceiptBillAuction']);
     Route::get('/my-auction-bill/{id_auctions}', [BillAuctionController::class, 'myAuctionBill']);
     Route::post('/confirm-verification', [BillAuctionController::class, 'confirmVerification']);
+
+
+    //Chat Rooms -----------------------------------------------------------
+    Route::get('/chat-rooms/{id_users_sender}', [ChatRoomController::class, 'chatRooms']);
+
+    // Chat -----------------------------------------------------------
+    Route::get('/chat/{id_chat_rooms}', [ChatController::class, 'chat']);
+    Route::post('/send-message', [ChatController::class, 'sendMessage']);
+
+
 });

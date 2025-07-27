@@ -11,6 +11,7 @@ use App\Models\v1\AuctionType;
 use App\Models\v1\BankAccount;
 use App\Models\v1\BillAuction;
 use App\Models\v1\Chat;
+use App\Models\v1\ChatRoom;
 use App\Models\v1\ImageInChats;
 use App\Models\v1\PaymentProofImages;
 use App\Models\v1\PaymentStatusType;
@@ -48,6 +49,7 @@ class DatabaseSeeder extends Seeder
         PaymentProofImages::factory(10)->create();
         BillAuction::factory(10)->create();
         ImageInChats::factory(10)->create();
+        ChatRoom::factory(10)->create();
         Chat::factory(10)->create();
         PrivateAuctionGroup::factory(10)->create();
         // \App\Models\User::factory()->create([

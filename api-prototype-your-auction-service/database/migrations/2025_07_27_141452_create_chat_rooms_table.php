@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('image_in_chats', function (Blueprint $table) {
-            $table->id('id_image_in_chats');
-            $table->string('image_in_chat_path');
+        Schema::create('chat_rooms', function (Blueprint $table) {
+            $table->id('id_chat_rooms');
+            $table->string('id_users_chat_1');
+            $table->string('id_users_chat_2');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });
@@ -24,6 +25,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('image_in_chats');
+        Schema::dropIfExists('chat_rooms');
     }
 };
+

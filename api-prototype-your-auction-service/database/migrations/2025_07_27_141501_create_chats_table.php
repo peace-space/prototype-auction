@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id('id_chats');
-            $table->string('id_users_chat_1');
-            $table->string('id_users_chat_2');
-            $table->text('message');
-            $table->foreignId('id_image_in_chats')->nullable()->default(null);
+            $table->foreignId('id_chat_rooms');
+            $table->bigInteger('id_users_sender');
+            $table->text('message')->nullable()->default('null');
+            $table->foreignId('id_image_in_chats')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
+
+            $table->foreign('id_chat_rooms')->references('id_chat_rooms')->on('chat_rooms')->onDelete('cascade');
+            $table->foreign('id_image_in_chats')->references('id_image_in_chats')->on('image_in_chats')->onDelete('cascade');
         });
     }
 
@@ -30,3 +34,4 @@ return new class extends Migration
         Schema::dropIfExists('chats');
     }
 };
+
