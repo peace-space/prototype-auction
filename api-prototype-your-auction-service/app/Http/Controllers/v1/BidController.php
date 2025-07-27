@@ -104,7 +104,7 @@ class BidController extends Controller
 
             $update_max_price_auctions =  DB::table('auctions')
                                             ->where('id_auctions', '=', $id_auctions)
-                                            ->update(['max_price', '=', $max_price->bid_price]);
+                                            ->update(['max_price' => $max_price->bid_price]);
             // return $update_max_price_auctions;
             if ($delete_bid == false) {
                 return response()->json([
