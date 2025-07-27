@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/Chat.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 class ChatList extends StatefulWidget {
@@ -26,51 +28,60 @@ class ChatListState extends State<ChatList> {
   }
 
   Stream<List<dynamic>> streamChatData() async* {
-    String url = "https://your-auction-services.com/prototype-auction/api-pa/api/user";
+    String url = ApiPathServer().getChatRoomsServerGet(
+        id_users: ShareData.userData['id_users']);
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
     List<dynamic> data = resData['data'];
     yield data;
+    setState(() {});
   }
 
   Widget streamChatListData(BuildContext ctx) {
     return StreamBuilder(
       stream: streamChatData(),
-      builder: (context, snapshot) =>
-          ListView.builder(
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text("เกิดข้อผิดพลาด ${snapshot.hasError}"),
+            );
+          }
+
+          if (snapshot.connectionState == ConnectionState.active) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (snapshot.hasData) {
+            return ListView.builder(
             itemCount: snapshot.data?.length,
             itemBuilder: (context, index) {
-              if (snapshot.hasError) {
-                return Text("Error ${snapshot.hasError}");
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (snapshot.hasData) {
                 Map<String, dynamic> data = snapshot.data?[index];
                 return Card(
                   margin: EdgeInsets.all(5),
                   child: ListTile(
-                    onTap: () => goToChat(ctx, data['id_users']),
-                    title: Text("${data['name']}"),
+                    onTap: () => goToChat(),
+                    title: Text("${data}"),
                   ),
                 );
-              }
             },
-          ),
+            );
+          }
+
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
     );
   }
 
-  void goToChat(BuildContext ctx, id_user) {
+  void goToChat() {
     var route = MaterialPageRoute(
-      builder: (ctx) => Chat(id_user),
+      builder: (ctx) => Chat(),
     );
-    Navigator.push(ctx, route);
+    Navigator.push(context, route);
   }
 }
 

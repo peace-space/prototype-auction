@@ -56,6 +56,8 @@ class ApiPathServer {
   final String user_bid_delete_server_delete =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-bid-delete';
 
+  final String chat_rooms_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/chat-rooms';
+
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
@@ -142,6 +144,11 @@ class ApiPathServer {
       {required var id_bids, required var id_auctions}) {
     String path = this.user_bid_delete_server_delete + '/' +
         id_bids.toString() + '/' + id_auctions.toString();
+    return path;
+  }
+
+  String getChatRoomsServerGet({required var id_users}) {
+    String path = this.chat_rooms_server_get + '/' + id_users.toString();
     return path;
   }
 }

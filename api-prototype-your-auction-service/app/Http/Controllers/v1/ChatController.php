@@ -4,6 +4,7 @@ namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -14,10 +15,10 @@ class ChatController extends Controller
             // return $id_chat_rooms;
             $chat_list = DB::table('chats')
                                 ->select('*')
-                                // ->where('id_users_chat_2', '=', $id_users, 'and',
-                                        // 'id_users_chat_1', '=', $id_users_sender)
                                 ->where('id_chat_rooms', '=', $id_chat_rooms)
-                                // ->where('id_users_chat_2', '=', $id_users)
+                                ->join('users', function(JoinClause $join) {
+                                    $join->on('users.id_users')
+                                })
                                 ->get();
             return response()->json([
                 'status' => 1,
