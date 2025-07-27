@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
+import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -18,6 +19,7 @@ class DetailAuction extends StatefulWidget {
 
 class DetailAuctionState extends State<DetailAuction> {
   var _bid = TextEditingController();
+  var max_price;
   Map<String, dynamic> detailAuctionData = {};
   List<dynamic> _imageData = [];
   int indexSelectImage = 0;
@@ -178,6 +180,7 @@ class DetailAuctionState extends State<DetailAuction> {
   }
 
   Widget displayDataAuction(BuildContext ctx, dynamic data) {
+    max_price = data['max_price'];
     return Padding(
       padding: EdgeInsets.all(19),
       child: Column(
@@ -200,7 +203,7 @@ class DetailAuctionState extends State<DetailAuction> {
             ],
           ),
           textButtonGoToBidLists(ctx, data!['bids_count']),
-          onBit(),
+          onBit(data['id_users']),
           SizedBox(height: 7),
           Row(
             children: [
@@ -280,7 +283,17 @@ class DetailAuctionState extends State<DetailAuction> {
     print('End.detialAuctions');
   }
 
-  Widget onBit() {
+  Widget onBit(var id_users_owner) {
+    // return checkProductOwner();
+    // print(id_users_owner.toString());
+    // return Text("${isProductOwner(id_users_owner)}");
+    if (isProductOwner(id_users_owner)) {
+      // return Text("เจ้าของสินค้า ไม่สามารถเสนอราคาได้");
+      return ElevatedButton(onPressed: () {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => MyAuctions(),));
+      }, child: Text("หน้าจัดการร้านค้า"));
+    }
     return Column(
       children: [
         SizedBox(
@@ -304,7 +317,7 @@ class DetailAuctionState extends State<DetailAuction> {
             child: Text("เสนอราคา"),
           ),
         ),
-        Row(crossAxisAlignment: CrossAxisAlignment.center, children: []),
+        // Row(crossAxisAlignment: CrossAxisAlignment.center, children: []),
       ],
     );
   }
@@ -315,45 +328,59 @@ class DetailAuctionState extends State<DetailAuction> {
       int bid_price = int.parse(_bid.text);
       print("Check num bid: ${bid_price.runtimeType == int}");
       if (ShareData.userData['id_users'] != null) {
-        Map<String, dynamic> data = {
-          'id_users': ShareData.userData['id_users'],
-          'id_auctions': ShareProductData.productData['id_auctions'],
-          'bid_price': bid_price,
-        };
+        if (bid_price > max_price) {
+          Map<String, dynamic> data = {
+            'id_users': ShareData.userData['id_users'],
+            'id_auctions': ShareProductData.productData['id_auctions'],
+            'bid_price': bid_price,
+          };
 
-        String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
-        final uri = Uri.parse(url);
-        final responce = await http.post(
-          uri,
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode(data),
-        );
-
-        final reActions = jsonDecode(responce.body);
-
-        if (responce.statusCode == 201) {
-          await showDialog(
-            context: context,
-            builder:
-                (context) => AlertDialog(
-                  title: Text("เสนอราคาสำเร็จ"),
-                  actions: [
-                    TextButton(
-                      onPressed: () => {Navigator.pop(context)},
-                      child: Text("ตกลง"),
-                    ),
-                  ],
-                ),
+          String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
+          final uri = Uri.parse(url);
+          final responce = await http.post(
+            uri,
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode(data),
           );
-          print("Successfully: " + responce.statusCode.toString());
 
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => DetailAuction()),
-          );
+          final reActions = jsonDecode(responce.body);
+
+          if (responce.statusCode == 201) {
+            await showDialog(
+              context: context,
+              builder:
+                  (context) =>
+                  AlertDialog(
+                    title: Text("เสนอราคาสำเร็จ"),
+                    actions: [
+                      TextButton(
+                        onPressed: () => {Navigator.pop(context)},
+                        child: Text("ตกลง"),
+                      ),
+                    ],
+                  ),
+            );
+            print("Successfully: " + responce.statusCode.toString());
+
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => DetailAuction()),
+            );
+          } else {
+            _alertDialog(title: "เกิดข้อผิดพลาด");
+            print("Error: " + responce.statusCode.toString());
+          }
         } else {
-          _alertDialog(title: "เกิดข้อผิดพลาด");
-          print("Error: " + responce.statusCode.toString());
+          showDialog(context: context, builder: (context) =>
+              AlertDialog(
+                title: Text("ล้มเหลว"),
+                content: Text("จะต้องเสนอราคาที่สูงกว่าราคาสูงสุดเท่านั้น"),
+                actions: [
+                  TextButton(onPressed: () {
+                    Navigator.of(context).pop();
+                  }, child: Text("ตกลง"))
+                ],
+              ),);
         }
       } else {
         showDialog(
@@ -468,7 +495,7 @@ class DetailAuctionState extends State<DetailAuction> {
         );
       },
     );
-  // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
+    // print("ต้องรับเป็นตัวแปร Duration เท่านั้น: " + _countDownDateTime.toString());
 
     return countdown;
   }
@@ -598,7 +625,17 @@ class DetailAuctionState extends State<DetailAuction> {
 
     Navigator.pushReplacement(context, route);
   }
+
+  bool isProductOwner(var id_users_owner) {
+    var id_users = ShareData.userData['id_users'].toString();
+    // return id_users;
+    if (ShareData.userData['id_users'] == id_users_owner) {
+      return true;
+    } else {
+      return false;
+    }
   }
+}
 
 // void test() {
 //   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {

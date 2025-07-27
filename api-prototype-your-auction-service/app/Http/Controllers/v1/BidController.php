@@ -98,15 +98,33 @@ class BidController extends Controller
             $delete_bid = DB::table('bids')
                                 ->where('id_bids', '=', $id_bids)
                                 ->delete();
-
-            $max_price = $this->highBids($id_auctions);
-            // return $max_price->bid_price;
-
-            $update_max_price_auctions =  DB::table('auctions')
+            try {
+                $max_price = $this->highBids($id_auctions);
+                $update_max_price_auctions =  DB::table('auctions')
                                             ->where('id_auctions', '=', $id_auctions)
                                             ->update(['max_price' => $max_price->bid_price]);
+            } catch (Exception $e) {
+                // return "AAA";
+               $start_price = DB::table('auctions')
+                                    ->select('id_auctions', 'start_price')
+                                    ->where('id_auctions', '=', $id_auctions)
+                                    ->first();
+                $update_max_price_auctions =  DB::table('auctions')
+                                            ->where('id_auctions', '=', $id_auctions)
+                                            ->update(['max_price' => $start_price->start_price]);
+            }
+            // return $max_price;
+
+            // return "AAA";
             // return $update_max_price_auctions;
-            if ($delete_bid == false) {
+            if ($update_max_price_auctions == 0) {
+
+                $update_max_price_auctions =  DB::table('auctions')
+                                            ->where('id_auctions', '=', $id_auctions)
+                                            ->update(['max_price' => $start_price->start_price]);
+            }
+            // return $update_max_price_auctions;
+            if ($delete_bid == 0) {
                 return response()->json([
                     'status' => 1,
                     'message' => "ไม่มีข้อมูล",

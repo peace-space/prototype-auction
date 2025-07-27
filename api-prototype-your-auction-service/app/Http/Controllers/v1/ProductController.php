@@ -19,6 +19,7 @@ class ProductController extends Controller
             $detail_product = DB::table('auctions')
                     ->select('auctions.id_auctions',
                             'images.id_images',
+                            'users.id_users',
                             'users.first_name_users', 'users.last_name_users',
                             'products.name_product',
                             'products.detail_product',
@@ -92,6 +93,7 @@ class ProductController extends Controller
             $data = [
                 "id_auctions" => $detail_product->first()->id_auctions,
                 "id_images"=> $detail_product->first()->id_images,
+                "id_users"=> $detail_product->first()->id_users,
                 "first_name_users" => $detail_product->first()->first_name_users,
                 "last_name_users" => $detail_product->first()->last_name_users,
                 "name_product" => $detail_product->first()->name_product,

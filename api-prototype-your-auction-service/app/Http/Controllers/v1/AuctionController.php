@@ -40,6 +40,7 @@ class AuctionController extends Controller
                     'products.id_products',
                     'products.name_product',
                     'images.image_path_1',
+                    'users.id_users',
                     'users.first_name_users',
                     'users.last_name_users',
                 )

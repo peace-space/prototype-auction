@@ -30,7 +30,7 @@ class AuctionHomeState extends State<AuctionHome> {
   @override
   void initState() {
     // TODO: implement initState
-    print("\n\n\n\n\n\n\n\n\n\nTest");
+    // print("\n\n\n\n\n\n\n\n\n\nTest");
     super.initState();
     CheckLogin().onCheckLogin();
     setState(() {

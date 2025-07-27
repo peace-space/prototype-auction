@@ -55,8 +55,9 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(data.toString()),
-                        Text(data['name_product']),
+                        // Text(data.toString()),
+                        Text("วันที่เวลา: ${data['created_at'].toString()}"),
+                        Text("ชื่อ: ${data['name_product']}"),
                         Text(
                           'จำนวนเงิน: ${data['bid_price'].toString()} บาท',
                           style: TextStyle(fontSize: 13),
@@ -65,14 +66,14 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
                             data['end_date_time']),
                       ],
                     ),
-                    trailing: Column(
-                      children: [Column(
-                        children: [
-                          Text(data['created_at'].toString()),
-                        ],
-                      )
-                      ],
-                    ),
+                    // trailing: Column(
+                    //   children: [Column(
+                    //     children: [
+                    //       Text(data['created_at'].toString()),
+                    //     ],
+                    //   )
+                    //   ],
+                    // ),
                   ),
                 );
               }),
@@ -89,7 +90,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
 
 
   Stream<dynamic> fetchHistoryAuctions() async* {
-    print('Start.');
+    // print('Start.');
     String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/history-product/${ShareData
         .userData['id_users']}';
     final uri = Uri.parse(url);
@@ -104,13 +105,13 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
     }
 
     setState(() {});
-    print("End.");
+    // print("End.");
   }
 
   Widget buttonDeleteBid(var id_bids, var id_auctions, String end_date_time) {
-    print(end_date_time.toString());
+    // print(end_date_time.toString());
 
-    // end_date_time = '2025-07-27 13:30:00';
+    // end_date_time = '2025-07-27 18:35:00';
 
     // print("Cuurent Date Time: ${DateTime.now()}");
     var date_time = DateTime.parse(end_date_time);
@@ -140,7 +141,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
       ),
       ));
     } else {
-      return Text("หมดเวลายกเลิกเสนอราคา", style: TextStyle(
+      return Text("หมดเวลายกเลิกเสนอราคาแล้ว", style: TextStyle(
           fontSize: 13,
           color: Colors.orange
       ),);
@@ -148,7 +149,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
   }
 
   void onDeleteBid(var id_bids, var id_auctions) async {
-    print("Delete");
+    // print("Delete");
     String api = ApiPathServer().getUserBidDeleteServerDelete(
         id_bids: id_bids, id_auctions: id_auctions);
     Uri uri = Uri.parse(api);
@@ -168,7 +169,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
       showDialog(context: context, builder: (context) =>
           AlertDialog(
             title: Text("แจ้งเตือน"),
-            content: Text("ยกเลิกการเสนอราคาล้มเหลว"),
+            content: Text("ยกเลิกการเสนอราคาล้มเหลว: ${response.statusCode}"),
             actions: [
               TextButton(onPressed: () {
                 Navigator.of(context).pop();
