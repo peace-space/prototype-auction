@@ -92,4 +92,26 @@ class BidController extends Controller
             ], 404);
         }
     }
+
+    public function userBidDelete($id_bids) {
+        try {
+            $delete_bid = DB::table('bids')
+                                ->where('id_bids', '=', $id_bids)
+                                ->delete();
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Successfully.',
+                'data' => $delete_bid
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ], 500);
+        }
+    }
 }

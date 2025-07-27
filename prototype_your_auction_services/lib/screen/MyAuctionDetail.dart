@@ -300,7 +300,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print(ShareProductData.productData['id_auctions']);
     // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
     //     .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
-    String url = ApiPathServer().getUserDeleteProductDelete(
+    String url = ApiPathServer().getUserDeleteProductServerDelete(
         id_products: ShareProductData.productData['id_products'].toString());
     final uri = Uri.parse(url);
     final response = await http.delete(uri);

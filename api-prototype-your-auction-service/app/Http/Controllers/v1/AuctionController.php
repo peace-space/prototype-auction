@@ -647,6 +647,7 @@ class AuctionController extends Controller
         try {
             $auctions_list = DB::table('bids')
                 ->select(
+                    'bids.id_bids',
                     'auctions.id_auctions',
                     'images.id_images',
                     'products.name_product',

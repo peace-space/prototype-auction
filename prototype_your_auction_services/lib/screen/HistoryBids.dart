@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -54,6 +55,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
                     title: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(data.toString()),
                         Text(data['name_product']),
                         Text(
                           'จำนวนเงิน: ${data['bid_price'].toString()} บาท',
@@ -93,5 +95,16 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
       // setState(() {});
     }
     print("End.");
+  }
+
+  ElevatedButton buttonDeleteBid() {
+    return ElevatedButton(onPressed: () =>
+    {
+      // onDeleteBid(id_bids)
+    }, child: Text('ลบการเสนอราคา'));
+  }
+
+  void onDeleteBid(id_bids) {
+    String api = ApiPathServer().getUserBidDeleteServerDelete(id_bids: id_bids);
   }
 }
