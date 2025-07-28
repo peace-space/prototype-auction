@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/HomePage.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/AdminMenu.dart';
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
+import 'package:prototype_your_auction_services/screen/AuctionPrivateHome.dart';
 import 'package:prototype_your_auction_services/screen/ChatList.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
@@ -68,6 +69,7 @@ Drawer createDrawer(BuildContext ctx) {
           ),
           testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
+          buttonGoToAuctionPrivate(ctx),
           storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),
@@ -277,4 +279,11 @@ Widget buttonGoToReportAution(BuildContext ctx) {
     },
     child: Text("รายงานผลการประมูล"),
   );
+}
+
+Widget buttonGoToAuctionPrivate(BuildContext ctx) {
+  return ElevatedButton(onPressed: () {
+    Navigator.pushReplacement(
+        ctx, MaterialPageRoute(builder: (context) => AuctionPrivateHome(),));
+  }, child: Text("ประมูลส่วนตัว"));
 }

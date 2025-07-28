@@ -11,6 +11,7 @@ use App\Http\Controllers\v1\UserController;
 use App\Http\Controllers\v1\BidController;
 use App\Http\Controllers\v1\ChatRoomController;
 use App\Http\Controllers\v1\ImageController;
+use App\Http\Controllers\v1\PrivateAuctionGroupController;
 use App\Http\Controllers\v1\ResultReportAuctionController;
 use App\Models\ResultReportAuction;
 use Illuminate\Http\Request;
@@ -110,5 +111,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/chat/{id_chat_rooms}', [ChatController::class, 'chat']);
     Route::post('/send-message', [ChatController::class, 'sendMessage']);
 
+    // Private Auction -----------------------------------------------------------
+    Route::get('/private-auction-group/{id_users}', [PrivateAuctionGroupController::class, 'privateAuctionsGroup']);
 
 });

@@ -19,6 +19,8 @@ class StoreManageState extends State<StoreManage> {
           openAuctionsButton(context),
           Divider(),
           buttonGoToUserProduct(context),
+          Divider(),
+
         ],
       ),
       drawer: createDrawer(context),
