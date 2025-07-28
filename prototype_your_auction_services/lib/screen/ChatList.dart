@@ -91,7 +91,7 @@ class ChatListState extends State<ChatList> {
   void goToChat(Map<String, dynamic> data) {
     ShareChatData.chatData = data;
     var route = MaterialPageRoute(
-      builder: (ctx) => ChatTest(),
+      builder: (ctx) => Chat(),
     );
     Navigator.push(context, route);
   }

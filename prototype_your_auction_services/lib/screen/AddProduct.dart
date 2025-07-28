@@ -752,13 +752,14 @@ class AddProductState extends State<AddProduct> {
           // "end_date_time": "2025-04-25 01:26:00",
           "end_date_time": _inputEndDateData + " " + _inputEndTimeData,
           "id_auction_types": auctionTypes(_dataAuctionTypeValue),
-          "id_payment_types": ShareData.userData['id_payment_types'],
-          // "id_payment_types": '1',
-          "id_bank_accounts": ShareData.userData['id_bank_accounts'],
+          // "id_payment_types": ShareData.bankAccountUser['data']['id_payment_types'].toString(),
+          "id_payment_types": '1',
+          "id_bank_accounts": ShareData
+              .bankAccountUser['data']['id_bank_accounts'].toString(),
           // "id_bank_accounts": '1',
         };
 
-        print(data.toString());
+        print(ShareData.bankAccountUser.toString());
 
         request.fields['id_users'] = data['id_users'];
         request.fields['id_product_types'] = data['id_product_types'];

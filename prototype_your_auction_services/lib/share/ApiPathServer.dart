@@ -62,6 +62,8 @@ class ApiPathServer {
 
   final String send_message_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/send-message';
 
+  final String create_chat_rooms_server_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-chat-rooms';
+
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
@@ -162,5 +164,9 @@ class ApiPathServer {
 
   String getSendMessageServerPost() {
     return this.send_message_post;
+  }
+
+  String getCreateChatRoomsServerPost() {
+    return this.create_chat_rooms_server_post;
   }
 }

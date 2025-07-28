@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:prototype_your_auction_services/share/CustomDialog.dart';
 import 'package:prototype_your_auction_services/share/confirm_picker.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 // import 'flutter_s';
@@ -38,7 +37,7 @@ class HomeTestSystemState extends State<HomeTestSystem> {
           child: ListView(
             children: [
               Text(_confirm.toString()),
-              button1(context),
+              // button1(context),
               Text("ทดสอบ Confirm Dialog: " + _confirm.toString()),
               button2(context),
               Text("ทดสอบ DropDown: " + _DropDown.toString()),
@@ -59,12 +58,12 @@ class HomeTestSystemState extends State<HomeTestSystem> {
     );
   }
 
-  Widget button1(BuildContext ctx) {
-    return ElevatedButton(
-      onPressed: () => _showCustomDlg(ctx),
-      child: Text("ปุ่ม 1"),
-    );
-  }
+  // Widget button1(BuildContext ctx) {
+  //   return ElevatedButton(
+  //     onPressed: () => _showCustomDlg(ctx),
+  //     child: Text("ปุ่ม 1"),
+  //   );
+  // }
 
   Widget button2(BuildContext ctx) {
     return ElevatedButton(
@@ -85,15 +84,15 @@ class HomeTestSystemState extends State<HomeTestSystem> {
     );
   }
 
-  void _showCustomDlg(BuildContext ctx) async {
-    String? result = await showDialog(
-      context: ctx,
-      builder: (_) => CustomDialog(message: "123", title: "Test"),
-    );
-    setState(() {
-      _return_value = result!;
-    });
-  }
+  // void _showCustomDlg(BuildContext ctx) async {
+  //   String? result = await showDialog(
+  //     context: ctx,
+  //     builder: (_) => CustomDialog(message: "123", title: "Test"),
+  //   );
+  //   setState(() {
+  //     _return_value = result!;
+  //   });
+  // }
 
   Widget dropdownTest() {
     //ข้อมูล ต้องเป็น String เท่านั้น

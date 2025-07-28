@@ -4,8 +4,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/screen/Chat.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class ConfirmPayment extends StatefulWidget {
   State<ConfirmPayment> createState() {
@@ -240,7 +243,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   Stream<Map<String, dynamic>> fetchBillAuction() async* {
     // Future.delayed(Duration(seconds: 5));
-    print("Start FetchBillAuction");
+    // print("Start FetchBillAuction");
     // print(ShareProductData.productData['id_bill_auctions']);
     ApiPathServer apiServerPath = ApiPathServer();
     // print("TETTT");
@@ -271,7 +274,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       );
     }
 
-    print("End FetchBillAuction");
+    // print("End FetchBillAuction");
   }
 
   Widget buttonDetailAuction() {
@@ -311,7 +314,39 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
   }
 
   Widget buttonGoToChat() {
-    return ElevatedButton(onPressed: () => {}, child: Text("แชท"));
+    var a = bill_auction_data;
+    print("::::::::::::: ${a['id_users']}");
+    return ElevatedButton(onPressed: () =>
+    {
+      createChatRooms()
+    }, child: Text("แชท"));
+  }
+
+  void createChatRooms() async {
+    Map<String, dynamic> data = {
+      'id_users_chat_1': ShareData.userData['id_users'],
+      'id_users_chat_2': bill_auction_data['id_users'],
+    };
+
+    print(data);
+
+    String api = ApiPathServer().getCreateChatRoomsServerPost();
+    Uri uri = Uri.parse(api);
+    final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data)
+    );
+    print("objectSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+    if (response.statusCode == 200) {
+      print("objectAAAAAAAAAAAAAAAAAAAAA");
+      Map<String, dynamic> reAction = await jsonDecode(response.body);
+
+      ShareChatData.chatData = reAction['data'];
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Chat(),));
+    } else {
+      print("ERROR: ${response.statusCode}");
+    }
   }
 
   Widget buttonInsertReceipt() {
@@ -366,7 +401,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
       final response = await request.send();
 
       if (response.statusCode == 201) {
-        print("STATUS CODE: ${response.statusCode.toString()}");
+        // print("STATUS CODE: ${response.statusCode.toString()}");
         // showDialog(
         //     context: context,
         //     builder: (context) => ,
@@ -409,16 +444,16 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
         setState(() {
           _receipt.add(File(pickedFile.path));
         });
-        print("end.aaaaa");
+        // print("end.aaaaa");
       }
     }
   }
 
   Widget displayReceiptImage() {
-    print("ssssssssssssssssssssssssssssssssssssssss: " +
-        bill_auction_data['id_payment_proof_images'].toString());
+    // print("ssssssssssssssssssssssssssssssssssssssss: " +
+    //     bill_auction_data['id_payment_proof_images'].toString());
     int id_payment_status_types = bill_auction_data['id_payment_status_types'];
-    print(_receipt.length.toString());
+    // print(_receipt.length.toString());
     if (_bill_images == null) {
       return Text('');
     }
@@ -537,7 +572,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
   Widget buttonSubmit() {
     int id_payment_status_types = bill_auction_data['id_payment_status_types'];
-    print("AAAAAA: " + id_payment_status_types.toString());
+    // print("AAAAAA: " + id_payment_status_types.toString());
 
     if (id_payment_status_types == 1) {
       return ElevatedButton(

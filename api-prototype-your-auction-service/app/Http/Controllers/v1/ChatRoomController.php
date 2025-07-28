@@ -19,8 +19,9 @@ class ChatRoomController extends Controller
                                 ->join('users', function(JoinClause $join) {
                                     $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
                                 })                               //         'id_users_chat_1', '=', $id_users_sender)
-                                ->where('id_users_chat_1', '=', $id_users_sender)
-                                // ->where('id_users_chat_2', '=', $id_users)
+                                // ->where('id_users_chat_2', '=', $id_users_sender, 'OR', 'id_users_chat_1', '=', $id_users_sender)
+                                ->where('id_users_chat_1', '=', $id_users_sender)->orWhere('id_users_chat_2', '=', $id_users_sender)
+                                // ->where('id_users_chat_2', '=', $id_users_sender)
                                 ->get();
 
             return response()->json([

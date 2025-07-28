@@ -6,14 +6,14 @@ import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class ChatTest extends StatefulWidget {
+class Chat extends StatefulWidget {
 
-  State<ChatTest> createState() {
-    return ChatTestState();
+  State<Chat> createState() {
+    return ChatState();
   }
 }
 
-class ChatTestState extends State<ChatTest> {
+class ChatState extends State<Chat> {
   var _messageController = TextEditingController();
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,5 +201,7 @@ class ChatTestState extends State<ChatTest> {
     } else {
       print('ERROR: ${response.statusCode.toString()}');
     }
+
+    _messageController.text = '';
   }
 }
