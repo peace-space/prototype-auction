@@ -80,25 +80,9 @@ class DetailAuctionState extends State<DetailAuction> {
         "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
             _imageData![indexSelectImage],
       ),
-      //     : Image.network(
-      //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image'
-      //       + _imageData![indexSelectImage],
-      // ),
     );
   }
 
-  // Widget imagePlatformWebOrAndroid({required List<String?> imageData, required int index}) {
-  //
-  //   if (kIsWeb) {
-  //     //return Image.network(imageData[index]!.path, fit: BoxFit.fill,);
-  //     return Image.network(imageData[index]!);
-  //   } else if (Platform.isAndroid) {
-  //     // return Image.file(_imageData[index]!, fit: BoxFit.fill);
-  //     return Image.file(imageData[index]!);
-  //   }
-  //
-  //   return Text("Error");
-  // }
 
   Widget showAndSelectImage() {
     return Container(
@@ -121,10 +105,6 @@ class DetailAuctionState extends State<DetailAuction> {
                   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
                 ),
-                // child: Image.network(
-                //   'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/get-image' +
-                //       _imageData[index],
-                // ),
               ),
             ),
       ),
@@ -499,65 +479,6 @@ class DetailAuctionState extends State<DetailAuction> {
 
     return countdown;
   }
-
-  // Widget showDateTimeCountdown(Map<String, dynamic> data) {
-  // Widget showDateTimeCountdown() {
-  //     DateTime dateTime = DateTime.parse(detailAuctionData['end_date_time']);
-  //     return CountdownTimer(
-  //       endTime: dateTime.millisecondsSinceEpoch,
-  //       widgetBuilder: (context, time) {
-  //         if (time == null) {
-  //           return Text('หมดเวลา', style: TextStyle(
-  //               color: Colors.red
-  //           ),);
-  //         }
-  //         String day = (time.days == null || time.days == 00)? "00": time.days.toString();
-  //         String hour = (time.hours == null || time.hours == 00)? "00": time.hours.toString();
-  //         String min = (time.min == null || time.hours == 00)? "00": time.min.toString();
-  //         String sec = (time.sec == null)? "00": time.sec.toString();
-  //
-  //         return Text("เวลา: ${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
-  //             fontSize: 15,
-  //             fontWeight: FontWeight.bold,
-  //             color: Colors.red
-  //         ),
-  //         );
-  //       },
-  //       onEnd: () {
-  //         // saveTheWinnerAuctions(data);
-  //         Navigator.pushReplacement(
-  //             context, MaterialPageRoute(builder: (context) => AuctionHome(),));
-  //         showDialog(
-  //           context: context,
-  //           builder:
-  //               (context) => AlertDialog(
-  //             title: Text('หมดเวลา'),
-  //             content: Text("สามารถตรวจสอบผลการประมูล"),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () => {Navigator.of(context).pop()},
-  //                 child: Text('ตกลง'),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //     );
-  //   }
-
-
-  // void showConfirmDialog() async {
-  //   confirmPicker(
-  //     context: context,
-  //     callback: (_return_value) {
-  //       setState(() {
-  //         _confirm = _return_value;
-  //       });
-  //     },
-  //     message: 'ยืนยันการเสนอราคา' + ": Confirm: " + _confirm.toString(),
-  //     data: "จำนวนเงิน: " + _bid.text,
-  //   );
-  // }
 
   void _alertDialog({String? title, String? message}) async {
     await showDialog(
