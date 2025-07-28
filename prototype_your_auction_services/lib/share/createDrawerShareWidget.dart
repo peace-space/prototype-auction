@@ -38,6 +38,7 @@ Drawer createDrawer(BuildContext ctx) {
           testSystem(ctx), // ทดสอบระบบ
           adminMenuButton(ctx),
           homePageButton(ctx),
+          buttonGoToAuctionPrivate(ctx),
           storaManageButton(ctx),
           userProfile(ctx),
           chatListButton(ctx),

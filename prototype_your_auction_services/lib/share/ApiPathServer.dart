@@ -14,8 +14,9 @@ class ApiPathServer {
   final String image_profile_api_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile';
 
-
   final String image_api_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-imagee';
+
+  final String product_detail_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail';
 
   final String bill_auction_api_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bill-auction';
@@ -69,6 +70,13 @@ class ApiPathServer {
 
   final String private_auction_group_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/private-auction-group';
 
+
+  final String bidder_list_api_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidder-list';
+
+  final String add_bidder_api_server_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/add-bidder';
+
+  final String delete_bidder_api_server_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/delete-bidder';
+
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
@@ -96,6 +104,11 @@ class ApiPathServer {
     String path = this.image_profile_api_server_get +
         image_auction_path.toString();
     return path!;
+  }
+
+  String getProductDetailApiServerGet({required var id_auctions}) {
+    String path = this.product_detail_server_get + '/' + id_auctions.toString();
+    return path;
   }
 
   String getBillAuctionApiServerGet({required id_bill_auction}) {
@@ -186,4 +199,19 @@ class ApiPathServer {
         id_users.toString();
     return path;
   }
+
+  String getBidderListApiServerGet({required var id_private_auction_groups}) {
+    String path = this.bidder_list_api_server_get + '/' +
+        id_private_auction_groups.toString();
+    return path;
+  }
+
+  String getAddBidderApiServerPost() {
+    return this.add_bidder_api_server_post;
+  }
+
+  String getDeleteBidderApiServerPost() {
+    return this.delete_bidder_api_server_post;
+  }
+
 }

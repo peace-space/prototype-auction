@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -8,41 +7,39 @@ import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
+import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
-class DetailAuction extends StatefulWidget {
-  State<DetailAuction> createState() {
-    return DetailAuctionState();
+class AuctionPrivateDetail extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return AuctionPrivateDetailState();
   }
 }
 
-class DetailAuctionState extends State<DetailAuction> {
+class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
   var _bid = TextEditingController();
   var max_price;
   Map<String, dynamic> detailAuctionData = {};
   List<dynamic> _imageData = [];
   int indexSelectImage = 0;
 
+  var _phone_bidder_controller = TextEditingController();
+  var _password_controller = TextEditingController();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "รายละเอียด: ${ShareProductData.productData['id_auctions']}",
-        ),
-      ),
+      appBar: AppBar(title: Text("รายละเอียด")),
       body: StreamBuilder(
-        stream: fetchDataDetailAuctions(),
+        stream: fetchPrivateAictomDetail(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(
-              child: Text("เกิดข้อผิดพลาด"),
-            );
+            return Center(child: Text("เกิดข้อผิดพลาด"));
           }
           if (snapshot.connectionState == ConnectionState.active) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData) {
             return Padding(
@@ -61,9 +58,7 @@ class DetailAuctionState extends State<DetailAuction> {
               ),
             );
           }
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -74,15 +69,14 @@ class DetailAuctionState extends State<DetailAuction> {
       width: 500,
       height: 300,
       child:
-      (_imageData.length == 0)
-          ? Center(child: Text("ไม่พบรูปภาพ"))
-          : Image.network(
-        "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-            _imageData![indexSelectImage],
-      ),
+          (_imageData.length == 0)
+              ? Center(child: Text("ไม่พบรูปภาพ"))
+              : Image.network(
+                "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
+                    _imageData![indexSelectImage],
+              ),
     );
   }
-
 
   Widget showAndSelectImage() {
     return Container(
@@ -95,12 +89,11 @@ class DetailAuctionState extends State<DetailAuction> {
             (context, index) => Card(
               child: InkWell(
                 onTap:
-                    () =>
-                {
-                  setState(() {
-                    indexSelectImage = index;
-                  }),
-                },
+                    () => {
+                      setState(() {
+                        indexSelectImage = index;
+                      }),
+                    },
                 child: Image.network(
                   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
                       _imageData[index],
@@ -188,8 +181,10 @@ class DetailAuctionState extends State<DetailAuction> {
           Row(
             children: [
               Text("ผู้เปิดประมูล: ", style: headText()),
-              Text("${data!['first_name_users']} ${data!['last_name_users']}",
-                  style: defaultText()),
+              Text(
+                "${data!['first_name_users']} ${data!['last_name_users']}",
+                style: defaultText(),
+              ),
             ],
           ),
           Row(
@@ -211,68 +206,26 @@ class DetailAuctionState extends State<DetailAuction> {
     );
   }
 
-  // Widget displayDataAuction() {
-  //   return Text("data");
-  // }
-
-  Widget displayImages(dynamic data) {
-    double left = 0.0;
-    double top = 0.0;
-    double right = 0.0;
-    double bottom = 0.0;
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: data,
-      // itemCount: data!['images'].length,
-      itemBuilder: (context, index) {
-        return Text("data");
-        // Map<String, dynamic> data = snapshot.data
-        // return Padding(
-        //   padding: EdgeInsets.all(8),
-        //   child: Container(
-        //     padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-        //     child: Image.network(
-        //       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/'
-        //       '${data!['images'][index]}',
-        //       fit: BoxFit.cover,
-        //     ),
-        //   ),
-        // );
-      },
-    );
-  }
-
-  Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
-    // Future.delayed(Duration(seconds: 1));
-    print('Start.detailAuctions');
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
-        .productData['id_auctions']}';
-    // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/product-detail/${ShareProductData
-    //     .productData['id_auctions']}';
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final resData = jsonDecode(response.body);
-    Map<String, dynamic> data = resData['data'];
-    // print("aaaaaaaaaaaaaaaaaaaa");
-    // print(data['images'].toString());
-    yield data;
-    setState(() {
-      detailAuctionData = data;
-      _imageData = data["images"];
-    });
-    print('End.detialAuctions');
-  }
-
   Widget onBit(var id_users_owner) {
     // return checkProductOwner();
     // print(id_users_owner.toString());
     // return Text("${isProductOwner(id_users_owner)}");
     if (isProductOwner(id_users_owner)) {
       // return Text("เจ้าของสินค้า ไม่สามารถเสนอราคาได้");
-      return ElevatedButton(onPressed: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => MyAuctions(),));
-      }, child: Text("หน้าจัดการร้านค้า"));
+      return Column(
+        children: [
+          buttonShowBidderList(),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => MyAuctions()),
+              );
+            },
+            child: Text("หน้าจัดการร้านค้า"),
+          ),
+        ],
+      );
     }
     return Column(
       children: [
@@ -315,7 +268,8 @@ class DetailAuctionState extends State<DetailAuction> {
             'bid_price': bid_price,
           };
 
-          String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
+          String url =
+              'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bidding';
           final uri = Uri.parse(url);
           final responce = await http.post(
             uri,
@@ -329,8 +283,7 @@ class DetailAuctionState extends State<DetailAuction> {
             await showDialog(
               context: context,
               builder:
-                  (context) =>
-                  AlertDialog(
+                  (context) => AlertDialog(
                     title: Text("เสนอราคาสำเร็จ"),
                     actions: [
                       TextButton(
@@ -344,23 +297,29 @@ class DetailAuctionState extends State<DetailAuction> {
 
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => DetailAuction()),
+              MaterialPageRoute(builder: (context) => AuctionPrivateDetail()),
             );
           } else {
             _alertDialog(title: "เกิดข้อผิดพลาด");
             print("Error: " + responce.statusCode.toString());
           }
         } else {
-          showDialog(context: context, builder: (context) =>
-              AlertDialog(
-                title: Text("ล้มเหลว"),
-                content: Text("จะต้องเสนอราคาที่สูงกว่าราคาสูงสุดเท่านั้น"),
-                actions: [
-                  TextButton(onPressed: () {
-                    Navigator.of(context).pop();
-                  }, child: Text("ตกลง"))
-                ],
-              ),);
+          showDialog(
+            context: context,
+            builder:
+                (context) => AlertDialog(
+                  title: Text("ล้มเหลว"),
+                  content: Text("จะต้องเสนอราคาที่สูงกว่าราคาสูงสุดเท่านั้น"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("ตกลง"),
+                    ),
+                  ],
+                ),
+          );
         }
       } else {
         showDialog(
@@ -423,28 +382,15 @@ class DetailAuctionState extends State<DetailAuction> {
     Navigator.push(ctx, route);
   }
 
-  // bool compareCurrentDateTimeAndEndDateTime(DateTime date_time_curent, DateTime end_date_time) {
-  //   if ()
-  //   return true;
-  // }
-
   Widget countdown() {
-    // final start_date_time_data = detailAuctionData['start_date_time'];
     final end_date_time_data = detailAuctionData['end_date_time'];
-    // print("หน้า Detail, Methode: contdown: " + end_date_time_data.toString());
-    // var min;
     var end_date_time = DateTime.parse(end_date_time_data);
 
     var date_tiem_difference = end_date_time.difference(DateTime.now());
-    // print("ความต่างของเวลา: " + date_tiem_difference.toString());
     var countdown = TimerCountdown(
       endTime: DateTime.now().add(
         Duration(seconds: date_tiem_difference.inSeconds),
       ),
-      onTick: (remainingTime) {
-        // print("Test: " + remainingTime.inMinutes.toString());
-        // _countDownDateTime = remainingTime.inDays;
-      },
       format: CountDownTimerFormat.daysHoursMinutesSeconds,
       enableDescriptions: true,
       spacerWidth: 5,
@@ -457,12 +403,13 @@ class DetailAuctionState extends State<DetailAuction> {
       colonsTextStyle: TextStyle(fontSize: 21, color: Colors.red),
       onEnd: () {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => AuctionHome(),));
+          context,
+          MaterialPageRoute(builder: (context) => AuctionHome()),
+        );
         showDialog(
           context: context,
           builder:
-              (context) =>
-              AlertDialog(
+              (context) => AlertDialog(
                 title: Text('หมดเวลา'),
                 content: Text("สามารถตรวจสอบผลการประมูล"),
                 actions: [
@@ -485,7 +432,7 @@ class DetailAuctionState extends State<DetailAuction> {
       context: context,
       builder:
           (context) =>
-          AlertDialog(title: Text(title!), content: Text(message!)),
+              AlertDialog(title: Text(title!), content: Text(message!)),
     );
   }
 
@@ -495,8 +442,7 @@ class DetailAuctionState extends State<DetailAuction> {
       showDialog(
         context: context,
         builder:
-            (context) =>
-            AlertDialog(
+            (context) => AlertDialog(
               title: Text("ยืนยันการเสนอราคา"),
               content: Text("จำนวนเงิน: " + _bid.text),
               actions: [
@@ -523,8 +469,7 @@ class DetailAuctionState extends State<DetailAuction> {
       showDialog(
         context: context,
         builder:
-            (context) =>
-            AlertDialog(
+            (context) => AlertDialog(
               title: Text("แจ้งเตือน"),
               content: Text(
                 "กรุณาตรวจสอบความถูกต้องอีกครั้ง.",
@@ -556,11 +501,140 @@ class DetailAuctionState extends State<DetailAuction> {
       return false;
     }
   }
-}
 
-// void test() {
-//   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {
-//     print("ZZZZZZZZZZZZZZZZZ");
-//   },);
-// }
-// }
+  Widget buttonShowBidderList() {
+    return ElevatedButton(
+      onPressed: () => {showBidderList()},
+      child: Text("ผู้มีสิทธิ์เข้าร่วมประมูล"),
+    );
+  }
+
+  void showBidderList() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => Dialog(
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text("รายชื่อผู้ร่วมประมูล"),
+                actions: [
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () => {insertBidderDisplay()},
+                        icon: Icon(Icons.add_reaction_outlined),
+                      ),
+                    ],
+                  ),
+                  // Text("เพิ่มผู้ร่วมประมูล")
+                ],
+              ),
+              body: StreamBuilder(
+                stream: fetchBidderList(),
+                builder:
+                    (context, snapshot) => ListView.builder(
+                      padding: EdgeInsets.all(8),
+                      itemCount: snapshot.data.length,
+                      itemBuilder:
+                          (context, index) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("ชื่อ: ${snapshot.data}"),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.disabled_by_default_outlined),
+                              ),
+                            ],
+                          ),
+                    ),
+              ),
+            ),
+          ),
+    );
+  }
+
+  TextField insertBidder() {
+    return TextField(
+      controller: _phone_bidder_controller,
+      decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+    );
+  }
+
+  void insertBidderDisplay() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: Text("เพิ่มผู้ร่วมประมูล"),
+            content: insertBidder(),
+            actions: [
+              TextButton(onPressed: () => {}, child: Text("ยกเลิก")),
+              TextButton(onPressed: () => {}, child: Text("ตกลง")),
+            ],
+          ),
+    );
+  }
+
+  Stream fetchPrivateAictomDetail() async* {
+    print("${ShareProductData.productData['id_auctions']}");
+    String api = ApiPathServer().getProductDetailApiServerGet(
+      id_auctions: ShareProductData.productData['id_auctions'],
+    );
+    Uri uri = Uri.parse(api);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    Map<String, dynamic> data = resData['data'];
+    detailAuctionData = data;
+    _imageData = data['images'];
+    yield resData['data'];
+    setState(() {});
+  }
+
+  Stream fetchBidderList() async* {
+    String api = ApiPathServer().getBidderListApiServerGet(
+      id_private_auction_groups:
+          ShareProductData.productData['id_private_auction_groups'],
+    );
+    Uri uri = Uri.parse(api);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    Map<String, dynamic> data = resData['data'];
+    print("AAAA" + data.toString());
+    yield data;
+    setState(() {});
+  }
+
+  void addBidder() async {
+    if (_password_controller.text != '' && _password_controller.text != '') {
+      Map<String, dynamic> data = {
+        'email': ShareData.userData['email'],
+        'password': _password_controller.text,
+        'id_auctions': ShareProductData.productData['id_auctions'],
+        'phone_bidder': _phone_bidder_controller,
+      };
+      String api = ApiPathServer().getAddBidderApiServerPost();
+      Uri uri = Uri.parse(api);
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+    }
+  }
+
+  void deleteBidder() async {
+    Map<String, dynamic> data = {
+      'email': ShareData.userData['email'],
+      'password': _password_controller.text,
+      'id_private_auction_groups':
+          ShareProductData.productData['id_private_auction_groups'],
+    };
+    String api = ApiPathServer().getAddBidderApiServerPost();
+    Uri uri = Uri.parse(api);
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(data),
+    );
+  }
+}

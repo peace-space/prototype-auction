@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class PrivateAuctionGroupController extends Controller
 {
@@ -49,6 +50,173 @@ class PrivateAuctionGroupController extends Controller
                 'status' => 1,
                 'message' => "Successfully.",
                 'data' => $get_private_auction_group
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
+    }
+
+    public function bidderList($id_private_auction_groups)
+    {
+        try {
+
+
+            $bidder_data = DB::table('private_auction_groups')
+                ->select(
+                    'private_auction_groups.id_private_auction_groups',
+                    'users.id_users',
+                    'users.first_name_users',
+                    'users.last_name_users',
+                    'users.phone'
+                )
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'private_auction_groups.id_users');
+                })
+                ->where('id_private_auction_groups', '=', $id_private_auction_groups)
+                ->get();
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $bidder_data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
+    }
+
+    public function addBidder(Request $request)
+    {
+        try {
+            $email = $request->email;
+            $password = $request->password;
+
+            $request->validate([
+                'email' => 'required',
+                'password' => 'required',
+                'id_auctions' => 'required',
+                'phone_bidder' => 'required'
+            ]);
+
+            $verify_password = DB::table('users')
+                ->select(
+                    'id_users',
+                    'first_name_users',
+                    'last_name_users',
+                    'phone',
+                    'address',
+                    'email',
+                    'admin_status',
+                    'password'
+                )
+                ->where('email', '=', $request->email)
+                ->first();
+
+            if ($verify_password == true && Hash::check($password, $verify_password->password)) {
+
+                $check_phone_bidder = DB::table('users')
+                    ->select('*')
+                    ->where('phone', '=', $request->phone_bidder)
+                    ->first();
+
+                    // return $check_phone_bidder->id_users;
+
+                if ($check_phone_bidder != '') {
+                    $bidder_data = [
+                        'id_users' => $check_phone_bidder->id_users,
+                        'id_auctions' => $request->id_auctions,
+                    ];
+
+                    $add_bidder = DB::table('private_auction_groups')
+                        ->insert($bidder_data);
+
+                    return response()->json([
+                        'status' => 1,
+                        'message' => 'Successfully.',
+                        // 'data' => ''
+                    ], 201);
+                } else {
+                    return response()->json([
+                        'status' => 0,
+                        'message' => 'ไม่มีผู้ใช้งาน',
+                        // 'data' => ''
+                    ], 404);
+                }
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ไม่มีข้อมูล'
+                ], 500);
+            }
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $bidder_data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
+    }
+
+    public function deleteBidder(Request $request) {
+        try {
+            $request->validate([
+                'email' => 'required',
+                'password' => 'required',
+                'id_private_auction_groups' => 'required',
+            ]);
+
+            $verify_password = DB::table('users')
+                ->select(
+                    'id_users',
+                    'first_name_users',
+                    'last_name_users',
+                    'phone',
+                    'address',
+                    'email',
+                    'admin_status',
+                    'password'
+                )
+                ->where('email', '=', $request->email)
+                ->first();
+
+            if ($verify_password == true && Hash::check($request->password, $verify_password->password)) {
+
+                $delete_bidder = DB::table('private_auction_groups')
+                                            ->where('id_private_auction_groups', '=', $request->id_private_auction_groups)
+                                            ->delete();
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Successfully.',
+                    // 'data' => ''
+                ], 200);
+           } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ไม่มีข้อมูล'
+                ], 500);
+            }
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $bidder_data
             ], 200);
         } catch (Exception $e) {
             return response()->json([

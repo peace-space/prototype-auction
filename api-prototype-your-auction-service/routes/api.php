@@ -113,5 +113,8 @@ Route::prefix('/v1')->group(function () {
 
     // Private Auction -----------------------------------------------------------
     Route::get('/private-auction-group/{id_users}', [PrivateAuctionGroupController::class, 'privateAuctionsGroup']);
+    Route::get('/bidder-list/{id_private_auction_groups}', [PrivateAuctionGroupController::class, 'bidderList']);
+    Route::post('/add-bidder', [PrivateAuctionGroupController::class, 'addBidder']);
+    Route::post('/delete-bidder', [PrivateAuctionGroupController::class, 'deleteBidder']);
 
 });
