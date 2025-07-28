@@ -127,26 +127,45 @@ class PrivateAuctionGroupController extends Controller
                     ->where('phone', '=', $request->phone_bidder)
                     ->first();
 
-                    // return $check_phone_bidder->id_users;
+                // return $check_phone_bidder->id_users;
 
                 if ($check_phone_bidder != '') {
-                    $bidder_data = [
-                        'id_users' => $check_phone_bidder->id_users,
-                        'id_auctions' => $request->id_auctions,
-                    ];
+                    // return "AA";
+                    $check_bidder = DB::table('private_auction_groups')
+                        ->select('*')
+                        ->where('id_users', '=', $check_phone_bidder->id_users)
+                        ->where('id_auctions', '=', $request->id_auctions)
+                        ->get();
+                    // return $check_bidder;
+                    // return count($check_bidder);
 
-                    $add_bidder = DB::table('private_auction_groups')
-                        ->insert($bidder_data);
+                    if (
+                        count($check_bidder) == 0
+                    ) {
+                        $bidder_data = [
+                            'id_users' => $check_phone_bidder->id_users,
+                            'id_auctions' => $request->id_auctions,
+                        ];
 
-                    return response()->json([
-                        'status' => 1,
-                        'message' => 'Successfully.',
-                        // 'data' => ''
-                    ], 201);
+                        $add_bidder = DB::table('private_auction_groups')
+                            ->insert($bidder_data);
+
+                        return response()->json([
+                            'status' => 1,
+                            'message' => 'Successfully.',
+                            // 'data' => ''
+                        ], 201);
+                    } else {
+                        return response()->json([
+                            'status' => 0,
+                            'message' => 'ผู้ใช้งานอยู่ในกลุ่มประมูลส่วนตัวแล้ว',
+                            // 'data' => ''
+                        ], 404);
+                    }
                 } else {
                     return response()->json([
                         'status' => 0,
-                        'message' => 'ไม่มีผู้ใช้งาน',
+                        'message' => 'ไม่มีบัญชีผู้ใช้งาน',
                         // 'data' => ''
                     ], 404);
                 }
@@ -156,7 +175,6 @@ class PrivateAuctionGroupController extends Controller
                     'message' => 'ไม่มีข้อมูล'
                 ], 500);
             }
-
 
             return response()->json([
                 'status' => 1,
@@ -172,7 +190,8 @@ class PrivateAuctionGroupController extends Controller
         }
     }
 
-    public function deleteBidder(Request $request) {
+    public function deleteBidder(Request $request)
+    {
         try {
             $request->validate([
                 'email' => 'required',
@@ -197,15 +216,15 @@ class PrivateAuctionGroupController extends Controller
             if ($verify_password == true && Hash::check($request->password, $verify_password->password)) {
 
                 $delete_bidder = DB::table('private_auction_groups')
-                                            ->where('id_private_auction_groups', '=', $request->id_private_auction_groups)
-                                            ->delete();
+                    ->where('id_private_auction_groups', '=', $request->id_private_auction_groups)
+                    ->delete();
 
                 return response()->json([
                     'status' => 1,
                     'message' => 'Successfully.',
                     // 'data' => ''
                 ], 200);
-           } else {
+            } else {
                 return response()->json([
                     'status' => 0,
                     'message' => 'ไม่มีข้อมูล'
@@ -227,3 +246,4 @@ class PrivateAuctionGroupController extends Controller
         }
     }
 }
+

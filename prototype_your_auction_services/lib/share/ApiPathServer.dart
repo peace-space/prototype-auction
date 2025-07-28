@@ -200,9 +200,9 @@ class ApiPathServer {
     return path;
   }
 
-  String getBidderListApiServerGet({required var id_private_auction_groups}) {
+  String getBidderListApiServerGet({required var id_auctions}) {
     String path = this.bidder_list_api_server_get + '/' +
-        id_private_auction_groups.toString();
+        id_auctions.toString();
     return path;
   }
 
