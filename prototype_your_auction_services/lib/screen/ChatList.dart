@@ -67,7 +67,7 @@ class ChatListState extends State<ChatList> {
                       title: Column(
                         children: [
                           Image.network(
-                            ApiPathServer().getImageApiServerGet(
+                            ApiPathServer().getImageProfileApiServerGet(
                               image_profile_path: data['image_profile'],
                             ),
                           ),

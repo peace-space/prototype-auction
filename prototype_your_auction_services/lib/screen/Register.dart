@@ -200,7 +200,7 @@ class RegisterState extends State<Register> {
         return CircleAvatar(
           radius: 150,
           backgroundImage: NetworkImage(
-            ApiPathServer().getImageApiServerGet(image_profile_path: 
+            ApiPathServer().getImageProfileApiServerGet(image_profile_path:
                 ShareData.userData['image_profile'])
             ,
           ),

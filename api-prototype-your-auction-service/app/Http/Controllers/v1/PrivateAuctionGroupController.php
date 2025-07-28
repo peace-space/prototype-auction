@@ -40,11 +40,10 @@ class PrivateAuctionGroupController extends Controller
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
                 ->where('private_auction_groups.id_users', '=', $id_users)
+                ->where('auctions.auction_status', '=', true)
+                ->where('auctions.id_auction_types', '=', 2)
+                ->orderByDesc('auctions.id_auctions')
                 ->get();
-
-            $private_auctions_model_data = [
-                ''
-            ];
 
             return response()->json([
                 'status' => 1,

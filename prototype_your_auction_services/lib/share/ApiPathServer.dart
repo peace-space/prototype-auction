@@ -14,6 +14,9 @@ class ApiPathServer {
   final String image_profile_api_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile';
 
+
+  final String image_api_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-imagee';
+
   final String bill_auction_api_server_get =
       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bill-auction';
 
@@ -64,6 +67,8 @@ class ApiPathServer {
 
   final String create_chat_rooms_server_post = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/create-chat-rooms';
 
+  final String private_auction_group_server_get = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/private-auction-group';
+
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
@@ -82,8 +87,14 @@ class ApiPathServer {
     return this.logout_api_server_get;
   }
 
-  String getImageApiServerGet({required String image_profile_path}) {
+  String getImageProfileApiServerGet({required String image_profile_path}) {
     String path = this.image_profile_api_server_get + image_profile_path;
+    return path!;
+  }
+
+  String getImageAuctionApiServerGet({required var image_auction_path}) {
+    String path = this.image_profile_api_server_get +
+        image_auction_path.toString();
     return path!;
   }
 
@@ -168,5 +179,11 @@ class ApiPathServer {
 
   String getCreateChatRoomsServerPost() {
     return this.create_chat_rooms_server_post;
+  }
+
+  String getPrivateAuctionGroupServerGet({required var id_users}) {
+    String path = this.private_auction_group_server_get + '/' +
+        id_users.toString();
+    return path;
   }
 }
