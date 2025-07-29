@@ -195,7 +195,9 @@ class LoginState extends State<Login>{
         ShareData.logedIn = true;
         // print("\n\n\n\n+++++++++++++++++++++++++++++++++++${data.toString()}\n\n\n\n\n");
         ShareData.userData = data['user_data'];
-        ShareData.bankAccountUser = data['bank_account'];
+        if (data['bank_account'] != null) {
+          ShareData.bankAccountUser = data['bank_account'];
+        }
         ShareData.image_user_profile =
             data['user_data']['image_profile'].toString();
         // print(ShareData.userData['user_data']['image_profile'].toString());

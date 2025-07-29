@@ -11,7 +11,6 @@ import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
 import 'package:prototype_your_auction_services/share/Logout.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
-import 'package:prototype_your_auction_services/test_system/HomeTestSystem.dart';
 
 import '../screen/HistoryBids.dart';
 
@@ -35,7 +34,7 @@ Drawer createDrawer(BuildContext ctx) {
               ],
             ),
           ),
-          testSystem(ctx), // ทดสอบระบบ
+          // testSystem(ctx), // ทดสอบระบบ
           adminMenuButton(ctx),
           homePageButton(ctx),
           buttonGoToAuctionPrivate(ctx),
@@ -68,7 +67,7 @@ Drawer createDrawer(BuildContext ctx) {
               ],
             ),
           ),
-          testSystem(ctx), // ทดสอบระบบ
+          // testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
           buttonGoToAuctionPrivate(ctx),
           storaManageButton(ctx),
@@ -88,7 +87,7 @@ Drawer createDrawer(BuildContext ctx) {
             accountName: Text("ยังไม่ได้เข้าสู่ระบบ"),
             accountEmail: Text("กรุณาเข้าสู่ระบบ"),
           ),
-          testSystem(ctx), // ทดสอบระบบ
+          // testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
           logedIn(ctx),
           registerStatus(ctx),
@@ -243,20 +242,20 @@ Widget storaManageButton(BuildContext ctx) {
     child: Text("จัดการร้านค้า"),
   );
 }
-
-Widget testSystem(BuildContext ctx) {
-  return ElevatedButton(
-    onPressed:
-        () =>
-    {
-      Navigator.pushReplacement(
-        ctx,
-        MaterialPageRoute(builder: (ctx) => HomeTestSystem()),
-      ),
-    },
-    child: Text("ทดสอบระบบ"),
-  );
-}
+// ใช้สำหรับทดสอบ
+// Widget testSystem(BuildContext ctx) {
+//   return ElevatedButton(
+//     onPressed:
+//         () =>
+//     {
+//       Navigator.pushReplacement(
+//         ctx,
+//         MaterialPageRoute(builder: (ctx) => HomeTestSystem()),
+//       ),
+//     },
+//     child: Text("ทดสอบระบบ"),
+//   );
+// }
 
 Widget buttonGoToHistoryAuction(BuildContext ctx) {
   return ElevatedButton(

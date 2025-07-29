@@ -43,7 +43,9 @@ class CheckLogin {
         print(responseData['message']);
 
         ShareData.userData = data['user_data'];
-        ShareData.bankAccountUser = data['bank_account'];
+        if (data['bank_account'] != null) {
+          ShareData.bankAccountUser = data['bank_account'];
+        }
         ShareData.logedIn = true;
 
         // showDialog(context: ctx, builder: (context) => AlertDialog(
