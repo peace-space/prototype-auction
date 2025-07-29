@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
+import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
@@ -305,8 +305,9 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
     if (response.statusCode == 200) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => MyAuctions(),));
+      // Navigator.popAndPushNamed(context, MaterialPageRoute(builder: (context) => MyAuctions(),));
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => StoreManage(),));
       print("Successfully.");
     } else {
       showDialog(

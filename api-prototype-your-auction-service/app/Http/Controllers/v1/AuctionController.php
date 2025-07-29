@@ -269,6 +269,8 @@ class AuctionController extends Controller
                 $create_auction = DB::table('auctions')
                     ->insert($auction_data);
 
+
+
                 $reAction = DB::table('products')
                     ->select('*')
                     ->join('images', 'products.id_images', '=', 'images.id_images')
@@ -277,6 +279,15 @@ class AuctionController extends Controller
                     //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
                     ->get();
 
+                if ($request->id_auction_types == 2) {
+                    $private_auction_groups_data = [
+                        'id_auctions' => $reAction->id_auctions,
+                        'id_users' => $request->id_users,
+                    ];
+
+                    $create_private_auction_group = DB::table('private_auction_groups')
+                                                    ->insert($private_auction_groups_data);
+                }
 
                 return response()->json([
                     'status' => 1,
