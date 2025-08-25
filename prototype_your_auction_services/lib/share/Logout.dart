@@ -5,14 +5,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 import 'ShareProductData.dart';
 import 'ShareUserData.dart';
 
 class Logout {
   final String logout_api_local_get = ApiPathLocal().getLogoutApiLocalGet();
-  final String logout_api_server_get = ApiPathServer().getLogoutApiServerGet();
+  final String logout_api_server_get = ConfigAPI().getLogoutApiServerGet();
 
   final BuildContext context;
 

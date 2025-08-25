@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionPrivateDetail.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
@@ -102,7 +102,7 @@ class AuctionPrivateHomeState extends State<AuctionPrivateHome> {
   }
 
   Stream fetchPrivateAuctionGroupData() async* {
-    String api = ApiPathServer().getPrivateAuctionGroupServerGet(
+    String api = ConfigAPI().getPrivateAuctionGroupServerGet(
         id_users: ShareData.userData['id_users']);
     Uri uri = Uri.parse(api);
     final response = await http.get(uri);
@@ -116,7 +116,7 @@ class AuctionPrivateHomeState extends State<AuctionPrivateHome> {
     return Container(
         height: 150,
         width: 150,
-        child: Image.network(ApiPathServer().getImageAuctionApiServerGet(
+        child: Image.network(ConfigAPI().getImageAuctionApiServerGet(
             image_auction_path: image_path)));
   }
 

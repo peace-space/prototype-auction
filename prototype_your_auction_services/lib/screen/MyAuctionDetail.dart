@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
 import 'BidLists.dart';
@@ -173,7 +173,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // String url =
     //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
     //     .productData['id_auctions']}';
-    String api = ApiPathServer().getMyAuctionBillServerGet(
+    String api = ConfigAPI().getMyAuctionBillServerGet(
         id_auctions: ShareProductData.productData['id_auctions'].toString());
 
     // print("SSSSSSSSSSSSSSSSSSSS: " + api);
@@ -300,7 +300,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
     // print(ShareProductData.productData['id_auctions']);
     // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user-procuct-delete/${ShareData
     //     .userData['id_users']}/${ShareProductData.productData['id_auctions']}";
-    String url = ApiPathServer().getUserDeleteProductServerDelete(
+    String url = ConfigAPI().getUserDeleteProductServerDelete(
         id_products: ShareProductData.productData['id_products'].toString());
     final uri = Uri.parse(url);
     final response = await http.delete(uri);
@@ -439,7 +439,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       'shipping_number': _shipping_number.text,
       'shipping_company': _shipping_company.text,
     };
-    String api = ApiPathServer().getConfirmVerificationServerPost();
+    String api = ConfigAPI().getConfirmVerificationServerPost();
     Uri uri = Uri.parse(api);
     final response = await http.post(
         uri,

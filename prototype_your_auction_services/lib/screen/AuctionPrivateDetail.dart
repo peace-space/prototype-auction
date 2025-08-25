@@ -7,7 +7,7 @@ import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -684,7 +684,7 @@ class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
 
   Stream fetchPrivateAuctionDetail() async* {
     // print("${detailAuctionData}");
-    String api = ApiPathServer().getProductDetailApiServerGet(
+    String api = ConfigAPI().getProductDetailApiServerGet(
       id_auctions: ShareProductData.productData['id_auctions'],
     );
     Uri uri = Uri.parse(api);
@@ -698,7 +698,7 @@ class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
   }
 
   Stream fetchBidderList() async* {
-    String api = ApiPathServer().getBidderListApiServerGet(
+    String api = ConfigAPI().getBidderListApiServerGet(
       id_auctions:
       ShareProductData.productData['id_auctions'],
     );
@@ -720,7 +720,7 @@ class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
         'id_auctions': ShareProductData.productData['id_auctions'],
         'phone_bidder': _phone_bidder_controller.text,
       };
-      String api = ApiPathServer().getAddBidderApiServerPost();
+      String api = ConfigAPI().getAddBidderApiServerPost();
       Uri uri = Uri.parse(api);
       final response = await http.post(
         uri,
@@ -779,7 +779,7 @@ class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
         'password': _password_controller.text,
         'id_private_auction_groups': id_private_auction_bidder_for_delete
       };
-      String api = ApiPathServer().getDeleteBidderApiServerPost();
+      String api = ConfigAPI().getDeleteBidderApiServerPost();
       Uri uri = Uri.parse(api);
       final response = await http.post(
         uri,

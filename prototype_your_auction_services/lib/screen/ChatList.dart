@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/Chat.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
@@ -29,7 +29,7 @@ class ChatListState extends State<ChatList> {
   }
 
   Stream<List<dynamic>> streamChatData() async* {
-    String url = ApiPathServer().getChatRoomsServerGet(
+    String url = ConfigAPI().getChatRoomsServerGet(
         id_users: ShareData.userData['id_users']);
     final uri = Uri.parse(url);
     final response = await http.get(uri);
@@ -67,7 +67,7 @@ class ChatListState extends State<ChatList> {
                       title: Column(
                         children: [
                           Image.network(
-                            ApiPathServer().getImageProfileApiServerGet(
+                            ConfigAPI().getImageProfileApiServerGet(
                               image_profile_path: data['image_profile'],
                             ),
                           ),

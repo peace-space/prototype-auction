@@ -8,17 +8,17 @@
     </head>
     <body class="antialiased">
 
-    <div>
-        <p>สถานะ: {{ $status }}</p>
-        <p>test: {{ $test }}</p>
-        <p>message: {{ $message }}</p>
+    {{-- <div> --}}
+        {{-- <p>สถานะ: {{ $status }}</p> --}}
+        {{-- <p>test: {{ $test }}</p> --}}
+        {{-- <p>message: {{ $message }}</p> --}}
         {{-- <p>data: {{ $data }}</p> --}}
-    </div>
+    {{-- </div> --}}
 
     {{-- @for ($i = $data['CurrentDateTime']; $i > $data['EndDateTime']; $i++) --}}
-        <div>
+        {{-- <div>
             <p>{{ $data['CurrentDateTime'] }}</p>
-        </div>
+        </div> --}}
     {{-- @endfor --}}
 
 

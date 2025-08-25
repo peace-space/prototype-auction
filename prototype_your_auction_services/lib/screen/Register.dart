@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Register extends StatefulWidget {
@@ -200,7 +200,7 @@ class RegisterState extends State<Register> {
         return CircleAvatar(
           radius: 150,
           backgroundImage: NetworkImage(
-            ApiPathServer().getImageProfileApiServerGet(image_profile_path:
+            ConfigAPI().getImageProfileApiServerGet(image_profile_path:
                 ShareData.userData['image_profile'])
             ,
           ),

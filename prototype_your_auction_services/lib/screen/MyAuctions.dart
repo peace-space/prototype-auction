@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/MyAuctionDetail.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -95,7 +95,7 @@ class MyAuctionsState extends State<MyAuctions> {
   Stream<dynamic> fetchUserProduct() async* {
     print("Start MyAuction");
     // print(ShareData.userData['id_users']);
-    String url = ApiPathServer().getMyAuctionsServerGet(
+    String url = ConfigAPI().getMyAuctionsServerGet(
         id_users: ShareData.userData['id_users'].toString());
     final uri = Uri.parse(url);
     final response = await http.get(uri);

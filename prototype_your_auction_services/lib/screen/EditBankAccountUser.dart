@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class EditBankAccountUser extends StatefulWidget {
@@ -148,7 +148,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
     print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA: ${data.toString()}');
 
     // print(":::::::::::::::::::::: ${data.toString()}");
-    String url = ApiPathServer().getInsertBankAccountServerPost();
+    String url = ConfigAPI().getInsertBankAccountServerPost();
     final uri = Uri.parse(url);
 
     // final response = await http.post(

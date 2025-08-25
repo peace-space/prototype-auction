@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:prototype_your_auction_services/screen/Chat.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
@@ -245,7 +245,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     // Future.delayed(Duration(seconds: 5));
     // print("Start FetchBillAuction");
     // print(ShareProductData.productData['id_bill_auctions']);
-    ApiPathServer apiServerPath = ApiPathServer();
+    ConfigAPI apiServerPath = ConfigAPI();
     // print("TETTT");
     String api = apiServerPath.getBillAuctionApiServerGet(
       id_bill_auction:
@@ -330,7 +330,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
 
     print(data);
 
-    String api = ApiPathServer().getCreateChatRoomsServerPost();
+    String api = ConfigAPI().getCreateChatRoomsServerPost();
     Uri uri = Uri.parse(api);
     final response = await http.post(
         uri,
@@ -365,7 +365,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     if (_receipt.length != 0) {
       // ApiPathLocal apiPathLocal = ApiPathLocal();
       // String api = apiPathLocal.getInsertReceiptBillAuctionLocalPost();
-      String api = ApiPathServer().getInsertReceiptBillAuctionPost();
+      String api = ConfigAPI().getInsertReceiptBillAuctionPost();
       Uri uri = Uri.parse(api);
       final request = http.MultipartRequest('POST', uri);
 

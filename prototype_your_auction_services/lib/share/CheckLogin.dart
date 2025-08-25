@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/share/ApiPathLocal.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 import 'ShareProductData.dart';
@@ -13,7 +13,7 @@ class CheckLogin {
   final String check_login_api_local_get =
       ApiPathLocal().getCheckLoginApiLocalGet();
   final String check_login_api_server_get =
-      ApiPathServer().getCheckLoginApiServerGet();
+      ConfigAPI().getCheckLoginApiServerGet();
 
   // final BuildContext ctx;
 

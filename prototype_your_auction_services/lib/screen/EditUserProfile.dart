@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class EditUserProfile extends StatefulWidget {
@@ -173,7 +173,7 @@ class EditUserProfileState extends State<EditUserProfile> {
 
 
     // print(":::::::::::::::::::::: ${data.toString()}");
-    String url = ApiPathServer().getEditMyUserProfileServerPost();
+    String url = ConfigAPI().getEditMyUserProfileServerPost();
     final uri = Uri.parse(url);
 
     // final response = await http.post(

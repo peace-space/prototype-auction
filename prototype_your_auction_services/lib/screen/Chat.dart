@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -173,7 +173,7 @@ class ChatState extends State<Chat> {
   // }
 
   Stream<List<dynamic>> streamMessageData() async* {
-    String api = ApiPathServer().getChatServerGet(
+    String api = ConfigAPI().getChatServerGet(
         id_chat_rooms: ShareChatData.chatData['id_chat_rooms']);
     Uri uri = Uri.parse(api);
     final response = await http.get(uri);
@@ -188,7 +188,7 @@ class ChatState extends State<Chat> {
       'id_users_sender': ShareData.userData['id_users'],
       'message': _messageController.text
     };
-    String api = ApiPathServer().getSendMessageServerPost();
+    String api = ConfigAPI().getSendMessageServerPost();
     Uri uri = Uri.parse(api);
     final response = await http.post(
         uri,

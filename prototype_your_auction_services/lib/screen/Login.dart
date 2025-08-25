@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/ForgotPassWord.dart';
 import 'package:prototype_your_auction_services/screen/Register.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Login extends StatefulWidget {
@@ -156,7 +156,7 @@ class LoginState extends State<Login>{
 
       // String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/login";
       // String url = ApiPathLocal().getLoginApiLocalPost();
-      String url = ApiPathServer().getLoginApiServerPost();
+      String url = ConfigAPI().getLoginApiServerPost();
 
       final uri = Uri.parse(url);
       final response = await http.post(

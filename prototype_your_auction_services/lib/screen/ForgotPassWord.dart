@@ -4,7 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/PassWordReset.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 class ForgotPassWord extends StatefulWidget {
   State<ForgotPassWord> createState() {
@@ -77,7 +77,7 @@ class ForgotPassWordState extends State<ForgotPassWord> {
       Map<String, dynamic> data = {
         'email': _email.text,
       };
-      String api = ApiPathServer().getForgotPasswordServerPost();
+      String api = ConfigAPI().getForgotPasswordServerPost();
       Uri uri = Uri.parse(api);
       final response = await http.post(
           uri,

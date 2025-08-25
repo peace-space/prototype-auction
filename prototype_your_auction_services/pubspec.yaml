@@ -41,6 +41,7 @@ dependencies:
   email_validator: ^3.0.0
   flutter_secure_storage: ^9.2.4
   flutter_countdown_timer: ^4.1.0
+  web_socket_channel: ^3.0.3
 
 dev_dependencies:
   flutter_test:

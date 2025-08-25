@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -150,7 +150,7 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
 
   void onDeleteBid(var id_bids, var id_auctions) async {
     // print("Delete");
-    String api = ApiPathServer().getUserBidDeleteServerDelete(
+    String api = ConfigAPI().getUserBidDeleteServerDelete(
         id_bids: id_bids, id_auctions: id_auctions);
     Uri uri = Uri.parse(api);
     final response = await http.delete(uri);

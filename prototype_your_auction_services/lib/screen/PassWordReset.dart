@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/Login.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 class PassWordReset extends StatefulWidget {
   String email = '';
@@ -165,7 +165,7 @@ class PassWordResetState extends State<PassWordReset> {
         'password': _new_password.text,
       };
       print("${data.toString()}");
-      String api = ApiPathServer().getPasswordResetServerPost();
+      String api = ConfigAPI().getPasswordResetServerPost();
       Uri uri = Uri.parse(api);
       final response = await http.post(
         uri,

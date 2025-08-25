@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/CreateBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
-import 'package:prototype_your_auction_services/share/ApiPathServer.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -164,7 +164,7 @@ class UserProfileState extends State<UserProfile> {
 
   Stream<Map<String, dynamic>> streamUserData() async* {
     print("Start.");
-    String url = ApiPathServer().getMyUserProfileApiServerGet(
+    String url = ConfigAPI().getMyUserProfileApiServerGet(
         ShareData.userData['id_users'].toString());
     final uri = Uri.parse(url);
     final response = await http.get(uri);
