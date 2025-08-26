@@ -1,11 +1,12 @@
 class ConfigAPI {
-  final String url = 'https://rmuti.your-auction-services.com';
-
-  // final String url = 'https://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
+  // final String url = 'https://rmuti.your-auction-services.com';
+  //
+  final String url =
+      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
   // final String url =
   //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1';
 
-  late final String login_api_server_post = '${url}/api/v1/login';
+  // late final String login_api_server_post = '${url}/api/v1/login';
 
   late final String check_login_api_server_get = '${url}/api/v1/check-login';
   late final String register_api_server_post = '${url}/api/v1/login';
@@ -78,7 +79,7 @@ class ConfigAPI {
   final String change_password_server_post = '';
 
   String getLoginApiServerPost() {
-    return this.login_api_server_post;
+    return "${url}/api/v1/login";
   }
 
   String getCheckLoginApiServerGet() {
@@ -216,5 +217,9 @@ class ConfigAPI {
 
   String getDeleteBidderApiServerPost() {
     return this.delete_bidder_api_server_post;
+  }
+
+  String getUserListAdmin() {
+    return "${url}/api/v1/user";
   }
 }

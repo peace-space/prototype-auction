@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Events\UserEvent;
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
 // use App\Models\User;
@@ -27,7 +28,8 @@ class UserController extends Controller
             $users_data = DB::table('users')
                 ->select('*')
                 ->get();
-
+            // broadcast(new UserEvent($users_data));
+            event(new UserEvent($users_data));
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',

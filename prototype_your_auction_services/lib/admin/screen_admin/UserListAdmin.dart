@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/UserDetailAdmin.dart';
+import 'package:prototype_your_auction_services/controller/UserController.dart';
+import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPIStreamingAdmin.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -14,6 +16,13 @@ class UserList extends StatefulWidget {
 }
 
 class UserListState extends State<UserList> {
+  // print("object");
+  late String url = ConfigAPIStreamingAdmin().getUserList();
+
+  // print(url.toString());
+  late Uri uri = Uri.parse(url);
+  late var channel = WebSocketChannel.connect(uri);
+
   List<dynamic> user_data = [];
 
   late Stream _data;
@@ -138,114 +147,259 @@ class UserListState extends State<UserList> {
   // }
 
   Widget streamUserList() {
-    print("object");
-    String url = ConfigAPIStreamingAdmin().getUserList();
-    print(url.toString());
-    Uri uri = Uri.parse(url);
-    final channel = WebSocketChannel.connect(uri);
+    // print("object");
+    // String url = ConfigAPIStreamingAdmin().getUserList();
+    // print(url.toString());
+    // Uri uri = Uri.parse(url);
+    // final channel = WebSocketChannel.connect(uri);
     final subscription = {
       "event": "pusher:subscribe",
-      "data": {"channel": "AAA"}
+      "data": {"channel": "user"}
     };
     // final subscription = {"event": "pusher:subscribe", "data": {"channel": "AAA"}};
     channel.sink.add(jsonEncode(subscription));
+    // channel.closeCode;
 
-
+    // print(channel.stream);
     // channel.stream.listen((event) async {
     //
-    //   print("Connected successfully.");
+    // print("Connected successfully.");
+    //
+    // var dataString = jsonDecode(event);
+    //
+    // // print(dataString.toString());
+    // if (dataString['event'] == 'App\\Events\\AuctionEvent') {
+    //   var userData = jsonDecode(dataString['data']);
+    //   // print(userData.toString());
+    //   // data = userData;
+    //   // _data = userData;
+    // }
 
-    //   var dataString = jsonDecode(event);
-    //
-    //   // print(dataString.toString());
-    //   // if (dataString['event'] == 'App\\Events\\AuctionEvent') {
-    //   //   var userData = jsonDecode(dataString['data']);
-    //   //   print(userData.toString());
-    //   //   // data = userData;
-    //   //   // _data = userData;
-    //   // }
-    //
     // },
     //     onDone: () {
     //       print('Connection colose');
     //     },
     //     onError: (error) {
+    //       reConnect();
     //       print('${error.toString()}');
     //     });
+    UserController userController = UserController();
+    var dataUserController = userController.fetchUserData();
+    // UserListAdminModel userListAdminModel = UserListAdminModel(dataUserController);
+    // var dd = UserListAdminModel.getData();
+    print("SSSSSSSSSS${channel.stream.toString()}");
     return StreamBuilder(
       // stream: UserListAdminModel.fetchStreamingUserData(),
       // stream: null,
       // stream: fetchUserDataTest(),
-        stream: channel!.stream,
-        // stream: _data.,
-      builder:
-          (context, snapshot) {
-        Map<String, dynamic> events = jsonDecode(snapshot.data);
-        var resJson = jsonDecode(events['data']);
+        stream: channel.stream,
+        //     stream: UserListAdminModel.fetchStreamingUserData(),
+        builder:
+            (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text('เกิดข้อผิดพลาด'),
+            );
+          }
 
-        print(resJson.runtimeType.toString());
+          var aaa = jsonDecode(snapshot.data);
+          try {
+            if (aaa['event'] == 'pusher:ping') {
+              eventPing();
+            }
+            if (aaa['event'] == 'pusher:pong') {
+              eventPong();
+            }
+          } on Exception catch (e) {
+            // print(e.toString());
+            // return Center(
+            //   child: Text("${snapshot.data}"),
+            // );
+          }
+          return Text("${snapshot.data}");
+          var dataString = jsonDecode(snapshot.data);
+          var userData;
+          var data;
 
-        if (snapshot.hasError) {
-          return Center(
-            child: Text('เกิดข้อผิดพลาด'),
-          );
-        }
+          if (snapshot.data == null) {
+            return Center(
+              child: Text('ไม่มีข้อมูล'),
+            );
+          }
 
-        if (resJson['data'] != null) {
-          return ListView.builder(
-              padding: EdgeInsets.all(20),
-              // itemCount: user_data.length,
-              itemCount: resJson['data'].length,
-              // itemCount: 5,
-              itemBuilder: (context, index) {
-                final Map data = resJson['data'][index];
-                // final id = data['id_users'];
-                // final first_name_users = data['first_name_users'];
-                // final last_name_users = data['first_name_users'];
-                // final phone = data['phone'];
-                // return Card(
-                //   child: ListTile(
-                //     title: Text("${id}) ชื่อ: ${first_name_users
-                //         .toString()} ${last_name_users.toString()}"),
-                //     subtitle: Text("เบอร์โทร: ${phone.toString()}"),
-                //     trailing: editUserData(context, id, data),
-                //   ),
-                // );
+          if (dataString['event'] == 'App\\Events\\UserEvent') {
+            userData = jsonDecode(dataString['data']);
+            data = userData['data'];
+            // print(userData.toString());
+          }
 
-                return Card(
-                  child: ListTile(
-                    leading: Text(
-                        "ชื่อ: ${data['first_name_users']} ${data['last_name_users']}"),
-                    title: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Id Auction: ${data['id_auctions']}'),
-                        Text('Auction Status: ${data['auction_status']}'),
-                        Text('Shipping cost: ${data['shipping_cost']}'),
-                        Text('Start price: ${data['start_price']}'),
-                        Text('Max price: ${data['max_price']}'),
-                        Text('End Date Time: ${data['end_date_time']}'),
-                        Text('Id Product: ${data['id_products']}'),
-                        Text('Id Users: ${data['id_users']}'),
-                      ],
+          var dataModel;
+
+          if (data != null) {
+            // UserListAdminModel userListAdminModel = new UserListAdminModel(data);
+            UserListAdminModel userListAdminModel = new UserListAdminModel(
+                userData);
+            dataModel = UserListAdminModel.getData();
+          }
+          // return Center(
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.center,
+          //     children: [
+          //       ElevatedButton(onPressed: () {
+          //         sendTest();
+          //       }, child: Text("ส่ง")),
+          //       Container(
+          //         width: 500,
+          //         height: 500,
+          //         padding: EdgeInsets.all(8),
+          //         child: ListView(
+          //           children: [
+          //             Text("${data}"),
+          //           ],
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // );
+
+
+          // var d = UserListAdminModel.getData();
+          // print("dfsfsd"+dataModel['status'].runtimeType.toString());
+          //   if (data != null) {
+          if (dataModel['status'] == 1) {
+            return ListView.builder(
+                padding: EdgeInsets.all(20),
+                // itemCount: user_data.length,
+                itemCount: data.length,
+                // itemCount: 5,
+                itemBuilder: (context, index) {
+                  // UserController userController = UserController();
+                  // var test = userController.fetchUserData();
+                  // UserListAdminModel userListAdminModel = new UserListAdminModel(data);
+                  // var dataModel = UserListAdminModel.getData();
+                  return Card(
+                    child: ListTile(
+                      // leading: Text("${userController.toString()}"),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              '${data[index]['first_name_users']} ${data[index]['last_name_users']}'),
+                          Text('เบอร์โทร: ${data[index]['phone']}'),
+                          Text('Data Model: ${data[index]['email']}'),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }
-              );
-        } else {
-          // WebSocketChannel.connect(uri);
+                  );
+                }
+            );
+          }
+          // else {
+          //   var aaa = jsonDecode(snapshot.data);
+          //   try {
+          //     if (aaa['event'] == 'pusher:ping') {
+          //       eventPing();
+          //     }
+          //     if (aaa['event'] == 'pusher:pong') {
+          //       eventPong();
+          //     }
+          //   } on Exception catch (e) {
+          //     print(e.toString());
+          //     return Center(
+          //       child: Text("${snapshot.data}"),
+          //     );
+          //   }
+          //   // reConnect();
+          //   return Center(
+          //       child: Column(
+          //         children: [
+          //           ElevatedButton(onPressed: (){
+          //             sendTest();
+          //           }, child: Text('sendTest')),
+          //           ElevatedButton(onPressed: (){
+          //             eventPing();
+          //           }, child: Text('Ping')),
+          //           ElevatedButton(onPressed: (){
+          //             eventPong();
+          //           }, child: Text('Pong')),
+          //           Text("${snapshot.data.toString()}"),
+          //           Text("${aaa.runtimeType}"),
+          //         ],
+          //       ));
+          // return Center(
+          //   child: Column(
+          //     // crossAxisAlignment: CrossAxisAlignment.center,
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       CircularProgressIndicator(),
+          //       Text("กำลังโหลด...")
+          //     ],
+          //   ),
+          // );
+          // }
+          var a = snapshot.data;
+          if (snapshot.hasData) {
+            return Center(
+              child: Column(
+                children: [
+                  ElevatedButton(onPressed: () {}, child: Text('data')),
+                  Text("${snapshot.data.toString()}"),
+                ],
+              ),
+            );
+          }
           return Center(
             child: CircularProgressIndicator(),
           );
         }
-
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      }
     );
   }
+
+  void reConnect() {
+    Future.delayed(const Duration(seconds: 20));
+    // channel.sink.close();
+    // print("object");
+    // String url = ConfigAPIStreamingAdmin().getUserList();
+    // print(url.toString());
+    // Uri uri = Uri.parse(url);
+    // channel = WebSocketChannel.connect(uri);
+    // final subscription = {
+    //   "event": "pusher:subscribe",
+    //   "data": {"channel": "user"}
+    // };
+    // var subscription = {"event": "pusher:ping"};
+    //
+    // channel.sink.add(jsonEncode(subscription));
+
+    // subscription = {"event": "pusher:pong"};
+    // channel.sink.add(jsonEncode(subscription));
+    // UserController userController = new UserController();
+    // userController.fetchUserData();
+    // setState(() {});
+  }
+
+  // Reconnect websocket in 1 seconds
+  // onDisconnected() async {
+  //   widget.channel.sink.close();
+  //   print("Disconnected, trying again in 2s");
+  //   new Timer(new Duration(seconds: 2), () async {
+  //     await connect();
+  //   });
+
+  // connect() async {
+  //   try {
+  //     IOWebSocketChannel channel = IOWebSocketChannel.connect(HttpService.wsUrl);
+  //     Stream stream = channel.stream.asBroadcastStream();
+  //     await Future.delayed(Duration(milliseconds: 1000));
+  //     await connectionRequest();
+  //   } catch (e) {
+  //     print("Error! can not connect WS connectWs " + e.toString());
+  //     await Future.delayed(Duration(milliseconds: 1000));
+  //     IOWebSocketChannel channel = IOWebSocketChannel.connect(HttpService.wsUrl);
+  //     Stream stream = channel.stream.asBroadcastStream();
+  //     await connectionRequest();
+  //   }
+  // }
 
   Stream fetchUserDataTest() async* {
     print("object");
@@ -256,10 +410,11 @@ class UserListState extends State<UserList> {
     // final subscription = {"event": "pusher:subscribe", "data": {"channel":"AAA"}};
     final subscription = {
       "event": "pusher:subscribe",
-      "data": {"channel": "AAA"}
+      "data": {"channel": "user"}
     };
     channel.sink.add(jsonEncode(subscription));
-    var data;
+    channel.sink.add(jsonEncode({"test"}));
+    // channel.closeCode;
     // yield channel.stream;
 
 
@@ -285,16 +440,122 @@ class UserListState extends State<UserList> {
     //       print('${error.toString()}');
     //     });
     //
+    var data;
+    var dataString = jsonDecode(channel.stream.toString());
+    if (dataString['event'] == 'App\\Events\\AuctionEvent') {
+      var userData = jsonDecode(dataString['data']);
+      print(userData.toString());
+      data = userData;
+    }
+    print(data.toString());
+    yield data;
+
+    // setState(() {});
+  }
+
+// void fetchData() async {
+//   String url = ConfigAPI().getUserListAdmin();
+//   print(url.toString());
+//   Uri uri = Uri.parse(url);
+//   final response = await http.get(uri);
+//   Map<String,dynamic> resData = jsonDecode(response.body);
+//   print("CONTROLLER:: ${resData}");
+//
+// }
+
+  void sendTest() {
+    print("object");
+    channel.sink.close();
+    String url = ConfigAPIStreamingAdmin().getUserList();
+    // print(url.toString());
+    Uri uri = Uri.parse(url);
+    channel = WebSocketChannel.connect(uri);
+    // final subscription = {"event": "pusher:subscribe", "data": {"channel":"AAA"}};
+    final subscription = {
+      "event": "pusher:subscribe",
+      "data": {"channel": "user"}
+    };
+    channel.sink.add(jsonEncode(subscription));
+    // channel.sink.add(jsonEncode({"event":"pusher", "channel":"user", "data":{}},));
+    // channel.closeCode;
+    // yield channel.stream;
+    print("============");
+    setState(() {
+
+    });
+
+
+    // channel.stream.listen((event) async {
+    //
+    //   print("Connected successfully.");
+    //
+    //   var dataString = jsonDecode(event);
+    //
+    //   print(dataString.toString());
+    //   if (dataString['event'] == 'App\\Events\\AuctionEvent') {
+    //     var userData = jsonDecode(dataString['data']);
+    //     print(userData.toString());
+    //     data = userData;
+    //     // _data = userData;
+    //   }
+    //
+    // },
+    //     onDone: () {
+    //       print('Connection colose');
+    //     },
+    //     onError: (error) {
+    //       print('${error.toString()}');
+    //     });
+    //
+    var data;
     // var dataString = jsonDecode(channel.stream.toString());
     // if (dataString['event'] == 'App\\Events\\AuctionEvent') {
     //   var userData = jsonDecode(dataString['data']);
     //   print(userData.toString());
     //   data = userData;
     // }
-    // print(_data.toString());
-    yield channel.stream;
+    print(data.toString());
+  }
 
-    // setState(() {});
+  void eventPing() {
+    final subscription = {"event": "pusher:ping"};
+    // final subscription = {
+    //   "event": "pusher:subscribe",
+    //   "data": {"channel": "user"}
+    // };
+    channel.sink.add(jsonEncode(subscription));
+    // channel.sink.add(jsonEncode({"event":"pusher", "channel":"user", "data":{}},));
+    // channel.closeCode;
+    // yield channel.stream;
+    // var s = {
+    //   "event": "pusher:subscribe",
+    //   "data": {"channel": "user"}
+    // };
+    // channel.sink.add(jsonEncode(s));
+
+    UserController userController = new UserController();
+    var data = userController.fetchUserData();
+    UserListAdminModel userListAdminModel = new UserListAdminModel(data);
+    print("============");
+    // setState(() {
+    //
+    // });
+  }
+
+  void eventPong() {
+    final subscription = {"event": "pusher:pong"};
+    // final subscription = {
+    //   "event": "pusher:subscribe",
+    //   "data": {"channel": "user"}
+    // };
+    channel.sink.add(jsonEncode(subscription));
+    // channel.sink.add(jsonEncode({"event":"pusher", "channel":"user", "data":{}},));
+    // channel.closeCode;
+    // yield channel.stream;
+    print("============");
+    // setState(() {
+    //
+    // });
   }
 
 }

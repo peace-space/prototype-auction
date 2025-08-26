@@ -21,8 +21,11 @@
         </div> --}}
     {{-- @endfor --}}
 
+        <h1>Laravel Realtime Test</h1>
 
-
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+	<span>message: </span>
+	<span id="display"></span>
 
     </body>
 </html>
