@@ -119,7 +119,7 @@ class UserManageState extends State<UserManage> {
 
   void onGotoUserList(BuildContext ctx) {
     var route = MaterialPageRoute(
-      builder: (ctx) => UserList(),
+      builder: (ctx) => UserListAdmin(),
     );
 
     Navigator.pushReplacement(ctx, route);

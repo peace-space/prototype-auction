@@ -222,4 +222,8 @@ class ConfigAPI {
   String getUserListAdmin() {
     return "${url}/api/v1/user";
   }
+
+  String getAuctionApi() {
+    return "${url}/api/v1/auction";
+  }
 }

@@ -15,22 +15,26 @@ class UserListAdminModel {
   // static var image_profile;
   // static var created_at;
   // static var updated_at;
-  static late Object userData;
+  static Map userData = {};
   static dynamic dataStreaming;
   static dynamic data;
   static var test;
 
-  UserListAdminModel(Object data) {
-    test = data;
+  UserListAdminModel(Map data) {
+    userData = data;
   }
 
   static Stream fetchStreamingUserData() async* {
-    String url = ConfigAPIStreamingAdmin().getUserList();
+    String url = ConfigAPIStreamingAdmin.getUserList();
     Uri uri = Uri.parse(url);
     final channel = WebSocketChannel.connect(uri);
+    // final subscription = {
+    //   "event": "pusher:subscribe",
+    //   "data": {"channel": "user"},
+    // };
     final subscription = {
       "event": "pusher:subscribe",
-      "data": {"channel": "user"},
+      "data": {"channel": "user", "data": ""},
     };
 
     channel.sink.add(jsonEncode(subscription));
@@ -62,7 +66,27 @@ class UserListAdminModel {
   //   yield data;
   // }
 
-  static dynamic getData() {
-    return test;
+  List getData() {
+    try {
+      // print(userData.toString());
+      // if (userData['event'] == "pusher_internal:subscription_succeeded") {
+      //   // print("aaaSSS${userData['data']}");
+      //   userData = userData['event'];
+      //   // userData = userData['data'];
+      //   print("aaaaaaaaaaaaaa${userData}");
+      //   // userData = jsonEncode(userData['data']) as Map;
+      //   return userData['data'];
+      // }
+      if (userData['event'] == "App\\Events\\UserEvent") {
+        // print("${userData['data']}");
+        userData = jsonDecode(userData['data']);
+        return userData['data'];
+      }
+      List error = ["กำลังโหลด..."];
+      return error;
+    } catch (e) {
+      List error = ["${e}"];
+      return error;
+    }
   }
 }

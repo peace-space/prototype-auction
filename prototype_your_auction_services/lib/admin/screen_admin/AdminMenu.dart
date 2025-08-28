@@ -19,7 +19,7 @@ class AdminMenuState extends State<AdminMenu> {
         children: [
           Column(
             children: [
-              Text("AdminMenu"),
+              Text("รายชื่อผู้ใช้งาน"),
               userList(context)
             ],
           )
@@ -34,7 +34,7 @@ class AdminMenuState extends State<AdminMenu> {
           Navigator.of(ctx).push(
               MaterialPageRoute(
                   builder: (ctx){
-                    return UserList();
+                    return UserListAdmin();
                   },
               )
           );

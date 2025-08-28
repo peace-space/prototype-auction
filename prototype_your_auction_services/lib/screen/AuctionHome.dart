@@ -6,6 +6,7 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
 import 'package:prototype_your_auction_services/share/CheckLogin.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
@@ -244,8 +245,9 @@ class AuctionHomeState extends State<AuctionHome> {
     try {
       // await Future.delayed(Duration(seconds: 5));
       // print("Start");
-      String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
+      // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/auction';
       // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/auction';
+      String url = ConfigAPI().getAuctionApi();
       final uri = Uri.parse(url);
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);
