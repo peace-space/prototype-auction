@@ -112,9 +112,10 @@ class EditUserProfileState extends State<EditUserProfile> {
     // print(phone);
     return ElevatedButton(
         onPressed: () => {
-        save(),Navigator.pushReplacement(ctx,
-          MaterialPageRoute(builder: (ctx) => UserManage(id_user: id_user),))
-        },
+        save(),Navigator.pushReplacement(ctx,erialPageRoute(builder: (ctx) => UserDetailAdmin()),
+        ),
+      },
+      },
         child: Text("บันทึกการแก้ไข")
     );
   }

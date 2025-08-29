@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/UserDetailAdmin.dart';
 import 'package:prototype_your_auction_services/controller/UserController.dart';
+import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../share/ConfigAPIStreamingAdmin.dart';
@@ -14,17 +16,12 @@ class UserListAdmin extends StatefulWidget {
 
 class UserListAdminState extends State<UserListAdmin> {
   static var data;
-
-  // String ws = ConfigAPIStreamingAdmin.getUserList();
-  // late Uri uri;
   var channel;
 
-  // Map<String, dynamic> subscription = {
-  //   "event": "pusher:subscribe",
-  //   "data": {"channel": "user"}};
+
   @override
   void initState() {
-    UserController().fetchUserData();
+
     super.initState();
   }
 
@@ -39,6 +36,7 @@ class UserListAdminState extends State<UserListAdmin> {
       "event": "pusher:subscribe",
       "data": {"channel": "user"}};
     channel.sink.add(jsonEncode(subscription));
+    UserController().fetchUserListData();
     return Scaffold(
       appBar: AppBar(
         title: Text('รายการผู้ใช้งาน'),
@@ -54,9 +52,15 @@ class UserListAdminState extends State<UserListAdmin> {
             );
           }
 
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text("ไม่มีข้อมูล"),
             );
           }
 
@@ -79,8 +83,38 @@ class UserListAdminState extends State<UserListAdmin> {
                 "event": "pusher:pong", "data": {"channel": "user"}};
               channel.sink.add(jsonEncode(subscription));
               UserController userController = UserController();
-              userController.fetchUserData();
+              userController.fetchUserListData();
               print("::: Pong :::");
+            }
+
+            if (data != null) {
+              userData = data['data'];
+              return ListView.builder(
+                padding: EdgeInsets.all(8),
+                itemCount: userData.length,
+                itemBuilder: (context, index) {
+                  // Map userData = data[index];
+                  return Card(
+                      child: InkWell(
+                        onTap: () {
+                          goToOneUserDetail(userData[index]);
+                        },
+                        child: ListTile(
+                          title: Row(
+                            children: [
+                              Text("${userData[index]['id_users']}: "),
+                              Text("${userData[index]['first_name_users']}"),
+                              Text("${userData[index]['last_name_users']}"),
+                            ],
+                          ),
+                        ),
+                      )
+                  );
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
             }
 
             if (data == null) {
@@ -97,7 +131,7 @@ class UserListAdminState extends State<UserListAdmin> {
                   return Card(
                       child: InkWell(
                         onTap: () {
-
+                          goToOneUserDetail(userData[index]);
                         },
                         child: ListTile(
                           title: Row(
@@ -125,35 +159,16 @@ class UserListAdminState extends State<UserListAdmin> {
     );
   }
 
-  Stream connect() async* {
-    print("stat");
-    // String ws = ConfigAPIStreamingAdmin.getUserList();
-    // print("${ws}");
-    // Uri uri = Uri.parse(ws);
-    // final channel = WebSocketChannel.connect(uri);
-    // Map<String, dynamic> subscription = {
-    //   "event": "pusher:subscribe",
-    //   "data": {"channel": "user"}};
-    // channel.sink.add(jsonEncode(subscription));
-
-    // channel.sink.add(jsonEncode(subscription));
+  void goToOneUserDetail(var user_data) {
 
     UserController userController = UserController();
-    final test = userController.fetchUserData();
+    var user_detail = userController.fetchOneUserDetail(
+        id_users: user_data['id_users']);
 
-    // channel.stream.listen((event) async {
-    //   print("Connection Sucessfully.");
-    //   print("cccc: ${event}");
-    //   data = jsonDecode(event);
-    // }, onError: (error) {
-    //   print("${error}");
-    // },
-    //   onDone: (){
-    //     print("Connection done.");
-    //
-    //   },);
-    print("object");
+    UserListAdminModel userListAdminModel = UserListAdminModel();
+    userListAdminModel.setOneUserDetail(user_detail);
 
-    // setState(() {});
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => UserDetailAdmin(),));
   }
 }

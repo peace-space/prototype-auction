@@ -13,8 +13,8 @@ class ConfigAPI {
 
   late final String logout_api_server_get = '${url}/api/v1/logout';
 
-  late final String image_profile_api_server_get =
-      '${url}/api/v1/get-image-profile';
+  // late final String image_profile_api_server_get =
+  //     '${url}/api/v1/get-image-profile';
 
   late final String image_api_server_get = '${url}/api/v1/get-imagee';
 
@@ -95,13 +95,12 @@ class ConfigAPI {
   }
 
   String getImageProfileApiServerGet({required String image_profile_path}) {
-    String path = this.image_profile_api_server_get + image_profile_path;
+    String path = "${url}/api/v1/get-image-profile" + image_profile_path;
     return path!;
   }
 
   String getImageAuctionApiServerGet({required var image_auction_path}) {
-    String path =
-        this.image_profile_api_server_get + image_auction_path.toString();
+    String path = "${url}" + image_auction_path.toString();
     return path!;
   }
 
@@ -225,5 +224,9 @@ class ConfigAPI {
 
   String getAuctionApi() {
     return "${url}/api/v1/auction";
+  }
+
+  String getOneUserApi({required var id_users}) {
+    return "${url}/api/v1/user/${id_users.toString()}";
   }
 }

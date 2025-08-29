@@ -1,141 +1,184 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:prototype_your_auction_services/admin/screen_admin/EditUserProfileAdmin.dart';
-import 'package:prototype_your_auction_services/admin/screen_admin/UserListAdmin.dart';
+import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
-class UserManage extends StatefulWidget {
-  int id_user;
-  UserManage({
-    required this.id_user
-});
-  State<UserManage> createState() {
-    return UserManageState(id_user);
+class UserDetailAdmin extends StatefulWidget {
+  State<UserDetailAdmin> createState() {
+    return UserDetailAdminState();
   }
 }
 
-class UserManageState extends State<UserManage> {
-  int id_user;
-  Map user_data = {};
-  UserManageState(this.id_user);
+class UserDetailAdminState extends State<UserDetailAdmin> {
+  UserListAdminModel userListAdminModel = UserListAdminModel();
+  late Future user_detail = userListAdminModel.getOneUserDetail();
+
+  // UserController userController = UserController();
+  // late Future<Map> user_detail = userController.fetchOneUserDetail(id_users: user_detail['id_users']);
 
   @override
   void initState() {
-    // TODO: implement initState
-    userData();
+
     super.initState();
   }
 
   Widget build(BuildContext context){
+    // return Scaffold(
+    //   appBar: AppBar(
+    //     title: Text("UserID: ${user_detail['id_users']}"),
+    //   ),
+    //   body: ListView(
+    //     padding: EdgeInsets.all(20),
+    //     children: [
+    //       Text("รหัสผู้ใช้งาน: ${user_detail['id_users']}",
+    //         textScaler: TextScaler.linear(1.5),),
+    //       Text("ชื่อ: ${user_detail['first_name_users']}",
+    //           textScaler: TextScaler.linear(1.5)),
+    //       Text("เบอร์โทร: ${user_detail['phone']}", textScaler: TextScaler.linear(1.5)),
+    //       Text("อีเมล: ${user_detail['email']}", textScaler: TextScaler.linear(1.5)),
+    //       Text("ที่อยู่: ${user_detail['address']}", textScaler: TextScaler.linear(1.5)),
+    //       buttonEditUserProfile(context, user_detail['id_users']),
+    //       deleteUserButton(context)
+    //     ],
+    //   ),
+    // );
     return Scaffold(
       appBar: AppBar(
-        title: Text("UserID: ${id_user}"),
+        title: Text("ข้อมูลผู้ใช้งาน"),
       ),
-      body: ListView(
-        padding: EdgeInsets.all(20),
-        children: [
-          Text("รหัสผู้ใช้งาน: ${user_data['id_users']}",
-            textScaler: TextScaler.linear(1.5),),
-          Text("ชื่อ: ${user_data['first_name_users']}",
-              textScaler: TextScaler.linear(1.5)),
-          Text("เบอร์โทร: ${user_data['phone']}", textScaler: TextScaler.linear(1.5)),
-          Text("อีเมล: ${user_data['email']}", textScaler: TextScaler.linear(1.5)),
-          Text("ที่อยู่: ${user_data['address']}", textScaler: TextScaler.linear(1.5)),
-          buttonEditUserProfile(context, id_user),
-          deleteUserButton(context)
-        ],
-      ),
-    );
-  }
-
-  Widget buttonEditUserProfile(BuildContext ctx, int id){
-    return ElevatedButton(
-            onPressed:  () {
-              Navigator.push(
-                  ctx, MaterialPageRoute(
-                  builder: (ctx) => EditUserProfile(id, user_data)
-                )
-              );
-            },
-            child: Text("แก้ไขข้อมูลผู้ใช้งาน")
-        );
-  }
-  Widget userList() {
-      // userData();
-      return ListView.builder(
-        padding: EdgeInsets.all(20),
-        itemCount: user_data.length,
-        itemBuilder: (context, index) {
-          final Map data = user_data[index];
-          final id = !data['id_users'];
-          final name = data['first_name_users'];
-          final phone = data['phone'];
-          return Card(
-            child: ListTile(
-              title: Text(name.toString()),
-              subtitle: Text(phone.toString()),
-            )
+      body: FutureBuilder(
+        future: user_detail, builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text("Error."),
           );
-        },
-      );
-    }
-  void userData() async {
-    await Future.delayed(Duration(milliseconds: 300));
-    print("aaaa");
-    String url = "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/user/${id_user}";
-    // String url = "https://www.your-auction-services.com/prototype-auction/api-pa/api/user/${id_user}";
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final resData = jsonDecode(response.body);
-    print(resData['data'].toString());
-    final data = resData['data'];
+        }
 
-    setState(() {
-      user_data = data;
-    });
+        if (snapshot.connectionState == ConnectionState.active) {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-    print("bbbb");
-  }
+        if (!snapshot.hasData) {
+          return Center(
+              child: Text("ไม่มีข้อมูล")
+          );
+        }
 
-  Widget deleteUser() {
-    return ElevatedButton(
-        onPressed: () => {
-
-        },
-        child: Text("ลบผู้ใช้งาน")
+        if (snapshot.hasData) {
+          Map<String, dynamic> user_data = snapshot.data['user_data'];
+          Map<String, dynamic> bank_account_user = snapshot
+              .data['bank_account']['data'];
+          return ListView(
+            padding: EdgeInsets.all(20),
+            children: [
+              CircleAvatar(
+                radius: 150,
+                backgroundImage: NetworkImage(
+                    "${ConfigAPI().getImageProfileApiServerGet(
+                        image_profile_path: user_data['image_profile'])}"
+                ),
+              ),
+              // Text("${user_data}"),
+              Text(
+                  "ชื่อ: ${user_data['first_name_users']} ${user_data['last_name_users']}"),
+              Text(
+                  "เบอร์โทร: ${user_data['first_name_users']} ${user_data['last_name_users']}"),
+              Text("อีเมล: ${user_data['email']}"),
+              Text("ที่อยู่: ${user_data['address']}"),
+              Text("สร้างบัญชีเมื่อ: ${user_data['created_at']}"),
+              Text("อัพเดทล่าสุด: ${user_data['created_at']}"),
+              Divider(),
+              Text("บัญชีธนาคาร"),
+              Text(
+                  "ชื่อเจ้าของบัญชี: ${bank_account_user['name_bank_account']}"),
+              Text("ชื่อบัญชีธนาคาร: ${bank_account_user['name_account']}"),
+              Text(
+                  "เลขบัญชีธนาคาร: ${bank_account_user['bank_account_number']}"),
+              Text("พร้อมเพย์: ${bank_account_user['prompt_pay']}"),
+              Text("สร้างบัญชีเมื่อ: ${bank_account_user['created_at']}"),
+              Text("อัพเดทล่าสุด: ${bank_account_user['created_at']}"),
+            ],
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },),
     );
   }
 
-  Widget deleteUserButton(BuildContext ctx) {
-    return ElevatedButton(
-        onPressed: () =>
-        {
-          onDeleteUser(ctx)
-        },
-        child: Text("ลบผู้ใช้งาน")
-    );
-  }
+// Widget buttonEditUserProfile(BuildContext ctx, int id){
+//   return ElevatedButton(
+//           onPressed:  () {
+//             Navigator.push(
+//                 ctx, MaterialPageRoute(
+//                 builder: (ctx) => EditUserProfile(id, user_detail)
+//               )
+//             );
+//           },
+//           child: Text("แก้ไขข้อมูลผู้ใช้งาน")
+//       );
+// }
+// Widget userList() {
+//     // userData();
+//     return ListView.builder(
+//       padding: EdgeInsets.all(20),
+//       itemCount: user_detail.length,
+//       itemBuilder: (context, index) {
+//         final Map data = user_detail[index];
+//         final id = !data['id_users'];
+//         final name = data['first_name_users'];
+//         final phone = data['phone'];
+//         return Card(
+//           child: ListTile(
+//             title: Text(name.toString()),
+//             subtitle: Text(phone.toString()),
+//           )
+//         );
+//       },
+//     );
+//   }
 
-  void onGotoUserList(BuildContext ctx) {
-    var route = MaterialPageRoute(
-      builder: (ctx) => UserListAdmin(),
-    );
 
-    Navigator.pushReplacement(ctx, route);
-  }
+// Widget deleteUser() {
+//   return ElevatedButton(
+//       onPressed: () => {
+//
+//       },
+//       child: Text("ลบผู้ใช้งาน")
+//   );
+// }
+//
+// Widget deleteUserButton(BuildContext ctx) {
+//   return ElevatedButton(
+//       onPressed: () =>
+//       {
+//         onDeleteUser(ctx)
+//       },
+//       child: Text("ลบผู้ใช้งาน")
+//   );
+// }
+//
+// void onGotoUserList(BuildContext ctx) {
+//   var route = MaterialPageRoute(
+//     builder: (ctx) => UserListAdmin(),
+//   );
+//
+//   Navigator.pushReplacement(ctx, route);
+// }
 
-  void onDeleteUser(BuildContext ctx) async {
-    String url = "https://your-auction-services.com/prototype-auction/api-pa/api/delete-user/${id_user}";
-    final uri = Uri.parse(url);
-    final response = await http.delete(uri);
-    if (response.statusCode == 200) {
-      print("Successfully.");
-      onGotoUserList(ctx);
-    } else {
-      throw Exception('Failed');
-    }
-  }
+// void onDeleteUser(BuildContext ctx) async {
+//   String url = "https://your-auction-services.com/prototype-auction/api-pa/api/delete-user/${user_detail['id_users']}";
+//   final uri = Uri.parse(url);
+//   final response = await http.delete(uri);
+//   if (response.statusCode == 200) {
+//     print("Successfully.");
+//     onGotoUserList(ctx);
+//   } else {
+//     throw Exception('Failed');
+//   }
+// }
 
 
 }

@@ -15,14 +15,15 @@ class UserListAdminModel {
   // static var image_profile;
   // static var created_at;
   // static var updated_at;
-  static Map userData = {};
+  static Map user_list_data = {};
   static dynamic dataStreaming;
   static dynamic data;
   static var test;
+  static var one_user_detail;
 
-  UserListAdminModel(Map data) {
-    userData = data;
-  }
+  // UserListAdminModel(Map data) {
+  //   user_list_data = data;
+  // }
 
   static Stream fetchStreamingUserData() async* {
     String url = ConfigAPIStreamingAdmin.getUserList();
@@ -62,9 +63,9 @@ class UserListAdminModel {
     yield channel.stream;
   }
 
-  // static dynamic getUserData() async* {
-  //   yield data;
-  // }
+  void setUserListData(dynamic user_list_data) {
+    UserListAdminModel.user_list_data = user_list_data;
+  }
 
   List getData() {
     try {
@@ -77,10 +78,10 @@ class UserListAdminModel {
       //   // userData = jsonEncode(userData['data']) as Map;
       //   return userData['data'];
       // }
-      if (userData['event'] == "App\\Events\\UserEvent") {
+      if (user_list_data['event'] == "App\\Events\\UserEvent") {
         // print("${userData['data']}");
-        userData = jsonDecode(userData['data']);
-        return userData['data'];
+        user_list_data = jsonDecode(user_list_data['data']);
+        return user_list_data['data'];
       }
       List error = ["กำลังโหลด..."];
       return error;
@@ -88,5 +89,15 @@ class UserListAdminModel {
       List error = ["${e}"];
       return error;
     }
+  }
+
+  void setOneUserDetail(var one_user_detial) {
+    UserListAdminModel.one_user_detail = one_user_detial;
+  }
+
+  Future<Map> getOneUserDetail() {
+    print("${one_user_detail.toString()}");
+
+    return one_user_detail;
   }
 }
