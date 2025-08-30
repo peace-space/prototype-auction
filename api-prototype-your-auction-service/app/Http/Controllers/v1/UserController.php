@@ -176,7 +176,7 @@ class UserController extends Controller
                         ->update(['address' => $user_data['address']]);
                 }
 
-                if ($request->image_profile != "" && $request->image_profile != "null") {
+                if ($request->image_profile != "") {
                     $old_path_image_profile = DB::table('users')
                         ->select("*")
                         ->where('id_users', '=', $user_data['id_users'])
@@ -583,9 +583,34 @@ class UserController extends Controller
         }
     }
 
-    public function changePassWord(Request $request)
+    public function changePassWordUserAdmin(Request $request)
     {
-        return $request;
+
+    //
+    //     return $password_hashed;
+        try {
+            $request->validate([
+                "id_users" => "required",
+                "password" => "required"
+            ]);
+
+            $password_hashed = Hash::make($request->password);
+
+            $change_password = DB::table('users')
+                                ->where('id_users', '=', $request->id_users)
+                                ->update(['password' => $password_hashed]);
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error",
+                'data' => $e
+            ], 500);
+        }
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +115,6 @@ class BankAccountController extends Controller
                     'message' => 'Successfully.',
                     // 'data' => $on_update,
                 ], 201);
-
             } else {
                 return response()->json([
                     'status' => 0,
@@ -130,6 +130,82 @@ class BankAccountController extends Controller
             ], 500);
         }
     }
+
+    public function editBankAccountAdmin(Request $request)
+    {
+        try {
+            $bank_account_data = $request->validate([
+                'id_users' => 'required',
+                'name_bank_account' => 'nullable',
+                'name_account' => 'nullable',
+                'bank_account_number' => 'nullable',
+                'prompt_pay' => 'nullable',
+                // 'prompt_pay' => ['sometimes', 'nullable']
+            ]);
+
+            $data_for_update = [
+                // 'name_bank_account' => $bank_account_data['name_bank_account'],
+                // 'name_account' => $bank_account_data['name_account'],
+                // 'bank_account_number' => $bank_account_data['bank_account_number'],
+            ];
+            // return $bank_account_data['id_users'] != "null";
+            try {
+                if ($bank_account_data['name_bank_account'] != null && $bank_account_data['name_bank_account'] != 'null') {
+                    $data_for_update['name_bank_account'] = $bank_account_data['name_bank_account'];
+                    // return $data_for_update['name_bank_account'];
+                    $on_update = DB::table('bank_accounts')->where('id_users', '=', $bank_account_data['id_users'])
+                            ->update(["name_bank_account"=>$data_for_update['name_bank_account']]);
+                    // return "TT";
+                } else {
+                    $data_for_update['name_bank_account'] = null;
+                }
+
+                if ($bank_account_data['name_account'] != null && $bank_account_data['name_account'] != "null") {
+                    $data_for_update['name_account'] = $bank_account_data['name_account'];
+                    $on_update = DB::table('bank_accounts')->where('id_users', '=', $bank_account_data['id_users'])
+                            ->update(["name_account" => $data_for_update['name_account']]);
+
+                } else {
+                    $data_for_update['name_account'] = null;
+                }
+                if ($bank_account_data['bank_account_number'] != null && $bank_account_data['bank_account_number'] != "null") {
+                    $data_for_update['bank_account_number'] = $bank_account_data['bank_account_number'];
+                    $on_update = DB::table('bank_accounts')->where('id_users', '=', $bank_account_data['id_users'])
+                                    ->update(["bank_account_number" => $data_for_update['bank_account_number']]);
+                } else {
+                    $data_for_update['bank_account_number'] = null;
+                }
+
+                if ($bank_account_data['prompt_pay'] != null && $bank_account_data['prompt_pay'] != "null") {
+                    $data_for_update['prompt_pay'] = $bank_account_data['prompt_pay'];
+                    $on_update = DB::table('bank_accounts')->where('id_users', '=', $bank_account_data['id_users'])
+                            ->update(["prompt_pay"=>$data_for_update['prompt_pay']]);
+                } else {
+                    $data_for_update['prompt_pay'] = null;
+                }
+            } catch (Exception $e) {
+                return "ERROR".$e;
+                $data_for_update['prompt_pay'] = null;
+            }
+
+            // return $data_for_update['prompt_pay'];
+            // return $data_for_update;
+
+            // $on_update = DB::table('bank_accounts')
+            //     ->where('id_users', '=', $bank_account_data['id_users'])
+            //     ->update(['updated_at' => Carbon::now("Asia/Bangkok")]);
+
+            return response()->json([
+                'status' => 1,
+                'message' => 'Successfully.',
+                // 'data' => $on_update,
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'ERROR.',
+                'data' => $e,
+            ], 500);
+        }
+    }
 }
-
-

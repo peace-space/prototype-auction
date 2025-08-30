@@ -42,7 +42,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('logout', [UserController::class, 'onLogout']);
     Route::post('/edit-user-profile', [UserController::class, 'editUserProfile']);
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
-    Route::post('/change-password', [UserController::class, 'changePassWord']);
+    Route::post('/change-password-user-admin', [UserController::class, 'changePassWordUserAdmin']);
 
     // Password Reset
     Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);
@@ -52,6 +52,7 @@ Route::prefix('/v1')->group(function () {
     // Bank Account -----------------------------------------------------------
     Route::post('/create-bank-account', [BankAccountController::class, 'createBankAccount']);
     Route::post('/insert-bank-account', [BankAccountController::class, 'insertBankAccount']);
+    Route::post('/edit-bank-account-admin', [BankAccountController::class, 'editBankAccountAdmin']);
 
     Route::post('/test-delete', [UserController::class, 'test']);
 

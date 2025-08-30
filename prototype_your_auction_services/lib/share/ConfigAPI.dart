@@ -146,7 +146,7 @@ class ConfigAPI {
   }
 
   String getInsertBankAccountServerPost() {
-    return this.insert_bank_account_server_post;
+    return "${url}/api/v1/insert-bank-account";
   }
 
   String getCreateProducServerPost() {
@@ -232,5 +232,9 @@ class ConfigAPI {
 
   String getDeleteUserAdminApi({required var id_users}) {
     return "${url}/api/v1/delete-user/${id_users.toString()}";
+  }
+
+  String getEditBankAccountAdmin() {
+    return "${url}/api/v1/edit-bank-account-admin";
   }
 }

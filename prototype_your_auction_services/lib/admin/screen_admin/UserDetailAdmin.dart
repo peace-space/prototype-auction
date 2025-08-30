@@ -3,7 +3,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/edit_user_bank_account_admin.dart';
 import 'package:prototype_your_auction_services/channel/UserDetailChannel.dart';
+import 'package:prototype_your_auction_services/controller/BankAccountController.dart';
 import 'package:prototype_your_auction_services/controller/UserController.dart';
 import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
@@ -26,6 +28,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
   final _name_account_controller = TextEditingController();
   final _bank_account_number_controller = TextEditingController();
   final _prompt_pay_controller = TextEditingController();
+  final _password_user_controller = TextEditingController();
   bool edit_data = false;
   var _imageData;
 
@@ -136,7 +139,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
             }
 
             // return Text("${user_data}");
-            if (user_data == null || bank_account_user == null) {
+            if (user_data == null) {
               return Center(
                 child: CircularProgressIndicator(),
               );
@@ -147,52 +150,101 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
               // String image_profile = user_data['image_profile'];
               // String image_profile = '/storage/images/user-profile-image/profile-default-image.png';
               return ListView(
-            padding: EdgeInsets.all(20),
-            children: [
-              CircleAvatar(
-                radius: 150,
-                backgroundImage: NetworkImage(
-                    "${ConfigAPI().getImageProfileApiServerGet(
-                        image_profile_path: user_data['image_profile'])}"
-                ),
-              ),
-              buttonSelectImage(),
-              // Text("${user_data}"),
-              Text("ID User: ${user_data['id_users']}"),
-              name("${user_data['first_name_users']}",
-                  " ${user_data['last_name_users']}"),
-              phone("${user_data['phone']}"),
-              email("${user_data['email']}"),
-              address("${user_data['address']}"),
+                padding: EdgeInsets.all(20),
+                children: [
+                  CircleAvatar(
+                    radius: 150,
+                    backgroundImage: NetworkImage(
+                        "${ConfigAPI().getImageProfileApiServerGet(
+                            image_profile_path: user_data['image_profile'])}"
+                    ),
+                  ),
+                  buttonSelectImage(),
+                  // Text("${user_data}"),
+                  Text("ID User: ${user_data['id_users']}"),
+                  SizedBox(height: 8,),
+                  name("${user_data['first_name_users']}",
+                      " ${user_data['last_name_users']}"),
+                  SizedBox(height: 8,),
+                  phone("${user_data['phone']}"),
+                  SizedBox(height: 8,),
+                  email("${user_data['email']}"),
+                  SizedBox(height: 8,),
+                  address("${user_data['address']}"),
+
+                  SizedBox(height: 8,),
+                  Text("สร้างบัญชีเมื่อ: ${user_data['created_at']}"),
+                  Text("อัพเดทล่าสุด: ${user_data['updated_at']}"),
+                  Divider(),
+                  Text("บัญชีธนาคาร"),
+
+                  SizedBox(height: 9,),
+                  nameBankAccount("${bank_account_user['name_bank_account']}"),
+                  SizedBox(height: 8,),
+                  nameAccount("${bank_account_user['name_account']}"),
+                  SizedBox(height: 8,),
+                  bankAccountNumber(
+                      "${bank_account_user['bank_account_number']}"),
+                  SizedBox(height: 8,),
+                  promptPay("${bank_account_user['prompt_pay']}"),
+                  SizedBox(height: 8,),
+                  // Text(
+                  //     "ชื่อเจ้าของบัญชี: ${bank_account_user['name_bank_account']}"),
+                  // Text("ชื่อบัญชีธนาคาร: ${bank_account_user['name_account']}"),
+                  // Text(
+                  //     "เลขบัญชีธนาคาร: ${bank_account_user['bank_account_number']}"),
+                  // Text("พร้อมเพย์: ${bank_account_user['prompt_pay']}"),
+                  Text("สร้างบัญชีเมื่อ: ${bank_account_user['created_at']}"),
+                  SizedBox(height: 8,),
+                  Text("อัพเดทล่าสุด: ${bank_account_user['updated_at']}"),
+                  Divider(),
+                  passwordUser(),
+                  editDataButton(),
+                  // ElevatedButton(onPressed: () {
+                  //   editData();
+                  // }, child: Text("แก้ไขข้อมูล")),
+                  deleteButton(user_data),
+                  SizedBox(
+                    height: 50,
+                  )
+                ],
+              );
+            } else {
+              return ListView(
+                padding: EdgeInsets.all(20),
+                children: [
+                  CircleAvatar(
+                    radius: 150,
+                    backgroundImage: NetworkImage(
+                        "${ConfigAPI().getImageProfileApiServerGet(
+                            image_profile_path: user_data['image_profile'])}"
+                    ),
+                  ),
+                  buttonSelectImage(),
+                  // Text("${user_data}"),
+                  Text("ID User: ${user_data['id_users']}"),
+                  name("${user_data['first_name_users']}",
+                      " ${user_data['last_name_users']}"),
+                  phone("${user_data['phone']}"),
+                  email("${user_data['email']}"),
+                  address("${user_data['address']}"),
 
 
-              Text("สร้างบัญชีเมื่อ: ${user_data['created_at']}"),
-              Text("อัพเดทล่าสุด: ${user_data['created_at']}"),
-              Divider(),
-              Text("บัญชีธนาคาร"),
+                  Text("สร้างบัญชีเมื่อ: ${user_data['created_at']}"),
+                  Text("อัพเดทล่าสุด: ${user_data['created_at']}"),
+                  Divider(),
+                  Text("ไม่มีบัญชีธนาคาร"),
 
-              nameBankAccount("${bank_account_user['name_bank_account']}"),
-              nameAccount("${bank_account_user['name_account']}"),
-              bankAccountNumber("${bank_account_user['bank_account_number']}"),
-              promptPay("${bank_account_user['prompt_pay']}"),
-              // Text(
-              //     "ชื่อเจ้าของบัญชี: ${bank_account_user['name_bank_account']}"),
-              // Text("ชื่อบัญชีธนาคาร: ${bank_account_user['name_account']}"),
-              // Text(
-              //     "เลขบัญชีธนาคาร: ${bank_account_user['bank_account_number']}"),
-              // Text("พร้อมเพย์: ${bank_account_user['prompt_pay']}"),
-              Text("สร้างบัญชีเมื่อ: ${bank_account_user['created_at']}"),
-              Text("อัพเดทล่าสุด: ${bank_account_user['created_at']}"),
-              Divider(),
-              editDataButton(),
-              // ElevatedButton(onPressed: () {
-              //   editData();
-              // }, child: Text("แก้ไขข้อมูล")),
-              deleteButton(user_data),
-              SizedBox(
-                height: 50,
-              )
-            ],
+                  passwordUser(),
+                  editDataButton(),
+                  ElevatedButton(onPressed: () {
+                    goToInsertBankAccount();
+                  }, child: Text("เพิ่มบัญชีธนาคาร")),
+                  deleteButton(user_data),
+                  SizedBox(
+                    height: 50,
+                  )
+                ],
               );
             }
           }
@@ -281,36 +333,36 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
   }
 
   Widget email(String email) {
-    if (edit_data) {
-      return Row(
-        children: [
-          Expanded(child: TextFormField(
-            controller: _email_controller,
-            decoration: InputDecoration(
-                label: Text("อีเมล"),
-                border: OutlineInputBorder(), hintText: "${email}"
-            ),
-          )),
-          // Expanded(
-          //   child: TextButton(onPressed: (){
-          //     editEmailToggle();
-          //   }, child: Text("ตกลง")),
-          // )
-        ],
-      );
-    } else {
-      // return Text("data");
-      return Row(
-        children: [
-          Expanded(child: Text("อีเมล: ${email}")),
-          // Expanded(
-          //   child: TextButton(onPressed: () {
-          //     editEmailToggle();
-          //   }, child: Text("แก้ไข")),
-          // )
-        ],
-      );
-    }
+    // if (edit_data) {
+    //   return Row(
+    //     children: [
+    //       Expanded(child: TextFormField(
+    //         controller: _email_controller,
+    //         decoration: InputDecoration(
+    //             label: Text("อีเมล"),
+    //             border: OutlineInputBorder(), hintText: "${email}"
+    //         ),
+    //       )),
+    //       // Expanded(
+    //       //   child: TextButton(onPressed: (){
+    //       //     editEmailToggle();
+    //       //   }, child: Text("ตกลง")),
+    //       // )
+    //     ],
+    //   );
+    // } else {
+    // return Text("data");
+    return Row(
+      children: [
+        Expanded(child: Text("อีเมล: ${email}")),
+        // Expanded(
+        //   child: TextButton(onPressed: () {
+        //     editEmailToggle();
+        //   }, child: Text("แก้ไข")),
+        // )
+      ],
+    );
+    // }
   }
 
   Widget address(String address) {
@@ -347,27 +399,28 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
   }
 
   Widget nameBankAccount(String name_bank_account) {
-    // if (edit_data) {
-    //   return Row(
-    //     children: [
-    //       Expanded(child: TextFormField(
-    //         decoration: InputDecoration(
-    //           label: Text("ชื่อเจ้าของบัญชี"),
-    //                         border: OutlineInputBorder(),  hintText: "${name_bank_account}"
-    //         ),
-    //       )),
-    //       // Expanded(
-    //       //   child: TextButton(onPressed: (){
-    //       //     editNameBankAccountToggle();
-    //       //   }, child: Text("ตกลง")),
-    //       // )
-    //     ],
-    //   );
-    // } else {
+    if (edit_data) {
+      return Row(
+        children: [
+          Expanded(child: TextFormField(
+            controller: _name_bank_account_controller,
+            decoration: InputDecoration(
+                label: Text("ชื่อธนาคาร"),
+                border: OutlineInputBorder(), hintText: "${name_bank_account}"
+            ),
+          )),
+          // Expanded(
+          //   child: TextButton(onPressed: (){
+          //     editNameBankAccountToggle();
+          //   }, child: Text("ตกลง")),
+          // )
+        ],
+      );
+    } else {
     // return Text("data");
     return Row(
       children: [
-        Expanded(child: Text("ชื่อเจ้าของบัญชี: ${name_bank_account}")),
+        Expanded(child: Text("ชื่อธนาคาร: ${name_bank_account}")),
         // Expanded(
         //   child: TextButton(onPressed: () {
         //     editNameBankAccountToggle();
@@ -375,7 +428,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
         // )
       ],
     );
-    // }
+    }
   }
 
   Widget nameAccount(String name_account) {
@@ -400,7 +453,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
       // return Text("data");
       return Row(
         children: [
-          Expanded(child: Text("เลขบัญชีธนาคาร: ${name_account}")),
+          Expanded(child: Text("ชื่อบัญชีธนาคาร: ${name_account}")),
           // Expanded(
           //   child: TextButton(onPressed: () {
           //     editNameAccountToggle();
@@ -486,6 +539,8 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
           }, child: Text("ยกเลิก")),
           ElevatedButton(onPressed: () {
             UserController().editUserProfile(context, null, onEdit());
+            BankAccountController().editBankAccountAdmin(
+                context, user_detail['id_users'], onEdit());
             editData();
           }, child: Text("บันทึกการแก้ไข")),
         ],
@@ -509,6 +564,29 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
     }
   }
 
+  Widget passwordUser() {
+    if (edit_data) {
+      return Row(
+        children: [
+          Expanded(child: TextFormField(
+            controller: _password_user_controller,
+            decoration: InputDecoration(
+                label: Text("เปลี่ยนรหัสผ่านของผู้ใช้งาน"),
+                border: OutlineInputBorder(),
+                hintText: "เปลี่ยนรหัสผ่านของผู้ใช้งาน"
+            ),
+          )),
+          // Expanded(
+          //   child: TextButton(onPressed: (){
+          //     editNameBankAccountToggle();
+          //   }, child: Text("ตกลง")),
+          // )
+        ],
+      );
+    } else {
+      return Text("สามารถเปลี่ยนรหัสผู้ใช้งานได้");
+    }
+  }
 
   bool editToggle(bool toggle) {
     if (toggle) {
@@ -568,7 +646,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
         _prompt_pay_controller.text != "") {
       data['prompt_pay'] = _prompt_pay_controller.text;
     }
-    print("${_phone_controller.text}lllllllllllllllllllllllllllllllllll");
+    print("${data}lllllllllllllllllllllllllllllllllll");
     return data;
   }
 
@@ -606,7 +684,6 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
         _imageData = File(imageFile.path);
       });
       showEditImageProfile();
-      Navigator.of(context).pop();
     }
   }
 
@@ -622,7 +699,8 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
                     Expanded(child: Image.file(_imageData)),
                     ElevatedButton(onPressed: () {
                       UserController().editUserProfile(
-                          context, _imageData, null);
+                          context, _imageData, {"": ""});
+                      Navigator.of(context).pop();
                     }, child: Text("เปลี่ยนรูป")),
                     ElevatedButton(onPressed: () {
                       Navigator.of(context).pop();
@@ -635,6 +713,11 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
             ),
           ));
     }
+  }
+
+  void goToInsertBankAccount() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => EditUserBankAccountAdmin(),));
   }
 
 
