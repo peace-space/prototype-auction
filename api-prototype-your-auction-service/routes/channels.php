@@ -1,5 +1,7 @@
 <?php
 
+use App\Events\UserDetailEvent;
+use App\Http\Controllers\v1\UserController;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -17,7 +19,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-Broadcast::channel('user', function () {
-    event("test");
-    broadcast('broadcast');
+Broadcast::channel('UserList', function () {
+    // event("test");
+    // broadcast('broadcast');
+});
+
+Broadcast::channel('UserDetail', function () {
+    // $userCobtroller = new UserController();
 });

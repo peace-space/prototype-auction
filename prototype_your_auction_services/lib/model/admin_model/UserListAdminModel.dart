@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:prototype_your_auction_services/share/ConfigAPIStreamingAdmin.dart';
@@ -18,14 +19,15 @@ class UserListAdminModel {
   static Map user_list_data = {};
   static dynamic dataStreaming;
   static dynamic data;
-  static var test;
+
+  // static var test;
   static var one_user_detail;
 
   // UserListAdminModel(Map data) {
   //   user_list_data = data;
   // }
 
-  static Stream fetchStreamingUserData() async* {
+  static WebSocketChannel fetchStreamingUserData() {
     String url = ConfigAPIStreamingAdmin.getUserList();
     Uri uri = Uri.parse(url);
     final channel = WebSocketChannel.connect(uri);
@@ -35,7 +37,7 @@ class UserListAdminModel {
     // };
     final subscription = {
       "event": "pusher:subscribe",
-      "data": {"channel": "user", "data": ""},
+      "data": {"channel": "user"},
     };
 
     channel.sink.add(jsonEncode(subscription));
@@ -60,7 +62,7 @@ class UserListAdminModel {
     //   },
     // );
 
-    yield channel.stream;
+    return channel;
   }
 
   void setUserListData(dynamic user_list_data) {
@@ -95,9 +97,15 @@ class UserListAdminModel {
     UserListAdminModel.one_user_detail = one_user_detial;
   }
 
-  Future<Map> getOneUserDetail() {
-    print("${one_user_detail.toString()}");
+  static Map getOneUserDetail() {
+    print("${one_user_detail.toString()}----------------------------");
 
     return one_user_detail;
+  }
+
+  void setConvertData(var data) {}
+
+  Stream test(test) async* {
+    yield test;
   }
 }

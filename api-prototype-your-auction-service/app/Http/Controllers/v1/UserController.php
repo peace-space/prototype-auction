@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\v1;
 
-use App\Events\UserEvent;
+use App\Events\UserDetailEvent;
+use App\Events\UserListEvent;
 use App\Http\Controllers\Controller;
 use App\Models\v1\User;
 // use App\Models\User;
@@ -29,7 +30,7 @@ class UserController extends Controller
                 ->select('*')
                 ->get();
             // broadcast(new UserEvent($users_data));
-            event(new UserEvent($users_data));
+            event(new UserListEvent($users_data));
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
@@ -68,12 +69,18 @@ class UserController extends Controller
                 $bank_account = null;
             }
 
+            event(new UserDetailEvent([
+                "user_data" => $user_data,
+                "bank_account" => $bank_account
+            ]));
+
             return response()->json([
                 "status" => 1,
                 "message" => "Successfully.",
                 "data" => [
                     'user_data' => $user_data,
-                    'bank_account' => ['data' => $bank_account]
+                    "bank_account" => $bank_account
+                    // 'bank_account' => ['data' => $bank_account]
                 ]
             ], 200);
         } catch (Exception $e) {
@@ -103,8 +110,8 @@ class UserController extends Controller
             // return "AAA";
             $user_data = $request->validate([
                 'id_users' => ['required'],
-                'email' => ['required'],
-                'password' => ['required'],
+                // 'email' => ['required'],
+                // 'password' => ['required'],
                 'first_name_users' => 'nullable',
                 'last_name_users' => 'nullable',
                 'phone' => 'nullable',
@@ -115,19 +122,19 @@ class UserController extends Controller
             // return "AA";
             // return $user_data['email'];
 
-            $verify_password = DB::table('users')
-                ->select(
-                    'id_users',
-                    'first_name_users',
-                    'last_name_users',
-                    'phone',
-                    'address',
-                    'email',
-                    'admin_status',
-                    'password'
-                )
-                ->where('email', '=', $user_data['email'])
-                ->first();
+            // $verify_password = DB::table('users')
+            //     ->select(
+            //         'id_users',
+            //         'first_name_users',
+            //         'last_name_users',
+            //         'phone',
+            //         'address',
+            //         'email',
+            //         'admin_status',
+            //         'password'
+            //     )
+            //     ->where('email', '=', $user_data['email'])
+            //     ->first();
 
 
 
@@ -138,38 +145,38 @@ class UserController extends Controller
             // return $token;
             // return $login;
 
-            if ($verify_password == true && Hash::check($user_data['password'], $verify_password->password)) {
-                if ($request->first_name_users != "") {
+            // if ($verify_password == true && Hash::check($user_data['password'], $verify_password->password)) {
+                if ($request->first_name_users != "" && $request->first_name_users != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['first_name_users' => $user_data['first_name_users']]);
                 }
-                if ($request->last_name_users != "") {
+                if ($request->last_name_users != "" && $request->last_name_users != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['last_name_users' => $user_data['last_name_users']]);
                 }
 
 
-                if ($request->phone != "") {
+                if ($request->phone != "" && $request->phone != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['phone' => $user_data['phone']]);
                 }
 
-                if ($request->email != "") {
+                if ($request->email != "" && $request->email != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['email' => $user_data['email']]);
                 }
 
-                if ($request->address != "") {
+                if ($request->address != "" && $request->address != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['address' => $user_data['address']]);
                 }
 
-                if ($request->image_profile != "") {
+                if ($request->image_profile != "" && $request->image_profile != "null") {
                     $old_path_image_profile = DB::table('users')
                         ->select("*")
                         ->where('id_users', '=', $user_data['id_users'])
@@ -184,7 +191,7 @@ class UserController extends Controller
                         }
                     }
 
-                    if ($request->image_profile != null) {
+                    if ($request->image_profile != "null") {
                         $image_name = Storage::disk('public')->put('images/user-profile-image', $user_data['image_profile']);
                         $path = Storage::url($image_name);
                         // return $path;
@@ -201,13 +208,13 @@ class UserController extends Controller
                     'message' => "Successfully.",
                     // 'data' => $new_data[0]
                 ], 200);
-            } else {
-                return response()->json([
-                    'status' => 0,
-                    'message' => 'ERRPR.',
-                    'data' => 'ไม่มีข้อมูลผู้ใช้งาน'
-                ], 404);
-            }
+            // } else {
+            //     return response()->json([
+            //         'status' => 0,
+            //         'message' => 'ERRPR.',
+            //         'data' => 'ไม่มีข้อมูลผู้ใช้งาน'
+            //     ], 404);
+            // }
 
 
 

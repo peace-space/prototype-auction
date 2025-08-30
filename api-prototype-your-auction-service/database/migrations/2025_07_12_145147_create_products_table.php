@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
-            $table->foreign('id_users')->references('id_users')->on('users');
+            $table->foreign('id_users')->references('id_users')->on('users')->onDelete("cascade");
             $table->foreign('id_product_types')->references('id_product_types')->on('product_types');
             $table->foreign('id_images')->references('id_images')->on('images')->onDelete('cascade');
         });

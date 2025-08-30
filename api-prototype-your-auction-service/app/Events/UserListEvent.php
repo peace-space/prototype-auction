@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserEvent implements ShouldBroadcastNow
+class UserListEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -34,7 +34,7 @@ class UserEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('user'),
+            new Channel('UserList'),
         ];
     }
 
@@ -49,7 +49,7 @@ class UserEvent implements ShouldBroadcastNow
             return [
                 'status' => 1,
                 'message' => 'Successfully',
-                'data' => $this->user_data
+                'data' => $e
             ];
        }
     }

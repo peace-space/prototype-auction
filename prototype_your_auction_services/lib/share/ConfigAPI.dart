@@ -229,4 +229,8 @@ class ConfigAPI {
   String getOneUserApi({required var id_users}) {
     return "${url}/api/v1/user/${id_users.toString()}";
   }
+
+  String getDeleteUserAdminApi({required var id_users}) {
+    return "${url}/api/v1/delete-user/${id_users.toString()}";
+  }
 }

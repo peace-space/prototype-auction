@@ -20,7 +20,7 @@ return new class extends Migration
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
 
             $table->foreign('id_bids')->references('id_bids')->on('bids')->onDelete('cascade');
-            $table->foreign('id_users')->references('id_users')->on('users');
+            $table->foreign('id_users')->references('id_users')->on('users')->onDelete("cascade");
         });
     }
 
