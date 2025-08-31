@@ -9,6 +9,7 @@ import 'package:prototype_your_auction_services/screen/Register.dart';
 import 'package:prototype_your_auction_services/screen/ResultReportAuction.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/screen/UserProfile.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/Logout.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -102,8 +103,8 @@ Widget showImageProfile() {
   if (ShareData.image_user_profile != null) {
     return CircleAvatar(
       backgroundImage: NetworkImage(
-          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile' +
-              ShareData.image_user_profile
+          '${ConfigAPI().getImageProfileApiServerGet(
+              image_profile_path: ShareData.image_user_profile)}'
       ),
     );
 
@@ -121,7 +122,8 @@ Widget HomePageButton(BuildContext ctx) {
     onPressed:
         () =>
     {
-      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => HomePage())),
+      Navigator.pushReplacement(
+          ctx, MaterialPageRoute(builder: (ctx) => HomePage())),
     },
     child: Text("หน้าหลัก"),
   );
@@ -132,7 +134,8 @@ Widget registerButton(BuildContext ctx) {
     onPressed:
         () =>
     {
-      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => Register())),
+      Navigator.pushReplacement(
+          ctx, MaterialPageRoute(builder: (ctx) => Register())),
     },
     child: Text("ลงทะเบียน"),
   );
@@ -143,7 +146,8 @@ Widget loginButton(BuildContext ctx) {
     onPressed:
         () =>
     {
-      Navigator.push(ctx, MaterialPageRoute(builder: (ctx) => Login())),
+      Navigator.pushReplacement(
+          ctx, MaterialPageRoute(builder: (ctx) => Login())),
     },
     child: Text("เข้าสู่ระบบ"),
   );
@@ -260,7 +264,7 @@ Widget storaManageButton(BuildContext ctx) {
 Widget buttonGoToHistoryAuction(BuildContext ctx) {
   return ElevatedButton(
     onPressed: () {
-      Navigator.push(
+      Navigator.pushReplacement(
         ctx,
         MaterialPageRoute(builder: (context) => HistoryAuctions()),
       );
@@ -272,7 +276,7 @@ Widget buttonGoToHistoryAuction(BuildContext ctx) {
 Widget buttonGoToReportAution(BuildContext ctx) {
   return ElevatedButton(
     onPressed: () {
-      Navigator.push(
+      Navigator.pushReplacement(
         ctx,
         MaterialPageRoute(builder: (context) => ReportAuction()),
       );

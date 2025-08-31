@@ -27,3 +27,5 @@ Broadcast::channel('UserList', function () {
 Broadcast::channel('UserDetail', function () {
     // $userCobtroller = new UserController();
 });
+
+Broadcast::channel('AuctionListAdmin', function (){});

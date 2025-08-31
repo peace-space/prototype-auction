@@ -106,7 +106,9 @@ class UserListAdminState extends State<UserListAdmin> {
             }
 
             if (data == null) {
-              return Text("data");
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
 
             if (data != null) {

@@ -47,7 +47,19 @@ window.Echo = new Echo({
 });
 
 
-window.Echo.channel('user').listen("UserEvent", function (events) {
+window.Echo.channel('UserList').listen("UserListEvent", function (events) {
+    console.log(events);
+    var display = document.getElementById('display');
+    display.innerHTML = events['message'];
+});
+
+window.Echo.channel('UserDetial').listen("UserDetailEvient", function (events) {
+    console.log(events);
+    var display = document.getElementById('display');
+    display.innerHTML = events['message'];
+});
+
+window.Echo.channel('AuctionListAdmin').listen("AuctionListAdminEvent", function (events) {
     console.log(events);
     var display = document.getElementById('display');
     display.innerHTML = events['message'];
