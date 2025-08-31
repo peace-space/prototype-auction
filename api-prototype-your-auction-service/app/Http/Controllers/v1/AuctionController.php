@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Events\AuctionDetailAdminEvent;
 use App\Events\AuctionListAdminEvent;
 use App\Http\Controllers\algorithm\RunAuctionSystem;
 use App\Http\Controllers\Controller;
@@ -711,37 +712,38 @@ class AuctionController extends Controller
         }
     }
 
-    public function auctionDetailAdmin($id_auctions) {
-        try {
+    // public function auctionDetailAdmin($id_auctions) {
+    //     try {
 
-            $auction_list = DB::table('auctions')
-                                ->select('*')
-                                ->join('products', function(JoinClause $join) {
-                                    $join->on('products.id_products', '=', 'auctions.id_products');
-                                })
-                                ->join('images', function(JoinClause $join) {
-                                    $join->on('images.id_images', '=', 'products.id_images');
-                                })
-                                ->join('users', function (JoinClause $join) {
-                                    $join->on('users.id_users', '=', 'products.id_users');
-                                })
-                                ->where('auctions.id_auctions', '=', $id_auctions)
-                                ->get();
+    //         $auction_detail = DB::table('auctions')
+    //                             ->select('*')
+    //                             ->join('products', function(JoinClause $join) {
+    //                                 $join->on('products.id_products', '=', 'auctions.id_products');
+    //                             })
+    //                             ->join('images', function(JoinClause $join) {
+    //                                 $join->on('images.id_images', '=', 'products.id_images');
+    //                             })
+    //                             ->join('users', function (JoinClause $join) {
+    //                                 $join->on('users.id_users', '=', 'products.id_users');
+    //                             })
+    //                             ->where('auctions.id_auctions', '=', $id_auctions)
+    //                             ->first();
 
+    //         event(new AuctionDetailAdminEvent($auction_detail));
 
-            return response()->json([
-                'status' => 1,
-                'message' => "Successfully.",
-                'data' => $auction_list
-            ], 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 0,
-                'message' => 'Error',
-                'data' => $e
-            ], 500);
-        }
-    }
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => "Successfully.",
+    //             'data' => $auction_detail
+    //         ], 200);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'Error',
+    //             'data' => $e
+    //         ], 500);
+    //     }
+    // }
 
 //     public function test(Request $request)
 //     {

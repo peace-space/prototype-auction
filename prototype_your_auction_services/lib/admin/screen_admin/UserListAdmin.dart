@@ -54,7 +54,7 @@ class UserListAdminState extends State<UserListAdmin> {
             .connent()
             .stream,
         builder: (context, snapshot) {
-          // print("ssss: ${snapshot.data}");
+          print("ssss: ${snapshot.data}");
 
 
 
@@ -113,7 +113,9 @@ class UserListAdminState extends State<UserListAdmin> {
 
             if (data != null) {
               userData = data['data'];
-              return ListView.builder(
+              return SafeArea(
+                  bottom: true,
+                  child: ListView.builder(
                 padding: EdgeInsets.all(8),
                 itemCount: userData.length,
                 itemBuilder: (context, index) {
@@ -139,7 +141,7 @@ class UserListAdminState extends State<UserListAdmin> {
                     child: CircularProgressIndicator(),
                   );
                 },
-              );
+                  ));
             }
             //
             // if (data == null) {

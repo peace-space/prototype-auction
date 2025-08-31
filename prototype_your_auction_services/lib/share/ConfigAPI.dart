@@ -18,7 +18,7 @@ class ConfigAPI {
 
   late final String image_api_server_get = '${url}/api/v1/get-imagee';
 
-  late final String product_detail_server_get = '${url}/api/v1/product-detail';
+  // late final String product_detail_server_get = '${url}/api/v1/product-detail';
 
   late final String bill_auction_api_server_get = '${url}/api/v1/bill-auction';
 
@@ -44,7 +44,7 @@ class ConfigAPI {
   late final String insert_bank_account_server_post =
       '${url}/api/v1/insert-bank-account';
 
-  late final String create_product_server_post = '${url}/api/v1/create-product';
+  // late final String create_product_server_post = '${url}/api/v1/create-product';
 
   late final String forgot_password_server_post =
       '${url}/api/v1/forgot-password';
@@ -105,8 +105,7 @@ class ConfigAPI {
   }
 
   String getProductDetailApiServerGet({required var id_auctions}) {
-    String path = this.product_detail_server_get + '/' + id_auctions.toString();
-    return path;
+    return "${url}/api/v1/product-detail/${id_auctions.toString()}";
   }
 
   String getBillAuctionApiServerGet({required id_bill_auction}) {
@@ -150,7 +149,8 @@ class ConfigAPI {
   }
 
   String getCreateProducServerPost() {
-    return this.create_product_server_post;
+    // return this.create_product_server_post;
+    return "${url}/api/v1/create-product";
   }
 
   String getForgotPasswordServerPost() {
@@ -236,5 +236,29 @@ class ConfigAPI {
 
   String getEditBankAccountAdmin() {
     return "${url}/api/v1/edit-bank-account-admin";
+  }
+
+  String getAuctionListAdmin() {
+    return "${url}/api/v1/auction-list-admin";
+  }
+
+  String getAuctionDetailAdmin({required var id_auctions}) {
+    return "${url}/api/v1/auction-detail-admin/${id_auctions.toString()}";
+  }
+
+  String getHistoryProduct({required var id_users}) {
+    return "${url}/api/v1/history-product/${id_users.toString()}";
+  }
+
+  String getResultReportAuction({required var id_users}) {
+    return "${url}/api/v1/result-report-auction/${id_users}";
+  }
+
+  String getBitList({required var id_auctions}) {
+    return "${url}/api/v1/bids/${id_auctions.toString()}";
+  }
+
+  String getAdminProductDelete({required var id_products}) {
+    return "${url}/api/v1/admin-product-delete/${id_products.toString()}";
   }
 }

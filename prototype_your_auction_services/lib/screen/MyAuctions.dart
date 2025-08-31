@@ -58,8 +58,8 @@ class MyAuctionsState extends State<MyAuctions> {
                       leading: ClipRRect(
                         // borderRadius: BorderRadius.vertical(),
                         child: Image.network(
-                          'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
-                              data['image_path_1'],
+                          '${ConfigAPI().getImageAuctionApiServerGet(
+                              image_auction_path: data['image_path_1'])}',
                           cacheHeight: 600,
                           cacheWidth: 500,
                         ),

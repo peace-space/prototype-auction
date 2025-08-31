@@ -47,8 +47,8 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
                 return Card(
                   child: ListTile(
                     leading: Image.network(
-                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                          '${data['image_path_1']}',
+                      '${ConfigAPI().getImageAuctionApiServerGet(
+                          image_auction_path: data['image_path_1'])}',
                       cacheHeight: 1000,
                       cacheWidth: 900,
                     ),
@@ -91,8 +91,9 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
 
   Stream<dynamic> fetchHistoryAuctions() async* {
     // print('Start.');
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/history-product/${ShareData
-        .userData['id_users']}';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/history-product/${}';
+    String url = ConfigAPI().getHistoryProduct(id_users: ShareData
+        .userData['id_users']);
     final uri = Uri.parse(url);
     final response = await http.get(uri);
     print(response.statusCode.toString());

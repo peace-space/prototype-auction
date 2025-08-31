@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/UserListAdmin.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/user_auction_list_admin_widget.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 
@@ -20,7 +21,8 @@ class AdminMenuState extends State<AdminMenu> {
           Column(
             children: [
               Text("รายชื่อผู้ใช้งาน"),
-              userList(context)
+              userList(context),
+              goToAuctionListAdmin(),
             ],
           )
         ],
@@ -41,5 +43,12 @@ class AdminMenuState extends State<AdminMenu> {
         },
         child: Text("รายชื่อผู้ใช้งาน")
     );
+  }
+
+  Widget goToAuctionListAdmin() {
+    return ElevatedButton(onPressed: () {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) => UserAuctionListAdminWidget(),));
+    }, child: Text("รายการประมูลทั้งหมด"));
   }
 }

@@ -1,8 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-// import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
 import 'package:prototype_your_auction_services/share/CheckLogin.dart';
@@ -10,6 +8,7 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
+import 'package:prototype_your_auction_services/share/widget_shared/show_count_down_timer.dart';
 
 class AuctionHome extends StatefulWidget {
   State<AuctionHome> createState() {
@@ -124,8 +123,8 @@ class AuctionHomeState extends State<AuctionHome> {
                                 top: Radius.circular(15),
                               ),
                               child: Image.network(
-                                'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image' +
-                                    data['image_path_1'],
+                                '${ConfigAPI().getImageAuctionApiServerGet(
+                                    image_auction_path: data['image_path_1'])}',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -140,7 +139,10 @@ class AuctionHomeState extends State<AuctionHome> {
                                 Text("ราคาสูงสุด ฿${data['max_price']
                                     .toString()}"),
                                 SizedBox(height: 5),
-                                showDateTimeCountdown(data),
+                                Text("เหลือเวลา:"),
+                                countDownList(context, data['end_date_time']),
+                                Text("day:hour:min:sec"),
+                                // showDateTimeCountdown(data),
                               ],
                             ),
                           ),
@@ -214,9 +216,13 @@ class AuctionHomeState extends State<AuctionHome> {
                               Text(data['name_product']),
                               Text("ราคาสูงสุด ฿${data['max_price']
                                   .toString()}"),
+                              Text("เวลาเหลือ"),
+                              countDownList(context, data['end_date_time']),
+                              Text("day:hour:min:sec"),
                             ],
                           ),
-                          subtitle: showDateTimeCountdown(data),
+                          // subtitle: countDownList(context, data['end_date_time']),
+                          // subtitle: showDateTimeCountdown(data),
                         ),
                       )
                   );
@@ -317,38 +323,38 @@ class AuctionHomeState extends State<AuctionHome> {
     }
   }
 
-  Widget showDateTimeCountdown(Map<String, dynamic> data) {
-    DateTime end_date_time = DateTime.parse(data['end_date_time']);
-    return CountdownTimer(
-      endTime: end_date_time.millisecondsSinceEpoch,
-      widgetBuilder: (context, time) {
-        if (time == null) {
-          return Text('หมดเวลา', style: TextStyle(
-              color: Colors.red
-          ),);
-        }
-        String day = (time.days == null || time.days == 00) ? "00" : time.days
-            .toString();
-        String hour = (time.hours == null || time.hours == 00) ? "00" : time
-            .hours.toString();
-        String min = (time.min == null || time.hours == 00) ? "00" : time.min
-            .toString();
-        String sec = (time.sec == null) ? "00" : time.sec.toString();
-
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("เหลือเวลาอีก (วัน:ช:น:ว)"),
-            Text(
-              "${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Colors.red
-            ),
-            ),
-          ],
-        );
-      },
-    );
-  }
+// Widget showDateTimeCountdown(Map<String, dynamic> data) {
+//   DateTime end_date_time = DateTime.parse(data['end_date_time']);
+//   return CountdownTimer(
+//     endTime: end_date_time.millisecondsSinceEpoch,
+//     widgetBuilder: (context, time) {
+//       if (time == null) {
+//         return Text('หมดเวลา', style: TextStyle(
+//             color: Colors.red
+//         ),);
+//       }
+//       String day = (time.days == null || time.days == 00) ? "00" : time.days
+//           .toString();
+//       String hour = (time.hours == null || time.hours == 00) ? "00" : time
+//           .hours.toString();
+//       String min = (time.min == null || time.hours == 00) ? "00" : time.min
+//           .toString();
+//       String sec = (time.sec == null) ? "00" : time.sec.toString();
+//
+//       return Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text("เหลือเวลาอีก (วัน:ช:น:ว)"),
+//           Text(
+//             "${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
+//               fontSize: 15,
+//               fontWeight: FontWeight.bold,
+//               color: Colors.red
+//           ),
+//           ),
+//         ],
+//       );
+//     },
+//   );
+// }
 }

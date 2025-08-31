@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/ConfirmPayment.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
@@ -44,8 +45,8 @@ class ReportAuctionState extends State<ReportAuction> {
                     child: ListTile(
                       onTap: () => goToConfirmPayment(data),
                       leading: Image.network(
-                        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/public' +
-                            '${data['image_path_1']}',
+                        '${ConfigAPI().getImageAuctionApiServerGet(
+                            image_auction_path: data['image_path_1'])}',
                         // cacheHeight: 1200,
                         // cacheWidth: 9200,
                       ),
@@ -93,8 +94,10 @@ class ReportAuctionState extends State<ReportAuction> {
   }
 
   Stream<dynamic> fetchResultReportAuction() async* {
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/result-report-auction/${ShareData
-        .userData['id_users']}';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/result-report-auction/${ShareData
+    //     .userData['id_users']}';
+    String url = ConfigAPI().getResultReportAuction(id_users: ShareData
+        .userData['id_users']);
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
     if (responce.statusCode == 200) {

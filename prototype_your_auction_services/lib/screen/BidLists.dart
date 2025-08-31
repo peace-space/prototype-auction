@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 
 class BidLists extends StatefulWidget {
@@ -141,9 +142,11 @@ class BidListsState extends State<BidLists> {
   Stream<dynamic> fetchUserBidList() async* {
     print("Start.");
     await Future.delayed(Duration(seconds: 1));
-    String url =
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bids/${ShareProductData
-        .productData['id_auctions']}';
+    // String url =
+    //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/bids/${ShareProductData
+    //     .productData['id_auctions']}';
+    String url = ConfigAPI().getBitList(id_auctions: ShareProductData
+        .productData['id_auctions']);
     final uri = Uri.parse(url);
     final responce = await http.get(uri);
     final data = jsonDecode(responce.body);

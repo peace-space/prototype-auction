@@ -611,7 +611,7 @@ class AddProductState extends State<AddProduct> {
     );
   }
 
-  Future<void> submit() async {
+  void submit() async {
     try {
       print("Start Submit");
 
@@ -735,7 +735,6 @@ class AddProductState extends State<AddProduct> {
 
         print("\n\n\n\n" + request.fields.toString() + "\n\n\n\n\n");
 
-
         Map<String, dynamic> data = {
           // "data" : "test",
           // "id_users": '2',
@@ -755,7 +754,7 @@ class AddProductState extends State<AddProduct> {
           // "id_payment_types": ShareData.bankAccountUser['data']['id_payment_types'].toString(),
           "id_payment_types": '1',
           "id_bank_accounts": ShareData
-              .bankAccountUser['data']['id_bank_accounts'].toString(),
+              .bankAccountUser['id_bank_accounts'].toString(),
           // "id_bank_accounts": '1',
         };
 

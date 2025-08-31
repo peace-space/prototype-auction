@@ -69,6 +69,8 @@ Route::prefix('/v1')->group(function () {
 
     // ProductController -----------------------------------------------------------
     Route::get('/product-detail/{id_auctions}', [ProductController::class, 'productDetail']);
+    Route::delete('/admin-product-delete/{id_products}', [ProductController::class, 'adminProductDelete']);
+
     // Route::get('/test-product-controller', [ProductController::class, 'test']);
 
     // Email -----------------------------------------------------------

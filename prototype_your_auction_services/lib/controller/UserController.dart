@@ -13,7 +13,7 @@ class UserController {
     Uri uri = Uri.parse(url);
     final response = await http.get(uri);
     Map<String, dynamic> resData = jsonDecode(response.body);
-    // print("CONTROLLER:: ${resData}");
+    print("CONTROLLER:: ${resData}");
     return resData;
   }
 

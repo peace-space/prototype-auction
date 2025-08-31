@@ -35,23 +35,24 @@ class DatabaseSeeder extends Seeder
         // Image::factory(10)->create();
         // Auction::factory(10)->create();
         // ResultReportAuction::factory(10)->create();
-        User::factory(10)->create();
+        $number = 50;
+        User::factory($number)->create();
         AuctionType::factory(2)->create();
         PaymentType::factory(3)->create();
-        ProductType::factory(10)->create();
+        ProductType::factory($number)->create();
         PaymentStatusType::factory(3)->create();
-        BankAccount::factory(10)->create();
-        Image::factory(10)->create();
-        Product::factory(10)->create();
-        Auction::factory(10)->create();
-        Bid::factory(10)->create();
-        ResultAuction::factory(10)->create();
-        PaymentProofImages::factory(10)->create();
-        BillAuction::factory(10)->create();
-        ImageInChats::factory(10)->create();
-        ChatRoom::factory(10)->create();
-        Chat::factory(10)->create();
-        PrivateAuctionGroup::factory(10)->create();
+        BankAccount::factory($number)->create();
+        Image::factory($number)->create();
+        Product::factory($number)->create();
+        Auction::factory($number)->create();
+        Bid::factory($number)->create();
+        ResultAuction::factory($number)->create();
+        PaymentProofImages::factory($number)->create();
+        BillAuction::factory($number)->create();
+        ImageInChats::factory($number)->create();
+        ChatRoom::factory($number)->create();
+        Chat::factory($number)->create();
+        PrivateAuctionGroup::factory($number)->create();
         // \App\Models\User::factory()->create([
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',

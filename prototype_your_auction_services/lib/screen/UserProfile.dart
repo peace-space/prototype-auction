@@ -62,8 +62,9 @@ class UserProfileState extends State<UserProfile> {
                 CircleAvatar(
                   radius: 150,
                   backgroundImage: NetworkImage(
-                      'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile' +
-                          ShareData.userData['image_profile']
+                      '${ConfigAPI().getImageProfileApiServerGet(
+                          image_profile_path: ShareData
+                              .userData['image_profile'])}'
                   ),
                 ),
                 Row(

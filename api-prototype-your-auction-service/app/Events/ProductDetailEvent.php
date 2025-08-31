@@ -2,24 +2,26 @@
 
 namespace App\Events;
 
+use Exception;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AuctionDetailAdminEvent
+class ProductDetailEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
+    public $product_detail;
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($product_detail)
     {
-        //
+        $this->product_detail = $product_detail;
     }
 
     /**
@@ -30,7 +32,23 @@ class AuctionDetailAdminEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('ProductDetail'),
         ];
+    }
+
+    public function broadcastWith() {
+        try {
+            return [
+                'status' => 1,
+                'message' => 'Successfully.',
+                'data' => $this->product_detail
+            ];
+        } catch (Exception $e) {
+            return [
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ];
+        }
     }
 }

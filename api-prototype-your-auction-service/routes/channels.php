@@ -29,3 +29,5 @@ Broadcast::channel('UserDetail', function () {
 });
 
 Broadcast::channel('AuctionListAdmin', function (){});
+
+Broadcast::channel('ProductDetail', function (){});

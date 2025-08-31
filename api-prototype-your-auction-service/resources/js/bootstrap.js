@@ -64,3 +64,9 @@ window.Echo.channel('AuctionListAdmin').listen("AuctionListAdminEvent", function
     var display = document.getElementById('display');
     display.innerHTML = events['message'];
 });
+
+window.Echo.channel('ProductDetial').listen("ProductDetail", function (events) {
+    console.log(events);
+    var display = document.getElementById('display');
+    display.innerHTML = events['message'];
+});

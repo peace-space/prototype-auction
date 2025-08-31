@@ -8,6 +8,7 @@ import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/screen/BidLists.dart';
 import 'package:prototype_your_auction_services/screen/Login.dart';
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
+import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
@@ -77,8 +78,8 @@ class DetailAuctionState extends State<DetailAuction> {
       (_imageData.length == 0)
           ? Center(child: Text("ไม่พบรูปภาพ"))
           : Image.network(
-        "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-            _imageData![indexSelectImage],
+        '${ConfigAPI().getImageAuctionApiServerGet(
+            image_auction_path: _imageData![indexSelectImage])}',
       ),
     );
   }
@@ -102,8 +103,8 @@ class DetailAuctionState extends State<DetailAuction> {
                   }),
                 },
                 child: Image.network(
-                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-                      _imageData[index],
+                  '${ConfigAPI().getImageAuctionApiServerGet(
+                      image_auction_path: _imageData[index])}',
                 ),
               ),
             ),
@@ -245,8 +246,10 @@ class DetailAuctionState extends State<DetailAuction> {
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
     // Future.delayed(Duration(seconds: 1));
     print('Start.detailAuctions');
-    String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
-        .productData['id_auctions']}';
+    // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
+    //     .productData['id_auctions']}';
+    String url = ConfigAPI().getProductDetailApiServerGet(
+        id_auctions: ShareProductData.productData['id_auctions']);
     // String url = 'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public/api/v1/product-detail/${ShareProductData
     //     .productData['id_auctions']}';
     final uri = Uri.parse(url);
@@ -556,7 +559,9 @@ class DetailAuctionState extends State<DetailAuction> {
       return false;
     }
   }
+
 }
+
 
 // void test() {
 //   TimerCountdown(endTime: DateTime(2025, 5, 7, 21, 02, DateTime.now().second), onEnd: () {

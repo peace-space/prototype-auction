@@ -17,8 +17,8 @@ class ChatRoomFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_users_chat_1' => fake()->numberBetween(1, 10),
-            'id_users_chat_2' => fake()->numberBetween(1, 10),
+            'id_users_chat_1' => fake()->numberBetween(1, 50),
+            'id_users_chat_2' => fake()->numberBetween(1, 50),
         ];
     }
 }

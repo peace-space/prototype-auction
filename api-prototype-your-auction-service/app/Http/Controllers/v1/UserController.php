@@ -29,8 +29,10 @@ class UserController extends Controller
             $users_data = DB::table('users')
                 ->select('*')
                 ->get();
-            // broadcast(new UserEvent($users_data));
+            // broadcast(new UserListEvent($users_data));
+
             event(new UserListEvent($users_data));
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',

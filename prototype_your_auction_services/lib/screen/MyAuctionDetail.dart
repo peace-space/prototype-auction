@@ -83,8 +83,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       (_imageData.length == 0)
           ? Center(child: Text("ไม่พบรูปภาพ"))
           : Image.network(
-        "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-            _imageData![indexSelectImage],
+        "${ConfigAPI().getImageAuctionApiServerGet(
+            image_auction_path: _imageData![indexSelectImage])}",
       ),
     );
   }
@@ -108,8 +108,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   }),
                 },
                 child: Image.network(
-                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-                      _imageData[index],
+                  "${ConfigAPI().getImageAuctionApiServerGet(
+                      image_auction_path: _imageData[index])}",
                 ),
               ),
             ),
