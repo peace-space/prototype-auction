@@ -51,6 +51,9 @@ class UserAuctionListAdminWidgetState
                   snapshot.data);
               dynamic data = auctionListAdminModel
                   .getConvertToMapAuctionListAdminData();
+              // PrivateAuctionAdminModel().setConvertToMapAuctionListAdminData(snapshot.data);
+              // dynamic data = PrivateAuctionAdminModel().getConvertToMapAuctionListAdminData();
+
               if (data == null) {
                 return Center(
                   child: CircularProgressIndicator(),

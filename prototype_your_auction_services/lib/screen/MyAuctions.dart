@@ -176,7 +176,7 @@ class MyAuctionsState extends State<MyAuctions> {
 
   void goToUserProductManage(BuildContext ctx, Map<String, dynamic> data) {
     ShareProductData.productData = data;
-    print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL: " + data.toString());
+    // print("LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL: " + data.toString());
     final route = MaterialPageRoute(builder: (ctx) => MyAuctionDetail(),);
 
     Navigator.push(ctx, route);

@@ -14,18 +14,30 @@ class PrivateAuctionAdminModel {
   }
 
   void setConvertToMap(convertToMap) {
-    print("SSSS");
-    var response = jsonDecode(convertToMap);
-    print("${response}");
-    var data;
-    if (response['event'] == "App\\Events\\ProductDetailEvent") {
-      data = jsonDecode(response['data']);
+    try {
+      var response = jsonDecode(convertToMap);
+      // print("${response}");
+      var data;
+      if (response['event'] == "App\\Events\\ProductDetailEvent") {
+        data = jsonDecode(response['data']);
+        if (data['status'] == 1) {
+          PrivateAuctionAdminModel.jsonToMap = data;
+        }
+      } else {
+        PrivateAuctionAdminModel.jsonToMap = null;
+      }
+    } on Exception catch (e) {
+      PrivateAuctionAdminModel.jsonToMap = null;
+      throw Exception(e);
     }
-    print("${data} 999999999999999999999999999999999999999999999");
-    PrivateAuctionAdminModel.jsonToMap = data;
   }
 
   static dynamic getConvertToMap() {
-    return PrivateAuctionAdminModel.jsonToMap;
+    try {
+      return PrivateAuctionAdminModel.jsonToMap;
+    } on Exception catch (e) {
+      return null;
+      throw Exception(e);
+    }
   }
 }

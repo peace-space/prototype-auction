@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/user_auction_list_admin_widget.dart';
+import 'package:prototype_your_auction_services/model/admin_model/PrivateProductDetailModel.dart';
 
 import '../../channel/ProductDetailAdminChannel.dart';
 import '../../controller/ProductDetailController.dart';
@@ -23,9 +24,11 @@ class PrivateAuctionDetailAdminWidgetState extends State<PrivateAuctionDetailAdm
   Map<String, dynamic> detailAuctionData = {};
   List<dynamic> _imageData = [];
   int indexSelectImage = 0;
-  PrivateAuctionAdminModel privateAuctionDetailAdminModel = PrivateAuctionAdminModel();
-  late Map private_auction_data = privateAuctionDetailAdminModel.getAuctionDetailAdminData();
+  // PrivateAuctionAdminModel privateAuctionDetailAdminModel = PrivateAuctionAdminModel();
+  // late Map private_auction_data = privateAuctionDetailAdminModel.getAuctionDetailAdminData();
 
+  PrivateProductDetailModel privateProductDetailModel = PrivateProductDetailModel();
+  late Map private_auction_data = privateProductDetailModel.getAuctionDetailAdminData();
 
   @override
   void dispose() {
@@ -51,7 +54,7 @@ class PrivateAuctionDetailAdminWidgetState extends State<PrivateAuctionDetailAdm
               child: Text("เกิดข้อผิดพลาด"),
             );
           }
-          if (snapshot.connectionState == ConnectionState.waiting) {
+          if (snapshot.connectionState == ConnectionState.none) {
             return Center(
               child: CircularProgressIndicator(),
             );

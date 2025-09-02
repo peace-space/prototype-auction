@@ -28,15 +28,20 @@ class ChatListState extends State<ChatList> {
     );
   }
 
-  Stream<List<dynamic>> streamChatData() async* {
-    String url = ConfigAPI().getChatRoomsServerGet(
-        id_users: ShareData.userData['id_users']);
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final resData = jsonDecode(response.body);
-    List<dynamic> data = resData['data'];
-    yield data;
-    setState(() {});
+  // Stream<List<dynamic>> streamChatData() async* {
+  Stream<dynamic> streamChatData() async* {
+    try {
+      String url = ConfigAPI().getChatRoomsServerGet(
+          id_users: ShareData.userData['id_users']);
+      final uri = Uri.parse(url);
+      final response = await http.get(uri);
+      final resData = jsonDecode(response.body);
+      List<dynamic> data = resData['data'];
+      yield data;
+      setState(() {});
+    } on Exception catch (e) {
+      yield null;
+    }
   }
 
   Widget streamChatListData(BuildContext ctx) {
@@ -45,13 +50,19 @@ class ChatListState extends State<ChatList> {
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
-              child: Text("เกิดข้อผิดพลาด ${snapshot.hasError}"),
+              child: Text("เกิดข้อผิดพลาด ${snapshot.data}"),
             );
           }
 
           if (snapshot.connectionState == ConnectionState.active) {
             return Center(
               child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text("ไม่มีข้อมูล"),
             );
           }
 

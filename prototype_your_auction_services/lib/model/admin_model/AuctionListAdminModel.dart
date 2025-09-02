@@ -25,6 +25,8 @@ class AuctionListAdminModel {
       } else {
         AuctionListAdminModel.jsonToMap = null;
       }
+    } else {
+      AuctionListAdminModel.jsonToMap = null;
     }
     // print("${data}999999999999999999999999999999999999999999999");
   }

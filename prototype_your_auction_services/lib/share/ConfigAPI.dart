@@ -9,7 +9,6 @@ class ConfigAPI {
   // late final String login_api_server_post = '${url}/api/v1/login';
 
   late final String check_login_api_server_get = '${url}/api/v1/check-login';
-  late final String register_api_server_post = '${url}/api/v1/login';
 
   late final String logout_api_server_get = '${url}/api/v1/logout';
 
@@ -87,7 +86,7 @@ class ConfigAPI {
   }
 
   String getRegisterApiServerPost() {
-    return this.register_api_server_post;
+    return '${url}/api/v1/register';
   }
 
   String getLogoutApiServerGet() {

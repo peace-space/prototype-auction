@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/user_auction_list_admin_widget.dart';
 import 'package:prototype_your_auction_services/channel/ProductDetailAdminChannel.dart';
@@ -28,8 +30,12 @@ class UserAuctionDetailAdminWidgetState
   PrivateAuctionAdminModel auctionDetailAdminModel = PrivateAuctionAdminModel();
   late Map auction_data = auctionDetailAdminModel.getAuctionDetailAdminData();
 
+  late Map test;
+  // StreamController<int> indexSelectImage = StreamController()
+
   @override
   void dispose() {
+
     ProductDetailAdminChannel.closeAdmin(id_auctions: auction_data['id_users']);
     super.dispose();
   }
@@ -37,72 +43,78 @@ class UserAuctionDetailAdminWidgetState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("รายละเอียดสินค้า"),
-      ),
-      body: StreamBuilder(
-        stream: ProductDetailAdminChannel
-            .connectAdmin(id_auctions: auction_data['id_auctions'])
-            .stream,
-        builder: (context, snapshot) {
-          // print("${snapshot.data}");
-          // return Text("${auction_data}");
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("เกิดข้อผิดพลาด"),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (!snapshot.hasData) {
-            return Center(
-              child: Text("ไม่มีข้อมูล"),
-            );
-          }
-          if (snapshot.hasData) {
-            try {
-              PrivateAuctionAdminModel auctionDetailAdminModel = PrivateAuctionAdminModel();
-              auctionDetailAdminModel.setConvertToMap(snapshot.data);
-              dynamic data = PrivateAuctionAdminModel.getConvertToMap();
-              if (data == null) {
+        appBar: AppBar(
+          title: Text("รายละเอียดสินค้า"),
+        ),
+        body: SafeArea(
+          top: true,
+          left: true,
+          right: true,
+          bottom: true,
+          child: StreamBuilder(
+            stream: ProductDetailAdminChannel
+                .connectAdmin(id_auctions: auction_data['id_auctions'])
+                .stream,
+            builder: (context, snapshot) {
+              // print("${snapshot.data}");
+              // return Text("${auction_data}");
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text("เกิดข้อผิดพลาด"),
+                );
+              }
+              if (snapshot.connectionState == ConnectionState.none) {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
               }
-              if (data != null) {
-                Map auction_detail_data = data['data'];
-                _imageData = auction_detail_data['images'];
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListView(
-                    children: [
-                      showOneImage(),
-                      SizedBox(height: 8),
-                      showAndSelectImage(),
-                      SizedBox(height: 8),
-                      selectShowImage(),
-                      SizedBox(height: 8),
-                      // Text("${auction_detail_data}"),
-                      displayDataAuction(context, auction_detail_data),
-                      SizedBox(height: 500),
-                    ],
-                  ),
+              if (!snapshot.hasData) {
+                return Center(
+                  child: Text("ไม่มีข้อมูล"),
                 );
               }
-            } on Exception catch (e) {
+              if (snapshot.hasData) {
+                try {
+                  PrivateAuctionAdminModel auctionDetailAdminModel = PrivateAuctionAdminModel();
+                  auctionDetailAdminModel.setConvertToMap(snapshot.data);
+                  dynamic data = PrivateAuctionAdminModel.getConvertToMap();
+                  if (data == null) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (data != null) {
+                    Map auction_detail_data = data['data'];
+                    _imageData = auction_detail_data['images'];
+                    test = data['data'];
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        children: [
+                          showOneImage(),
+                          SizedBox(height: 8),
+                          showAndSelectImage(),
+                          SizedBox(height: 8),
+                          selectShowImage(),
+                          SizedBox(height: 8),
+                          // Text("${auction_detail_data}"),
+                          displayDataAuction(context, auction_detail_data),
+                          // SizedBox(height: 500),
+                        ],
+                      ),
+                    );
+                  }
+                } on Exception catch (e) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              }
+
               return Center(
                 child: CircularProgressIndicator(),
               );
-            }
-          }
-
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        },),
+            },),)
     );
   }
 

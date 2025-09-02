@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/user_private_auction_detail_admin_widget.dart';
 import 'package:prototype_your_auction_services/channel/UserPrivateAuctionListAdminChannel.dart';
 import 'package:prototype_your_auction_services/model/admin_model/PrivateAuctionAdminModel.dart';
+import 'package:prototype_your_auction_services/model/admin_model/PrivateProductDetailModel.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 import '../../share/ConfigAPI.dart';
@@ -55,10 +57,10 @@ class UserPrivateAuctionAdminWidgetState
                       return Container(
                           child: Card(
                             child: ListTile(
-                              // onTap: () {
-                              //   goToAuctionDetailAdminWidget(
-                              //       auction_list_admin_data[index]);
-                              // },
+                              onTap: () {
+                                goToPrivateAuctionDetailAdminWidget(
+                                    private_auction_data[index]);
+                              },
                               leading: Container(
                                 color: Colors.greenAccent,
                                 child: Image.network(fit: BoxFit.fill,
@@ -105,5 +107,16 @@ class UserPrivateAuctionAdminWidgetState
     return TextStyle(
         fontSize: 13
     );
+  }
+
+  void goToPrivateAuctionDetailAdminWidget(Map private_auction_detail_admin_data) {
+    // PrivateAuctionAdminModel auctionDetailAdminModel = PrivateAuctionAdminModel();
+    // auctionDetailAdminModel.setProductDetailData(auction_data);
+
+    PrivateProductDetailModel privateProductDetailModel = PrivateProductDetailModel();
+    privateProductDetailModel.setProductDetailData(private_auction_detail_admin_data);
+
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) => PrivateAuctionDetailAdminWidget(),));
   }
 }

@@ -267,6 +267,9 @@ public function privateAuctionAdmin()
                     'products.id_products',
                     'products.name_product',
                     'images.image_path_1',
+                    'users.id_users',
+                    'users.first_name_users',
+                    'users.last_name_users',
                 )
                 ->join('auctions', function (JoinClause $join) {
                     $join->on('auctions.id_auctions', '=', 'private_auction_groups.id_auctions');
@@ -276,6 +279,9 @@ public function privateAuctionAdmin()
                 })
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
                 })
                 ->where('auctions.auction_status', '=', true)
                 ->where('auctions.id_auction_types', '=', 2)
