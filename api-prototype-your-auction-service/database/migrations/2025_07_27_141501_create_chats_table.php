@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id('id_chats');
             $table->foreignId('id_chat_rooms');
             $table->bigInteger('id_users_sender');
-            $table->text('message')->nullable()->default('null');
+            // $table->text('message')->nullable()->default('null');
+            // $table->foreignId('id_image_in_chats')->nullable();
+            $table->text('message')->nullable();
             $table->foreignId('id_image_in_chats')->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();

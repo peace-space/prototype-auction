@@ -4,6 +4,8 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 class PrivateAuctionController {
   void fetchPrivateAuctionAdmin() async {
     try {
+      await Future.delayed(Duration(seconds: 3));
+
       String url = ConfigAPI().getPrivateAuctionAdmin();
       Uri uri = Uri.parse(url);
       final response = await http.get(uri);

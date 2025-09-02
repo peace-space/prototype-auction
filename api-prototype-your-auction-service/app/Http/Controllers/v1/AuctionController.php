@@ -698,7 +698,7 @@ class AuctionController extends Controller
                                 ->join('users', function (JoinClause $join) {
                                     $join->on('users.id_users', '=', 'products.id_users');
                                 })
-                                ->where('id_auction_types', '=', 1)
+                                ->where('auctions.id_auction_types', '=', 1)
                                 ->get();
             // return "AA";
             event(new AuctionListAdminEvent($auction_list));

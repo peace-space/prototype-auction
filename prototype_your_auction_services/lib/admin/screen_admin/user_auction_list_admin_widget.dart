@@ -16,11 +16,11 @@ class UserAuctionListAdminWidget extends StatefulWidget {
 class UserAuctionListAdminWidgetState
     extends State<UserAuctionListAdminWidget> {
 
-  @override
-  void dispose() {
-    AuctionListAdminChannel.cloaseAdmin();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   AuctionListAdminChannel.cloaseAdmin();
+  //   super.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

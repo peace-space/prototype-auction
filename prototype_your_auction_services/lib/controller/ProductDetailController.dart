@@ -6,6 +6,9 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 class ProductDetailController {
   void fetchProductDetail({required var id_auctions}) async {
+
+    await Future.delayed(Duration(seconds: 3));
+
     String url = ConfigAPI().getProductDetailApiServerGet(
       id_auctions: id_auctions,
     );

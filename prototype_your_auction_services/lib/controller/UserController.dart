@@ -9,6 +9,9 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 class UserController {
   Future<Map<String, dynamic>> fetchUserListData() async {
+
+    await Future.delayed(Duration(seconds: 3));
+
     String url = ConfigAPI().getUserListAdmin();
     Uri uri = Uri.parse(url);
     final response = await http.get(uri);

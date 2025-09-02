@@ -3,6 +3,9 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
 class AuctionController {
   void fetchAuctionListAdmin() async {
+
+    await Future.delayed(Duration(seconds: 3));
+
     String url = ConfigAPI().getAuctionListAdmin();
     Uri uri = Uri.parse(url);
     final response = await http.get(uri);
