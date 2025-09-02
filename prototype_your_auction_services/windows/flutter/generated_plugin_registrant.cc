@@ -10,8 +10,8 @@
 #include <flutter_secure_storage_windows/flutter_secure_storage_windows_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
-    FileSelectorWindowsRegisterWithRegistrar(
-            registry->GetRegistrarForPlugin("FileSelectorWindows"));
-    FlutterSecureStorageWindowsPluginRegisterWithRegistrar(
-            registry->GetRegistrarForPlugin("FlutterSecureStorageWindowsPlugin"));
+  FileSelectorWindowsRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FileSelectorWindows"));
+  FlutterSecureStorageWindowsPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FlutterSecureStorageWindowsPlugin"));
 }

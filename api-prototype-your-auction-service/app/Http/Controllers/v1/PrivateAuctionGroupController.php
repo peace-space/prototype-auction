@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Events\PrivateAuctionAdminEvent;
+use App\Events\PrivateAuctionListAdminEvent;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
@@ -45,7 +47,7 @@ class PrivateAuctionGroupController extends Controller
                 ->where('auctions.id_auction_types', '=', 2)
                 ->orderByDesc('auctions.id_auctions')
                 ->get();
-
+            // return "TT";
             return response()->json([
                 'status' => 1,
                 'message' => "Successfully.",
@@ -236,6 +238,56 @@ class PrivateAuctionGroupController extends Controller
                 'status' => 1,
                 'message' => "Successfully.",
                 'data' => $bidder_data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error.",
+                'data' => $e
+            ], 500);
+        }
+    }
+
+public function privateAuctionAdmin()
+    {
+        try {
+
+            $get_private_auction_group = DB::table('private_auction_groups')
+                ->select(
+                    'private_auction_groups.id_private_auction_groups',
+                    'auctions.id_auctions',
+                    'auctions.auction_status',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.end_date_time',
+                    'auctions.max_price',
+                    'auctions.id_auction_types',
+                    'auctions.id_payment_types',
+                    'auctions.id_bank_accounts',
+                    'products.id_products',
+                    'products.name_product',
+                    'images.image_path_1',
+                )
+                ->join('auctions', function (JoinClause $join) {
+                    $join->on('auctions.id_auctions', '=', 'private_auction_groups.id_auctions');
+                })
+                ->join('products', function (JoinClause $join) {
+                    $join->on('products.id_products', '=', 'auctions.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->where('auctions.auction_status', '=', true)
+                ->where('auctions.id_auction_types', '=', 2)
+                ->orderByDesc('auctions.id_auctions')
+                ->get();
+
+               event(new PrivateAuctionListAdminEvent($get_private_auction_group));
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $get_private_auction_group
             ], 200);
         } catch (Exception $e) {
             return response()->json([

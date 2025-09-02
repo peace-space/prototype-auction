@@ -212,12 +212,17 @@ class ProductController extends Controller
                 $product_images->image_path_10,
             ];
 
-            for ($index = 0; $index < 10; $index++) {
-                if ($images_model[$index] != '') {
-                    $local_path = public_path($images_model[$index]);
-                    unlink($local_path);
+            try {
+               for ($index = 0; $index < 10; $index++) {
+                    if ($images_model[$index] != '') {
+                        $local_path = public_path($images_model[$index]);
+                        unlink($local_path);
+                    }
                 }
+            } catch (Exception $e) {
+
             }
+
 
             // return $images_model;
 

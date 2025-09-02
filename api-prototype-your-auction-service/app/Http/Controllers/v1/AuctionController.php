@@ -275,18 +275,22 @@ class AuctionController extends Controller
 
                 $reAction = DB::table('products')
                     ->select('*')
+                    ->join('auctions', 'auctions.id_products', '=', 'products.id_products')
                     ->join('images', 'products.id_images', '=', 'images.id_images')
-                    // ->orderByDesc('auctions.id_auctions')
+                    ->orderByDesc('auctions.id_auctions')
                     // ->where('auctions.id_users', '=', $data['id_users'], '&',
                     //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
-                    ->get();
+                    ->first();
 
-                if ($request->id_auction_types == 2) {
-                    $private_auction_groups_data = [
+                    // return $reAction;
+
+                if ($request->id_auction_types == '2' || $request->id_auction_types == 2) {
+                    // return "AAAA";
+                    $private_auction_groups_data =[
                         'id_auctions' => $reAction->id_auctions,
                         'id_users' => $request->id_users,
                     ];
-
+                    // return "AAA";
                     $create_private_auction_group = DB::table('private_auction_groups')
                                                     ->insert($private_auction_groups_data);
                 }
@@ -294,7 +298,7 @@ class AuctionController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => "Successfully.",
-                    'data' => $reAction->last()
+                    // 'data' => $reAction->last()
                 ], 201);
             } else {
                 return response()->json([
@@ -694,6 +698,7 @@ class AuctionController extends Controller
                                 ->join('users', function (JoinClause $join) {
                                     $join->on('users.id_users', '=', 'products.id_users');
                                 })
+                                ->where('id_auction_types', '=', 1)
                                 ->get();
             // return "AA";
             event(new AuctionListAdminEvent($auction_list));
