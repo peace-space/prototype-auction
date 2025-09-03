@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/Chat.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -32,7 +33,7 @@ class ChatListState extends State<ChatList> {
   Stream<dynamic> streamChatData() async* {
     try {
       String url = ConfigAPI().getChatRoomsServerGet(
-          id_users: ShareData.userData['id_users']);
+          id_users: ShareData.userData['id_users'], id_products: ShareProductData.productData['id_products']);
       final uri = Uri.parse(url);
       final response = await http.get(uri);
       final resData = jsonDecode(response.body);

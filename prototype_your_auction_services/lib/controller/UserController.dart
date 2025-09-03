@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/admin/screen_admin/UserListAdmin.dart';
 import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class UserController {
   Future<Map<String, dynamic>> fetchUserListData() async {
@@ -136,5 +137,30 @@ class UserController {
     print("End.");
   }
 
+  void onChangePassWordUser({required String new_password, required String old_password}) async {
+    try {
+      Map<String, dynamic> data = {
+        'id_users' : ShareData.userData['id_users'].toString(),
+        'email' : ShareData.userData['email'],
+        'password' : old_password,
+        'new_password' : new_password.toString()
+      };
+      String url = ConfigAPI().getChangePassWordUserPost();
+      Uri uri = Uri.parse(url);
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type" : "application/json"},
+        body: jsonEncode(data)
+      );
+
+      if (response.statusCode == 200) {
+        print("Successfully StatusCode = ${response.statusCode}");
+      } else {
+        throw Exception("Error StatusCode = ${response.statusCode}");
+      }
+    } on Exception catch (e) {
+      throw Exception("Error: ${e}");
+    }
+  }
 
 }

@@ -161,8 +161,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
           (_imageData.length == 0)
               ? Center(child: Text("ไม่พบรูปภาพ"))
               : Image.network(
-                "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-                    _imageData![indexSelectImage],
+                "${ConfigAPI().getImageAuctionApiServerGet(image_auction_path: _imageData![indexSelectImage])}",
               ),
     );
   }
@@ -184,8 +183,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
                       }),
                     },
                 child: Image.network(
-                  "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image" +
-                      _imageData[index],
+                  "${ConfigAPI().getImageAuctionApiServerGet(image_auction_path: _imageData[index])}",
                 ),
               ),
             ),
@@ -326,6 +324,7 @@ class ConfirmPaymentState extends State<ConfirmPayment> {
     Map<String, dynamic> data = {
       'id_users_chat_1': ShareData.userData['id_users'],
       'id_users_chat_2': bill_auction_data['id_users'],
+      'id_products' : ShareProductData.productData['id_products']
     };
 
     print(data);

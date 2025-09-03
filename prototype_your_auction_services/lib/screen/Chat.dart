@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareChatData.dart';
+import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Chat extends StatefulWidget {
@@ -186,6 +187,7 @@ class ChatState extends State<Chat> {
     Map<String, dynamic> data = {
       'id_chat_rooms': ShareChatData.chatData['id_chat_rooms'],
       'id_users_sender': ShareData.userData['id_users'],
+      'id_products' : ShareProductData.productData['id_products'],
       'message': _messageController.text
     };
     String api = ConfigAPI().getSendMessageServerPost();

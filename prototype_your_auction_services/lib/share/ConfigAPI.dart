@@ -56,8 +56,6 @@ class ConfigAPI {
   late final String user_bid_delete_server_delete =
       '${url}/api/v1/user-bid-delete';
 
-  late final String chat_rooms_server_get = '$url/api/v1/chat-rooms';
-
   late final String chat_server_get = '${url}/api/v1/chat';
 
   late final String send_message_post = '${url}/api/v1/send-message';
@@ -179,9 +177,8 @@ class ConfigAPI {
     return path;
   }
 
-  String getChatRoomsServerGet({required var id_users}) {
-    String path = this.chat_rooms_server_get + '/' + id_users.toString();
-    return path;
+  String getChatRoomsServerGet({required var id_users, required var id_products}) {
+    return "${url}/api/v1/${id_users.toString()}/${id_products.toString()}";
   }
 
   String getChatServerGet({required var id_chat_rooms}) {
@@ -265,5 +262,12 @@ class ConfigAPI {
 
   String getBidding() {
     return "${url}/api/v1/bidding";
+  }
+
+  String getAddProductTypePost() {
+    return "${url}/api/v1/add-product-type";
+  }
+  String getChangePassWordUserPost() {
+    return "${url}/api/v1/change-password-user";
   }
 }

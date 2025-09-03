@@ -18,7 +18,7 @@ class EditBankAccountUserState extends State<EditBankAccountUser> {
 
   int id_user = ShareData.userData['id_users'];
   Map<String, dynamic> userData = ShareData.userData;
-  Map<String, dynamic> bankAccountUser = ShareData.bankAccountUser['data'];
+  Map<String, dynamic> bankAccountUser = ShareData.bankAccountUser;
   String name_bank_account = '';
   String name_account = '';
   String bank_account_number = '';

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/screen/CreateBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditBankAccountUser.dart';
+import 'package:prototype_your_auction_services/screen/EditPassWord.dart';
 import 'package:prototype_your_auction_services/screen/EditUserProfile.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
@@ -39,6 +40,7 @@ class UserProfileState extends State<UserProfile> {
     return StreamBuilder(
         stream: streamUserData(),
         builder: (ctx, snapshot) {
+          print("${snapshot.data}");
           if (snapshot.hasError) {
             return const Center(
               child: Text("เกิดข้อผิดพลาดในการโหลดข้อมูล",
@@ -150,7 +152,9 @@ class UserProfileState extends State<UserProfile> {
 
   Widget changePassWord(BuildContext ctx) {
     return ElevatedButton(
-        onPressed: () => goToEditUserProfile(ctx),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => EditPassWord(),));
+        },
         child: Text("เปลี่ยนรหัสผ่าน")
     );
   }
@@ -174,9 +178,13 @@ class UserProfileState extends State<UserProfile> {
     Map<String, dynamic> data = resData['data'];
     ShareData.userData = data['user_data'];
     ShareData.image_user_profile = data['user_data']['image_profile'];
-    // print(data.toString());
-    bank_account_user = data['bank_account']['data'];
-    ShareData.bankAccountUser = data['bank_account'];
+    print(data.toString());
+    if (data['bank_account'] != null) {
+      ShareData.bankAccountUser = data['bank_account'];
+      bank_account_user = data['bank_account'];
+    } else {
+      bank_account_user = null;
+    }
     yield data['user_data'];
     setState(() {});
     print("End.");

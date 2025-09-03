@@ -615,6 +615,85 @@ class UserController extends Controller
         }
     }
 
+    public function changePassWordUser(Request $request)
+    {
+        $request->validate([
+            'id_users' => 'required',
+            'email' => 'required',
+            'password' => 'required',
+            'new_password' => 'required'
+        ]);
+            $id_users = $request->id_users;
+            $email = $request->email;
+            $password = $request->password;
+            $new_password = $request->new_password;
+            // return $email;
+            $verify_password = DB::table('users')
+                ->select(
+                    'id_users',
+                    'first_name_users',
+                    'last_name_users',
+                    'phone',
+                    'address',
+                    'email',
+                    'admin_status',
+                    'password'
+                )
+                ->where('email', '=', $email)
+                ->first();
+
+
+
+            // return $verify_password;
+
+
+            // $token = auth()->attempt($login_data);
+            // return $token;
+            // return $login;
+
+            if ($verify_password == true && Hash::check($password, $verify_password->password)) {
+                $password_hashed = Hash::make($request->new_password);
+
+                $change_password = DB::table('users')
+                                ->where('id_users', '=', $request->id_users)
+                                ->update(['password' => $password_hashed]);
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Successfully.',
+                    'data' => [
+                        'password' => true
+                    ],
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ไม่มีข้อมูล'
+                ], 500);
+            }
+    //     return $password_hashed;
+        try {
+            // $request->validate([
+            //     "id_users" => "required",
+            //     "password" => "required"
+            // ]);
+
+
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => "Error",
+                'data' => $e
+            ], 500);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */

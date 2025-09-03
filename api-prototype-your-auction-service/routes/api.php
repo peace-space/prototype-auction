@@ -43,6 +43,7 @@ Route::prefix('/v1')->group(function () {
     Route::post('/edit-user-profile', [UserController::class, 'editUserProfile']);
     Route::delete('/delete-user/{index}', [UserController::class, 'deleteUser']);
     Route::post('/change-password-user-admin', [UserController::class, 'changePassWordUserAdmin']);
+    Route::post('/change-password-user', [UserController::class, 'changePassWordUser']);
 
     // Password Reset
     Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);

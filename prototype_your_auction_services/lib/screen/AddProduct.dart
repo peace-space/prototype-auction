@@ -673,6 +673,7 @@ class AddProductState extends State<AddProduct> {
           _inputEndDateData != '' &&
           _dataAuctionTypeValue != '' &&
           _productTypeValues != '' &&
+          ShareData.bankAccountUser != null &&
           check_integer_shipping_cost != null &&
           check_integer_start_price != null) {
         showDialog(
@@ -758,7 +759,7 @@ class AddProductState extends State<AddProduct> {
           // "id_bank_accounts": '1',
         };
 
-        print(ShareData.bankAccountUser.toString());
+        print(ShareData.bankAccountUser['id_bank_accounts'].toString());
 
         request.fields['id_users'] = data['id_users'];
         request.fields['id_product_types'] = data['id_product_types'];
@@ -809,7 +810,11 @@ class AddProductState extends State<AddProduct> {
 
         // print(
         // "SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS" + ShareData.userData.toString());
-
+        if (ShareData.bankAccountUser == null) {
+          setState(() {
+            message += "- กรุณาเพิ่มบัญชีธนาคาร\n";
+          });
+        }
         if (_imageData.length <= 0) {
           setState(() {
             message += "- กรุณาเพิ่มรูปภาพอย่างน้อย 1 ภาพ\n";
