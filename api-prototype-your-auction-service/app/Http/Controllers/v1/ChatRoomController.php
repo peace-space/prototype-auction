@@ -49,18 +49,20 @@ class ChatRoomController extends Controller
               'id_products' => 'required'
             ]);
 
-
+            // return "AA";
             $check_chat_rooms = DB::table('chat_rooms')
                                         ->select('*')
                                         ->where('id_users_chat_1', $request->id_users_chat_1)
                                         ->where('id_users_chat_2', $request->id_users_chat_2)
+                                        ->where('id_products', '=', $request->id_products)
                                         ->first();
-
+            // return $check_chat_rooms;
             if ($check_chat_rooms == '') {
 
                 $chat_rooms_data = [
                     'id_users_chat_1' => $request->id_users_chat_1,
-                    'id_users_chat_2' => $request->id_users_chat_2
+                    'id_users_chat_2' => $request->id_users_chat_2,
+                    'id_products' => $request->id_products,
                 ];
 
                 $create_chat_room = DB::table('chat_rooms')
