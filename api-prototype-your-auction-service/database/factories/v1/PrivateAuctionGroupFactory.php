@@ -18,8 +18,8 @@ class PrivateAuctionGroupFactory extends Factory
     {
         return [
             // 'id_private_auction_groups' => fake()->numberBetween(1, 10),
-            'id_auctions' => fake()->numberBetween(1, 50),
-            'id_users' => fake()->numberBetween(1, 50),
+            'id_auctions' => fake()->numberBetween(1, 10),
+            'id_users' => fake()->numberBetween(1, 10),
         ];
     }
 }

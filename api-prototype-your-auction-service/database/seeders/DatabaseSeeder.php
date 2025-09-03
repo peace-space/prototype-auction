@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         // Image::factory(10)->create();
         // Auction::factory(10)->create();
         // ResultReportAuction::factory(10)->create();
-        $number = 50;
+        $number = 10;
         User::factory($number)->create();
         AuctionType::factory(2)->create();
         PaymentType::factory(3)->create();

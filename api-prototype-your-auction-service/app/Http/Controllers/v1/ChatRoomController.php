@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 
 class ChatRoomController extends Controller
 {
-    public function chatRooms($id_users_sender) {
+    public function chatRooms($id_users_sender, $id_products) {
         try {
             $chat_list = DB::table('chat_rooms')
                                 // ->select('id_chat_rooms', 'id_users_chat_1', 'id_users_chat_2', 'created_at')
@@ -20,8 +20,10 @@ class ChatRoomController extends Controller
                                     $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
                                 })                               //         'id_users_chat_1', '=', $id_users_sender)
                                 // ->where('id_users_chat_2', '=', $id_users_sender, 'OR', 'id_users_chat_1', '=', $id_users_sender)
-                                ->where('id_users_chat_1', '=', $id_users_sender)->orWhere('id_users_chat_2', '=', $id_users_sender)
+                                ->where('id_users_chat_1', '=', $id_users_sender)
+                                ->orWhere('id_users_chat_2', '=', $id_users_sender)
                                 // ->where('id_users_chat_2', '=', $id_users_sender)
+                                ->where('id_products', '=', $id_products)
                                 ->get();
 
             return response()->json([
@@ -43,7 +45,8 @@ class ChatRoomController extends Controller
         try {
             $request->validate([
               'id_users_chat_1' => 'required',
-              'id_users_chat_2' => 'required'
+              'id_users_chat_2' => 'required',
+              'id_products' => 'required'
             ]);
 
 
@@ -67,6 +70,7 @@ class ChatRoomController extends Controller
                                         ->select('*')
                                         ->where('id_users_chat_1', $request->id_users_chat_1)
                                         ->where('id_users_chat_2', $request->id_users_chat_2)
+                                        ->where('id_products', $request->id_products)
                                         ->first();
 
                 return response()->json([

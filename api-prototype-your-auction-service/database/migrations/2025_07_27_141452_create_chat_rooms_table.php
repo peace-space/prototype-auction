@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('chat_rooms', function (Blueprint $table) {
             $table->id('id_chat_rooms');
+            $table->foreignId('id_products');
             $table->string('id_users_chat_1');
             $table->string('id_users_chat_2');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
+            $table->foreign('id_products')->references('id_products')->on('products')->onDelete('cascade');
         });
     }
 

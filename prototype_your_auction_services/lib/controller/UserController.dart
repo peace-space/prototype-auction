@@ -22,6 +22,9 @@ class UserController {
 
   Future<Map> fetchOneUserDetail({required var id_users}) async {
     // print("aaaa");
+
+    await Future.delayed(Duration(seconds: 3));
+
     String url = ConfigAPI().getOneUserApi(id_users: id_users);
     final uri = Uri.parse(url);
     final response = await http.get(uri);

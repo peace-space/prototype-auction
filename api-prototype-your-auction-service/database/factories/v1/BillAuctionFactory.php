@@ -17,7 +17,7 @@ class BillAuctionFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_result_auctions' => fake()->numberBetween(1, 50),
+            'id_result_auctions' => fake()->numberBetween(1, 10),
             'id_payment_status_types' => fake()->numberBetween(1, 3),
             'debts' => fake()->numberBetween(1, 100),
             'shipping_company' => fake()->word(),

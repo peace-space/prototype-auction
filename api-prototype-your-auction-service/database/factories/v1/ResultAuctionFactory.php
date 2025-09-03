@@ -17,8 +17,8 @@ class ResultAuctionFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_bids' => fake()->numberBetween(1, 50),
-            'id_users' => fake()->numberBetween(1, 50),
+            'id_bids' => fake()->numberBetween(1, 10),
+            'id_users' => fake()->numberBetween(1, 10),
         ];
     }
 }

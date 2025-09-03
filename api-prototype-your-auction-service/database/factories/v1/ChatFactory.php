@@ -17,10 +17,10 @@ class ChatFactory extends Factory
     public function definition(): array
     {
         return [
-            'id_chat_rooms' => fake()->numberBetween(1, 50),
-            'id_users_sender' => fake()->numberBetween(1, 50),
+            'id_chat_rooms' => fake()->numberBetween(1, 10),
+            'id_users_sender' => fake()->numberBetween(1, 10),
             'message' => fake()->sentence(50),
-            'id_image_in_chats' => fake()->numberBetween(1, 50),
+            'id_image_in_chats' => fake()->numberBetween(1, 10),
         ];
     }
 }
