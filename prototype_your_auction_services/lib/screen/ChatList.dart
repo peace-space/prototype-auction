@@ -34,9 +34,14 @@ class ChatListState extends State<ChatList> {
     try {
       String url = ConfigAPI().getChatRoomsServerGet(
           id_users: ShareData.userData['id_users'], id_products: ShareProductData.productData['id_products']);
+
+      print("${ShareProductData.productData['id_products']}");
       final uri = Uri.parse(url);
       final response = await http.get(uri);
+
       final resData = jsonDecode(response.body);
+
+      // print("object");
       List<dynamic> data = resData['data'];
       yield data;
       setState(() {});
@@ -79,13 +84,12 @@ class ChatListState extends State<ChatList> {
                       title: Column(
                         children: [
                           Image.network(
-                            ConfigAPI().getImageProfileApiServerGet(
-                              image_profile_path: data['image_profile'],
-                            ),
+                            '${ConfigAPI().getImageAuctionApiServerGet(image_auction_path: data['image_path_1'])}',
                           ),
                           Text(
                             "ชื่อ: ${data['first_name_users']} ${data['last_name_users']}",
                           ),
+                          Text("")
                         ],
                       )),
                 );

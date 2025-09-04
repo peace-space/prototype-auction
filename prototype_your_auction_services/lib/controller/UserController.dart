@@ -137,14 +137,15 @@ class UserController {
     print("End.");
   }
 
-  void onChangePassWordUser({required String new_password, required String old_password}) async {
+  void onChangePassWordUser(BuildContext context, {required String new_password, required String old_password}) async {
     try {
       Map<String, dynamic> data = {
         'id_users' : ShareData.userData['id_users'].toString(),
         'email' : ShareData.userData['email'],
-        'password' : old_password,
+        'password' : old_password.toString(),
         'new_password' : new_password.toString()
       };
+      // print("${data}ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss");
       String url = ConfigAPI().getChangePassWordUserPost();
       Uri uri = Uri.parse(url);
       final response = await http.post(
@@ -154,8 +155,26 @@ class UserController {
       );
 
       if (response.statusCode == 200) {
+        showDialog(context: context, builder: (context) => AlertDialog(
+          title: Text("เปลี่ยนรหัสผ่านสำเร็จ"),
+          content: Text("เปลี่ยนรหัสผ่านสำเร็จแล้ว"),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).pop();
+            }, child: Text("ตกลง"))
+          ],
+        ));
         print("Successfully StatusCode = ${response.statusCode}");
       } else {
+        showDialog(context: context, builder: (context) => AlertDialog(
+          title: Text("แจ้งเตือน"),
+          content: Text("เปลี่ยนรหัสผ่านล้มเหลว บันทึกข้อมูลไม่สำเร็จ"),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).pop();
+            }, child: Text("ตกลง")),
+          ],
+        ));
         throw Exception("Error StatusCode = ${response.statusCode}");
       }
     } on Exception catch (e) {

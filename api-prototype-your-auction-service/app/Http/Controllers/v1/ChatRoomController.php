@@ -19,11 +19,21 @@ class ChatRoomController extends Controller
                                 ->join('users', function(JoinClause $join) {
                                     $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
                                 })                               //         'id_users_chat_1', '=', $id_users_sender)
+                                ->join('products', function(JoinClause $join) {
+                                    $join->on('products.id_users', '=', 'users.id_users');
+                                })
+                                ->join('auctions', function(JoinClause $join) {
+                                    $join->on('auctions.id_products', '=', 'products.id_products');
+                                })
+                                ->join('images', function(JoinClause $join) {
+                                    $join->on('images.id_images', '=', 'products.id_images');
+                                })
                                 // ->where('id_users_chat_2', '=', $id_users_sender, 'OR', 'id_users_chat_1', '=', $id_users_sender)
-                                ->where('id_users_chat_1', '=', $id_users_sender)
-                                ->orWhere('id_users_chat_2', '=', $id_users_sender)
+                                // ->where('products.id_products', '=', $id_products)
+                                ->where('id_users_chat_2', '=', $id_users_sender)
+                                ->where('auctions.auction_status', '=', false)
+                                // ->orWhere('id_users_chat_1', '=', $id_users_sender)
                                 // ->where('id_users_chat_2', '=', $id_users_sender)
-                                ->where('id_products', '=', $id_products)
                                 ->get();
 
             return response()->json([

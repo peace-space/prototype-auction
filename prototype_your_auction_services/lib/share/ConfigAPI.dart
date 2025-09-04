@@ -178,7 +178,7 @@ class ConfigAPI {
   }
 
   String getChatRoomsServerGet({required var id_users, required var id_products}) {
-    return "${url}/api/v1/${id_users.toString()}/${id_products.toString()}";
+    return "${url}/api/v1/chat-rooms/${id_users.toString()}/${id_products.toString()}";
   }
 
   String getChatServerGet({required var id_chat_rooms}) {
