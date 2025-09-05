@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/admin/screen_admin/user_auction_list_admin_widget.dart';
+import 'package:prototype_your_auction_services/admin/screen_admin/user_private_auction_admin_widget.dart';
 import 'package:prototype_your_auction_services/controller/PrivateAuctionController.dart';
 import 'package:prototype_your_auction_services/model/admin_model/PrivateProductDetailModel.dart';
 
@@ -56,7 +57,7 @@ class PrivateAuctionDetailAdminWidgetState extends State<PrivateAuctionDetailAdm
               child: Text("เกิดข้อผิดพลาด"),
             );
           }
-          if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -275,13 +276,13 @@ class PrivateAuctionDetailAdminWidgetState extends State<PrivateAuctionDetailAdm
           actions: [
             TextButton(onPressed: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => UserAuctionListAdminWidget(),));
+                builder: (context) => UserPrivateAuctionAdminWidget(),));
             }, child: Text("ยกเลิก")),
             TextButton(onPressed: () {
               ProductDetailController().onDeleteProductAdmin(
                   id_products: id_products);
               Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) => UserAuctionListAdminWidget(),));
+                builder: (context) => UserPrivateAuctionAdminWidget()));
             }, child: Text("ตกลง"))
           ],
         ),);

@@ -283,7 +283,7 @@ public function privateAuctionAdmin()
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'products.id_users');
                 })
-                ->where('auctions.auction_status', '=', true)
+                // ->where('auctions.auction_status', '=', true)
                 ->where('auctions.id_auction_types', '=', 2)
                 ->orderByDesc('auctions.id_auctions')
                 ->get();

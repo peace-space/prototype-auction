@@ -123,5 +123,6 @@ Route::prefix('/v1')->group(function () {
     Route::post('/add-bidder', [PrivateAuctionGroupController::class, 'addBidder']);
     Route::post('/delete-bidder', [PrivateAuctionGroupController::class, 'deleteBidder']);
     Route::get('/private-auction-admin', [PrivateAuctionGroupController::class, 'privateAuctionAdmin']);
+    Route::get('/private-auction-detail-admin', [PrivateAuctionGroupController::class, 'privateAuctionAdmin']);
 
 });

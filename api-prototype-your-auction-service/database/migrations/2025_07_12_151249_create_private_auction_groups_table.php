@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('id_users');
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
+
+            $table->foreign('id_auctions')->references('id_auctions')->on('auctions')->onDelete('cascade');
         });
     }
 
