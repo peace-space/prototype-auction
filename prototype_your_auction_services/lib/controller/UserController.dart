@@ -53,17 +53,18 @@ class UserController {
     }
   }
 
-  void editUserProfile(BuildContext context, _imageData, user_data) async {
+  void editUserProfileAdmin(BuildContext context, _imageData, user_data) async {
     print("Start");
     final userData = UserListAdminModel.getOneUserDetail();
     Map<String, dynamic> data = {
       'id_users': userData['id_users'],
       // 'email': userData['email'],
-      // 'password': _confirmPassWord,
+      // 'password': ,
       "first_name_users": user_data['first_name_users'],
       "last_name_users": user_data['last_name_users'],
       "phone": user_data['phone'],
       "address": user_data['address'],
+      "new_password" : user_data['new_password'],
       // "confirm_password" : _confirmPassWord,
     };
 
@@ -99,6 +100,7 @@ class UserController {
     request.fields['last_name_users'] = data!['last_name_users'].toString();
     request.fields['phone'] = data!['phone'].toString();
     request.fields['address'] = data!['address'].toString();
+    request.fields['new_password'] = data!['new_password'].toString();
     // final resData = jsonDecode(response.body);
     // Map<String, dynamic> newUserData = resData['data'];
     // print(resData['data']);

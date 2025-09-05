@@ -120,6 +120,7 @@ class UserController extends Controller
                 'email' => 'nullable',
                 'address' => 'nullable',
                 'image_profile' => 'nullable',
+                'new_password' => 'nullable'
             ]);
             // return "AA";
             // return $user_data['email'];
@@ -205,6 +206,15 @@ class UserController extends Controller
                         ->where('id_users', '=', $user_data['id_users'])
                         ->update(['image_profile' => $path]);
                 }
+
+
+                    if ($request->new_password != "" && $request->new_password != "null") {
+                       $password_hashed = Hash::make($request->new_password);
+
+                        $change_password = DB::table('users')
+                                ->where('id_users', '=', $request->id_users)
+                                ->update(['password' => $password_hashed]);
+                    }
                 return response()->json([
                     'status' => 1,
                     'message' => "Successfully.",

@@ -545,7 +545,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
             editData();
           }, child: Text("ยกเลิก")),
           ElevatedButton(onPressed: () {
-            UserController().editUserProfile(context, null, onEdit());
+            UserController().editUserProfileAdmin(context, null, onEdit());
             BankAccountController().editBankAccountAdmin(
                 context, user_detail['id_users'], onEdit());
             editData();
@@ -653,6 +653,10 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
         _prompt_pay_controller.text != "") {
       data['prompt_pay'] = _prompt_pay_controller.text;
     }
+    if (_password_user_controller.text != null &&
+      _password_user_controller.text != "") {
+      data['new_password'] = _password_user_controller.text;
+    }
     print("${data}lllllllllllllllllllllllllllllllllll");
     return data;
   }
@@ -705,7 +709,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
                   children: [
                     Expanded(child: Image.file(_imageData)),
                     ElevatedButton(onPressed: () {
-                      UserController().editUserProfile(
+                      UserController().editUserProfileAdmin(
                           context, _imageData, {"": ""});
                       Navigator.of(context).pop();
                     }, child: Text("เปลี่ยนรูป")),
