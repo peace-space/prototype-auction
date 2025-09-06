@@ -1,0 +1,18 @@
+docker start db-your-auction-services phpmyadmin-db-your-auction-services your-auction-services
+----------------------------
+docker start db-your-auction-services your-auction-services
+
+docker run -d --network api-prototype-your-auction-service_sail -p 9081:80 --name phpmyadmin-db-your-auction-services --link db-your-auction-services:db phpmyadmin
+----------------------------
+
+docker exec -it your-auction-services bash
+
+apt update \
+&& apt install vim -y \
+&& composer update \
+&& npm install \
+&& npm run build
+
+\ && php artisan reverb:start
+
+

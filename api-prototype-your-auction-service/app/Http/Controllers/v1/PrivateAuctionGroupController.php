@@ -252,41 +252,55 @@ public function privateAuctionAdmin()
     {
         try {
 
-            $get_private_auction_group = DB::table('private_auction_groups')
-                ->select(
-                    'private_auction_groups.id_private_auction_groups',
-                    'auctions.id_auctions',
-                    'auctions.auction_status',
-                    'auctions.shipping_cost',
-                    'auctions.start_price',
-                    'auctions.end_date_time',
-                    'auctions.max_price',
-                    'auctions.id_auction_types',
-                    'auctions.id_payment_types',
-                    'auctions.id_bank_accounts',
-                    'products.id_products',
-                    'products.name_product',
-                    'images.image_path_1',
-                    'users.id_users',
-                    'users.first_name_users',
-                    'users.last_name_users',
-                )
-                ->join('auctions', function (JoinClause $join) {
-                    $join->on('auctions.id_auctions', '=', 'private_auction_groups.id_auctions');
-                })
-                ->join('products', function (JoinClause $join) {
-                    $join->on('products.id_products', '=', 'auctions.id_products');
-                })
-                ->join('images', function (JoinClause $join) {
-                    $join->on('images.id_images', '=', 'products.id_images');
-                })
-                ->join('users', function (JoinClause $join) {
-                    $join->on('users.id_users', '=', 'products.id_users');
-                })
-                // ->where('auctions.auction_status', '=', true)
-                ->where('auctions.id_auction_types', '=', 2)
-                ->orderByDesc('auctions.id_auctions')
-                ->get();
+            // $get_private_auction_group = DB::table('private_auction_groups')
+            //     ->select(
+            //         'private_auction_groups.id_private_auction_groups',
+            //         'auctions.id_auctions',
+            //         'auctions.auction_status',
+            //         'auctions.shipping_cost',
+            //         'auctions.start_price',
+            //         'auctions.end_date_time',
+            //         'auctions.max_price',
+            //         'auctions.id_auction_types',
+            //         'auctions.id_payment_types',
+            //         'auctions.id_bank_accounts',
+            //         'products.id_products',
+            //         'products.name_product',
+            //         'images.image_path_1',
+            //         'users.id_users',
+            //         'users.first_name_users',
+            //         'users.last_name_users',
+            //     )
+            //     ->join('auctions', function (JoinClause $join) {
+            //         $join->on('auctions.id_auctions', '=', 'private_auction_groups.id_auctions');
+            //     })
+            //     ->join('products', function (JoinClause $join) {
+            //         $join->on('products.id_products', '=', 'auctions.id_products');
+            //     })
+            //     ->join('images', function (JoinClause $join) {
+            //         $join->on('images.id_images', '=', 'products.id_images');
+            //     })
+            //     ->join('users', function (JoinClause $join) {
+            //         $join->on('users.id_users', '=', 'products.id_users');
+            //     })
+            //     // ->where('auctions.auction_status', '=', true)
+            //     ->where('auctions.id_auction_types', '=', 2)
+            //     ->orderByDesc('auctions.id_auctions')
+            //     ->get();
+
+            $get_private_auction_group = DB::table('auctions')
+                                ->select('*')
+                                ->join('products', function(JoinClause $join) {
+                                    $join->on('products.id_products', '=', 'auctions.id_products');
+                                })
+                                ->join('images', function(JoinClause $join) {
+                                    $join->on('images.id_images', '=', 'products.id_images');
+                                })
+                                ->join('users', function (JoinClause $join) {
+                                    $join->on('users.id_users', '=', 'products.id_users');
+                                })
+                                ->where('auctions.id_auction_types', '=', 1)
+                                ->get();
 
                event(new PrivateAuctionListAdminEvent($get_private_auction_group));
 

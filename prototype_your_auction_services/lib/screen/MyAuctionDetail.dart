@@ -9,6 +9,7 @@ import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 // import 'package:pusher_channels_flutter/pusher-js/core/config.dart';
 
+import '../share/ShareUserData.dart';
 import 'BidLists.dart';
 
 class MyAuctionDetail extends StatefulWidget {
@@ -23,6 +24,12 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
   List<dynamic> _receipt = [];
   var _shipping_number = TextEditingController();
   var _shipping_company = TextEditingController();
+  var _phone_bidder_controller = TextEditingController();
+  var _password_controller = TextEditingController();
+
+  Map<String, dynamic> detailAuctionData = {};
+  String message = '';
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -52,6 +59,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   myAuctionDetail(data['data_auction']!),
                   SizedBox(height: 8),
                   textButtonGoToBidLists(context),
+                  SizedBox(height: 8),
+                  buttonShowBidderList(),
                   SizedBox(height: 8),
                   Divider(),
                   SizedBox(height: 8),
@@ -194,6 +203,8 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       }
     }
     print("nnnnn");
+
+    detailAuctionData = data;
     yield data;
     setState(() {
       _imageData = data['images'];
@@ -690,5 +701,346 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       }
     }
     return "-";
+  }
+
+  Widget buttonShowBidderList() {
+    return ElevatedButton(
+      onPressed: () => {showBidderList()},
+      child: Text("ผู้มีสิทธิ์เข้าร่วมประมูล"),
+    );
+  }
+
+  void showBidderList() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => Dialog(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("รายชื่อผู้ร่วมประมูล"),
+            actions: [
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () =>
+                    {
+                      insertBidderDisplay()
+                    },
+                    icon: Icon(Icons.add_reaction_outlined),
+                  ),
+                ],
+              ),
+              // Text("เพิ่มผู้ร่วมประมูล")
+            ],
+          ),
+          body: StreamBuilder(
+              stream: fetchBidderList(),
+              builder:
+                  (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(
+                    child: Text("เกิดข้อผิดพลาด"),
+                  );
+                }
+                if (snapshot.connectionState == ConnectionState.active) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasData) {
+                  return ListView.builder(
+                      padding: EdgeInsets.all(8),
+                      itemCount: snapshot.data.length,
+                      itemBuilder:
+                          (context, index) {
+                        Map<String, dynamic> data = snapshot.data![index];
+                        // return ListTile(
+                        //   leading: Text("${index + 1}"),
+                        //   title: Text("ชื่อ: ${data['first_name_users']} ${data['last_name_users']} \n"
+                        //         "เบอร์โทร: ${data['phone']}"),
+                        //   trailing: IconButton(
+                        //           onPressed: () {},
+                        //           icon: Icon(Icons.disabled_by_default_outlined),
+                        //         ),
+                        // );
+                        return Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    "ชื่อ: ${data['first_name_users']} ${data['last_name_users']} \n"
+                                        "เบอร์โทร: ${data['phone']}"),
+                                IconButton(
+                                  onPressed: () {
+                                    deleteBidderPasswordVerify(
+                                        data['id_private_auction_groups'],
+                                        data['id_users']);
+                                  },
+                                  icon: Icon(
+                                      Icons.disabled_by_default_outlined),
+                                ),
+                              ],
+                            ),
+                            Divider()
+                          ],
+                        );
+                      }
+                  );
+                }
+
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+          ),
+        ),
+      ),
+    );
+  }
+
+  TextField insertBidder() {
+    return TextField(
+      controller: _phone_bidder_controller,
+      decoration: InputDecoration(hintText: 'เบอร์โทรศัพท์'),
+    );
+  }
+
+  void insertBidderDisplay() {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+        title: Text("เพิ่มผู้ร่วมประมูล"),
+        content: insertBidder(),
+        actions: [
+          TextButton(onPressed: () =>
+          {
+            Navigator.of(context).pop()
+          }, child: Text("ยกเลิก")),
+          TextButton(onPressed: () =>
+          {
+            Navigator.of(context).pop(),
+            addBidderPasswordVerify()
+          }, child: Text("ตกลง")),
+        ],
+      ),
+    );
+  }
+
+
+  void addBidderPasswordVerify() {
+    showDialog(context: context, builder: (context) =>
+        AlertDialog(
+          title: Text("ยืนยันรหัสผ่าน"),
+          content: TextField(
+            controller: _password_controller,
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: "รหัสผ่านบัญชีของคุณ",
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () =>
+            {
+              Navigator.of(context).pop()
+            }, child: Text("ยกเลิก")),
+            TextButton(onPressed: () =>
+            {
+              Navigator.of(context).pop(),
+              addBidder()
+            }, child: Text("ตกลง")),
+          ],
+        ));
+  }
+
+  void deleteBidderPasswordVerify(var id_private_auction_bidder_for_delete,
+      var id_users_for_check_owner) {
+    showDialog(context: context, builder: (context) =>
+        AlertDialog(
+          title: Text("ยืนยันรหัสผ่าน"),
+          content: TextField(
+            controller: _password_controller,
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: "รหัสผ่านบัญชีของคุณ",
+            ),
+          ),
+          actions: [
+            TextButton(onPressed: () =>
+            {
+              Navigator.of(context).pop()
+            }, child: Text("ยกเลิก")),
+            TextButton(onPressed: () =>
+            {
+              Navigator.of(context).pop(),
+              deleteBidder(id_private_auction_bidder_for_delete,
+                  id_users_for_check_owner)
+            }, child: Text("ตกลง")),
+          ],
+        ));
+  }
+
+  Stream fetchBidderList() async* {
+    String api = ConfigAPI().getBidderListApiServerGet(
+      id_auctions:
+      ShareProductData.productData['id_auctions'],
+    );
+    Uri uri = Uri.parse(api);
+    final response = await http.get(uri);
+    final resData = jsonDecode(response.body);
+    // print(resData.toString());
+    List<dynamic> data = resData['data'];
+    print("AAAA" + data.toString());
+    yield data;
+    setState(() {});
+  }
+
+  void addBidder() async {
+    if (_password_controller.text != '' && _password_controller.text != '') {
+      Map<String, dynamic> data = {
+        'email': ShareData.userData['email'],
+        'password': _password_controller.text,
+        'id_auctions': ShareProductData.productData['id_auctions'],
+        'phone_bidder': _phone_bidder_controller.text,
+      };
+      String api = ConfigAPI().getAddBidderApiServerPost();
+      Uri uri = Uri.parse(api);
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 201) {
+        Navigator.of(context).pop();
+        showBidderList();
+        _password_controller.text = '';
+        _phone_bidder_controller.text = '';
+        setState(() {});
+
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+              AlertDialog(
+                title: Text("สำเร็จ"),
+                content: Text("เพิ่มผู้ร่วมประมูลสำเร็จแล้ว"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop(),
+                  }, child: Text("ตกลง")),
+                ],
+              ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+              AlertDialog(
+                title: Text("ล้มเหลว"),
+                content: Text("เพิ่มผู้ร่วมประมูลล้มเหลว"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop(),
+                  }, child: Text("ตกลง")),
+                ],
+              ),
+        );
+      }
+    }
+  }
+
+  void deleteBidder(var id_private_auction_bidder_for_delete,
+      var id_users_for_check_owner) async {
+    if (_password_controller.text != '' &&
+        id_users_for_check_owner != detailAuctionData['id_users']) {
+      Map<String, dynamic> data = {
+        'email': ShareData.userData['email'],
+        'password': _password_controller.text,
+        'id_private_auction_groups': id_private_auction_bidder_for_delete
+      };
+      String api = ConfigAPI().getDeleteBidderApiServerPost();
+      Uri uri = Uri.parse(api);
+      final response = await http.post(
+        uri,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(data),
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.of(context).pop();
+        showBidderList();
+        _password_controller.text = '';
+        setState(() {});
+
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+              AlertDialog(
+                title: Text("สำเร็จ"),
+                content: Text("ลบผู้ร่วมประมูลสำเร็จแล้ว"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop(),
+                  }, child: Text("ตกลง")),
+                ],
+              ),
+        );
+      } else {
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+              AlertDialog(
+                title: Text("ล้มเหลว"),
+                content: Text("ลบผู้ร่วมประมูลล้มเหลว"),
+                actions: [
+                  TextButton(onPressed: () =>
+                  {
+                    Navigator.of(context).pop(),
+                  }, child: Text("ตกลง")),
+                ],
+              ),
+        );
+      }
+    } else {
+      message = '';
+      if (id_users_for_check_owner == detailAuctionData['id_users']) {
+        setState(() {
+          message +=
+          '- ไม่สามารถลบเจ้าของสินค้าออกจากกลุ่มประมูลแบบส่วนตัวได้\n';
+        });
+      }
+      if (_password_controller.text == '' || _password_controller == null) {
+        message += '- กรุณากรอกรหัสผ่านเพื่อยืนยันการลบผู้ร่วมประมูล\n';
+        setState(() {});
+      }
+
+      // message = detailAuctionData['id_users'].toString();
+
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+            AlertDialog(
+              title: Text("แจ้งเตือน"),
+              content: Text("${message}"),
+              actions: [
+                TextButton(onPressed: () =>
+                {
+                  Navigator.of(context).pop(),
+                }, child: Text("ตกลง")),
+              ],
+            ),
+      );
+      _password_controller.text = '';
+      setState(() {});
+    }
   }
 }
