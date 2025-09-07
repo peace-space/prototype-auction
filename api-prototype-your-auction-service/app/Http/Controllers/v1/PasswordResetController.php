@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ForgotPassword;
 use App\Mail\ForgotPasswordMail;
 use App\Mail\MessageMail;
 use Exception;
@@ -22,6 +23,9 @@ class PasswordResetController extends Controller
                 'email' => 'required',
             ]);
 
+            // Mail::to('peace.space.ps@gmail.com')->send(new ForgotPasswordMail("SSS"));
+            // return "AAA";
+
             $check_email = DB::table('users')
                 ->select('*')
                 ->where('email', '=', $request->email)
@@ -34,6 +38,8 @@ class PasswordResetController extends Controller
                     'email' => $request->email,
                     'token' => $token,
                 ];
+
+                // return $data_for_password_reset;
 
                 $insert_token_for_password_reset = DB::table('password_resets')
                     ->insert($data_for_password_reset);
