@@ -16,12 +16,15 @@ class ChatRoomController extends Controller
                                 // ->select('id_chat_rooms', 'id_users_chat_1', 'id_users_chat_2', 'created_at')
                                 ->select('*')
                                 // ->where('id_users_chat_2', '=', $id_users, 'and',
-                                ->join('users', function(JoinClause $join) {
-                                    $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
-                                })                               //         'id_users_chat_1', '=', $id_users_sender)
                                 ->join('products', function(JoinClause $join) {
-                                    $join->on('products.id_users', '=', 'users.id_users');
+                                    $join->on('products.id_products', '=', 'chat_rooms.id_products');
                                 })
+                                ->join('product_types', function(JoinClause $join) {
+                                    $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                                })
+                                // ->join('users', function(JoinClause $join) {
+                                    // $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
+                                // })                               //         'id_users_chat_1', '=', $id_users_sender)
                                 ->join('auctions', function(JoinClause $join) {
                                     $join->on('auctions.id_products', '=', 'products.id_products');
                                 })
@@ -32,7 +35,7 @@ class ChatRoomController extends Controller
                                 // ->where('products.id_products', '=', $id_products)
                                 ->where('id_users_chat_2', '=', $id_users_sender)
                                 ->where('auctions.auction_status', '=', false)
-                                // ->orWhere('id_users_chat_1', '=', $id_users_sender)
+                                ->orWhere('id_users_chat_1', '=', $id_users_sender)
                                 // ->where('id_users_chat_2', '=', $id_users_sender)
                                 ->get();
 

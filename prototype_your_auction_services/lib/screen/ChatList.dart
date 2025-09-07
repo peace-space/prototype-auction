@@ -81,15 +81,15 @@ class ChatListState extends State<ChatList> {
                   margin: EdgeInsets.all(5),
                   child: ListTile(
                       onTap: () => goToChat(data),
+                      leading: Image.network(
+                        '${ConfigAPI().getImageAuctionApiServerGet(image_auction_path: data['image_path_1'])}', height: 50, width: 50,
+                      ),
                       title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Image.network(
-                            '${ConfigAPI().getImageAuctionApiServerGet(image_auction_path: data['image_path_1'])}',
-                          ),
-                          Text(
-                            "ชื่อ: ${data['first_name_users']} ${data['last_name_users']}",
-                          ),
-                          Text("")
+                          // Text("${data}"),
+                          Text("ชื่อสินค้า: ${data['name_product']}"),
+                          Text("ประเภทสินค้า: ${data['product_type_text']}"),
                         ],
                       )),
                 );
