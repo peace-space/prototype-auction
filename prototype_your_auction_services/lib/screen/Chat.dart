@@ -19,8 +19,10 @@ class ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("data: ${ShareData.userData['id_users']} | ${ShareChatData
-            .chatData['id_users_chat_2']}"),
+        // title: Text("data: ${ShareData.userData['id_users']} | ${ShareChatData
+        //     .chatData['id_users_chat_2']}"),
+        title: Text("${ShareChatData
+            .chatData['name_product']}"),
       ),
       body: streamMessageList(),
       // body: StreamBuilder(

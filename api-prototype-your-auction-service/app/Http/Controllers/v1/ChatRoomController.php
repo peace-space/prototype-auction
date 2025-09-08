@@ -19,14 +19,15 @@ class ChatRoomController extends Controller
                                 ->join('products', function(JoinClause $join) {
                                     $join->on('products.id_products', '=', 'chat_rooms.id_products');
                                 })
-                                ->join('product_types', function(JoinClause $join) {
-                                    $join->on('product_types.id_product_types', '=', 'products.id_product_types');
-                                })
+
                                 // ->join('users', function(JoinClause $join) {
                                     // $join->on('users.id_users', '=', 'chat_rooms.id_users_chat_2');
                                 // })                               //         'id_users_chat_1', '=', $id_users_sender)
                                 ->join('auctions', function(JoinClause $join) {
                                     $join->on('auctions.id_products', '=', 'products.id_products');
+                                })
+                                ->join('auction_types', function(JoinClause $join) {
+                                    $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                                 })
                                 ->join('images', function(JoinClause $join) {
                                     $join->on('images.id_images', '=', 'products.id_images');

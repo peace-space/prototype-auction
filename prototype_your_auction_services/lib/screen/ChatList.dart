@@ -89,7 +89,8 @@ class ChatListState extends State<ChatList> {
                         children: [
                           // Text("${data}"),
                           Text("ชื่อสินค้า: ${data['name_product']}"),
-                          Text("ประเภทสินค้า: ${data['product_type_text']}"),
+                          Text("ประเภทสินค้า: ${data['auction_types']}"),
+                          Text("ราคาที่ประมูลได้ + ค่าจัดส่ง: \nราคา: ${data['max_price'] + data['shipping_cost']} บาท"),
                         ],
                       )),
                 );
