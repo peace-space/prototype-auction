@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/controller/ProductTypesController.dart';
 import 'package:prototype_your_auction_services/screen/DetailAuction.dart';
 import 'package:prototype_your_auction_services/share/CheckLogin.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
@@ -9,6 +10,8 @@ import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 import 'package:prototype_your_auction_services/share/widget_shared/show_count_down_timer.dart';
+
+import '../model/ProductTypesModel.dart';
 
 class AuctionHome extends StatefulWidget {
   State<AuctionHome> createState() {
@@ -24,6 +27,8 @@ class AuctionHomeState extends State<AuctionHome> {
   var _timeout;
   late BuildContext ctx;
   var end_date_time_check;
+  var id_product_types;
+  var _productTypeValues;
 
   // Map<String, dynamic> dateTimeCoundown = {};
 
@@ -31,6 +36,7 @@ class AuctionHomeState extends State<AuctionHome> {
   void initState() {
     // TODO: implement initState
     // print("\n\n\n\n\n\n\n\n\n\nTest");
+    ProductTypesController().fetchProductTypes();
     super.initState();
     CheckLogin().onCheckLogin();
     setState(() {
@@ -52,12 +58,19 @@ class AuctionHomeState extends State<AuctionHome> {
       body: Column(
         children: [
           Container(
-            //color: Colors.lightBlueAccent,
+            // color: Colors.lightBlueAccent,
             width: double.infinity,
             margin: EdgeInsets.fromLTRB(left, top, right, bottom),
             alignment: Alignment.topRight,
-            height: 23,
-            child: changeDisplayButton(context),
+            // height: 23,
+            height: 50,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                inputProductTypes(),
+                changeDisplayButton(context),
+              ],
+            ),
           ),
           SizedBox(height: 3),
           Expanded(child: displayer(context)),
@@ -321,6 +334,86 @@ class AuctionHomeState extends State<AuctionHome> {
             ),
       );
     }
+  }
+
+  // String auctionSelectProductTypes(String auction_types) {
+  //   List check_index_auction_types = AuctionTypesModel().getAuctionTypes();
+  //   for (int index = 0; index <= check_index_auction_types.length - 1; index++) {
+  //     if (auction_types == check_index_auction_types[index]['auction_types']) {
+  //       return "${index + 1}";
+  //     }
+  //   }
+  //
+  //   return "1";
+  //
+  //   //   if (auction_types == '') {
+  //   //     return "1";
+  //   //   } else if (_dataAuctionTypeValue == 'ประมูลปกติ') {
+  //   //     return "1";
+  //   //   } else if (_dataAuctionTypeValue == 'ประมูลแบบส่วนตัว') {
+  //   //     return "2";
+  //   //   }
+  //   //   return "1";
+  // }
+  Widget inputProductTypes() {
+    dynamic test = ProductTypesModel().getProductTypes();
+    // List<String>? product_types = [
+    //   'ทั่วไป',
+    //   'ของเก่า',
+    //   'เสื้อผ้า',
+    //   'ของใช้',
+    //   'เทคโนโลยี',
+    //   'เครื่องดนตรี',
+    //   'นาฬิกา',
+    //   'เครื่องประดับ',
+    //   'จักรยานยนต์',
+    //   'รถยนต์',
+    // ];
+    List<String>? product_types = [];
+    for (int i = 0; i <= test.length - 1; i++) {
+      // print('${i} ${test[i]['product_type_text']}');
+      product_types.add(test[i]['product_type_text'].toString());
+    }
+    // product_types.add('อื่น ๆ');
+    // print("${test} ${product_types.length}");
+    double left = 0,
+        top = 0,
+        right = 0,
+        bottom = 0;
+
+    return DropdownButton(
+      hint: Text("ประเภทสินค้า"),
+      isExpanded: false,
+      // padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+      value: _productTypeValues,
+      items:
+      product_types.map((data) {
+        return DropdownMenuItem(
+          value: data,
+          child: Center(child: Text(data)),
+        );
+      }).toList(),
+      onChanged:
+          (value) =>
+      {
+        setState(() {
+          _productTypeValues = value.toString();
+        }),
+      },
+    );
+  }
+
+  String selectProductType(String product_type) {
+    List check_index_product_types = ProductTypesModel().getProductTypes();
+
+    for (int index = 0; index <=
+        check_index_product_types.length - 1; index++) {
+      if (product_type ==
+          check_index_product_types[index]['product_type_text']) {
+        return "${index + 1}";
+      }
+    }
+    return "1";
   }
 
 // Widget showDateTimeCountdown(Map<String, dynamic> data) {

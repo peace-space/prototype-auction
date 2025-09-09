@@ -270,4 +270,16 @@ class ConfigAPI {
   String getChangePassWordUserPost() {
     return "${url}/api/v1/change-password-user";
   }
+
+  String getProductTypesGet() {
+    return "${url}/api/v1/product-types";
+  }
+
+  String getAuctionTypesGet() {
+    return "${url}/api/v1/auction-types";
+  }
+
+  String getAuctionSelectTypesGet({required var id_products}) {
+    return '${url}/api/v1/auction-select-types/${id_products..toString()}';
+  }
 }

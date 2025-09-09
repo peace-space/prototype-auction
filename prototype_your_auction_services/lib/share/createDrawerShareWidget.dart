@@ -21,18 +21,23 @@ Drawer createDrawer(BuildContext ctx) {
     return Drawer(
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            currentAccountPicture: showImageProfile(),
-            accountName: Text(
-              "Admin ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
-                  .userData['last_name_users']}",
-            ),
-            accountEmail: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("อีเมล: ${ShareData.userData['email']}"),
-                Text("เบอร์โทร: ${ShareData.userData['phone']}"),
-              ],
+          Container(
+            // color: Colors.amber,
+            height: 200,
+            width: 20,
+            child: UserAccountsDrawerHeader(
+              currentAccountPicture: showImageProfile(),
+              accountName: Text(
+                "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                    .userData['last_name_users']}",
+              ),
+              accountEmail: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("อีเมล: ${ShareData.userData['email']}"),
+                  Text("เบอร์โทร: ${ShareData.userData['phone']}"),
+                ],
+              ),
             ),
           ),
           // testSystem(ctx), // ทดสอบระบบ
@@ -54,18 +59,23 @@ Drawer createDrawer(BuildContext ctx) {
     return Drawer(
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            currentAccountPicture: showImageProfile(),
-            accountName: Text(
-              "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
-                  .userData['last_name_users']}",
-            ),
-            accountEmail: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("อีเมล: ${ShareData.userData['email']}"),
-                Text("เบอร์โทร: ${ShareData.userData['phone']}"),
-              ],
+          Container(
+            // color: Colors.amber,
+            height: 200,
+            width: 20,
+            child: UserAccountsDrawerHeader(
+              currentAccountPicture: showImageProfile(),
+              accountName: Text(
+                "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                    .userData['last_name_users']}",
+              ),
+              accountEmail: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("อีเมล: ${ShareData.userData['email']}"),
+                  Text("เบอร์โทร: ${ShareData.userData['phone']}"),
+                ],
+              ),
             ),
           ),
           // testSystem(ctx), // ทดสอบระบบ
@@ -84,9 +94,13 @@ Drawer createDrawer(BuildContext ctx) {
     return Drawer(
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
-            accountName: Text("ยังไม่ได้เข้าสู่ระบบ"),
-            accountEmail: Text("กรุณาเข้าสู่ระบบ"),
+          Container(
+            height: 200,
+            width: 20,
+            child: UserAccountsDrawerHeader(
+              accountName: Text("ยังไม่ได้เข้าสู่ระบบ"),
+              accountEmail: Text("กรุณาเข้าสู่ระบบ"),
+            ),
           ),
           // testSystem(ctx), // ทดสอบระบบ
           homePageButton(ctx),
@@ -108,13 +122,21 @@ Widget showImageProfile() {
       ),
     );
 
-  } else {
+  }
+  else {
     return CircleAvatar(
       backgroundImage: NetworkImage(
-        'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
+        '${ConfigAPI().getImageProfileApiServerGet(image_profile_path: 'profile-default-image.png')}',
       ),
     );
   }
+  // else {
+  //   return CircleAvatar(
+  //     backgroundImage: NetworkImage(
+  //       'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image-profile/storage/images/user-profile-image/profile-default-image.png',
+  //     ),
+  //   );
+  // }
 }
 
 Widget HomePageButton(BuildContext ctx) {

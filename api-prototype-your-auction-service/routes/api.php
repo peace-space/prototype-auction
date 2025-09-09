@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\v1\AuctionTypeController;
 use App\Http\Controllers\v1\ChatController;
 use App\Http\Controllers\v1\PasswordResetController;
 use App\Http\Controllers\v1\BankAccountController;
@@ -12,8 +13,11 @@ use App\Http\Controllers\v1\BidController;
 use App\Http\Controllers\v1\ChatRoomController;
 use App\Http\Controllers\v1\ImageController;
 use App\Http\Controllers\v1\PrivateAuctionGroupController;
+use App\Http\Controllers\v1\ProductTypeController;
 use App\Http\Controllers\v1\ResultReportAuctionController;
 use App\Models\ResultReportAuction;
+use App\Models\v1\AuctionType;
+use App\Models\v1\ProductType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +63,7 @@ Route::prefix('/v1')->group(function () {
 
     // AuctionController -----------------------------------------------------------
     Route::get('/auction', [AuctionController::class, 'index']);
+    Route::get('/auction-select-product-types/{id_product_types}', [AuctionController::class, 'auctionSelectTypes']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
     Route::delete('/user-product-delete/{id_products}', [ProductController::class, 'userProductDelete']);
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
@@ -68,9 +73,15 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction-list-admin', [AuctionController::class, 'auctionListAdmin']);
     Route::get('/auction-detail-admin/{id_auctions}', [AuctionController::class, 'auctionDetailAdmin']);
 
+    // Auction Types
+    Route::get('/auction-types', [AuctionTypeController::class, 'auctionTypes']);
+
+
+
     // ProductController -----------------------------------------------------------
     Route::get('/product-detail/{id_auctions}', [ProductController::class, 'productDetail']);
     Route::delete('/admin-product-delete/{id_products}', [ProductController::class, 'adminProductDelete']);
+    Route::get('/product-types', [ProductTypeController::class, 'productTypes']);
 
     // Route::get('/test-product-controller', [ProductController::class, 'test']);
 

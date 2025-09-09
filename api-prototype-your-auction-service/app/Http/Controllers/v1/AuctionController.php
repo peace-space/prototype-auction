@@ -23,10 +23,132 @@ class AuctionController extends Controller
     public function index()
     {
         try {
-
             $run_auction_system = new RunAuctionSystem();
 
             $run_auction_system->runAuctionSystem();
+
+            $auctions_list = DB::table('auctions')
+                ->select(
+                    'auctions.id_auctions',
+                    'auctions.auction_status',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.end_date_time',
+                    'auctions.max_price',
+                    'auctions.id_auction_types',
+                    'auctions.id_payment_types',
+                    'auctions.id_bank_accounts',
+                    'products.id_products',
+                    'products.name_product',
+                    'images.image_path_1',
+                    'users.id_users',
+                    'users.first_name_users',
+                    'users.last_name_users',
+                )
+                ->join('products', function (JoinClause $join) {
+                    $join->on('auctions.id_products', '=', 'products.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->where('auctions.auction_status', '=', true)
+                ->where('id_auction_types', '=', 1)
+                // ->orderByRaw('id_auctions')
+                ->orderByDesc('id_auctions')
+                ->get();
+
+            // $high_bit = DB::table('bids')
+            //                     ->select('id_users', 'id_auctions', 'bid_price')
+            //                     ->where('id_auctions', '=', $id_auctions)
+            //                     ->orderByDesc('bid_price')
+            //                     ->get();
+            // $counter = 0;
+            // for ($i = 0; $i < count($auctions_list); $i++) {
+            //     $counter += $i;
+            // }
+
+            // return $counter;
+
+            // highBids();
+
+            return response()->json([
+                'status' => 1,
+                'message' => "Successfully.",
+                'data' => $auctions_list
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => 'Error.',
+                'data' => $e
+            ], 500);
+        }
+    }
+
+    public function auctionSelectTypes($id_product_types)
+    {
+        try {
+            $run_auction_system = new RunAuctionSystem();
+
+            $run_auction_system->runAuctionSystem();
+
+            try {
+                if ($id_product_types != null && $id_product_types != '') {
+                    $auction_list_select_types = DB::table('auctions')
+                    ->select(
+                        'auctions.id_auctions',
+                        'auctions.auction_status',
+                        'auctions.shipping_cost',
+                        'auctions.start_price',
+                        'auctions.end_date_time',
+                        'auctions.max_price',
+                        'auctions.id_auction_types',
+                        'auctions.id_payment_types',
+                        'auctions.id_bank_accounts',
+                        'products.id_products',
+                        'products.id_product_types',
+                        'products.name_product',
+                        'images.image_path_1',
+                        'users.id_users',
+                        'users.first_name_users',
+                        'users.last_name_users',
+                    )
+                    ->join('products', function (JoinClause $join) {
+                        $join->on('auctions.id_products', '=', 'products.id_products');
+                    })
+                    ->join('images', function (JoinClause $join) {
+                        $join->on('images.id_images', '=', 'products.id_images');
+                    })
+                    ->join('users', function (JoinClause $join) {
+                        $join->on('users.id_users', '=', 'products.id_users');
+                    })
+                    ->where('auctions.auction_status', '=', true)
+                    ->where('id_auction_types', '=', 1)
+                    ->where('products.id_product_types', '=', $id_product_types)
+                    // ->orderByRaw('id_auctions')
+                    ->orderByDesc('id_auctions')
+                    ->get();
+
+                    if ($auction_list_select_types != null && $auction_list_select_types != '') {
+                        return response()->json([
+                            'status' => 1,
+                            'message' => "Successfully.",
+                            'data' => $auction_list_select_types
+                        ], 200);
+                    }
+                }
+            } catch (Exception $e) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Error.',
+                    // 'data' => $e
+                ], 404);
+            }
+
+
 
             $auctions_list = DB::table('auctions')
                 ->select(
@@ -282,17 +404,17 @@ class AuctionController extends Controller
                     //         'auctions.created_at', '=', $last_time_auction[0]->last_time)
                     ->first();
 
-                    // return $reAction;
+                // return $reAction;
 
                 if ($request->id_auction_types == '2' || $request->id_auction_types == 2) {
                     // return "AAAA";
-                    $private_auction_groups_data =[
+                    $private_auction_groups_data = [
                         'id_auctions' => $reAction->id_auctions,
                         'id_users' => $request->id_users,
                     ];
                     // return "AAA";
                     $create_private_auction_group = DB::table('private_auction_groups')
-                                                    ->insert($private_auction_groups_data);
+                        ->insert($private_auction_groups_data);
                 }
 
                 return response()->json([
@@ -680,26 +802,28 @@ class AuctionController extends Controller
         }
     }
 
-    public function closeAuctions() {
+    public function closeAuctions()
+    {
         return "TEST";
     }
 
-    public function auctionListAdmin() {
+    public function auctionListAdmin()
+    {
         try {
 
             $auction_list = DB::table('auctions')
-                                ->select('*')
-                                ->join('products', function(JoinClause $join) {
-                                    $join->on('products.id_products', '=', 'auctions.id_products');
-                                })
-                                ->join('images', function(JoinClause $join) {
-                                    $join->on('images.id_images', '=', 'products.id_images');
-                                })
-                                ->join('users', function (JoinClause $join) {
-                                    $join->on('users.id_users', '=', 'products.id_users');
-                                })
-                                ->where('auctions.id_auction_types', '=', 1)
-                                ->get();
+                ->select('*')
+                ->join('products', function (JoinClause $join) {
+                    $join->on('products.id_products', '=', 'auctions.id_products');
+                })
+                ->join('images', function (JoinClause $join) {
+                    $join->on('images.id_images', '=', 'products.id_images');
+                })
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->where('auctions.id_auction_types', '=', 1)
+                ->get();
             // return "AA";
             event(new AuctionListAdminEvent($auction_list));
 
@@ -750,110 +874,108 @@ class AuctionController extends Controller
     //     }
     // }
 
-//     public function test(Request $request)
-//     {
-//         try {
+    //     public function test(Request $request)
+    //     {
+    //         try {
 
-//             $test_date_time = DB::table('auctions')
-//                             ->select('*')
-//                             // ->where('id_auctions', '=', 1)
-//                             ->get();
-//             // return $test_date_time;
-//             $end_date_time_auctions = Carbon::parse($test_date_time[0]->end_date_time, 'Asia/Bangkok');
-
-
-//             $current_date_time = Carbon::now('Asia/Bangkok');
-
-//             $end_date_time_auctions->toPeriod();
-
-//             $data = [
-//                 'test' => $end_date_time_auctions.' เปรียบเทียบ '.$current_date_time,
-//                 'CurrentDateTime' => $current_date_time->toDateTimeString(),
-//                 'EndDateTime' => $end_date_time_auctions->toDateTimeString(),
-//             ];
-
-//             $a = $this->test1($test_date_time);
-//             return $a;
-
-//             // return view('welcome', [
-
-//             // ]));
-//                 sleep(1);
-//             if ($end_date_time_auctions <= $current_date_time) {
+    //             $test_date_time = DB::table('auctions')
+    //                             ->select('*')
+    //                             // ->where('id_auctions', '=', 1)
+    //                             ->get();
+    //             // return $test_date_time;
+    //             $end_date_time_auctions = Carbon::parse($test_date_time[0]->end_date_time, 'Asia/Bangkok');
 
 
-//                 return view('welcome', [
-//                     'status' => 'หมดเวลา',
-//                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
-//                     'message' => 'end น้อยกว่า current',
-//                     'data' => $data
-//                 ]);
+    //             $current_date_time = Carbon::now('Asia/Bangkok');
 
-//                 return response()->json([
-//                     'status' => 'หมดเวลา',
-//                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
-//                     'message' => 'end น้อยกว่า current',
-//                     'data' => $data
-//                 ], 200);
-//             } else {
+    //             $end_date_time_auctions->toPeriod();
 
-//                 return view('welcome', [
-//                     'status' => $end_date_time_auctions->toDateTimeString(),
-//                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
-//                     'message' => 'end มากกว่า current',
-//                     'data' => $data
-//                 ]);
+    //             $data = [
+    //                 'test' => $end_date_time_auctions.' เปรียบเทียบ '.$current_date_time,
+    //                 'CurrentDateTime' => $current_date_time->toDateTimeString(),
+    //                 'EndDateTime' => $end_date_time_auctions->toDateTimeString(),
+    //             ];
 
-//                 return response()->json([
-//                     'status' => $end_date_time_auctions->toDateTimeString(),
-//                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
-//                     'message' => 'end มากกว่า current',
-//                     'data' => $data
-//                 ], 200);
-//             }
+    //             $a = $this->test1($test_date_time);
+    //             return $a;
+
+    //             // return view('welcome', [
+
+    //             // ]));
+    //                 sleep(1);
+    //             if ($end_date_time_auctions <= $current_date_time) {
 
 
-//             // dd($diff_in_hours);
-//             return $diff_in_hours;
-//         } catch (Exception $e) {
-//             return response()->json([
-//                 'status' => 0,
-//                 'message' => "Error",
-//                 'data' => $e
-//             ]);
-//         }
-//     }
+    //                 return view('welcome', [
+    //                     'status' => 'หมดเวลา',
+    //                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+    //                     'message' => 'end น้อยกว่า current',
+    //                     'data' => $data
+    //                 ]);
 
-//  public function test1($data) {
-//         $newData = [];
-//         // $count = 0;
-//         if ($data != '') {
-//             foreach ($data as $d) {
-//                 // return $d->end_date_time;
-//                 $end_date_time_auctions = Carbon::parse($d->end_date_time, 'Asia/Bangkok');
-//                 $current_date_time = Carbon::now('Asia/Bangkok');
+    //                 return response()->json([
+    //                     'status' => 'หมดเวลา',
+    //                     'test' => $end_date_time_auctions->toDateTimeString().' น้อยกว่า '.$current_date_time->toDateTimeString(),
+    //                     'message' => 'end น้อยกว่า current',
+    //                     'data' => $data
+    //                 ], 200);
+    //             } else {
 
-//                 if ($end_date_time_auctions <= $current_date_time) {
-//                     // $count += 1;
-//                     // return $d->id_auctions;
-//                     $auctions_timeout = DB::table('auctions')
-//                                             ->where('id_auctions', '=', $d->id_auctions)
-//                                             ->update(['auction_status' => false]);
+    //                 return view('welcome', [
+    //                     'status' => $end_date_time_auctions->toDateTimeString(),
+    //                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+    //                     'message' => 'end มากกว่า current',
+    //                     'data' => $data
+    //                 ]);
 
-//                     array_push($newData, $auctions_timeout);
+    //                 return response()->json([
+    //                     'status' => $end_date_time_auctions->toDateTimeString(),
+    //                     'test' => $end_date_time_auctions->toDateTimeString().' มากกว่า '.$current_date_time->toDateTimeString(),
+    //                     'message' => 'end มากกว่า current',
+    //                     'data' => $data
+    //                 ], 200);
+    //             }
 
-//                     // return $count;
-//                 }
 
-//             }
-//                 // return $count;
-//                 return $newData;
-//         }
+    //             // dd($diff_in_hours);
+    //             return $diff_in_hours;
+    //         } catch (Exception $e) {
+    //             return response()->json([
+    //                 'status' => 0,
+    //                 'message' => "Error",
+    //                 'data' => $e
+    //             ]);
+    //         }
+    //     }
 
-//         return $data;
+    //  public function test1($data) {
+    //         $newData = [];
+    //         // $count = 0;
+    //         if ($data != '') {
+    //             foreach ($data as $d) {
+    //                 // return $d->end_date_time;
+    //                 $end_date_time_auctions = Carbon::parse($d->end_date_time, 'Asia/Bangkok');
+    //                 $current_date_time = Carbon::now('Asia/Bangkok');
 
-//     }
+    //                 if ($end_date_time_auctions <= $current_date_time) {
+    //                     // $count += 1;
+    //                     // return $d->id_auctions;
+    //                     $auctions_timeout = DB::table('auctions')
+    //                                             ->where('id_auctions', '=', $d->id_auctions)
+    //                                             ->update(['auction_status' => false]);
+
+    //                     array_push($newData, $auctions_timeout);
+
+    //                     // return $count;
+    //                 }
+
+    //             }
+    //                 // return $count;
+    //                 return $newData;
+    //         }
+
+    //         return $data;
+
+    //     }
 
 }
-
-

@@ -5,6 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:prototype_your_auction_services/controller/AuctionTypesController.dart';
+import 'package:prototype_your_auction_services/controller/ProductTypesController.dart';
+import 'package:prototype_your_auction_services/model/AuctionTypesModel.dart';
+import 'package:prototype_your_auction_services/model/ProductTypesModel.dart';
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
@@ -36,6 +40,13 @@ class AddProductState extends State<AddProduct> {
 
   // List<File?> _imageData = [];
   List<dynamic?> _imageData = [];
+
+  @override
+  void initState() {
+    ProductTypesController().fetchProductTypes();
+    AuctionTypesController().fetchAuctionTypes();
+    super.initState();
+  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -467,10 +478,17 @@ class AddProductState extends State<AddProduct> {
   // }
 
   Widget inputAuctionTypes() {
-    List<String>? listDataAuctionTypeValue = [
-      'ประมูลปกติ',
-      'ประมูลแบบส่วนตัว',
-    ];
+    dynamic auction_types_data = AuctionTypesModel().getAuctionTypes();
+
+    List<String>? listDataAuctionTypeValue = [];
+    for (int i = 0; i <= auction_types_data.length - 1; i++) {
+      // print('${i} ${auction_types_data[i]['auction_types']}');
+      listDataAuctionTypeValue.add(auction_types_data[i]['auction_types'].toString());
+    }
+    // List<String>? listDataAuctionTypeValue = [
+    //   'ประมูลปกติ',
+    //   'ประมูลแบบส่วนตัว',
+    // ];
     double left = 20, top = 0, right = 20, bottom = 0;
     return DropdownButton(
       hint: Text("เลือกประเภทการประมูล"),
@@ -494,18 +512,26 @@ class AddProductState extends State<AddProduct> {
   }
 
   Widget inputProductTypes() {
-    List<String>? product_types = [
-      'ทั่วไป',
-      'ของเก่า',
-      'เสื้อผ้า',
-      'ของใช้',
-      'เทคโนโลยี',
-      'เครื่องดนตรี',
-      'นาฬิกา',
-      'เครื่องประดับ',
-      'จักรยานยนต์',
-      'รถยนต์',
-    ];
+    dynamic test = ProductTypesModel().getProductTypes();
+    // List<String>? product_types = [
+    //   'ทั่วไป',
+    //   'ของเก่า',
+    //   'เสื้อผ้า',
+    //   'ของใช้',
+    //   'เทคโนโลยี',
+    //   'เครื่องดนตรี',
+    //   'นาฬิกา',
+    //   'เครื่องประดับ',
+    //   'จักรยานยนต์',
+    //   'รถยนต์',
+    // ];
+    List<String>? product_types = [];
+    for (int i = 0; i <= test.length - 1; i++) {
+      // print('${i} ${test[i]['product_type_text']}');
+      product_types.add(test[i]['product_type_text'].toString());
+    }
+    // product_types.add('อื่น ๆ');
+    // print("${test} ${product_types.length}");
     double left = 20,
         top = 0,
         right = 20,
@@ -740,6 +766,7 @@ class AddProductState extends State<AddProduct> {
           // "data" : "test",
           // "id_users": '2',
           "id_users": ShareData.userData['id_users'].toString(),
+          // "id_product_types": _productTypeValues,
           "id_product_types": selectProductType(_productTypeValues),
           // "name_product": "Submit Flutter Test",
           "name_product": _nameProduct.text,
@@ -759,7 +786,8 @@ class AddProductState extends State<AddProduct> {
           // "id_bank_accounts": '1',
         };
 
-        print(ShareData.bankAccountUser['id_bank_accounts'].toString());
+        print("${data}");
+        // print(ShareData.bankAccountUser['id_bank_accounts'].toString());
 
         request.fields['id_users'] = data['id_users'];
         request.fields['id_product_types'] = data['id_product_types'];
@@ -822,7 +850,6 @@ class AddProductState extends State<AddProduct> {
         }
         if (_dataAuctionTypeValue == null) {
           setState(() {
-            message += ShareData.userData.toString();
             message += "- กรุณาเลือกประเภทการประมูล\n";
           });
         }
@@ -895,6 +922,15 @@ class AddProductState extends State<AddProduct> {
   }
 
   String selectProductType(String product_type) {
+    List check_index_product_types = ProductTypesModel().getProductTypes();
+
+    for (int index = 0; index <= check_index_product_types.length - 1; index++) {
+      if (product_type == check_index_product_types[index]['product_type_text']) {
+        return "${index + 1}";
+      }
+    }
+    return "1";
+
     if (product_type == 'ทั่วไป') {
       return '1';
     } else if (product_type == 'ของเก่า') {
@@ -920,14 +956,23 @@ class AddProductState extends State<AddProduct> {
   }
 
   String auctionTypes(String auction_types) {
-    if (auction_types == '') {
-      return "1";
-    } else if (_dataAuctionTypeValue == 'ประมูลปกติ') {
-      return "1";
-    } else if (_dataAuctionTypeValue == 'ประมูลแบบส่วนตัว') {
-      return "2";
+    List check_index_auction_types = AuctionTypesModel().getAuctionTypes();
+    for (int index = 0; index <= check_index_auction_types.length - 1; index++) {
+      if (auction_types == check_index_auction_types[index]['auction_types']) {
+        return "${index + 1}";
+      }
     }
+
     return "1";
+
+  //   if (auction_types == '') {
+  //     return "1";
+  //   } else if (_dataAuctionTypeValue == 'ประมูลปกติ') {
+  //     return "1";
+  //   } else if (_dataAuctionTypeValue == 'ประมูลแบบส่วนตัว') {
+  //     return "2";
+  //   }
+  //   return "1";
   }
 
   // Future<void> onSaveProduct() async {

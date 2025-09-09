@@ -8,7 +8,6 @@ import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 class Chat extends StatefulWidget {
-
   State<Chat> createState() {
     return ChatState();
   }
