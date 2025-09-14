@@ -4,10 +4,14 @@ import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/controller/AuctionController.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 
+import '../share/config/ConfigDelayBroadcast.dart';
+
 class ProductDetailController {
   void fetchProductDetail({required var id_auctions}) async {
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+
+    // ConfigDelayBroadcast.onDelay();
 
     String url = ConfigAPI().getProductDetailApiServerGet(
       id_auctions: id_auctions,

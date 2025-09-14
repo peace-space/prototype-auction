@@ -7,19 +7,22 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class AuctionHomeEvent
+class AuctionHomeEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public $auction_data;
 
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($auction_data)
     {
-        //
+        $this->auction_data = $auction_data;
     }
 
     /**
@@ -30,7 +33,15 @@ class AuctionHomeEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('AuctionList'),
+        ];
+    }
+
+    public function broadcastWith() {
+        return [
+            'status' => 1,
+            'message' => 'Successfully',
+            'data' => $this->auction_data
         ];
     }
 }

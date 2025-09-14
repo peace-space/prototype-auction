@@ -1,10 +1,13 @@
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
+import 'package:prototype_your_auction_services/share/config/ConfigDelayBroadcast.dart';
 
 class PrivateAuctionController {
   void fetchPrivateAuctionAdmin() async {
     try {
-      await Future.delayed(Duration(seconds: 3));
+      await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+
+      // ConfigDelayBroadcast.onDelay();
 
       String url = ConfigAPI().getPrivateAuctionAdmin();
       Uri uri = Uri.parse(url);

@@ -39,6 +39,14 @@ class ReportAuctionState extends State<ReportAuction> {
                   return Center(child: CircularProgressIndicator());
                 }
 
+                if (!snapshot.hasData) {
+                  return Center(
+                    child: Text("ไม่มีข้อมูล", style: TextStyle(
+                      fontSize: 16
+                    ),),
+                  );
+                }
+
                 if (snapshot.hasData) {
                   Map<String, dynamic> data = snapshot.data![index];
                   return Card(

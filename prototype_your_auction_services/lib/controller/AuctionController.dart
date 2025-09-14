@@ -3,13 +3,16 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/model/AuctionModel.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
+import 'package:prototype_your_auction_services/share/config/ConfigDelayBroadcast.dart';
 
 import '../model/ProductTypesModel.dart';
 
 class AuctionController {
   void fetchAuctionListAdmin() async {
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+
+    // ConfigDelayBroadcast.onDelay();
 
     String url = ConfigAPI().getAuctionListAdmin();
     Uri uri = Uri.parse(url);
@@ -25,13 +28,25 @@ class AuctionController {
 
   void fetchAuctionSelectTypes({required var id_products}) async {
     try {
+      if (id_products == null || id_products == '') {
+        id_products = 0;
+      }
+
+      // id_products = 0;
+
+      print('${id_products}');
+
       String url = ConfigAPI().getAuctionSelectTypesGet(id_products: id_products);
+
       Uri uri = Uri.parse(url);
       final response = await http.get(uri);
       final resJson = jsonDecode(response.body);
 
+      // Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+      Future.delayed(Duration(seconds: 3));
       if (response.statusCode == 200) {
         AuctionModel().setAuctionSelectTypesData(auction_select_types_data: resJson['data']);
+        // print("object: ${resJson}");
       } else {
         Exception("ERROR StatusCode = ${response.statusCode}");
       }
@@ -50,4 +65,5 @@ class AuctionController {
     }
     return "1";
   }
+
 }

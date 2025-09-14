@@ -35,3 +35,6 @@ Broadcast::channel('ProductDetail', function (){});
 Broadcast::channel('PrivateAuctionListAdmin', function (){});
 
 Broadcast::channel('PrivateAuctionDetailAdmin', function (){});
+
+
+Broadcast::channel('AuctionList', function () {});

@@ -113,7 +113,7 @@ class BidListsState extends State<BidLists> {
                     Map<String, dynamic> data = snapshot.data[index];
                     String first_name_users = data['first_name_users']
                         .toString();
-                    String last_name_users = data['first_name_users']
+                    String last_name_users = data['last_name_users']
                         .toString();
                     String price = data['bid_price'].toString();
                     String bidding_date_time = data['created_at'].toString();

@@ -480,6 +480,8 @@ class AddProductState extends State<AddProduct> {
   Widget inputAuctionTypes() {
     dynamic auction_types_data = AuctionTypesModel().getAuctionTypes();
 
+    Future.delayed(Duration(milliseconds: 300));
+
     List<String>? listDataAuctionTypeValue = [];
     for (int i = 0; i <= auction_types_data.length - 1; i++) {
       // print('${i} ${auction_types_data[i]['auction_types']}');
@@ -513,6 +515,9 @@ class AddProductState extends State<AddProduct> {
 
   Widget inputProductTypes() {
     dynamic test = ProductTypesModel().getProductTypes();
+
+    Future.delayed(Duration(milliseconds: 300));
+
     // List<String>? product_types = [
     //   'ทั่วไป',
     //   'ของเก่า',
@@ -525,6 +530,7 @@ class AddProductState extends State<AddProduct> {
     //   'จักรยานยนต์',
     //   'รถยนต์',
     // ];
+
     List<String>? product_types = [];
     for (int i = 0; i <= test.length - 1; i++) {
       // print('${i} ${test[i]['product_type_text']}');
@@ -557,78 +563,6 @@ class AddProductState extends State<AddProduct> {
       },
     );
   }
-
-  // Widget inputBankAccount() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Center(child: Text("เพิ่มข้อมูลการชำระเงิน", style: subjectTextStyle())),
-  //       SizedBox(height: 8),
-  //       Text("ช่องทางการรับเงิน", style: subjectTextStyle()),
-  //       inputPaymentTypes(),
-  //       SizedBox(height: 8),
-  //       Text("ชื่อบัญชีธนาคาร", style: subjectTextStyle()),
-  //       inputNameBankAccount(),
-  //       SizedBox(height: 8),
-  //       Text("เลขบัญชีธนาคาร", style: subjectTextStyle()),
-  //       inputBankAccountNumber(),
-  //       SizedBox(height: 8),
-  //       Text("พร้อมเพย์", style: subjectTextStyle()),
-  //       inputPromptPay(),
-  //       SizedBox(height: 8),
-  //     ],
-  //   );
-  // }
-  //
-  //
-  // Widget inputPaymentTypes() {
-  //   List<String> testInputPaymentTypes = ['บัญชีธนาคาร', "พร้อมเพย์", "เก็บเงินปลายทาง", "ทั้ง 3 ช่องทาง"];
-  //   double left = 20, top = 0, right = 20, bottom = 0;
-  //   return DropdownButton<String>(
-  //     hint: Text("เลือกประเภทการรับเงิน"),
-  //     isExpanded: true,
-  //     padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-  //     value: _dataPaymentTypesValue,
-  //     items:
-  //     testInputPaymentTypes.map((data) {
-  //       return DropdownMenuItem(value: data, child: Center(child: Text(data),));
-  //     }).toList(),
-  //     onChanged:
-  //         (value) =>
-  //     {
-  //       setState(() {
-  //         _dataPaymentTypesValue = value.toString();
-  //       }),
-  //     },
-  //   );
-  // }
-  //
-  // Widget inputBankAccountNumber() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       border: OutlineInputBorder(),
-  //       hintText: "เลขบัญชีธนาคาร",
-  //     ),
-  //   );
-  // }
-  //
-  // Widget inputNameBankAccount() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       border: OutlineInputBorder(),
-  //       hintText: "ชื่อบัญชีธนาคาร",
-  //     ),
-  //   );
-  // }
-  //
-  // Widget inputPromptPay() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       border: OutlineInputBorder(),
-  //       hintText: "พร้อมเพย์",
-  //     ),
-  //   );
-  // }
 
   Widget buttonSubmit() {
     return ElevatedButton(
@@ -702,6 +636,7 @@ class AddProductState extends State<AddProduct> {
           ShareData.bankAccountUser != null &&
           check_integer_shipping_cost != null &&
           check_integer_start_price != null) {
+
         showDialog(
           barrierDismissible: false,
           context: context,
@@ -888,6 +823,7 @@ class AddProductState extends State<AddProduct> {
             message += "- กรุณาเพิ่มวันที่ปิดประมูล\n";
           });
         }
+        Navigator.of(context).pop();
 
         showDialog(context: context, builder: (context) =>
             AlertDialog(
@@ -905,6 +841,8 @@ class AddProductState extends State<AddProduct> {
       print("\n\n\n");
       print("ERROR: " + e.toString());
       print("\n\n\n");
+
+      Navigator.of(context).pop();
 
       showDialog(
         context: context,

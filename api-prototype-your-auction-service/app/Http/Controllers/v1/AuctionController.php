@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Events\AuctionDetailAdminEvent;
+use App\Events\AuctionHomeEvent;
 use App\Events\AuctionListAdminEvent;
 use App\Http\Controllers\algorithm\RunAuctionSystem;
 use App\Http\Controllers\Controller;
@@ -96,7 +97,7 @@ class AuctionController extends Controller
             $run_auction_system->runAuctionSystem();
 
             try {
-                if ($id_product_types != null && $id_product_types != '') {
+                if ($id_product_types != null && $id_product_types != '' && $id_product_types != '0' && $id_product_types != 0) {
                     $auction_list_select_types = DB::table('auctions')
                     ->select(
                         'auctions.id_auctions',
@@ -133,6 +134,9 @@ class AuctionController extends Controller
                     ->get();
 
                     if ($auction_list_select_types != null && $auction_list_select_types != '') {
+
+                        event(new AuctionHomeEvent($auction_list_select_types));
+
                         return response()->json([
                             'status' => 1,
                             'message' => "Successfully.",
@@ -196,6 +200,8 @@ class AuctionController extends Controller
             // return $counter;
 
             // highBids();
+
+            event(new AuctionHomeEvent($auctions_list));
 
             return response()->json([
                 'status' => 1,

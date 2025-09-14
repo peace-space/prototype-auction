@@ -10,16 +10,23 @@ class ProductTypesController {
   //
   // }
 
-  Future<void> fetchProductTypes() async {
+  Future<dynamic> fetchProductTypes() async {
     try {
       String url = ConfigAPI().getProductTypesGet();
       Uri uri = Uri.parse(url);
       final response = await http.get(uri);
       final resJson = jsonDecode(response.body);
 
+      // Future.delayed(Duration(seconds: 3));
+
       if (response.statusCode == 200) {
         ProductTypesModel().setProductTypes(product_types: resJson['data']);
+        print("++++++++++++++++++++++++++++++++++++++++++ ${resJson['data']}");
+        return resJson['data'];
       } else {
+        ProductTypesModel().setProductTypes(product_types: null);
+        return null;
+        print("------------------------------------------");
         Exception("Error StatusCode = ${response.statusCode}");
       }
     } on Exception catch (e) {

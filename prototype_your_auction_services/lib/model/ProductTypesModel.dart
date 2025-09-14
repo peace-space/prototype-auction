@@ -3,7 +3,10 @@ class ProductTypesModel {
 
   void setProductTypes({required dynamic product_types}) {
     try {
-      ProductTypesModel.product_types_data = product_types;
+      // if (product_types != null) {
+        ProductTypesModel.product_types_data = product_types;
+      // }
+        // ProductTypesModel.product_types_data = 0;
     } on Exception catch (e) {
       Exception("ERROR = ${e}");
     }
@@ -14,6 +17,7 @@ class ProductTypesModel {
     try {
       return ProductTypesModel.product_types_data;
     } on Exception catch (e) {
+      // return 0;
       Exception("ERROR = ${e}");
     }
   }

@@ -29,7 +29,7 @@ class DetailAuctionState extends State<DetailAuction> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "รายละเอียด: ${ShareProductData.productData['id_auctions']}",
+          "รายละเอียด: ${ShareProductData.productData['name_product']}",
         ),
       ),
       body: StreamBuilder(

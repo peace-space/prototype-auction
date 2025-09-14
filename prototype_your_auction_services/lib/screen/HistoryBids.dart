@@ -37,6 +37,14 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
           );
         }
 
+        if (!snapshot.hasData) {
+          return Center(
+            child: Text("ไม่มีข้อมูล", style: TextStyle(
+              fontSize: 16
+            ),),
+          );
+        }
+
         if (snapshot.hasData) {
           return Padding(
             padding: EdgeInsets.all(8),

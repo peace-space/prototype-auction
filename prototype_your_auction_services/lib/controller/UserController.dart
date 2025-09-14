@@ -7,11 +7,14 @@ import 'package:prototype_your_auction_services/admin/screen_admin/UserListAdmin
 import 'package:prototype_your_auction_services/model/admin_model/UserListAdminModel.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/config/ConfigDelayBroadcast.dart';
 
 class UserController {
   Future<Map<String, dynamic>> fetchUserListData() async {
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+
+   // ConfigDelayBroadcast.onDelay();
 
     String url = ConfigAPI().getUserListAdmin();
     Uri uri = Uri.parse(url);
@@ -24,7 +27,9 @@ class UserController {
   Future<Map> fetchOneUserDetail({required var id_users}) async {
     // print("aaaa");
 
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+
+    // ConfigDelayBroadcast.onDelay();
 
     String url = ConfigAPI().getOneUserApi(id_users: id_users);
     final uri = Uri.parse(url);

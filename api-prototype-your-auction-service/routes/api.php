@@ -52,14 +52,14 @@ Route::prefix('/v1')->group(function () {
     // Password Reset
     Route::post('forgot-password', [PasswordResetController::class, 'forgotPassword']);
     Route::post('password-reset', [PasswordResetController::class, 'passwordReset']);
-    Route::post('test-send-email', [PasswordResetController::class, 'test']);
+    // Route::post('test-send-email', [PasswordResetController::class, 'test']);
 
     // Bank Account -----------------------------------------------------------
     Route::post('/create-bank-account', [BankAccountController::class, 'createBankAccount']);
     Route::post('/insert-bank-account', [BankAccountController::class, 'insertBankAccount']);
     Route::post('/edit-bank-account-admin', [BankAccountController::class, 'editBankAccountAdmin']);
 
-    Route::post('/test-delete', [UserController::class, 'test']);
+    // Route::post('/test-delete', [UserController::class, 'test']);
 
     // AuctionController -----------------------------------------------------------
     Route::get('/auction', [AuctionController::class, 'index']);
@@ -69,7 +69,7 @@ Route::prefix('/v1')->group(function () {
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     // Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
-    Route::get('/test', [AuctionController::class, 'test']);
+    // Route::get('/test', [AuctionController::class, 'test']);
     Route::get('/auction-list-admin', [AuctionController::class, 'auctionListAdmin']);
     Route::get('/auction-detail-admin/{id_auctions}', [AuctionController::class, 'auctionDetailAdmin']);
 
