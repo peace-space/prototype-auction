@@ -913,6 +913,10 @@ class AddProductState extends State<AddProduct> {
   //   return "1";
   }
 
+  void test() {
+
+  }
+
   // Future<void> onSaveProduct() async {
   //   try {
   //     print("onSaveStart");
