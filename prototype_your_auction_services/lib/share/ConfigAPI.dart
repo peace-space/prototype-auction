@@ -1,8 +1,8 @@
 class ConfigAPI {
-  // final String url = 'https://rmuti.your-auction-services.com';
+  final String url = 'https://rmuti.your-auction-services.com';
   //
-  final String url =
-      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
+  // // final String url =
+  //     'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
   // final String url =
   //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1';
 
@@ -281,6 +281,7 @@ class ConfigAPI {
 
   String getAuctionSelectTypesGet({required var id_products}) {
     // print("api: ${id_products}");
+    // id_products = 0;
     return "${url}/api/v1/auction-select-product-types/${id_products}";
   }
 }

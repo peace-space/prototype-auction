@@ -25,7 +25,7 @@ class BidListsState extends State<BidLists> {
 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("BidList")),
+      appBar: AppBar(title: Text("รายชื่อผู้เสนอราคา")),
       body: displayBidList(),
     );
   }

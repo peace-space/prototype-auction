@@ -346,10 +346,12 @@ class DetailAuctionState extends State<DetailAuction> {
             );
             print("Successfully: " + responce.statusCode.toString());
 
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => DetailAuction()),
-            );
+            _bid.text = '';
+            setState(() {});
+            // Navigator.pushReplacement(
+            //   context,
+            //   MaterialPageRoute(builder: (context) => DetailAuction()),
+            // );
           } else {
             _alertDialog(title: "เกิดข้อผิดพลาด");
             print("Error: " + responce.statusCode.toString());

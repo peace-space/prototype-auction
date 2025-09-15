@@ -26,7 +26,7 @@ class AuctionController {
   }
 
 
-  void fetchAuctionSelectTypes({required var id_products}) async {
+  Future<void> fetchAuctionSelectTypes({required var id_products}) async {
     try {
       if (id_products == null || id_products == '') {
         id_products = 0;
@@ -34,7 +34,10 @@ class AuctionController {
 
       // id_products = 0;
 
-      print('${id_products}');
+      // print('${id_products}');
+
+      await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
+      // await Future.delayed(Duration(seconds: 3));
 
       String url = ConfigAPI().getAuctionSelectTypesGet(id_products: id_products);
 
@@ -42,8 +45,6 @@ class AuctionController {
       final response = await http.get(uri);
       final resJson = jsonDecode(response.body);
 
-      // Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
-      Future.delayed(Duration(seconds: 3));
       if (response.statusCode == 200) {
         AuctionModel().setAuctionSelectTypesData(auction_select_types_data: resJson['data']);
         // print("object: ${resJson}");

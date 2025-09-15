@@ -316,6 +316,19 @@ class AuctionHomeState extends State<AuctionHome> {
           dynamic auction_list = AuctionModel().getConvertToMapAuctionList();
           if (auction_list == null || auction_list.length == 0) {
             return Center(
+                child: AlertDialog(
+                  title: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text("กำลังโหลดข้อมูล...")
+                    ],
+                  ),
+                )
+            );
+            return Center(
+                child: CircularProgressIndicator()
+            );
+            return Center(
                 child: Text("ไม่มีข้อมูล")
             );
           }
@@ -338,7 +351,7 @@ class AuctionHomeState extends State<AuctionHome> {
 
                     if ((data['auction_status'] == 1)) {
                       return InkWell(
-                        onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
+                        onTap: () => goToDetailAuction(ctx, data),
                         child: Card(
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -438,6 +451,16 @@ class AuctionHomeState extends State<AuctionHome> {
           // if ()
           // return Text("${auction_list}");
           if (auction_list == null || auction_list.length == 0) {
+            return Center(
+                child: AlertDialog(
+                 title: Column(
+                   children: [
+                     CircularProgressIndicator(),
+                     Text("กำลังโหลดข้อมูล...")
+                   ],
+                 ),
+                )
+            );
             return Center(
               child: Text("ไม่มีข้อมูล")
             );
