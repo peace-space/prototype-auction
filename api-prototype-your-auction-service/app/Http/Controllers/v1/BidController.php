@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -65,7 +66,8 @@ class BidController extends Controller
             $bidding = [
                 'id_users' => $request->id_users,
                 'id_auctions' => $request->id_auctions,
-                'bid_price' => $bid_price
+                'bid_price' => $bid_price,
+                'created_at' => Carbon::now()
             ];
 
             $save_data_bidding = DB::table('bids')
