@@ -35,21 +35,14 @@ class AuctionHomeState extends State<AuctionHome> {
   var select_types;
   bool has_data = true;
 
-  // Map<String, dynamic> dateTimeCoundown = {};
-
   @override
   void initState() {
-    // TODO: implement initState
-    // print("\n\n\n\n\n\n\n\n\n\nTest");
     CheckLogin().onCheckLogin();
-    // super.initState();
     ProductTypesController().fetchProductTypes();
-
-    Future.delayed(Duration(seconds: 1));
-
     setState(() {
       loginStatus = logedIn();
     });
+    super.initState();
   }
 
   Widget build(BuildContext context) {
@@ -78,7 +71,6 @@ class AuctionHomeState extends State<AuctionHome> {
                 if (snapshot.hasError) {
                   return Text("เกิดข้อผิดพลาด");
                 }
-                // print("${snapshot.data}");
                 if (snapshot.hasData) {
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -91,10 +83,72 @@ class AuctionHomeState extends State<AuctionHome> {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-            },),
+              },),
           ),
           SizedBox(height: 3),
-          Expanded(child: displayer(context)),
+          // Expanded(child: displayer(context)),
+          Expanded(child: StreamBuilder(
+            stream: AuctionHomeChannel.connect(id_products: selectProductType(_productTypeValues)).stream,
+            builder: (context, snapshot) {
+              print("${snapshot.data}");
+              if (snapshot.hasError) {
+                return const Center(child: Text("Error."));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                      child: AlertDialog(
+                        title: Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            Text("กำลังโหลดข้อมูล")
+                          ],
+                        ),
+                      )
+                  );
+              }
+
+              if (!snapshot.hasData) {
+                return Center(
+                    child: Text("ไม่มีข้อมูล", style: TextStyle(fontSize: 18),)
+                );
+              }
+
+              if (snapshot.hasData) {
+                AuctionModel().setConvertToMapAuctionList(snapshot.data);
+                dynamic data = AuctionModel().getConvertToMapAuctionList();
+                if (data == null || data.length == 0) {
+                  return Center(
+                      child: AlertDialog(
+                        title: Column(
+                          children: [
+                            CircularProgressIndicator(),
+                            Text("กำลังโหลดข้อมูล")
+                          ],
+                        ),
+                      )
+                  );
+                }
+                if (data['hasData'] == 0) {
+                  return Center(
+                    child: Text("ไม่มีข้อมูล"),
+                  );
+                } else {
+                  List auction_list = data['data'];
+                  return displayer(ctx, auction_list);
+                }}
+              return Center(
+                  child: AlertDialog(
+                    title: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("กำลังโหลดข้อมูล")
+                      ],
+                    ),
+                  )
+              );
+            },)
+          )
         ],
       ),
       drawer: createDrawer(context),
@@ -108,187 +162,6 @@ class AuctionHomeState extends State<AuctionHome> {
       return "ยังไม่เข้าสู่ระบบ";
     }
   }
-
-  // Widget auctionGrid(BuildContext ctx) {
-  //   double left = 8.0;
-  //   double top = 0.0;
-  //   double right = 8.0;
-  //   double bottom = 8.0;
-  //
-  //   return StreamBuilder(
-  //     stream: fetchAuctionData(),
-  //     builder: (context, snapshot) {
-  //       if (snapshot.hasError) {
-  //         return const Center(child: Text("Error."));
-  //       }
-  //
-  //       if (snapshot.connectionState == ConnectionState.active) {
-  //         return const Center(child: CircularProgressIndicator());
-  //       }
-  //
-  //       if (!snapshot.hasData) {
-  //         return Center(
-  //           child: Text("ไม่มีข้อมูล")
-  //         );
-  //       }
-  //
-  //       if (snapshot.hasData) {
-  //         try {
-  //           return GridView.builder(
-  //             padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-  //             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //               crossAxisCount: 2, //จำนวนคอลลัมน์
-  //               crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
-  //               mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
-  //               //mainAxisExtent: 300, //ขนาดของรูปภาพ
-  //               childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
-  //             ),
-  //             itemCount: snapshot.data?.length,
-  //             itemBuilder: (context, index) {
-  //               Map<String, dynamic> data = snapshot.data?[index];
-  //
-  //               if ((data['auction_status'] == 1)) {
-  //                 return InkWell(
-  //                   onTap: () => goToDetailAuction(ctx, snapshot.data?[index]),
-  //                   child: Card(
-  //                     shape: RoundedRectangleBorder(
-  //                       borderRadius: BorderRadius.circular(15),
-  //                     ),
-  //                     child: Column(
-  //                       crossAxisAlignment: CrossAxisAlignment.stretch,
-  //                       children: [
-  //                         Expanded(
-  //                           child: ClipRRect(
-  //                             borderRadius: BorderRadius.vertical(
-  //                               top: Radius.circular(15),
-  //                             ),
-  //                             child: Image.network(
-  //                               '${ConfigAPI().getImageAuctionApiServerGet(
-  //                                   image_auction_path: data['image_path_1'])}',
-  //                               fit: BoxFit.cover,
-  //                             ),
-  //                           ),
-  //                         ),
-  //                         Padding(
-  //                           padding: EdgeInsets.all(8.0),
-  //                           child: Column(
-  //                             crossAxisAlignment: CrossAxisAlignment.start,
-  //                             children: [
-  //                               Text(data['name_product']),
-  //                               SizedBox(height: 5),
-  //                               Text("ราคาสูงสุด ฿${data['max_price']
-  //                                   .toString()}"),
-  //                               SizedBox(height: 5),
-  //                               Text("เหลือเวลา:"),
-  //                               countDownList(context, data['end_date_time']),
-  //                               Text("day:hour:min:sec"),
-  //                               // showDateTimeCountdown(data),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                   ),
-  //                 );
-  //               }
-  //             },
-  //           );
-  //         } on Exception catch (e) {
-  //           AlertDialog(
-  //               title: Text("แจ้งเตือน"),
-  //               content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
-  //               actions: [
-  //                 TextButton(onPressed: () =>
-  //                 {
-  //                   Navigator.of(context).pop()
-  //                 }, child: Text("ตกลง"))
-  //               ]
-  //           );
-  //         }
-  //       }
-  //
-  //       return const Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
-
-  // Widget auctionList(BuildContext ctx) {
-  //   return StreamBuilder(
-  //     // stream: fetchAuctionData(),
-  //     stream: AuctionHomeChannel.connect(id_products: _productTypeValues).stream,
-  //     builder: (context, snapshot) {
-  //       print('${snapshot.data}');
-  //
-  //       if (snapshot.hasError) {
-  //         return const Center(child: Text("Error."));
-  //       }
-  //
-  //       if (snapshot.connectionState == ConnectionState.active) {
-  //         return Center(child: CircularProgressIndicator());
-  //       }
-  //
-  //       if (snapshot.hasData) {
-  //         try {
-  //           return ListView.builder(
-  //             itemCount: snapshot.data?.length,
-  //             padding: EdgeInsets.all(8),
-  //             itemBuilder: (context, index) {
-  //               Map<String, dynamic> data = snapshot.data?[index];
-  //
-  //               double left = 0.0;
-  //               double top = 0.0;
-  //               double right = 8.0;
-  //               double bottom = 8.0;
-  //                 return Padding(
-  //                   padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-  //                     child: Card(
-  //                       child: ListTile(
-  //                         onTap: () => goToDetailAuction(ctx, data),
-  //                         leading: ClipRRect(
-  //                           // borderRadius: BorderRadius.vertical(),
-  //                           child: Image.network(
-  //                             '${ConfigAPI().getImageAuctionApiServerGet(
-  //                                 image_auction_path: data['image_path_1'])}',
-  //                             cacheHeight: 600,
-  //                             cacheWidth: 500,
-  //                           ),
-  //                         ),
-  //                         title: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Text(data['name_product']),
-  //                             Text("ราคาสูงสุด ฿${data['max_price']
-  //                                 .toString()}"),
-  //                             Text("เวลาเหลือ"),
-  //                             countDownList(context, data['end_date_time']),
-  //                             Text("day:hour:min:sec"),
-  //                           ],
-  //                         ),
-  //                         // subtitle: countDownList(context, data['end_date_time']),
-  //                         // subtitle: showDateTimeCountdown(data),
-  //                       ),
-  //                     )
-  //                 );
-  //             },
-  //           );
-  //         } on Exception catch (e) {
-  //           AlertDialog(
-  //               title: Text("แจ้งเตือน"),
-  //               content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
-  //               actions: [
-  //                 TextButton(onPressed: () =>
-  //                 {
-  //                   Navigator.of(context).pop()
-  //                 }, child: Text("ตกลง"))
-  //               ]
-  //           );
-  //         }
-  //       }
-  //
-  //       return const Center(child: CircularProgressIndicator());
-  //     },
-  //   );
-  // }
 
   Widget auctionGrid(BuildContext ctx) {
     double left = 8.0;
@@ -321,22 +194,22 @@ class AuctionHomeState extends State<AuctionHome> {
           dynamic data = AuctionModel().getConvertToMapAuctionList();
           // print("${data}");
           if (data == null || data.length == 0) {
-              return Center(
-                  child: AlertDialog(
-                    title: Column(
-                      children: [
-                        CircularProgressIndicator(),
-                        Text("กำลังโหลดข้อมูล")
-                      ],
-                    ),
-                  )
-              );
-              return Center(
-                  child: CircularProgressIndicator()
-              );
-              return Center(
-                  child: Text("ไม่มีข้อมูล")
-              );
+            return Center(
+                child: AlertDialog(
+                  title: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text("กำลังโหลดข้อมูล")
+                    ],
+                  ),
+                )
+            );
+            return Center(
+                child: CircularProgressIndicator()
+            );
+            return Center(
+                child: Text("ไม่มีข้อมูล")
+            );
           }
           if (data['hasData'] == 0) {
             return Center(
@@ -344,81 +217,81 @@ class AuctionHomeState extends State<AuctionHome> {
             );
           } else {
             List auction_list = data['data'];
-             try {
-            return SafeArea(
-                child: GridView.builder(
-                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, //จำนวนคอลลัมน์
-                    crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
-                    mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
-                    //mainAxisExtent: 300, //ขนาดของรูปภาพ
-                    childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
-                  ),
-                  // itemCount: snapshot.data!.length,
-                  itemCount: auction_list!.length,
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> data = auction_list![index];
+            try {
+              return SafeArea(
+                  child: GridView.builder(
+                    padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, //จำนวนคอลลัมน์
+                      crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
+                      mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
+                      //mainAxisExtent: 300, //ขนาดของรูปภาพ
+                      childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
+                    ),
+                    // itemCount: snapshot.data!.length,
+                    itemCount: auction_list!.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> data = auction_list![index];
 
-                    if ((data['auction_status'] == 1)) {
-                      return InkWell(
-                        onTap: () => goToDetailAuction(ctx, data),
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(15),
-                                  ),
-                                  child: Image.network(
-                                    '${ConfigAPI().getImageAuctionApiServerGet(
-                                        image_auction_path: data['image_path_1'])}',
-                                    fit: BoxFit.cover,
+                      if ((data['auction_status'] == 1)) {
+                        return InkWell(
+                          onTap: () => goToDetailAuction(ctx, data),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(15),
+                                    ),
+                                    child: Image.network(
+                                      '${ConfigAPI().getImageAuctionApiServerGet(
+                                          image_auction_path: data['image_path_1'])}',
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(data['name_product']),
-                                    SizedBox(height: 5),
-                                    Text("ราคาสูงสุด ฿${data['max_price']
-                                        .toString()}"),
-                                    SizedBox(height: 5),
-                                    Text("เหลือเวลา:"),
-                                    countDownList(context, data['end_date_time']),
-                                    Text("day:hour:min:sec"),
-                                    // showDateTimeCountdown(data),
-                                  ],
+                                Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(data['name_product']),
+                                      SizedBox(height: 5),
+                                      Text("ราคาสูงสุด ฿${data['max_price']
+                                          .toString()}"),
+                                      SizedBox(height: 5),
+                                      Text("เหลือเวลา:"),
+                                      countDownList(context, data['end_date_time']),
+                                      Text("day:hour:min:sec"),
+                                      // showDateTimeCountdown(data),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  },
-                )
-            );
-          } on Exception catch (e) {
-            AlertDialog(
-                title: Text("แจ้งเตือน"),
-                content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
-                actions: [
-                  TextButton(onPressed: () =>
-                  {
-                    Navigator.of(context).pop()
-                  }, child: Text("ตกลง"))
-                ]
-            );
-          }
+                        );
+                      }
+                    },
+                  )
+              );
+            } on Exception catch (e) {
+              AlertDialog(
+                  title: Text("แจ้งเตือน"),
+                  content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
+                  actions: [
+                    TextButton(onPressed: () =>
+                    {
+                      Navigator.of(context).pop()
+                    }, child: Text("ตกลง"))
+                  ]
+              );
+            }
           }
         }
 
@@ -531,65 +404,6 @@ class AuctionHomeState extends State<AuctionHome> {
           }
 
         }
-
-        // if (snapshot.hasData) {
-        //   try {
-        //     return ListView.builder(
-        //       itemCount: snapshot.data?.length,
-        //       padding: EdgeInsets.all(8),
-        //       itemBuilder: (context, index) {
-        //         Map<String, dynamic> data = snapshot.data?[index];
-        //
-        //         double left = 0.0;
-        //         double top = 0.0;
-        //         double right = 8.0;
-        //         double bottom = 8.0;
-        //           return Padding(
-        //             padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-        //               child: Card(
-        //                 child: ListTile(
-        //                   onTap: () => goToDetailAuction(ctx, data),
-        //                   leading: ClipRRect(
-        //                     // borderRadius: BorderRadius.vertical(),
-        //                     child: Image.network(
-        //                       '${ConfigAPI().getImageAuctionApiServerGet(
-        //                           image_auction_path: data['image_path_1'])}',
-        //                       cacheHeight: 600,
-        //                       cacheWidth: 500,
-        //                     ),
-        //                   ),
-        //                   title: Column(
-        //                     crossAxisAlignment: CrossAxisAlignment.start,
-        //                     children: [
-        //                       Text(data['name_product']),
-        //                       Text("ราคาสูงสุด ฿${data['max_price']
-        //                           .toString()}"),
-        //                       Text("เวลาเหลือ"),
-        //                       countDownList(context, data['end_date_time']),
-        //                       Text("day:hour:min:sec"),
-        //                     ],
-        //                   ),
-        //                   // subtitle: countDownList(context, data['end_date_time']),
-        //                   // subtitle: showDateTimeCountdown(data),
-        //                 ),
-        //               )
-        //           );
-        //       },
-        //     );
-        //   } on Exception catch (e) {
-        //     AlertDialog(
-        //         title: Text("แจ้งเตือน"),
-        //         content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
-        //         actions: [
-        //           TextButton(onPressed: () =>
-        //           {
-        //             Navigator.of(context).pop()
-        //           }, child: Text("ตกลง"))
-        //         ]
-        //     );
-        //   }
-        // }
-
         return const Center(child: CircularProgressIndicator());
       },
     );
@@ -611,11 +425,127 @@ class AuctionHomeState extends State<AuctionHome> {
     }
   }
 
-  Widget displayer(BuildContext ctx) {
+  // Widget displayer(BuildContext ctx) {
+  //   if (_changeDisplay) {
+  //     return auctionList(ctx);
+  //   } else {
+  //     return auctionGrid(ctx);
+  //   }
+  // }
+  Widget displayer(BuildContext ctx, auction_list) {
     if (_changeDisplay) {
-      return auctionList(ctx);
+      return SafeArea(
+          child:  ListView.builder(
+            itemCount: auction_list?.length,
+            padding: EdgeInsets.all(8),
+            itemBuilder: (context, index) {
+              Map<String, dynamic> data = auction_list[index];
+
+              double left = 0.0;
+              double top = 0.0;
+              double right = 0.0;
+              double bottom = 0.0;
+              return Padding(
+                  padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                  child: Card(
+                    child: ListTile(
+                      onTap: () => goToDetailAuction(ctx, data),
+                      leading: ClipRRect(
+                        // borderRadius: BorderRadius.vertical(),
+                        child: Image.network(
+                          '${ConfigAPI().getImageAuctionApiServerGet(
+                              image_auction_path: data['image_path_1'])}',
+                          cacheHeight: 600,
+                          cacheWidth: 500,
+                        ),
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(data['name_product']),
+                          Text("ราคาสูงสุด ฿${data['max_price']
+                              .toString()}"),
+                          Text("เวลาเหลือ"),
+                          countDownList(context, data['end_date_time']),
+                          Text("day:hour:min:sec"),
+                        ],
+                      ),
+                      // subtitle: countDownList(context, data['end_date_time']),
+                      // subtitle: showDateTimeCountdown(data),
+                    ),
+                  )
+              );
+            },
+          )
+      );
     } else {
-      return auctionGrid(ctx);
+      double left = 8.0;
+      double top = 0.0;
+      double right = 8.0;
+      double bottom = 8.0;
+      // return auctionGrid(ctx);
+      return SafeArea(
+          child: GridView.builder(
+            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, //จำนวนคอลลัมน์
+              crossAxisSpacing: 10, //ระยะห่างระหว่างคอลลัมน์
+              mainAxisSpacing: 10, //ระยะห่างระหว่างแถว
+              //mainAxisExtent: 300, //ขนาดของรูปภาพ
+              childAspectRatio: 0.52, //อัตตราส่วนของช่อง (กว้าง / สูง)
+            ),
+            // itemCount: snapshot.data!.length,
+            itemCount: auction_list!.length,
+            itemBuilder: (context, index) {
+              Map<String, dynamic> data = auction_list![index];
+
+              if ((data['auction_status'] == 1)) {
+                return InkWell(
+                  onTap: () => goToDetailAuction(ctx, data),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(15),
+                            ),
+                            child: Image.network(
+                              '${ConfigAPI().getImageAuctionApiServerGet(
+                                  image_auction_path: data['image_path_1'])}',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(data['name_product']),
+                              SizedBox(height: 5),
+                              Text("ราคาสูงสุด ฿${data['max_price']
+                                  .toString()}"),
+                              SizedBox(height: 5),
+                              Text("เหลือเวลา:"),
+                              countDownList(context, data['end_date_time']),
+                              Text("day:hour:min:sec"),
+                              // showDateTimeCountdown(data),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+            },
+          )
+      );
     }
   }
 
@@ -684,25 +614,6 @@ class AuctionHomeState extends State<AuctionHome> {
   //   //   return "1";
   // }
   Widget inputProductTypes(dynamic product_types_data) {
-    // dynamic product_types_data = ProductTypesModel().getProductTypes();
-    // dynamic product_types_data = ProductTypesController().fetchProductTypes();
-
-    // Future.delayed(Duration(seconds: 3));
-
-
-    // List<String>? product_types = [
-    //   'ทั่วไป',
-    //   'ของเก่า',
-    //   'เสื้อผ้า',
-    //   'ของใช้',
-    //   'เทคโนโลยี',
-    //   'เครื่องดนตรี',
-    //   'นาฬิกา',
-    //   'เครื่องประดับ',
-    //   'จักรยานยนต์',
-    //   'รถยนต์',
-    // ];
-    // print("${product_types_data}");
     List<String>? product_types = [];
 
     if (product_types_data != null) {
@@ -741,7 +652,7 @@ class AuctionHomeState extends State<AuctionHome> {
         },
       );
     } else {
-     return Text("${product_types_data}");
+      return Text("${product_types_data}");
     }
 
   }
@@ -767,7 +678,7 @@ class AuctionHomeState extends State<AuctionHome> {
     // has_data = true;
 
     if (has_data == true && data == null && data.length == 0) {
-     return Center(
+      return Center(
           child: AlertDialog(
             title: Column(
               children: [
@@ -788,57 +699,6 @@ class AuctionHomeState extends State<AuctionHome> {
       );
     }
 
-      return Text("ไม่มีข้อมูล");
+    return Text("ไม่มีข้อมูล");
   }
-
-  // int onAuctionSelectType() {
-  //
-  //   List check_index_product_types = ProductTypesModel().getProductTypes();
-  //
-  //   if (select_types == null) {
-  //     return 1;
-  //   }
-  //   if (select_types == 2) {
-  //     return 2;
-  //   }
-  //
-  //   if (select_types == 3)
-  //
-  //   return 1;
-  // }
-
-// Widget showDateTimeCountdown(Map<String, dynamic> data) {
-//   DateTime end_date_time = DateTime.parse(data['end_date_time']);
-//   return CountdownTimer(
-//     endTime: end_date_time.millisecondsSinceEpoch,
-//     widgetBuilder: (context, time) {
-//       if (time == null) {
-//         return Text('หมดเวลา', style: TextStyle(
-//             color: Colors.red
-//         ),);
-//       }
-//       String day = (time.days == null || time.days == 00) ? "00" : time.days
-//           .toString();
-//       String hour = (time.hours == null || time.hours == 00) ? "00" : time
-//           .hours.toString();
-//       String min = (time.min == null || time.hours == 00) ? "00" : time.min
-//           .toString();
-//       String sec = (time.sec == null) ? "00" : time.sec.toString();
-//
-//       return Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text("เหลือเวลาอีก (วัน:ช:น:ว)"),
-//           Text(
-//             "${day} : ${hour} : ${min} : ${sec}", style: TextStyle(
-//               fontSize: 15,
-//               fontWeight: FontWeight.bold,
-//               color: Colors.red
-//           ),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
 }

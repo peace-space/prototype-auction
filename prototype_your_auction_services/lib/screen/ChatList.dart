@@ -73,6 +73,9 @@ class ChatListState extends State<ChatList> {
           }
 
           if (snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return Center(child: Text("ไม่มีข้อมูล", style: TextStyle(fontSize: 18),),);
+            }
             return ListView.builder(
             itemCount: snapshot.data?.length,
             itemBuilder: (context, index) {

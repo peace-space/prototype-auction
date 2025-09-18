@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:prototype_your_auction_services/screen/AddProduct.dart';
+import 'package:prototype_your_auction_services/screen/CreateBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
+import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
 import '../controller/AuctionTypesController.dart';
@@ -44,9 +46,29 @@ class StoreManageState extends State<StoreManage> {
   }
 
   void goToOpenAuctionButton(BuildContext ctx) {
-    final route = MaterialPageRoute(builder: (ctx) => AddProduct());
 
-    Navigator.push(ctx, route);
+    var check_bank_account = ShareData.bankAccountUser;
+    print("${check_bank_account}");
+    if (check_bank_account.isNotEmpty) {
+      final route = MaterialPageRoute(builder: (ctx) => AddProduct());
+      Navigator.push(ctx, route);
+    } else if (check_bank_account.isEmpty) {
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: Text("แจ้งเตือน"),
+        content: Text("- กรุณาเพิ่มบัญชีธนาคารก่อนเพิ่มสินค้าเพื่อเปิดประมูล\n"
+                      "- คุณต้องการเพิ่มบัญชีธนาคารหรือไม่ ?"),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, child: Text("ยกเลิก")),
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => CreateBankAccountUser(),));
+          } , child: Text("ตกลง"))
+        ],
+      ),);
+    }
+
   }
 
   Widget buttonGoToUserProduct(BuildContext ctx) {

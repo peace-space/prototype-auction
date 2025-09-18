@@ -27,10 +27,16 @@ class BankAccountController extends Controller
 
             $on_save = DB::table('bank_accounts')->insert($bank_account_data);
 
+            $return_data = DB::table('bank_accounts')
+                                ->select('id_bank_accounts', 'name_bank_account', 'name_account',
+                                        'bank_account_number', 'prompt_pay')
+                                ->where('id_users', '=', $bank_account_data['id_users'])
+                                ->first();
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
-                'data' => $on_save,
+                'data' => $return_data,
             ], 201);
         } catch (Exception $e) {
             return response()->json([
@@ -113,7 +119,7 @@ class BankAccountController extends Controller
                 return response()->json([
                     'status' => 1,
                     'message' => 'Successfully.',
-                    // 'data' => $on_update,
+                    'data' => $on_update,
                 ], 201);
             } else {
                 return response()->json([

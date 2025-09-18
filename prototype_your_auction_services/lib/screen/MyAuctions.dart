@@ -41,6 +41,11 @@ class MyAuctionsState extends State<MyAuctions> {
           }
 
           if (snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return Center(
+                child: Text("ไม่มีข้อมูล", style: TextStyle(fontSize: 18),),
+              );
+            }
             return ListView.builder(
                 itemCount: snapshot.data?.length,
                 padding: EdgeInsets.all(8),

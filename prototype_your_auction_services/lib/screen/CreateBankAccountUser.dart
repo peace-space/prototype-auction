@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
@@ -110,7 +112,7 @@ class CreateBankAccountUserState extends State<CreateBankAccountUser> {
       decoration: InputDecoration(
         labelText: "พร้อมเพย์",
         border: OutlineInputBorder(),
-        hintText: "อีเมล",
+        hintText: "พร้อมเพย์",
       ),
       onChanged: (value) {
         setState(() {
@@ -121,56 +123,67 @@ class CreateBankAccountUserState extends State<CreateBankAccountUser> {
   }
 
   Widget submit(BuildContext ctx) {
+    var check_bank_account = ShareData.bankAccountUser;
+    String message;
+    if (check_bank_account['hasData'] == true) {
+     message = "เพิ่มบัญชีธนาคาร";
+    } else {
+      message = "บันทึกการแก้ไข";
+    }
     return ElevatedButton(
       onPressed:
           () => {
             // onSave(ctx),
             confirmChangeUserData(ctx),
           },
-      child: Text("บันทึกการแก้ไข"),
+      child: Text("${message}"),
     );
   }
 
   void onSave(BuildContext ctx) async {
     print("Start");
     Map<String, dynamic> data = {
-      'id_users': ShareData.userData['id_users'],
-      'email': ShareData.userData['email'],
-      'password': _confirmPassWord,
-      'name_bank_account': name_bank_account,
-      'name_account': name_account,
-      "bank_account_number": bank_account_number,
-      "prompt_pay": prompt_pay,
+      'id_users': ShareData.userData['id_users'].toString(),
+      'email': ShareData.userData['email'].toString(),
+      'password': _confirmPassWord.toString(),
+      'name_bank_account': name_bank_account.toString(),
+      'name_account': name_account.toString(),
+      "bank_account_number": bank_account_number.toString(),
+      "prompt_pay": prompt_pay.toString(),
     };
 
-    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA: ${data.toString()}');
+    // print('AAAAAAAAAAAAAAAAAAAAAAAAAAAA: ${data.toString()}');
 
-    // print(":::::::::::::::::::::: ${data.toString()}");
     String url = ConfigAPI().getCreateBankAccountServerPost();
-    final uri = Uri.parse(url);
+    Uri uri = Uri.parse(url);
+    final response = await http.post(
+      uri,
+      headers: {"Content-Type" : "application/json"},
+      body: jsonEncode(data)
+    );
 
-    // final response = await http.post(
-    //   uri,
-    //   headers: {"Content-Type": "application/json"},
-    //   body: jsonEncode(data),
-    // );
 
-    final request = http.MultipartRequest('POST', uri);
 
-    request.headers['Content-Type'] = 'application/json';
+    // final request = http.MultipartRequest('POST', uri);
+    //
+    // request.headers['Content-Type'] = 'application/json';
+    //
+    // request.fields['id_users'] = data['id_users'].toString();
+    // request.fields['email'] = data['email'].toString();
+    // request.fields['password'] = data['password'].toString();
+    // request.fields['name_bank_account'] = data['name_bank_account'].toString();
+    // request.fields['name_account'] = data['name_account'];
+    // request.fields['bank_account_number'] =
+    //     data['bank_account_number'].toString();
+    // request.fields['prompt_pay'] = data['prompt_pay'].toString();
+    //
+    // final response = await request.send();
 
-    request.fields['id_users'] = data['id_users'].toString();
-    request.fields['email'] = data['email'].toString();
-    request.fields['password'] = data['password'].toString();
-    request.fields['name_bank_account'] = data['name_bank_account'].toString();
-    request.fields['name_account'] = data['name_account'];
-    request.fields['bank_account_number'] =
-        data['bank_account_number'].toString();
-    request.fields['prompt_pay'] = data['prompt_pay'].toString();
-
-    final response = await request.send();
     if (response.statusCode == 201) {
       print("Successfully.");
+      final resJson = jsonDecode(response.body);
+      print("${resJson}");
+      ShareData.bankAccountUser = resJson['data'];
       // Navigator.pop(ctx);
       Navigator.pop(context);
       Navigator.pop(context);
@@ -193,7 +206,7 @@ class CreateBankAccountUserState extends State<CreateBankAccountUser> {
               ],
             ),
       );
-      throw Exception("err");
+      throw Exception("err StatusCode = ${response.statusCode}");
     }
     print("End.");
   }

@@ -46,7 +46,9 @@ class ReportAuctionState extends State<ReportAuction> {
 
             if (snapshot.hasData) {
               if (snapshot.data.length == 0) {
-                return Text("ไม่มีข้อมูล");
+                return Center(child: Text("ไม่มีข้อมูล", style: TextStyle(
+                  fontSize: 18
+                ),));
               }
                 if (snapshot.data.length != 0) {
                   return ListView.builder(

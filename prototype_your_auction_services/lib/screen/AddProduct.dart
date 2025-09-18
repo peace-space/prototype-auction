@@ -114,16 +114,8 @@ class AddProductState extends State<AddProduct> {
                 imageData: _imageData,
                 index: indexSelectImage,
               ),
-      // Image.network(
-      //   "https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/get-image/car-001.jpg",
-      //   fit: BoxFit.fill,
-      // ),
     );
   }
-
-  // void imageDataLength() {
-  //   if (_imageData.length >)
-  // }
 
   Widget showAndSelectImage() {
     return Container(
@@ -172,7 +164,6 @@ class AddProductState extends State<AddProduct> {
           // Text("Start"),
           Column(
             children: [
-              // Text("ทดสอบต่ำแหน่ง: " + indexSelectImage.toString()),
               Text(
                 _imageData.length == 0
                     ? "ไม่มีรูปภาพ"
@@ -181,7 +172,6 @@ class AddProductState extends State<AddProduct> {
               Text("จำนวนรูปภาพที่เลือกแล้ว: ${_imageData.length} / 10"),
             ],
           ),
-          // Text("End"),
           IconButton(
             onPressed:
                 () => {
@@ -287,45 +277,6 @@ class AddProductState extends State<AddProduct> {
           message = "";
         });
       }
-
-      // if (kIsWeb) {
-      //   print("Web");
-      //   // final _piker = await ImagePickerWeb.get
-      // }
-      //
-      // if (Platform.isAndroid) {
-      //   print("Android");
-      //
-      //   if (_imageData.length <= maxImageListLength - 1) {
-      //     final _picker = ImagePicker();
-      //
-      //     final pickedFile = await _picker.pickImage(
-      //         source: ImageSource.gallery
-      //     );
-      //
-      //     if (pickedFile != null) {
-      //       setState(() {
-      //         // imageData = File(pickedFile.path);
-      //         _imageData.add(File(pickedFile.path));
-      //       });
-      //       print("end.aaaaa");
-      //     }
-      //   }
-      // }
-
-      // FilePickerResult? result = await FilePicker.platform.pickFiles();
-      //
-      // if (result != null) {
-      //   PlatformFile file = result.files.first;
-      //
-      //   print(file.name);
-      //   print(file.bytes);
-      //   print(file.size);
-      //   print(file.extension);
-      //   print(file.path);
-      // } else {
-      //   // User canceled the picker
-      // }
 
       if (_imageData.length <= maxImageListLength - 1) {
         if (kIsWeb) {
@@ -468,15 +419,6 @@ class AddProductState extends State<AddProduct> {
     }
   });
 
-  // Widget inputAuctionTypes() {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //         border: OutlineInputBorder(),
-  //         hintText: "inputAuctionTypes"
-  //     ),
-  //   );
-  // }
-
   Widget inputAuctionTypes() {
     dynamic auction_types_data = AuctionTypesModel().getAuctionTypes();
 
@@ -487,10 +429,7 @@ class AddProductState extends State<AddProduct> {
       // print('${i} ${auction_types_data[i]['auction_types']}');
       listDataAuctionTypeValue.add(auction_types_data[i]['auction_types'].toString());
     }
-    // List<String>? listDataAuctionTypeValue = [
-    //   'ประมูลปกติ',
-    //   'ประมูลแบบส่วนตัว',
-    // ];
+
     double left = 20, top = 0, right = 20, bottom = 0;
     return DropdownButton(
       hint: Text("เลือกประเภทการประมูล"),
@@ -633,7 +572,7 @@ class AddProductState extends State<AddProduct> {
           _inputEndDateData != '' &&
           _dataAuctionTypeValue != '' &&
           _productTypeValues != '' &&
-          ShareData.bankAccountUser != null &&
+          ShareData.bankAccountUser.isNotEmpty &&
           check_integer_shipping_cost != null &&
           check_integer_start_price != null) {
 

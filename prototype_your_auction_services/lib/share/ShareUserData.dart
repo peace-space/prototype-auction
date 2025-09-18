@@ -8,4 +8,6 @@ class ShareData {
   static Map<String, dynamic> userData = {};
   static Map<String, dynamic> bankAccountUser = {};
   static Function upDateState = () {};
+
+
 }
