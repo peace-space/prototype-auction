@@ -99,49 +99,64 @@ class AuctionController extends Controller
             try {
                 if ($id_product_types != null && $id_product_types != '' && $id_product_types != '0' && $id_product_types != 0) {
                     $auction_list_select_types = DB::table('auctions')
-                    ->select(
-                        'auctions.id_auctions',
-                        'auctions.auction_status',
-                        'auctions.shipping_cost',
-                        'auctions.start_price',
-                        'auctions.end_date_time',
-                        'auctions.max_price',
-                        'auctions.id_auction_types',
-                        'auctions.id_payment_types',
-                        'auctions.id_bank_accounts',
-                        'products.id_products',
-                        'products.id_product_types',
-                        'products.name_product',
-                        'images.image_path_1',
-                        'users.id_users',
-                        'users.first_name_users',
-                        'users.last_name_users',
-                    )
-                    ->join('products', function (JoinClause $join) {
-                        $join->on('auctions.id_products', '=', 'products.id_products');
-                    })
-                    ->join('images', function (JoinClause $join) {
-                        $join->on('images.id_images', '=', 'products.id_images');
-                    })
-                    ->join('users', function (JoinClause $join) {
-                        $join->on('users.id_users', '=', 'products.id_users');
-                    })
-                    ->where('auctions.auction_status', '=', true)
-                    ->where('id_auction_types', '=', 1)
-                    ->where('products.id_product_types', '=', $id_product_types)
-                    // ->orderByRaw('id_auctions')
-                    ->orderByDesc('id_auctions')
-                    ->get();
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('id_auction_types', '=', 1)
+                        ->where('products.id_product_types', '=', $id_product_types)
+                        // ->orderByRaw('id_auctions')
+                        ->orderByDesc('id_auctions')
+                        ->get();
+
 
                     if ($auction_list_select_types != null && $auction_list_select_types != '') {
 
-                        event(new AuctionHomeEvent($auction_list_select_types));
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select_types) != 0) {
+                            $has_data = 1;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select_types));
 
-                        return response()->json([
-                            'status' => 1,
-                            'message' => "Successfully.",
-                            'data' => $auction_list_select_types
-                        ], 200);
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select_types
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select_types));
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select_types
+                            ], 200);
+                        }
                     }
                 }
             } catch (Exception $e) {
@@ -201,13 +216,37 @@ class AuctionController extends Controller
 
             // highBids();
 
-            event(new AuctionHomeEvent($auctions_list));
+            if (sizeof($auctions_list) != 0) {
+                $has_data = 1;
 
-            return response()->json([
-                'status' => 1,
-                'message' => "Successfully.",
-                'data' => $auctions_list
-            ], 200);
+                event(new AuctionHomeEvent($has_data, $auctions_list));
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    'hasData' => $has_data,
+                    'data' => $auctions_list
+                ], 200);
+            } else {
+
+                $has_data = 0;
+
+                event(new AuctionHomeEvent($has_data, $auctions_list));
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    'hasData' => $has_data,
+                    'data' => $auctions_list
+                ], 200);
+            }
+
+            // event(new AuctionHomeEvent(1, $auctions_list));
+
+            // return response()->json([
+            //     'status' => 1,
+            //     'message' => "Successfully.",
+            //     'data' => $auctions_list
+            // ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,

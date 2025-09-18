@@ -44,7 +44,6 @@ class HistoryAuctionsState extends State<HistoryAuctions> {
             ),),
           );
         }
-
         if (snapshot.hasData) {
           return Padding(
             padding: EdgeInsets.all(8),

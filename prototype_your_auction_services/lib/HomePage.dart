@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
+import 'package:prototype_your_auction_services/share/CheckLogin.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
@@ -21,17 +23,34 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
+    CheckLogin().onCheckLogin();
     setState(() {
       loginStatus = logedIn();
     });
+    goToAuctionHome();
     super.initState();
   }
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AppBar(
-        title: Text("HomePage: ${loginStatus}"),
-      ),drawer: createDrawer(context),
+      body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                Text("ระบบประมูลออนไลน์",style: TextStyle(
+                    fontSize: 18
+                ),),
+              ],
+            ),
+          )
     );
+  }
+
+  void goToAuctionHome() async {
+
+    await Future.delayed(Duration(seconds:2));
+
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => AuctionHome(),));
   }
 
   String logedIn() {

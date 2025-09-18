@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:http/http.dart' as http;
 import 'package:prototype_your_auction_services/channel/AuctionHomeChannel.dart';
 import 'package:prototype_your_auction_services/controller/ProductTypesController.dart';
@@ -32,6 +33,7 @@ class AuctionHomeState extends State<AuctionHome> {
   var id_product_types;
   var _productTypeValues;
   var select_types;
+  bool has_data = true;
 
   // Map<String, dynamic> dateTimeCoundown = {};
 
@@ -39,10 +41,12 @@ class AuctionHomeState extends State<AuctionHome> {
   void initState() {
     // TODO: implement initState
     // print("\n\n\n\n\n\n\n\n\n\nTest");
-    super.initState();
-
     CheckLogin().onCheckLogin();
+    // super.initState();
     ProductTypesController().fetchProductTypes();
+
+    Future.delayed(Duration(seconds: 1));
+
     setState(() {
       loginStatus = logedIn();
     });
@@ -58,7 +62,7 @@ class AuctionHomeState extends State<AuctionHome> {
       loginStatus = logedIn();
     });
     return Scaffold(
-      appBar: AppBar(title: Text("Home: ${loginStatus}")),
+      appBar: AppBar(title: Text("Home: ${logedIn()}")),
       body: Column(
         children: [
           Container(
@@ -296,11 +300,12 @@ class AuctionHomeState extends State<AuctionHome> {
       // stream: fetchAuctionData(),
       stream: AuctionHomeChannel.connect(id_products: selectProductType(_productTypeValues)).stream,
       builder: (context, snapshot) {
+        print("${snapshot.data}");
         if (snapshot.hasError) {
           return const Center(child: Text("Error."));
         }
 
-        if (snapshot.connectionState == ConnectionState.waiting) {
+        if (snapshot.connectionState == ConnectionState.none) {
           return const Center(child: CircularProgressIndicator());
         }
 
@@ -313,27 +318,33 @@ class AuctionHomeState extends State<AuctionHome> {
         if (snapshot.hasData) {
           AuctionModel().setConvertToMapAuctionList(snapshot.data);
           // dynamic auction_list = AuctionModel().getAuctionSelectTypesData();
-          dynamic auction_list = AuctionModel().getConvertToMapAuctionList();
-          if (auction_list == null || auction_list.length == 0) {
-            return Center(
-                child: AlertDialog(
-                  title: Column(
-                    children: [
-                      CircularProgressIndicator(),
-                      Text("กำลังโหลดข้อมูล...")
-                    ],
-                  ),
-                )
-            );
-            return Center(
-                child: CircularProgressIndicator()
-            );
-            return Center(
-                child: Text("ไม่มีข้อมูล")
-            );
+          dynamic data = AuctionModel().getConvertToMapAuctionList();
+          // print("${data}");
+          if (data == null || data.length == 0) {
+              return Center(
+                  child: AlertDialog(
+                    title: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("กำลังโหลดข้อมูล")
+                      ],
+                    ),
+                  )
+              );
+              return Center(
+                  child: CircularProgressIndicator()
+              );
+              return Center(
+                  child: Text("ไม่มีข้อมูล")
+              );
           }
-
-          try {
+          if (data['hasData'] == 0) {
+            return Center(
+              child: Text("ไม่มีข้อมูล"),
+            );
+          } else {
+            List auction_list = data['data'];
+             try {
             return SafeArea(
                 child: GridView.builder(
                   padding: EdgeInsets.fromLTRB(left, top, right, bottom),
@@ -408,6 +419,7 @@ class AuctionHomeState extends State<AuctionHome> {
                 ]
             );
           }
+          }
         }
 
         return const Center(child: CircularProgressIndicator());
@@ -420,15 +432,6 @@ class AuctionHomeState extends State<AuctionHome> {
       // stream: fetchAuctionData(),
       stream: AuctionHomeChannel.connect(id_products: selectProductType(_productTypeValues)).stream,
       builder: (context, snapshot) {
-        print('${snapshot.data}');
-
-        // return Column(
-        //   children: [
-        //     // Text("${_productTypeValues}"),
-        //     Text("${selectProductType(_productTypeValues)}\n\n${AuctionModel().getAuctionSelectTypesData()}"),
-        //   ],
-        // );
-
         if (snapshot.hasError) {
           return const Center(child: Text("Error."));
         }
@@ -446,84 +449,87 @@ class AuctionHomeState extends State<AuctionHome> {
         if (snapshot.hasData) {
           AuctionModel().setConvertToMapAuctionList(snapshot.data);
           // dynamic auction_list = AuctionModel().getAuctionSelectTypesData();
-          dynamic auction_list = AuctionModel().getConvertToMapAuctionList();
-          // return Text("${data.runtimeType}");
-          // if ()
-          // return Text("${auction_list}");
-          if (auction_list == null || auction_list.length == 0) {
+          dynamic data = AuctionModel().getConvertToMapAuctionList();
+          // print("${data}");
+          if (data == null || data.length == 0) {
             return Center(
                 child: AlertDialog(
-                 title: Column(
-                   children: [
-                     CircularProgressIndicator(),
-                     Text("กำลังโหลดข้อมูล...")
-                   ],
-                 ),
+                  title: Column(
+                    children: [
+                      CircularProgressIndicator(),
+                      Text("กำลังโหลดข้อมูล")
+                    ],
+                  ),
                 )
             );
+          }
+          if (data['hasData'] == 0) {
             return Center(
-              child: Text("ไม่มีข้อมูล")
+              child: Text("ไม่มีข้อมูล"),
             );
-          }
-          try {
-          if (auction_list != null) {
-            return SafeArea(
-                child:  ListView.builder(
-                  itemCount: auction_list?.length,
-                  padding: EdgeInsets.all(8),
-                  itemBuilder: (context, index) {
-                    Map<String, dynamic> data = auction_list[index];
+          } else {
+            List auction_list = data['data'];
+            try {
+              if (auction_list != null) {
+                return SafeArea(
+                    child:  ListView.builder(
+                      itemCount: auction_list?.length,
+                      padding: EdgeInsets.all(8),
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> data = auction_list[index];
 
-                    double left = 0.0;
-                    double top = 0.0;
-                    double right = 0.0;
-                    double bottom = 0.0;
-                    return Padding(
-                        padding: EdgeInsets.fromLTRB(left, top, right, bottom),
-                        child: Card(
-                          child: ListTile(
-                            onTap: () => goToDetailAuction(ctx, data),
-                            leading: ClipRRect(
-                              // borderRadius: BorderRadius.vertical(),
-                              child: Image.network(
-                                '${ConfigAPI().getImageAuctionApiServerGet(
-                                    image_auction_path: data['image_path_1'])}',
-                                cacheHeight: 600,
-                                cacheWidth: 500,
+                        double left = 0.0;
+                        double top = 0.0;
+                        double right = 0.0;
+                        double bottom = 0.0;
+                        return Padding(
+                            padding: EdgeInsets.fromLTRB(left, top, right, bottom),
+                            child: Card(
+                              child: ListTile(
+                                onTap: () => goToDetailAuction(ctx, data),
+                                leading: ClipRRect(
+                                  // borderRadius: BorderRadius.vertical(),
+                                  child: Image.network(
+                                    '${ConfigAPI().getImageAuctionApiServerGet(
+                                        image_auction_path: data['image_path_1'])}',
+                                    cacheHeight: 600,
+                                    cacheWidth: 500,
+                                  ),
+                                ),
+                                title: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(data['name_product']),
+                                    Text("ราคาสูงสุด ฿${data['max_price']
+                                        .toString()}"),
+                                    Text("เวลาเหลือ"),
+                                    countDownList(context, data['end_date_time']),
+                                    Text("day:hour:min:sec"),
+                                  ],
+                                ),
+                                // subtitle: countDownList(context, data['end_date_time']),
+                                // subtitle: showDateTimeCountdown(data),
                               ),
-                            ),
-                            title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(data['name_product']),
-                                Text("ราคาสูงสุด ฿${data['max_price']
-                                    .toString()}"),
-                                Text("เวลาเหลือ"),
-                                countDownList(context, data['end_date_time']),
-                                Text("day:hour:min:sec"),
-                              ],
-                            ),
-                            // subtitle: countDownList(context, data['end_date_time']),
-                            // subtitle: showDateTimeCountdown(data),
-                          ),
-                        )
-                    );
-                  },
-                )
-            );
+                            )
+                        );
+                      },
+                    )
+                );
+              }
+            } on Exception catch (e) {
+              AlertDialog(
+                  title: Text("แจ้งเตือน"),
+                  content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
+                  actions: [
+                    TextButton(onPressed: () =>
+                    {
+                      Navigator.of(context).pop()
+                    }, child: Text("ตกลง"))
+                  ]
+              );
+            }
           }
-          } on Exception catch (e) {
-            AlertDialog(
-                title: Text("แจ้งเตือน"),
-                content: Text('หมดเวลาหรือไม่มีการประมูลนี้แล้ว'),
-                actions: [
-                  TextButton(onPressed: () =>
-                  {
-                    Navigator.of(context).pop()
-                  }, child: Text("ตกลง"))
-                ]
-            );
-          }
+
         }
 
         // if (snapshot.hasData) {
@@ -754,6 +760,35 @@ class AuctionHomeState extends State<AuctionHome> {
       }
     }
     return 0;
+  }
+
+  Widget checkStatusData(dynamic data) {
+
+    // has_data = true;
+
+    if (has_data == true && data == null && data.length == 0) {
+     return Center(
+          child: AlertDialog(
+            title: Column(
+              children: [
+                CircularProgressIndicator(),
+                TimerCountdown(
+                  endTime: DateTime.now().add(Duration(seconds: 5)
+                  ), enableDescriptions: false,
+                  onEnd: () {
+                    print("object");
+                    has_data = false;
+                    setState(() {});
+                  },
+                  format: CountDownTimerFormat.secondsOnly,
+                ),
+              ],
+            ),
+          )
+      );
+    }
+
+      return Text("ไม่มีข้อมูล");
   }
 
   // int onAuctionSelectType() {

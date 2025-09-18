@@ -19,7 +19,7 @@ class ChatListState extends State<ChatList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ChatList"),
+        title: Text("รายการแชท"),
         actions: [
 
         ],

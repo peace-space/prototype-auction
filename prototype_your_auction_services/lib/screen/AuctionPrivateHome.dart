@@ -36,7 +36,16 @@ class AuctionPrivateHomeState extends State<AuctionPrivateHome> {
               );
             }
 
+            if(!snapshot.hasData) {
+              return Center(
+                child: Text("ไม่มีข้อมูล"),
+              );
+            }
+
             if (snapshot.hasData) {
+              if (snapshot.data.length == 0) {
+                return Center(child: Text("ไม่มีข้อมูล"));
+              }
               return ListView.builder(
                   padding: EdgeInsets.all(8),
                   itemCount: snapshot.data!.length,
@@ -73,17 +82,6 @@ class AuctionPrivateHomeState extends State<AuctionPrivateHome> {
                                   )
                                 ],
                               ),
-                              Column(
-                                children: [
-                                  // Text("data"),
-                                  // Text("data"),
-                                  // Text("data"),
-                                  // Text("data"),
-                                  // Text("data"),
-                                  // Text("data"),
-                                  // Text("data"),
-                                ],
-                              )
                             ],
                           )
                       ),
@@ -107,8 +105,9 @@ class AuctionPrivateHomeState extends State<AuctionPrivateHome> {
     Uri uri = Uri.parse(api);
     final response = await http.get(uri);
     final resData = jsonDecode(response.body);
-    // print("${resData.toString()}");
-    yield resData['data'];
+    if (response.statusCode == 200) {
+      yield resData['data'];
+    }
     setState(() {});
   }
 

@@ -9,6 +9,7 @@ class AuctionHomeChannel {
   static WebSocketChannel connect({required id_products}) {
     String wsUrl = ConfigAPIStreamingAdmin.wsUrl;
     Uri uri = Uri.parse(wsUrl);
+
     WebSocketChannel channel = WebSocketChannel.connect(uri);
 
     Map<String, dynamic> subscription = {

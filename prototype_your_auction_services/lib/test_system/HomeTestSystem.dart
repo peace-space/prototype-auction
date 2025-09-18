@@ -1,7 +1,6 @@
 // import 'package:email_validator/email_validator.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-// import 'package:prototype_your_auction_services/share/confirm_picker.dart';
 // import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 // // import 'flutter_s';
 //

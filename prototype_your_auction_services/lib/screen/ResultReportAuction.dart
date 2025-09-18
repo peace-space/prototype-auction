@@ -27,77 +27,86 @@ class ReportAuctionState extends State<ReportAuction> {
     return StreamBuilder(
       stream: fetchResultReportAuction(),
       builder:
-          (context, snapshot) => ListView.builder(
-              padding: EdgeInsets.all(8),
-              itemCount: snapshot.data?.length,
-              itemBuilder: (context, index) {
-                if (snapshot.hasError) {
-                  return Center(child: Text("เกิดข้อผิดพลาด"));
-                }
+          (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text("เกิดข้อผิดพลาด"));
+            }
 
-                if (snapshot.connectionState == ConnectionState.active) {
-                  return Center(child: CircularProgressIndicator());
-                }
+            if (snapshot.connectionState == ConnectionState.active) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Text("ไม่มีข้อมูล", style: TextStyle(
-                      fontSize: 16
-                    ),),
-                  );
-                }
+            if (!snapshot.hasData) {
+              return Center(
+                child: Text("ไม่มีข้อมูล", style: TextStyle(
+                    fontSize: 16
+                ),),
+              );
+            }
 
-                if (snapshot.hasData) {
-                  Map<String, dynamic> data = snapshot.data![index];
-                  return Card(
-                    child: ListTile(
-                      onTap: () => goToConfirmPayment(data),
-                      leading: Image.network(
-                        '${ConfigAPI().getImageAuctionApiServerGet(
-                            image_auction_path: data['image_path_1'])}',
-                        // cacheHeight: 1200,
-                        // cacheWidth: 9200,
-                      ),
-                      title: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
-                              color: Colors.green
-                          ),),
-                          Text(
-                            'No. Bill-${data['id_bill_auctions'].toString()}',
-                            style: TextStyle(
-                                fontSize: 13
-                            ),),
-                          Text('ชื่อ: ${data['name_product'].toString()}'),
-                          Text('สถานะ: ${paymentStatus(
-                              data['id_payment_status_types'])
-                              .toString()}'),
-                          Text("จำนวนเงิน: ${data['debts'].toString()} บาท",
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),)
-                          // Text('${data['payment_status'].toString()}'),
-                        ],
-                      ),
-                      // trailing: Column(
-                      //   children: [
-                      //     // Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
-                      //     //     color: Colors.green
-                      //     // ),),
-                      //     // Text("จำนวนเงิน ${data['debts'].toString()} บาท",
-                      //     //   style: TextStyle(
-                      //     //     fontSize: 16,
-                      //     //   ),)
-                      //   ],
-                      // ),
-                    ),
-                  );
-                }
-
-                return Center(child: CircularProgressIndicator());
+            if (snapshot.hasData) {
+              if (snapshot.data.length == 0) {
+                return Text("ไม่มีข้อมูล");
               }
-          ),
+                if (snapshot.data.length != 0) {
+                  return ListView.builder(
+                      padding: EdgeInsets.all(8),
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> data = snapshot.data![index];
+                        return Card(
+                          child: ListTile(
+                            onTap: () => goToConfirmPayment(data),
+                            leading: Image.network(
+                              '${ConfigAPI().getImageAuctionApiServerGet(
+                                  image_auction_path: data['image_path_1'])}',
+                              // cacheHeight: 1200,
+                              // cacheWidth: 9200,
+                            ),
+                            title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
+                                    color: Colors.green
+                                ),),
+                                Text(
+                                  'No. Bill-${data['id_bill_auctions'].toString()}',
+                                  style: TextStyle(
+                                      fontSize: 13
+                                  ),),
+                                Text('ชื่อ: ${data['name_product'].toString()}'),
+                                Text('สถานะ: ${paymentStatus(
+                                    data['id_payment_status_types'])
+                                    .toString()}'),
+                                Text("จำนวนเงิน: ${data['debts'].toString()} บาท",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),)
+                                // Text('${data['payment_status'].toString()}'),
+                              ],
+                            ),
+                            // trailing: Column(
+                            //   children: [
+                            //     // Text("คุณเป็นผู้ประมูลสำเร็จ", style: TextStyle(
+                            //     //     color: Colors.green
+                            //     // ),),
+                            //     // Text("จำนวนเงิน ${data['debts'].toString()} บาท",
+                            //     //   style: TextStyle(
+                            //     //     fontSize: 16,
+                            //     //   ),)
+                            //   ],
+                            // ),
+                          ),
+                        );
+                      }
+                  );
+                }
+            }
+
+
+            return Center(child: CircularProgressIndicator());
+          }
+
     );
   }
 

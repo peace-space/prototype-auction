@@ -19,8 +19,12 @@ class CheckLogin {
 
   // CheckLogin();
 
-  void onCheckLogin() async {
+  // void onCheckLogin() async {
+  Future<dynamic> onCheckLogin() async {
     print("Start Check Login");
+
+    // await Future.delayed(Duration(seconds: 2));
+
     FlutterSecureStorage storage = FlutterSecureStorage();
 
     String? user_token = await storage.read(key: 'user_token');
@@ -37,6 +41,7 @@ class CheckLogin {
       // print(http_header);
       final response = await http.get(uri, headers: http_header);
 
+
       if (response.statusCode == 200) {
         Map<String, dynamic> responseData = jsonDecode(response.body);
         Map<String, dynamic> data = responseData['data'];
@@ -46,23 +51,26 @@ class CheckLogin {
         if (data['bank_account'] != null) {
           ShareData.bankAccountUser = data['bank_account'];
         }
-        ShareData.logedIn = true;
 
-        // showDialog(context: ctx, builder: (context) => AlertDialog(
-        //   title: Text(response.statusCode.toString()),
-        // ),);
+        ShareData.logedIn = true;
+        ShareData.image_user_profile = data['user_data']['image_profile'];
 
         if (data['user_data']['admin_status'] == '1') {
           ShareData.admin = true;
         } else {
           ShareData.admin = false;
         }
+
+        print("SSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+        // await Future.delayed(Duration(seconds: 3));
+        return "เข้าสู่ระบบแล้ว";
       } else {
         print("หมดเวลาเข้าสู่ระบบ");
         ShareData.logedIn = false;
         ShareData.userData = {};
         ShareData.upDateState = () {};
         ShareProductData.productData = {};
+        return "ยังไม่เข้าสู่ระบบ";
       }
     } else {
       print("Storage No data");

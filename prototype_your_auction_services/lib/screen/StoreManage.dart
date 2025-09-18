@@ -3,6 +3,9 @@ import 'package:prototype_your_auction_services/screen/AddProduct.dart';
 import 'package:prototype_your_auction_services/screen/MyAuctions.dart';
 import 'package:prototype_your_auction_services/share/createDrawerShareWidget.dart';
 
+import '../controller/AuctionTypesController.dart';
+import '../controller/ProductTypesController.dart';
+
 class StoreManage extends StatefulWidget {
   State<StoreManage> createState() {
     return StoreManageState();
@@ -10,6 +13,13 @@ class StoreManage extends StatefulWidget {
 }
 
 class StoreManageState extends State<StoreManage> {
+  @override
+  void initState() {
+    ProductTypesController().fetchProductTypes();
+    AuctionTypesController().fetchAuctionTypes();
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("จัดการร้านค้า")),
@@ -20,7 +30,6 @@ class StoreManageState extends State<StoreManage> {
           Divider(),
           buttonGoToUserProduct(context),
           Divider(),
-
         ],
       ),
       drawer: createDrawer(context),

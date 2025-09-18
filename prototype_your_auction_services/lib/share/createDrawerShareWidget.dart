@@ -15,6 +15,11 @@ import 'package:prototype_your_auction_services/share/ShareUserData.dart';
 
 import '../screen/HistoryBids.dart';
 
+double iconToTextSpacing() {
+  double icon_to_text_spacing = 8.0;
+  return icon_to_text_spacing;
+}
+
 Drawer createDrawer(BuildContext ctx) {
   // CheckLogin().onCheckLogin();
   if (ShareData.admin && ShareData.logedIn) {
@@ -23,17 +28,26 @@ Drawer createDrawer(BuildContext ctx) {
         children: [
           Container(
             // color: Colors.amber,
-            height: 200,
+            height: 230,
             width: 20,
             child: UserAccountsDrawerHeader(
               currentAccountPicture: showImageProfile(),
-              accountName: Text(
-                "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
-                    .userData['last_name_users']}",
+              accountName: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Admin", style: TextStyle(
+                    color: Colors.yellow
+                  ),),
+                  Text(
+                    "ชื่อ: ${ShareData.userData['first_name_users']} ${ShareData
+                        .userData['last_name_users']}",
+                  ),
+                ],
               ),
               accountEmail: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Text("data:"),
                   Text("อีเมล: ${ShareData.userData['email']}"),
                   Text("เบอร์โทร: ${ShareData.userData['phone']}"),
                 ],
@@ -159,7 +173,13 @@ Widget registerButton(BuildContext ctx) {
       Navigator.pushReplacement(
           ctx, MaterialPageRoute(builder: (ctx) => Register())),
     },
-    child: Text("ลงทะเบียน"),
+    child: Row(
+      children: [
+        Icon(Icons.app_registration),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("ลงทะเบียน"),
+      ],
+    ),
   );
 }
 
@@ -171,7 +191,13 @@ Widget loginButton(BuildContext ctx) {
       Navigator.pushReplacement(
           ctx, MaterialPageRoute(builder: (ctx) => Login())),
     },
-    child: Text("เข้าสู่ระบบ"),
+    child: Row(
+      children: [
+        Icon(Icons.login),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("เข้าสู่ระบบ"),
+      ],
+    ),
   );
 }
 
@@ -183,7 +209,13 @@ Widget adminMenuButton(BuildContext ctx) {
         MaterialPageRoute(builder: (ctx) => AdminMenu()),
       );
     },
-    child: Text("Admin"),
+    child: Row(
+      children: [
+        Icon(Icons.admin_panel_settings),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("Admin"),
+      ],
+    ),
   );
 }
 
@@ -192,8 +224,26 @@ Widget logOutButton(BuildContext ctx) {
     onPressed:
         () =>
     {
-      Logout(context: ctx).onLogout()},
-    child: Text("ออกจากระบบ"),
+      showDialog(context: ctx, builder: (context) => AlertDialog(
+        title: Text("ออกจากระบบ"),
+        content: Text("คุณต้องการออกจากระบบหรือไม่ ?"),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          } , child: Text("ยกเลิก")),
+          TextButton(onPressed: () {
+            Logout(context: ctx).onLogout();
+          } , child: Text("ตกลง"))
+        ],
+      ),),
+    },
+    child: Row(
+      children: [
+        Icon(Icons.logout),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("ออกจากระบบ"),
+      ],
+    ),
   );
 }
 
@@ -207,7 +257,13 @@ Widget userProfile(BuildContext ctx) {
         MaterialPageRoute(builder: (ctx) => UserProfile()),
       ),
     },
-    child: Text("ข้อมูลผู้ใช้งาน"),
+    child: Row(
+      children: [
+        Icon(Icons.supervisor_account_rounded),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("ข้อมูลผู้ใช้งาน"),
+      ],
+    ),
   );
 }
 
@@ -237,7 +293,14 @@ Widget homePageButton(BuildContext ctx) {
         MaterialPageRoute(builder: (ctx) => AuctionHome()),
       ),
     },
-    child: Text("หน้าหลัก"),
+    // child: Icon(Icons.add),
+    child: Row(
+      children: [
+        Icon(Icons.public),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("หน้าหลัก"),
+      ],
+    ),
   );
 }
 
@@ -251,7 +314,13 @@ Widget chatListButton(BuildContext ctx) {
         MaterialPageRoute(builder: (ctx) => ChatList()),
       ),
     },
-    child: Text("แชท"),
+    child: Row(
+      children: [
+        Icon(Icons.chat),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("แชท"),
+      ],
+    ),
   );
 }
 
@@ -265,7 +334,13 @@ Widget storaManageButton(BuildContext ctx) {
         MaterialPageRoute(builder: (ctx) => StoreManage()),
       ),
     },
-    child: Text("จัดการร้านค้า"),
+    child: Row(
+      children: [
+        Icon(Icons.store_mall_directory),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("จัดการร้านค้า"),
+      ],
+    ),
   );
 }
 // ใช้สำหรับทดสอบ
@@ -291,7 +366,13 @@ Widget buttonGoToHistoryAuction(BuildContext ctx) {
         MaterialPageRoute(builder: (context) => HistoryAuctions()),
       );
     },
-    child: Text("ประวัติการประมูล"),
+    child: Row(
+      children: [
+        Icon(Icons.history),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("ประวัติการประมูล"),
+      ],
+    ),
   );
 }
 
@@ -303,7 +384,13 @@ Widget buttonGoToReportAution(BuildContext ctx) {
         MaterialPageRoute(builder: (context) => ReportAuction()),
       );
     },
-    child: Text("รายงานผลการประมูล"),
+    child: Row(
+      children: [
+        Icon(Icons.wallet),
+        SizedBox(width: iconToTextSpacing(),),
+        Text("รายงานผลการประมูล"),
+      ],
+    ),
   );
 }
 
@@ -311,5 +398,11 @@ Widget buttonGoToAuctionPrivate(BuildContext ctx) {
   return ElevatedButton(onPressed: () {
     Navigator.pushReplacement(
         ctx, MaterialPageRoute(builder: (context) => AuctionPrivateHome(),));
-  }, child: Text("ประมูลส่วนตัว"));
+  }, child: Row(
+    children: [
+      Icon(Icons.public_off),
+      SizedBox(width: iconToTextSpacing(),),
+      Text("ประมูลส่วนตัว"),
+    ],
+  ));
 }

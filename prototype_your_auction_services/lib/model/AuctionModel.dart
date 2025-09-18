@@ -29,7 +29,14 @@ class AuctionModel {
       data = jsonDecode(response['data']);
 
       if (data['status'] == 1) {
-        AuctionModel.jsonToMap = data['data'];
+        if (data['hasData'] != 0) {
+          // AuctionModel.jsonToMap = data['data'];
+          AuctionModel.jsonToMap = data;
+        } else {
+          AuctionModel.jsonToMap = {
+            "hasData" : 0,
+          };
+        }
       } else {
         AuctionModel.jsonToMap = null;
       }
