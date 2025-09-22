@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:prototype_your_auction_services/channel/UserProfileChannel.dart';
+import 'package:prototype_your_auction_services/model/UserProfileModel.dart';
 import 'package:prototype_your_auction_services/screen/CreateBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditBankAccountUser.dart';
 import 'package:prototype_your_auction_services/screen/EditPassWord.dart';
@@ -21,6 +23,11 @@ class UserProfileState extends State<UserProfile> {
   Map<String, dynamic> userData = ShareData.userData;
   var bank_account_user;
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -38,9 +45,10 @@ class UserProfileState extends State<UserProfile> {
   Widget userProfile(BuildContext ctx) {
     double height = 3.0;
     return StreamBuilder(
-        stream: streamUserData(),
+        stream: UserProfileChannel.connent(id_users: ShareData.userData['id_users']).stream,
+        // stream: streamUserData(),
         builder: (ctx, snapshot) {
-          print("${snapshot.data}");
+          // print("${snapshot.data}");
           if (snapshot.hasError) {
             return const Center(
               child: Text("เกิดข้อผิดพลาดในการโหลดข้อมูล",
@@ -50,80 +58,101 @@ class UserProfileState extends State<UserProfile> {
             );
           }
 
-          if (snapshot.connectionState == ConnectionState.active) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text("ไม่มีข้อมูล"),
+            );
+          }
+
           if (snapshot.hasData) {
-            Map<String, dynamic> user_data = snapshot.data!;
-            return ListView(
-              children: [
-                // Text(userData.toString()),
-                CircleAvatar(
-                  radius: 150,
-                  backgroundImage: NetworkImage(
-                      '${ConfigAPI().getImageProfileApiServerGet(
-                          image_profile_path: ShareData
-                              .userData['image_profile'])}'
+            // Map<String, dynamic> user_data = snapshot.data!;
+            // dynamic user_data = snapshot.data;
+            UserProfileModel().setProductDetailData(snapshot.data);
+            dynamic user_data = UserProfileModel().getAuctionDetailUserData();
+            // dynamic bank_account_user = UserProfileModel().getAuctionDetaiUserData();
+            // print("${user_data}");
+            // return Text("${user_data}");
+            if (user_data == null) {
+              return Center(
+                child: Text("ไม่มีข้อมูล", style: TextStyle(
+                  fontSize: 18
+                ),),
+              );
+            }
+            if (user_data != null) {
+              return ListView(
+                children: [
+                  // Text(userData.toString()),
+                  CircleAvatar(
+                    radius: 150,
+                    backgroundImage: NetworkImage(
+                        '${ConfigAPI().getImageProfileApiServerGet(
+                            image_profile_path: ShareData
+                                .userData['image_profile'])}'
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Text("ชื่อ: ", style: textPrefixStyle(),),
-                    Text(
-                      "${user_data?['first_name_users']} ${user_data?['last_name_users']}",
-                      style: textStyleUserProfile(),),
-                  ],
-                ),
-                SizedBox(height: height,),
-                Row(
-                  children: [
-                    Text("เบอร์โทร: ", style: textPrefixStyle(),),
-                    Text("${user_data?['phone']}",
-                      style: textStyleUserProfile(),),
-                    SizedBox(height: height,),
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    Text("อีเมล: ", style: textPrefixStyle(),),
-                    Text("${user_data?['email']}",
-                      style: textStyleUserProfile(),),
-                    SizedBox(height: height,),
-                  ],
-                ),
-
-                Text("ที่อยู่ในการรับสินค้า: ", style: textPrefixStyle(),),
-
-                Text("${user_data?['address']}",
-                  style: textStyleUserProfile(),),
-                Divider(),
-                SizedBox(height: 8,),
-                bankAccount(),
-                Divider(),
-                SizedBox(height: 8,),
-                Center(
-                  child: Column(
+                  Row(
                     children: [
-                      SizedBox(height: height,),
-                      editProfile(ctx),
-                      SizedBox(height: height,),
-                      buttonGoToChangeBankAccount(),
-                      SizedBox(height: height,),
-                      changePassWord(ctx),
+                      Text("ชื่อ: ", style: textPrefixStyle(),),
+                      Text(
+                        "${user_data?['first_name_users']} ${user_data?['last_name_users']}",
+                        style: textStyleUserProfile(),),
                     ],
                   ),
-                ),
+                  SizedBox(height: height,),
+                  Row(
+                    children: [
+                      Text("เบอร์โทร: ", style: textPrefixStyle(),),
+                      Text("${user_data?['phone']}",
+                        style: textStyleUserProfile(),),
+                      SizedBox(height: height,),
+                    ],
+                  ),
 
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                ),
-              ],
-            );
+                  Row(
+                    children: [
+                      Text("อีเมล: ", style: textPrefixStyle(),),
+                      Text("${user_data?['email']}",
+                        style: textStyleUserProfile(),),
+                      SizedBox(height: height,),
+                    ],
+                  ),
+
+                  Text("ที่อยู่ในการรับสินค้า: ", style: textPrefixStyle(),),
+
+                  Text("${user_data?['address']}",
+                    style: textStyleUserProfile(),),
+                  Divider(),
+                  SizedBox(height: 8,),
+                  bankAccount(),
+                  Divider(),
+                  SizedBox(height: 8,),
+                  Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: height,),
+                        editProfile(ctx),
+                        SizedBox(height: height,),
+                        buttonGoToChangeBankAccount(),
+                        SizedBox(height: height,),
+                        changePassWord(ctx),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(
+                    height: 200,
+                    width: 200,
+                  ),
+                ],
+              );
+            }
           }
           return Center(child: CircularProgressIndicator(),);
         }
@@ -168,30 +197,31 @@ class UserProfileState extends State<UserProfile> {
   }
 
   Stream<Map<String, dynamic>> streamUserData() async* {
-    print("Start.");
-    String url = ConfigAPI().getMyUserProfileApiServerGet(
-        ShareData.userData['id_users'].toString());
-    final uri = Uri.parse(url);
-    final response = await http.get(uri);
-    final resData = jsonDecode(response.body);
-    await Future.delayed(Duration(seconds: 1));
-    Map<String, dynamic> data = resData['data'];
-    ShareData.userData = data['user_data'];
-    ShareData.image_user_profile = data['user_data']['image_profile'];
-    print(data.toString());
-    if (data['bank_account'] != null) {
-      ShareData.bankAccountUser = data['bank_account'];
-      bank_account_user = data['bank_account'];
-    } else {
-      bank_account_user = null;
-    }
-    yield data['user_data'];
-    setState(() {});
-    print("End.");
+    // print("Start.");
+    // print("UserProfile:::::::::::::::::::::::::::::: ${ShareData.userData}");
+    // String url = ConfigAPI().getMyUserProfileApiServerGet(
+    //     ShareData.userData['id_users'].toString());
+    // final uri = Uri.parse(url);
+    // final response = await http.get(uri);
+    // final resData = jsonDecode(response.body);
+    // await Future.delayed(Duration(seconds: 1));
+    // Map<String, dynamic> data = resData['data'];
+    // ShareData.userData = data['user_data'];
+    // ShareData.image_user_profile = data['user_data']['image_profile'];
+    // // print(data.toString());
+    // if (data['bank_account'] != null) {
+    //   ShareData.bankAccountUser = data['bank_account'];
+    //   bank_account_user = data['bank_account'];
+    // } else {
+    //   bank_account_user = null;
+    // }
+    // yield data['user_data'];
+    // setState(() {});
+    // print("End.");
   }
 
   ElevatedButton buttonGoToChangeBankAccount() {
-    if (bank_account_user != null) {
+    if (ShareData.bankAccountUser.isNotEmpty) {
       return ElevatedButton(
           onPressed: () =>
           {
@@ -207,6 +237,8 @@ class UserProfileState extends State<UserProfile> {
   }
 
   Widget bankAccount() {
+    dynamic bank_account_user = UserProfileModel().getAuctionDetailBankAccountUser();
+    // return Text("${bank_account_user}");
     if (bank_account_user != null) {
       return Column(
         children: [
@@ -244,6 +276,7 @@ class UserProfileState extends State<UserProfile> {
         ],
       );
     }
+
     if (bank_account_user == null) {
       return Column(
         children: [

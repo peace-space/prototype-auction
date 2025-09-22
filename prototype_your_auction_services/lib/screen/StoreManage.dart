@@ -48,7 +48,9 @@ class StoreManageState extends State<StoreManage> {
   void goToOpenAuctionButton(BuildContext ctx) {
 
     var check_bank_account = ShareData.bankAccountUser;
+
     print("${check_bank_account}");
+
     if (check_bank_account.isNotEmpty) {
       final route = MaterialPageRoute(builder: (ctx) => AddProduct());
       Navigator.push(ctx, route);

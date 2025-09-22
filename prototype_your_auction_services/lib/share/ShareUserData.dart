@@ -7,7 +7,6 @@ class ShareData {
       '/storage/images/user-profile-image/profile-default-image.png';
   static Map<String, dynamic> userData = {};
   static Map<String, dynamic> bankAccountUser = {};
-  static Function upDateState = () {};
 
 
 }

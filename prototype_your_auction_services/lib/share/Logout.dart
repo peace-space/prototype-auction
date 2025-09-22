@@ -43,11 +43,13 @@ class Logout {
         storage.deleteAll();
         ShareData.logedIn = false;
         ShareData.admin = false;
-        ShareData.userData = {};
-        ShareData.upDateState = () {};
-        ShareProductData.productData = {};
+        ShareData.userData.clear();
+        ShareData.bankAccountUser.clear();
+        ShareProductData.productData.clear();
+
         print("Logout Successfully.");
 
+        print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::: ${ShareData.userData['id_users']}");
         Navigator.pushReplacement(
           this.context,
           MaterialPageRoute(builder: (context) => AuctionHome()),

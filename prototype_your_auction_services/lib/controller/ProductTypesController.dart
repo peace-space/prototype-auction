@@ -21,7 +21,7 @@ class ProductTypesController {
 
       if (response.statusCode == 200) {
         ProductTypesModel().setProductTypes(product_types: resJson['data']);
-        print("++++++++++++++++++++++++++++++++++++++++++ ${resJson['data']}");
+        // print("++++++++++++++++++++++++++++++++++++++++++ ${resJson['data']}");
         return resJson['data'];
       } else {
         ProductTypesModel().setProductTypes(product_types: null);

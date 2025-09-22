@@ -125,19 +125,19 @@ class UserController extends Controller
             // return "AA";
             // return $user_data['email'];
 
-            // $verify_password = DB::table('users')
-            //     ->select(
-            //         'id_users',
-            //         'first_name_users',
-            //         'last_name_users',
-            //         'phone',
-            //         'address',
-            //         'email',
-            //         'admin_status',
-            //         'password'
-            //     )
-            //     ->where('email', '=', $user_data['email'])
-            //     ->first();
+            $verify_password = DB::table('users')
+                ->select(
+                    'id_users',
+                    'first_name_users',
+                    'last_name_users',
+                    'phone',
+                    'address',
+                    'email',
+                    'admin_status',
+                    'password'
+                )
+                ->where('email', '=', $user_data['email'])
+                ->first();
 
 
 
@@ -148,7 +148,7 @@ class UserController extends Controller
             // return $token;
             // return $login;
 
-            // if ($verify_password == true && Hash::check($user_data['password'], $verify_password->password)) {
+            if ($verify_password == true && Hash::check($user_data['password'], $verify_password->password)) {
                 if ($request->first_name_users != "" && $request->first_name_users != "null") {
                     $update_data = DB::table('users')
                         ->where('id_users', '=', $user_data['id_users'])
@@ -215,18 +215,23 @@ class UserController extends Controller
                                 ->where('id_users', '=', $request->id_users)
                                 ->update(['password' => $password_hashed]);
                     }
+
+                $userController = new UserController();
+
+                $userController->oneIndex($request->id_users);
+
                 return response()->json([
                     'status' => 1,
                     'message' => "Successfully.",
                     // 'data' => $new_data[0]
                 ], 200);
-            // } else {
-            //     return response()->json([
-            //         'status' => 0,
-            //         'message' => 'ERRPR.',
-            //         'data' => 'ไม่มีข้อมูลผู้ใช้งาน'
-            //     ], 404);
-            // }
+            } else {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'ERRPR.',
+                    'data' => 'ไม่มีข้อมูลผู้ใช้งาน'
+                ], 404);
+            }
 
 
 
@@ -236,7 +241,6 @@ class UserController extends Controller
             // ->get();
 
             // return $new_data[0];
-
 
         } catch (Exception $e) {
             return response()->json([

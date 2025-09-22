@@ -30,14 +30,14 @@ class CreateBankAccountUserState extends State<CreateBankAccountUser> {
   @override
   void initState() {
     // TODO: implement initState
-    id_user = ShareData.userData['id_users'];
+    // id_user = ShareData.userData['id_users'];
     super.initState();
   }
 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("เพิ่มบัญชีธนาคาร ${ShareData.userData['id_users']}"),
+        title: Text("เพิ่มบัญชีธนาคาร"),
       ),
       body: ListView(
         padding: EdgeInsets.all(20),
@@ -182,7 +182,7 @@ class CreateBankAccountUserState extends State<CreateBankAccountUser> {
     if (response.statusCode == 201) {
       print("Successfully.");
       final resJson = jsonDecode(response.body);
-      print("${resJson}");
+      // print("${resJson}");
       ShareData.bankAccountUser = resJson['data'];
       // Navigator.pop(ctx);
       Navigator.pop(context);

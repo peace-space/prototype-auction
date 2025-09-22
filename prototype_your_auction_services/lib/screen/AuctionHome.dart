@@ -90,7 +90,7 @@ class AuctionHomeState extends State<AuctionHome> {
           Expanded(child: StreamBuilder(
             stream: AuctionHomeChannel.connect(id_products: selectProductType(_productTypeValues)).stream,
             builder: (context, snapshot) {
-              print("${snapshot.data}");
+              // print("${snapshot.data}");
               if (snapshot.hasError) {
                 return const Center(child: Text("Error."));
               }
@@ -173,7 +173,7 @@ class AuctionHomeState extends State<AuctionHome> {
       // stream: fetchAuctionData(),
       stream: AuctionHomeChannel.connect(id_products: selectProductType(_productTypeValues)).stream,
       builder: (context, snapshot) {
-        print("${snapshot.data}");
+        // print("${snapshot.data}");
         if (snapshot.hasError) {
           return const Center(child: Text("Error."));
         }

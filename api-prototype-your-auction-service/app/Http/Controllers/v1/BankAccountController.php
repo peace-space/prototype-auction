@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\v1\UserController;
 
 class BankAccountController extends Controller
 {
@@ -32,6 +33,10 @@ class BankAccountController extends Controller
                                         'bank_account_number', 'prompt_pay')
                                 ->where('id_users', '=', $bank_account_data['id_users'])
                                 ->first();
+
+            $userController = new UserController();
+
+            $userController->oneIndex($bank_account_data['id_users']);
 
             return response()->json([
                 'status' => 1,
@@ -115,6 +120,10 @@ class BankAccountController extends Controller
                 $on_update = DB::table('bank_accounts')
                     ->where('id_users', '=', $bank_account_data['id_users'])
                     ->update($data_for_update);
+
+                $userController = new UserController();
+
+                $userController->oneIndex($bank_account_data['id_users']);
 
                 return response()->json([
                     'status' => 1,
@@ -200,6 +209,8 @@ class BankAccountController extends Controller
             // $on_update = DB::table('bank_accounts')
             //     ->where('id_users', '=', $bank_account_data['id_users'])
             //     ->update(['updated_at' => Carbon::now("Asia/Bangkok")]);
+
+
 
             return response()->json([
                 'status' => 1,

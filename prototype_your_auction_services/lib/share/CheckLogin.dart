@@ -68,7 +68,6 @@ class CheckLogin {
         print("หมดเวลาเข้าสู่ระบบ");
         ShareData.logedIn = false;
         ShareData.userData = {};
-        ShareData.upDateState = () {};
         ShareProductData.productData = {};
         return "ยังไม่เข้าสู่ระบบ";
       }
@@ -76,7 +75,7 @@ class CheckLogin {
       print("Storage No data");
       ShareData.logedIn = false;
       ShareData.userData = {};
-      ShareData.upDateState = () {};
+      ShareData.bankAccountUser = {};
       ShareProductData.productData = {};
     }
 

@@ -55,8 +55,8 @@ class EditUserProfileState extends State<EditUserProfile> {
           lastNameEdit(),
           SizedBox(height: 8),
           phoneEdit(),
-          SizedBox(height: 8),
-          emailEdit(),
+          // SizedBox(height: 8),
+          // emailEdit(),
           SizedBox(height: 16),
           addressEdit(),
           SizedBox(height: 8),
@@ -115,21 +115,21 @@ class EditUserProfileState extends State<EditUserProfile> {
     );
   }
 
-  Widget emailEdit() {
-    return TextField(
-      controller: _emailController,
-      decoration: InputDecoration(
-        labelText: "อีเมลเดิม: " + userData['email'],
-        border: OutlineInputBorder(),
-        hintText: "อีเมล",
-      ),
-      onChanged: (value) {
-        setState(() {
-          email = _emailController.value.text;
-        });
-      },
-    );
-  }
+  // Widget emailEdit() {
+  //   return TextField(
+  //     controller: _emailController,
+  //     decoration: InputDecoration(
+  //       labelText: "อีเมลเดิม: " + userData['email'],
+  //       border: OutlineInputBorder(),
+  //       hintText: "อีเมล",
+  //     ),
+  //     onChanged: (value) {
+  //       setState(() {
+  //         email = _emailController.value.text;
+  //       });
+  //     },
+  //   );
+  // }
 
   Widget addressEdit() {
     return TextField(
@@ -162,7 +162,7 @@ class EditUserProfileState extends State<EditUserProfile> {
     print("Start");
     Map<String, dynamic> data = {
       'id_users': ShareData.userData['id_users'],
-      'email': ShareData.userData['email'],
+      // 'email': ShareData.userData['email'],
       'password': _confirmPassWord,
       "first_name_users": firstName,
       "last_name_users": lastName,
@@ -196,7 +196,7 @@ class EditUserProfileState extends State<EditUserProfile> {
       request.fields['image_profile'] = request.files.toString();
     }
     request.fields['id_users'] = data['id_users'].toString();
-    request.fields['email'] = data['email'].toString();
+    // request.fields['email'] = data['email'].toString();
     request.fields['password'] = data['password'].toString();
 
     request.fields['first_name_users'] = data['first_name_users'].toString();
@@ -216,7 +216,7 @@ class EditUserProfileState extends State<EditUserProfile> {
       // Navigator.pop(ctx);
       Navigator.pop(context);
       Navigator.pop(context);
-      Navigator.pop(context);
+      // Navigator.pop(context);
     } else {
       print(
           "object::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::");
@@ -242,7 +242,7 @@ class EditUserProfileState extends State<EditUserProfile> {
     String confirmFirstName = firstName;
     String confirmLastName = lastName;
     String confirmPhone = phone;
-    String confirmEmail = email;
+    // String confirmEmail = email;
     String confirmAddress = address;
     String confirmImage = '-';
 
@@ -255,9 +255,9 @@ class EditUserProfileState extends State<EditUserProfile> {
     if (phone == '') {
       confirmPhone = '-';
     }
-    if (email == '') {
-      confirmEmail = '-';
-    }
+    // if (email == '') {
+    //   confirmEmail = '-';
+    // }
     if (address == '') {
       confirmAddress = '-';
     }
@@ -322,10 +322,10 @@ class EditUserProfileState extends State<EditUserProfile> {
                           "อีเมล: ",
                           style: textStyleSubjectConfirmChangeUserData(),
                         ),
-                        Text(
-                          "${confirmEmail}",
-                          style: textStyleConfirmChangeUserData(),
-                        ),
+                        // Text(
+                        //   "${confirmEmail}",
+                        //   style: textStyleConfirmChangeUserData(),
+                        // ),
                         Divider(),
                         Text(
                           "ที่อยู่ในการจัดส่ง: ",
@@ -350,7 +350,8 @@ class EditUserProfileState extends State<EditUserProfile> {
               TextButton(
                 onPressed: () =>
                 {
-                  confirmPassWord(ctx),
+                  // confirmPassWord(ctx),
+                  onSave(ctx),
                   // Navigator.pop(context)
                 },
                 child: Text("OK"),
@@ -360,43 +361,43 @@ class EditUserProfileState extends State<EditUserProfile> {
     );
   }
 
-  void confirmPassWord(BuildContext ctx) {
-    showDialog(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: Text("กรอกรหัสผ่านเพื่อยืนยัน"),
-            content: TextField(
-              obscureText: true,
-              controller: _confirmPassWordController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: "รหัสผ่าน",
-              ), onChanged: (value) {
-              setState(() {
-                _confirmPassWord = value;
-              });
-            },
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => {Navigator.pop(context)},
-                child: Text("Cencel"),
-              ),
-              TextButton(
-                onPressed: () =>
-                {
-                  // Navigator.pop(context),
-                  // Navigator.pop(context),
-                  // Navigator.pop(context),
-                  onSave(ctx),
-                },
-                child: Text("OK"),
-              ),
-            ],
-          ),
-    );
-  }
+  // void confirmPassWord(BuildContext ctx) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) =>
+  //         AlertDialog(
+  //           title: Text("กรอกรหัสผ่านเพื่อยืนยัน"),
+  //           content: TextField(
+  //             obscureText: true,
+  //             controller: _confirmPassWordController,
+  //             decoration: InputDecoration(
+  //               border: OutlineInputBorder(),
+  //               hintText: "รหัสผ่าน",
+  //             ), onChanged: (value) {
+  //             setState(() {
+  //               _confirmPassWord = value;
+  //             });
+  //           },
+  //           ),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => {Navigator.pop(context)},
+  //               child: Text("Cencel"),
+  //             ),
+  //             TextButton(
+  //               onPressed: () =>
+  //               {
+  //                 // Navigator.pop(context),
+  //                 // Navigator.pop(context),
+  //                 // Navigator.pop(context),
+  //                 onSave(ctx),
+  //               },
+  //               child: Text("OK"),
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  // }
 
   TextStyle textStyleSubjectConfirmChangeUserData() {
     return TextStyle(fontSize: 16);
