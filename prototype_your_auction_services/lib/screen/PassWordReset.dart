@@ -37,7 +37,7 @@ class PassWordResetState extends State<PassWordReset> {
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: [
-            textMessage(),
+            Center(child: textMessage()),
             // SizedBox(height: 8,),
             // inputEmail(),
             SizedBox(height: 16),
@@ -56,16 +56,21 @@ class PassWordResetState extends State<PassWordReset> {
 
   Widget textMessage() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          "มีการส่งรหัสยืนยันตัวตนไปยังอีเมลของคุณ",
+          "ระบบได้ส่ง OTP เพื่อยืนยันตัวตนไปยังอีเมลของคุณ",
           style: textStyleForMessage(),
         ),
+        SizedBox(height: 16),
         Text("สามารถตรวจสอบได้ที่อีเมล", style: textStyleForMessage()),
+        SizedBox(height: 8),
+        Text("${email}", style: TextStyle(
+          fontSize: 18,
+          color: Colors.red
+        )),
         SizedBox(height: 16),
-        Text("${email}", style: textStyleForMessage()),
-        SizedBox(height: 16),
-        Text("${message}", style: TextStyle(color: Colors.red)),
+        // Text("${message}", style: TextStyle(color: Colors.red)),
       ],
     );
   }
@@ -90,8 +95,8 @@ class PassWordResetState extends State<PassWordReset> {
       controller: _token_for_password_reset,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
-        label: Text("กรอกรหัสจากที่อยู่อีเมลของคุณ"),
-        hintText: "รหัสจากอีเมล",
+        label: Text("OTP"),
+        hintText: "OTP ของคุณ",
       ),
     );
   }
@@ -158,6 +163,11 @@ class PassWordResetState extends State<PassWordReset> {
   }
 
   void onPassWordReset() async {
+    showDialog(
+        barrierDismissible: false,
+        context: context, builder: (context) => Center(
+      child: CircularProgressIndicator(),
+    ));
     if (_new_password.text == _comfirm_password.text) {
       Map<String, dynamic> data = {
         'email': email,

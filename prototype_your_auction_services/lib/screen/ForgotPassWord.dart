@@ -73,6 +73,11 @@ class ForgotPassWordState extends State<ForgotPassWord> {
   }
 
   void submit() async {
+    showDialog(
+      barrierDismissible: false,
+      context: context, builder: (context) => Center(
+      child: CircularProgressIndicator(),
+    ));
     if (checkEmail()) {
       Map<String, dynamic> data = {
         'email': _email.text,
@@ -86,7 +91,10 @@ class ForgotPassWordState extends State<ForgotPassWord> {
 
       final resData = jsonDecode(response.body);
 
+
+
       if (response.statusCode == 200) {
+        Navigator.of(context).pop();
         Navigator.push(context, MaterialPageRoute(
           builder: (context) => PassWordReset(email: _email.text,),));
       } else {
