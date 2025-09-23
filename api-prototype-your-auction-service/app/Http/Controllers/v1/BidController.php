@@ -81,6 +81,10 @@ class BidController extends Controller
 
             // return $save_high_price;
 
+            $auctionController = new AuctionController();
+            $id_product_types = 0;
+            $auctionController->auctionSelectTypes($id_product_types);
+
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
