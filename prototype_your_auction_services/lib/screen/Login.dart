@@ -180,7 +180,7 @@ class LoginState extends State<Login>{
             key: 'user_token_type', value: resData['authorisation']['type']);
 
         Map<String, dynamic> data = resData['data'];
-        print(data.toString());
+        // print(data.toString());
         // print("\n\n\n\n+++++++++++++++++++++++++++++++++++++++++++++++++\n" +
         //     data['user_data']['admin_status'].runtimeType.toString() +
         //     "\n\n\n\n");
@@ -192,7 +192,7 @@ class LoginState extends State<Login>{
         // print("Admin Status: " + ShareData.admin.toString());
 
         ShareData.logedIn = true;
-        print("\n\n\n\n+++++++++++++++++++++++++++++++++++${data.toString()}\n\n\n\n\n");
+        // print("\n\n\n\n+++++++++++++++++++++++++++++++++++${data.toString()}\n\n\n\n\n");
         ShareData.userData = data['user_data'];
         if (data['bank_account'] != null) {
           ShareData.bankAccountUser = data['bank_account'];

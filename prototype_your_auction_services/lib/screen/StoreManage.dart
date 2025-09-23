@@ -49,16 +49,13 @@ class StoreManageState extends State<StoreManage> {
 
     var check_bank_account = ShareData.bankAccountUser;
 
-    print("${check_bank_account}");
+    print("////////////////////////${check_bank_account}");
 
-    if (check_bank_account.isNotEmpty) {
-      final route = MaterialPageRoute(builder: (ctx) => AddProduct());
-      Navigator.push(ctx, route);
-    } else if (check_bank_account.isEmpty) {
+    if (check_bank_account.isEmpty) {
       showDialog(context: context, builder: (context) => AlertDialog(
         title: Text("แจ้งเตือน"),
         content: Text("- กรุณาเพิ่มบัญชีธนาคารก่อนเพิ่มสินค้าเพื่อเปิดประมูล\n"
-                      "- คุณต้องการเพิ่มบัญชีธนาคารหรือไม่ ?"),
+            "- คุณต้องการเพิ่มบัญชีธนาคารหรือไม่ ?"),
         actions: [
           TextButton(onPressed: () {
             Navigator.of(context).pop();
@@ -69,7 +66,11 @@ class StoreManageState extends State<StoreManage> {
           } , child: Text("ตกลง"))
         ],
       ),);
+    } else {
+      final route = MaterialPageRoute(builder: (ctx) => AddProduct());
+      Navigator.push(ctx, route);
     }
+
 
   }
 

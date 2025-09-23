@@ -429,7 +429,7 @@ class UserController extends Controller
                     'message' => 'Successfully.',
                     'data' => [
                         'user_data' => $user_data,
-                        'bank_account' => ['data' => $bank_account],
+                        'bank_account' => $bank_account,
                     ],
                     'authorisation' => [
                         'token' => $user_token_data,

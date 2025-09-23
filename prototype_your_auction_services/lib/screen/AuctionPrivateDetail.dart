@@ -751,6 +751,9 @@ class AuctionPrivateDetailState extends State<AuctionPrivateDetail> {
               ),
         );
       } else {
+        _password_controller.text = '';
+        _phone_bidder_controller.text = '';
+        setState(() {});
         showDialog(
           context: context,
           builder:
