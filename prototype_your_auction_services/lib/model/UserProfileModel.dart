@@ -8,30 +8,45 @@ class UserProfileModel {
   static late dynamic bank_account_user;
 
   void setProductDetailData(dynamic user_profile) {
-    var dataJson = jsonDecode(user_profile);
-    // print("dataJson: ${dataJson}");
-    dynamic userData;
-    if (dataJson['event'] == "App\\Events\\UserDetailEvent") {
+    try {
+      var dataJson = jsonDecode(user_profile);
+      dynamic userData;
 
-      userData = jsonDecode(dataJson['data']);
+      if (dataJson['event'] == "App\\Events\\UserDetailEvent") {
 
-      if (userData['status'] == 1) {
-        print('sssssssssssssssssssssssssssssssss${userData['data']}');
-        UserProfileModel.user_data = userData['data']['user_data'];
-        if (userData['data'] != null) {
-          UserProfileModel.bank_account_user = userData['data']['bank_account'];
+        userData = jsonDecode(dataJson['data']);
+
+        if (userData['status'] == 1) {
+
+          if (userData['data']['user_data'] != null) {
+
+            UserProfileModel.user_data = userData['data']['user_data'];
+
+            if (userData['data'] != null) {
+
+              UserProfileModel.bank_account_user = userData['data']['bank_account'];
+
+            } else {
+              UserProfileModel.bank_account_user = null;
+            }
+          }
+          // ShareData.bankAccountUser = userData['data']['bank_account'];
+          // ShareData.userData = userData['data']['user_data'];
+          // ShareData.image_user_profile = userData['data']['image_profile'];
         } else {
-          UserProfileModel.bank_account_user = null;
+          UserProfileModel.user_data == null;
+          UserProfileModel.bank_account_user == null;
         }
-        // ShareData.bankAccountUser = userData['data']['bank_account'];
-        // ShareData.userData = userData['data']['user_data'];
-        // ShareData.image_user_profile = userData['data']['image_profile'];
+
+      } else {
+        UserProfileModel.user_data = null;
+        UserProfileModel.bank_account_user = null;
       }
-      // userData = userData['data'];
-      // user_data = userData['user_data'];
-      // bank_account_user = userData['bank_account'];
+    } on Exception catch (e) {
+      UserProfileModel.user_data = null;
+      UserProfileModel.bank_account_user = null;
     }
-    // UserProfileModel.user_profile = user_profile;
+
   }
 
   dynamic getAuctionDetailUserData() {

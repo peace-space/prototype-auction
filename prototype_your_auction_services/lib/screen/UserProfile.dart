@@ -50,7 +50,7 @@ class UserProfileState extends State<UserProfile> {
         builder: (ctx, snapshot) {
           // print("${snapshot.data}");
           if (snapshot.hasError) {
-            return const Center(
+            return Center(
               child: Text("เกิดข้อผิดพลาดในการโหลดข้อมูล",
                 style: TextStyle(
                     fontSize: 21
@@ -59,7 +59,7 @@ class UserProfileState extends State<UserProfile> {
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(),
             );
           }
@@ -74,15 +74,22 @@ class UserProfileState extends State<UserProfile> {
             // Map<String, dynamic> user_data = snapshot.data!;
             // dynamic user_data = snapshot.data;
             UserProfileModel().setProductDetailData(snapshot.data);
-            dynamic user_data = UserProfileModel().getAuctionDetailUserData();
+            dynamic ?user_data = UserProfileModel().getAuctionDetailUserData();
             // dynamic bank_account_user = UserProfileModel().getAuctionDetaiUserData();
             // print("${user_data}");
             // return Text("${user_data}");
             if (user_data == null) {
               return Center(
-                child: Text("ไม่มีข้อมูล", style: TextStyle(
-                  fontSize: 18
-                ),),
+                child: AlertDialog(
+                  title: Center(
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("กำลังโหลดข้อมูล...")
+                      ],
+                    ),
+                  ),
+                ),
               );
             }
             if (user_data != null) {
@@ -97,6 +104,7 @@ class UserProfileState extends State<UserProfile> {
                                 .userData['image_profile'])}'
                     ),
                   ),
+                  SizedBox(height: 8,),
                   Row(
                     children: [
                       Text("ชื่อ: ", style: textPrefixStyle(),),
@@ -152,6 +160,10 @@ class UserProfileState extends State<UserProfile> {
                   ),
                 ],
               );
+            } else {
+              return Center(
+                child: Text("ไม่มีข้อมูล"),
+              );
             }
           }
           return Center(child: CircularProgressIndicator(),);
@@ -196,7 +208,7 @@ class UserProfileState extends State<UserProfile> {
     Navigator.push(ctx, route);
   }
 
-  Stream<Map<String, dynamic>> streamUserData() async* {
+  // Stream<Map<String, dynamic>> streamUserData() async* {
     // print("Start.");
     // print("UserProfile:::::::::::::::::::::::::::::: ${ShareData.userData}");
     // String url = ConfigAPI().getMyUserProfileApiServerGet(
@@ -218,7 +230,7 @@ class UserProfileState extends State<UserProfile> {
     // yield data['user_data'];
     // setState(() {});
     // print("End.");
-  }
+  // }
 
   ElevatedButton buttonGoToChangeBankAccount() {
     if (ShareData.bankAccountUser.isNotEmpty) {

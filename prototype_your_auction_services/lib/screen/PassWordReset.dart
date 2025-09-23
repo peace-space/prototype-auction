@@ -174,7 +174,7 @@ class PassWordResetState extends State<PassWordReset> {
         'token_for_password_reset': _token_for_password_reset.text,
         'password': _new_password.text,
       };
-      print("${data.toString()}");
+      // print("${data.toString()}");
       String api = ConfigAPI().getPasswordResetServerPost();
       Uri uri = Uri.parse(api);
       final response = await http.post(
