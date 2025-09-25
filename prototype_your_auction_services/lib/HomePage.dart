@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:prototype_your_auction_services/controller/ProductTypesController.dart';
+import 'package:prototype_your_auction_services/model/ProductTypesModel.dart';
 import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 import 'package:prototype_your_auction_services/share/CheckLogin.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
@@ -28,6 +30,7 @@ class HomePageState extends State<HomePage> {
       loginStatus = logedIn();
     });
     goToAuctionHome();
+    ProductTypesController().fetchProductTypes();
     super.initState();
   }
   Widget build(BuildContext context) {

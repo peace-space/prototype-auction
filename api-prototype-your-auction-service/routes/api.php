@@ -73,8 +73,9 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction-list-admin', [AuctionController::class, 'auctionListAdmin']);
     Route::get('/auction-detail-admin/{id_auctions}', [AuctionController::class, 'auctionDetailAdmin']);
 
+
     // Auction Types
-    Route::get('/auction-types', [AuctionTypeController::class, 'auctionTypes']);
+    // Route::get('/auction-types', [AuctionTypeController::class, 'auctionTypes']);
 
 
 
@@ -82,6 +83,7 @@ Route::prefix('/v1')->group(function () {
     Route::get('/product-detail/{id_auctions}', [ProductController::class, 'productDetail']);
     Route::delete('/admin-product-delete/{id_products}', [ProductController::class, 'adminProductDelete']);
     Route::get('/product-types', [ProductTypeController::class, 'productTypes']);
+    // Route::get('/sreach/{}', [ProductController::class]);
 
     // Route::get('/test-product-controller', [ProductController::class, 'test']);
 

@@ -75,6 +75,7 @@ class MyAuctionsState extends State<MyAuctions> {
                           Text("${data['name_product']}"),
                           Text("สถานะการประมูล: ${auctionStatus(
                               data['auction_status'])}"),
+                          Text('ประเภทสินค้า: ${data['']}')
                         ],
                       ),
                       subtitle: Text(""),

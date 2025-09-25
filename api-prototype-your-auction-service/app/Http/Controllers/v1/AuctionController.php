@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Events\AuctionDetailAdminEvent;
 use App\Events\AuctionHomeEvent;
 use App\Events\AuctionListAdminEvent;
+use App\Events\MyAuctionEvent;
 use App\Http\Controllers\algorithm\RunAuctionSystem;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\v1\BidController;
@@ -89,15 +90,178 @@ class AuctionController extends Controller
         }
     }
 
-    public function auctionSelectTypes($id_product_types)
+    public function auctionSelectTypes($id_product_types, Request $request)
     {
         try {
             $run_auction_system = new RunAuctionSystem();
 
             $run_auction_system->runAuctionSystem();
+            // return "A";
+            // return $require->has('key_word');
+            // if (!$require->has('key_word')) {
+            //     return "false";
+            // }
+
+            // if ($request->has('key_word')) {
+            //     return $request->key_word;
+            // }
 
             try {
-                if ($id_product_types != null && $id_product_types != '' && $id_product_types != '0' && $id_product_types != 0) {
+                if (
+                    $id_product_types != null && $id_product_types != ''
+                    && $id_product_types != '0' && $id_product_types != 0
+                    && $request->has('key_word') && $request->key_word != ''
+                    && $request->key_word != null
+                ) {
+                    return "select-type and key_word";
+                    $auction_list_select = DB::table('auctions')
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('id_auction_types', '=', 1)
+                        ->where('products.id_product_types', '=', $id_product_types)
+                        ->where('products.name_product', 'like', "%" . $request->key_word . "%")
+                        ->orderByDesc('auctions.id_auctions')
+                        // ->orderByRaw('auctions.created_at')
+                        ->get();
+
+                        if ($auction_list_select != null && $auction_list_select != '') {
+
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select) != 0) {
+                            $has_data = 1;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select));
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select
+                            ], 200);
+                        }
+                    }
+                }
+
+
+                // -------------------------------------------------------------------------------------------------------------------------------------
+
+                if (
+                    $id_product_types == '0'
+                    && $request->has('key_word') && $request->key_word != ''
+                    && $request->key_word != null
+                    ) {
+
+                    return "key_word";
+                    $auction_list_select_key_word = DB::table('auctions')
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        // ->join('product_types', function(JoinClause $join) {
+                        //     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        // })
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('id_auction_types', '=', 1)
+                        // ->where('products.id_product_types', '=', $id_product_types)
+                        ->where('products.name_product', 'like', "%" . $request->key_word . "%")
+                        ->orderByDesc('auctions.id_auctions')
+                        // ->orderByRaw('auctions.created_at')
+                        ->get();
+
+                    // return "AA";
+
+                    if ($auction_list_select_key_word != null && $auction_list_select_key_word != '') {
+
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select_key_word) != 0) {
+                            $has_data = 1;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select_key_word));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select_key_word
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+                            event(new AuctionHomeEvent($has_data, $auction_list_select_key_word));
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                'hasData' => $has_data,
+                                'data' => $auction_list_select_key_word
+                            ], 200);
+                        }
+                    }
+                }
+
+                // -------------------------------------------------------------------------------------------------------------------------------------
+                if (
+                    !$request->has('key_word') && $request->key_word == ''
+                    && $request->key_word == null
+                    && $id_product_types != null && $id_product_types != ''
+                    && $id_product_types != '0' && $id_product_types != 0
+                    ) {
+
+                    return "select-type";
                     $auction_list_select_types = DB::table('auctions')
                         ->select(
                             'auctions.id_auctions',
@@ -195,6 +359,9 @@ class AuctionController extends Controller
                 })
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->join('product_types', function(JoinClause $join) {
+                    $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                 })
                 ->where('auctions.auction_status', '=', true)
                 ->where('id_auction_types', '=', 1)
@@ -496,102 +663,12 @@ class AuctionController extends Controller
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
-                // ->join('bids', function (JoinClause $join) {
-                //     $join->on('bids.id_auctions', '=', 'auctions.id_auctions');
-                // })
-                // ->join('result_auctions', function (JoinClause $join) {
-                //     $join->on('result_auctions.id_bids', '=', 'bids.id_bids');
-                // })
-                ->orderByRaw('id_auctions')
+                ->orderByDesc('auctions.auction_status')
                 ->where('products.id_users', '=', $id_user)
                 ->get();
-            // return "AA";
-            // return $my_auctions[0]->id_auctions;
 
-            // if ($request->image_1 != null) {
-            //     if ($request->image_1 != null) {
-            //         $image_name_1 = Storage::disk('public')->put('images/product-images', $request->image_1);
-            //         $image_path_1 = Storage::url($image_name_1);
-            //     } else {
-            //         $image_path_1 = null;
-            //     }
+            event(new MyAuctionEvent($my_auctions));
 
-            //     if ($request->image_2 != null) {
-            //         $image_name_2 = Storage::disk('public')->put('images/product-images', $request->image_2);
-            //         $image_path_2 = Storage::url($image_name_2);
-            //     } else {
-            //         $image_path_2 = null;
-            //     }
-
-            //     if ($request->image_3 != null) {
-            //         $image_name_3 = Storage::disk('public')->put('images/product-images', $request->image_3);
-            //         $image_path_3 = Storage::url($image_name_3);
-            //     } else {
-            //         $image_path_3 = null;
-            //     }
-
-            //     if ($request->image_4 != null) {
-            //         $image_name_4 = Storage::disk('public')->put('images/product-images', $request->image_4);
-            //         $image_path_4 = Storage::url($image_name_4);
-            //     } else {
-            //         $image_path_4 = null;
-            //     }
-
-            //     if ($request->image_5 != null) {
-            //         $image_name_5 = Storage::disk('public')->put('images/product-images', $request->image_5);
-            //         $image_path_5 = Storage::url($image_name_5);
-            //     } else {
-            //         $image_path_5 = null;
-            //     }
-
-            //     if ($request->image_6 != null) {
-            //         $image_name_6 = Storage::disk('public')->put('images/product-images', $request->image_6);
-            //         $image_path_6 = Storage::url($image_name_6);
-            //     } else {
-            //         $image_path_6 = null;
-            //     }
-
-            //     if ($request->image_7 != null) {
-            //         $image_name_7 = Storage::disk('public')->put('images/product-images', $request->image_7);
-            //         $image_path_7 = Storage::url($image_name_7);
-            //     } else {
-            //         $image_path_7 = null;
-            //     }
-
-            //     if ($request->image_8 != null) {
-            //         $image_name_8 = Storage::disk('public')->put('images/product-images', $request->image_8);
-            //         $image_path_8 = Storage::url($image_name_8);
-            //     } else {
-            //         $image_path_8 = null;
-            //     }
-
-            //     if ($request->image_9 != null) {
-            //         $image_name_9 = Storage::disk('public')->put('images/product-images', $request->image_9);
-            //         $image_path_9 = Storage::url($image_name_9);
-            //     } else {
-            //         $image_path_9 = null;
-            //     }
-
-            //     if ($request->image_10 != null) {
-            //         $image_name_10 = Storage::disk('public')->put('images/product-images', $request->image_10);
-            //         $image_path_10 = Storage::url($image_name_10);
-            //     } else {
-            //         $image_path_10 = null;
-            //     }
-            // }
-
-            // $image_model = [
-            //     'image_path_1' => $image_path_1,
-            //     'image_path_2' => $image_path_2,
-            //     'image_path_3' => $image_path_3,
-            //     'image_path_4' => $image_path_4,
-            //     'image_path_5' => $image_path_5,
-            //     'image_path_6' => $image_path_6,
-            //     'image_path_7' => $image_path_7,
-            //     'image_path_8' => $image_path_8,
-            //     'image_path_9' => $image_path_9,
-            //     'image_path_10' => $image_path_10,
-            // ];
             return response()->json([
                 'status' => 1,
                 'message' => 'Successfully.',
