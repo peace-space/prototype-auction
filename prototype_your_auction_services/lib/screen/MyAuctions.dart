@@ -157,7 +157,8 @@ class MyAuctionsState extends State<MyAuctions> {
                                     Text("สถานะการประมูล: "),
                                     auctionStatus(my_auction_data['auction_status']),
                                   ],),
-                                  Text('ประเภทสินค้า: ${my_auction_data['product_type_text']}')
+                                  Text('ประเภทสินค้า: ${my_auction_data['product_type_text']}'),
+                                  Text('ประเภทการประมูล: ${my_auction_data['auction_types']}')
                                 ],
                               ),
                               subtitle: Text(""),

@@ -57,7 +57,7 @@ class AuctionController extends Controller
                     $join->on('users.id_users', '=', 'products.id_users');
                 })
                 ->where('auctions.auction_status', '=', true)
-                ->where('id_auction_types', '=', 1)
+                ->where('auctions.id_auction_types', '=', 1)
                 // ->orderByRaw('id_auctions')
                 ->orderByDesc('id_auctions')
                 ->get();
@@ -133,6 +133,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -146,8 +147,11 @@ class AuctionController extends Controller
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                         })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                        })
                         ->where('auctions.auction_status', '=', true)
-                        ->where('id_auction_types', '=', 1)
+                        ->where('auctions.id_auction_types', '=', 1)
                         ->where('products.id_product_types', '=', $id_product_types)
                         ->where('products.name_product', 'like', "%" . $request->key_word . "%")
                         ->orderByDesc('auctions.id_auctions')
@@ -210,6 +214,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -220,14 +225,14 @@ class AuctionController extends Controller
                         ->join('users', function (JoinClause $join) {
                             $join->on('users.id_users', '=', 'products.id_users');
                         })
-                        // ->join('product_types', function(JoinClause $join) {
-                        //     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
-                        // })
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                         })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                        })
                         ->where('auctions.auction_status', '=', true)
-                        ->where('id_auction_types', '=', 1)
+                        ->where('auctions.id_auction_types', '=', 1)
                         // ->where('products.id_product_types', '=', $id_product_types)
                         ->where('products.name_product', 'like', "%" . $request->key_word . "%")
                         ->orderByDesc('auctions.id_auctions')
@@ -291,6 +296,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -304,8 +310,11 @@ class AuctionController extends Controller
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                         })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                        })
                         ->where('auctions.auction_status', '=', true)
-                        ->where('id_auction_types', '=', 1)
+                        ->where('auctions.id_auction_types', '=', 1)
                         ->where('products.id_product_types', '=', $id_product_types)
                         // ->orderByRaw('id_auctions')
                         ->orderByDesc('id_auctions')
@@ -366,6 +375,7 @@ class AuctionController extends Controller
                     'users.first_name_users',
                     'users.last_name_users',
                     'product_types.product_type_text',
+                    'auction_types.auction_types',
                 )
                 ->join('products', function (JoinClause $join) {
                     $join->on('auctions.id_products', '=', 'products.id_products');
@@ -379,8 +389,11 @@ class AuctionController extends Controller
                 ->join('product_types', function (JoinClause $join) {
                     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                 })
+                ->join('auction_types', function (JoinClause $join) {
+                    $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                 })
                 ->where('auctions.auction_status', '=', true)
-                ->where('id_auction_types', '=', 1)
+                ->where('auctions.id_auction_types', '=', 1)
                 // ->orderByRaw('id_auctions')
                 ->orderByDesc('id_auctions')
                 ->get();
@@ -711,6 +724,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -723,6 +737,9 @@ class AuctionController extends Controller
                         })
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
                         ->where('auctions.auction_status', '=', true)
@@ -789,6 +806,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types'
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -799,11 +817,11 @@ class AuctionController extends Controller
                         ->join('users', function (JoinClause $join) {
                             $join->on('users.id_users', '=', 'products.id_users');
                         })
-                        // ->join('product_types', function(JoinClause $join) {
-                        //     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
-                        // })
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
                         ->where('auctions.auction_status', '=', true)
@@ -871,6 +889,7 @@ class AuctionController extends Controller
                             'users.first_name_users',
                             'users.last_name_users',
                             'product_types.product_type_text',
+                            'auction_types.auction_types',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -883,6 +902,9 @@ class AuctionController extends Controller
                         })
                         ->join('product_types', function (JoinClause $join) {
                             $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
                         ->where('auctions.auction_status', '=', true)
@@ -951,6 +973,7 @@ class AuctionController extends Controller
                     'users.first_name_users',
                     'users.last_name_users',
                     'product_types.product_type_text',
+                    'auction_types.auction_types',
                 )
                 ->join('products', function (JoinClause $join) {
                     $join->on('auctions.id_products', '=', 'products.id_products');
@@ -964,6 +987,9 @@ class AuctionController extends Controller
                 ->join('product_types', function (JoinClause $join) {
                     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                 })
+                ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                        })
                 ->where('users.id_users', '=', $id_users)
                 ->where('auctions.auction_status', '=', true)
                 ->where('auctions.id_auction_types', '=', 1)

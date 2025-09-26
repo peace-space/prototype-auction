@@ -18,8 +18,9 @@ class AuctionTypesController {
       final response = await http.get(uri);
       final resJson = jsonDecode(response.body);
 
+      print("..............................");
       if (response.statusCode == 200) {
-        print("${resJson['data']}");
+        print("..............................${resJson['data']}");
         AuctionTypesModel().setAuctionTypes(auction_types: resJson['data']);
       } else {
         Exception("Error StatusCode = ${response.statusCode}");

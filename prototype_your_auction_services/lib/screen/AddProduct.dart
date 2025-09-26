@@ -43,8 +43,8 @@ class AddProductState extends State<AddProduct> {
 
   @override
   void initState() {
-    ProductTypesController().fetchProductTypes();
-    AuctionTypesController().fetchAuctionTypes();
+    // ProductTypesController().fetchProductTypes();
+    // AuctionTypesController().fetchAuctionTypes();
     super.initState();
   }
 
@@ -420,7 +420,10 @@ class AddProductState extends State<AddProduct> {
   });
 
   Widget inputAuctionTypes() {
+    // print("Start");
     dynamic auction_types_data = AuctionTypesModel().getAuctionTypes();
+
+    // print("sssssssssssssss ${auction_types_data}");
 
     Future.delayed(Duration(milliseconds: 300));
 

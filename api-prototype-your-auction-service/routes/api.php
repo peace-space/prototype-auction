@@ -65,7 +65,6 @@ Route::prefix('/v1')->group(function () {
     Route::get('/auction', [AuctionController::class, 'index']);
     Route::get('/auction-select-product-types/{id_product_types}', [AuctionController::class, 'auctionSelectTypes']);
     Route::post('/create-product', [AuctionController::class, 'createProduct']);
-    Route::delete('/user-product-delete/{id_products}', [ProductController::class, 'userProductDelete']);
     // Route::get('/product-detail/{id_auctions}', [AuctionController::class, 'productDetail']);
     Route::get('/history-product/{id_users}', [AuctionController::class, 'historyProduct']);
     // Route::post('/on-end-date-time', [AuctionController::class, 'onEndDateTime']);
@@ -75,7 +74,7 @@ Route::prefix('/v1')->group(function () {
 
 
     // Auction Types
-    // Route::get('/auction-types', [AuctionTypeController::class, 'auctionTypes']);
+    Route::get('/auction-types', [AuctionTypeController::class, 'auctionTypes']);
 
 
 
@@ -108,7 +107,8 @@ Route::prefix('/v1')->group(function () {
     // My Auctions User Product -----------------------------------------------------------
     Route::get('/my-auctions/{id_user}/{id_product_types}', [AuctionController::class, 'myAuctions']);
     Route::get('/my-auction-detail/{id_user}', [AuctionController::class, 'myAuctionDetail']);
-    Route::delete('/delete-my-auctions/{id_users}/{id_auctions}', [AuctionController::class, 'deleteMyAuctions']);
+    Route::delete('/user-product-delete/{id_products}', [ProductController::class, 'userProductDelete']);
+    // Route::delete('/delete-my-auctions/{id_users}/{id_auctions}', [AuctionController::class, 'deleteMyAuctions']);
 
     // Result -----------------------------------------------------------
     Route::get('/result-report-auction/{id_users}', [ResultAuctionController::class, 'resultReportAuction']);
