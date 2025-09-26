@@ -33,4 +33,31 @@ class ProductTypesController {
       Exception("Error = ${e}");
     }
   }
+
+  // String selectProductType(String product_type) {
+  //   List check_index_product_types = ProductTypesModel().getProductTypes();
+  //   print("${check_index_product_types}");
+  //   for (int index = 0; index <= check_index_product_types.length - 1; index++) {
+  //     if (product_type == check_index_product_types[index]['product_type_text']) {
+  //       return "${index + 1}";
+  //     }
+  //   }
+  //   return "0";
+  // }
+
+  dynamic selectProductType(dynamic product_type) {
+    dynamic check_index_product_types = ProductTypesModel().getProductTypes();
+    print("${product_type}");
+    // List check_index_product_types = product_type;
+    if (check_index_product_types != null) {
+      for (int index = 0; index <=
+          check_index_product_types.length - 1; index++) {
+        if (product_type ==
+            check_index_product_types[index]['product_type_text']) {
+          return "${index + 1}";
+        }
+      }
+    }
+    return 0;
+  }
 }

@@ -1,9 +1,9 @@
 class ConfigAPIStreamingAdmin {
 
   // rmuti server
-  static String wsUrl = 'wss://stream.your-auction-services.com/app/upkz7upeqdtkia4xh5b8';
+  // static String wsUrl = 'wss://stream.your-auction-services.com/app/upkz7upeqdtkia4xh5b8';
   // localhost
-  // static String wsUrl = 'ws://192.168.1.248:4010/app/upkz7upeqdtkia4xh5b8';
+  static String wsUrl = 'ws://192.168.1.248:4010/app/upkz7upeqdtkia4xh5b8';
 
   // static String url = 'ws://stream.your-auction-services.com/app/gxiziuskahs6vt4k8nle';
   // static String url =

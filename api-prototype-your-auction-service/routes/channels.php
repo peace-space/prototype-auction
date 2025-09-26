@@ -38,5 +38,6 @@ Broadcast::channel('PrivateAuctionDetailAdmin', function (){});
 
 Broadcast::channel('AuctionList', function () {});
 
-
 Broadcast::channel('UserProfile', function () {});
+
+Broadcast::channel('MyAuction', function () {});

@@ -106,7 +106,7 @@ Route::prefix('/v1')->group(function () {
     Route::delete('/user-bid-delete/{id_bids}/{id_auctiobs}', [BidController::class, 'userBidDelete']);
 
     // My Auctions User Product -----------------------------------------------------------
-    Route::get('/my-auctions/{id_user}', [AuctionController::class, 'myAuctions']);
+    Route::get('/my-auctions/{id_user}/{id_product_types}', [AuctionController::class, 'myAuctions']);
     Route::get('/my-auction-detail/{id_user}', [AuctionController::class, 'myAuctionDetail']);
     Route::delete('/delete-my-auctions/{id_users}/{id_auctions}', [AuctionController::class, 'deleteMyAuctions']);
 

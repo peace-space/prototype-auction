@@ -1,8 +1,8 @@
 class ConfigAPI {
-  final String url = 'https://rmuti.your-auction-services.com';
+  // final String url = 'https://rmuti.your-auction-services.com';
   //
-  // final String url =
-  //     'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
+  final String url =
+      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
   // final String url =
   //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1';
 
@@ -23,8 +23,6 @@ class ConfigAPI {
 
   late final String insert_receipt_bill_auction_server_post =
       '${url}/api/v1/insert-receipt-bill-auction';
-
-  late final String my_auctions_server_get = '${url}/api/v1/my-auctions';
 
   late final String my_auction_bill_server_get =
       '${url}/api/v1/my-auction-bill';
@@ -114,9 +112,14 @@ class ConfigAPI {
     return this.insert_receipt_bill_auction_server_post;
   }
 
-  String getMyAuctionsServerGet({required id_users}) {
-    String path = this.my_auctions_server_get + '/' + id_users;
-    return path;
+  String getMyAuctionsServerGet({required id_users, required var id_products, required String key_word}) {
+    if (key_word.isNotEmpty) {
+      print("${id_users}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
+      return "${url}/api/v1/my-auctions/${id_users.toString()}/${id_products.toString()}/?key_word=${key_word.toString()}";
+    } else {
+      return "${url}/api/v1/my-auctions/${id_users.toString()}/${id_products.toString()}";
+    }
+    return "${url}/api/v1/my-auctions/${id_users.toString()}";
   }
 
   String getMyAuctionBillServerGet({required id_auctions}) {
@@ -279,9 +282,15 @@ class ConfigAPI {
     return "${url}/api/v1/auction-types";
   }
 
-  String getAuctionSelectTypesGet({required var id_products}) {
+  String getAuctionSelectTypesGet({required var id_products, required String key_word}) {
     // print("api: ${id_products}");
     // id_products = 0;
-    return "${url}/api/v1/auction-select-product-types/${id_products}";
+    if (key_word.isNotEmpty) {
+      print("${id_products}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
+      return "${url}/api/v1/auction-select-product-types/${id_products.toString()}?key_word=${key_word.toString()}";
+    } else {
+      return "${url}/api/v1/auction-select-product-types/${id_products.toString()}";
+    }
+    // return "${url}/api/v1/auction-select-product-types/0?key_word=tem";
   }
 }

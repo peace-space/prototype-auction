@@ -46,6 +46,16 @@ window.Echo = new Echo({
    enabledTransports: ['ws', 'wss'],
 });
 
+// window.Echo = new Echo({
+//    broadcaster: 'reverb',
+//    key: import.meta.env.VITE_REVERB_APP_KEY,
+//    wsHost: '192.168.1.248',
+//    wsPort: 4010,
+// //    wssPort: import.meta.env.VITE_REVERB_PORT ?? 443,
+//    forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
+//    enabledTransports: ['ws', 'wss'],
+// });
+
 
 window.Echo.channel('UserList').listen("UserListEvent", function (events) {
     console.log(events);
@@ -65,8 +75,16 @@ window.Echo.channel('AuctionListAdmin').listen("AuctionListAdminEvent", function
     display.innerHTML = events['message'];
 });
 
-window.Echo.channel('ProductDetial').listen("ProductDetail", function (events) {
+window.Echo.channel('ProductDetial').listen("ProductDetailEvent", function (events) {
     console.log(events);
     var display = document.getElementById('display');
     display.innerHTML = events['message'];
 });
+
+window.Echo.channel('MyAuctions').listen("MyAuctionEvent", function (events) {
+    console.log(events);
+    var display = document.getElementById('display');
+    display.innerHTML = events['message'];
+});
+
+

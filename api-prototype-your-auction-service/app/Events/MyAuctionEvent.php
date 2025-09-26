@@ -15,14 +15,13 @@ class MyAuctionEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $my_auction_date;
-
+    public $my_auction_data;
     /**
      * Create a new event instance.
      */
-    public function __construct($my_auction_date)
+    public function __construct($my_auction_data)
     {
-        $this->my_auction_date = $my_auction_date;
+        $this->my_auction_data = $my_auction_data;
     }
 
     /**
@@ -33,15 +32,15 @@ class MyAuctionEvent implements ShouldBroadcastNow
     public function broadcastOn(): array
     {
         return [
-            new Channel('MyAuctionEvent'),
+            new Channel('MyAuctions'),
         ];
     }
 
     public function broadcastWith() {
         return [
             'status' => 1,
-            'message' => "Successfuly.",
-            'data' => $this->my_auction_date
+            'message' => 'Successfully.',
+            'data' => $this->my_auction_data
         ];
     }
 }

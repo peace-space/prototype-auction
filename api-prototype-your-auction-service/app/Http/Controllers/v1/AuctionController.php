@@ -113,7 +113,7 @@ class AuctionController extends Controller
                     && $request->has('key_word') && $request->key_word != ''
                     && $request->key_word != null
                 ) {
-                    return "select-type and key_word";
+                    // return "select-type and key_word";
                     $auction_list_select = DB::table('auctions')
                         ->select(
                             'auctions.id_auctions',
@@ -132,6 +132,7 @@ class AuctionController extends Controller
                             'users.id_users',
                             'users.first_name_users',
                             'users.last_name_users',
+                            'product_types.product_type_text',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -142,6 +143,9 @@ class AuctionController extends Controller
                         ->join('users', function (JoinClause $join) {
                             $join->on('users.id_users', '=', 'products.id_users');
                         })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
                         ->where('auctions.auction_status', '=', true)
                         ->where('id_auction_types', '=', 1)
                         ->where('products.id_product_types', '=', $id_product_types)
@@ -150,11 +154,12 @@ class AuctionController extends Controller
                         // ->orderByRaw('auctions.created_at')
                         ->get();
 
-                        if ($auction_list_select != null && $auction_list_select != '') {
+                    if ($auction_list_select != null && $auction_list_select != '') {
 
                         // return sizeof($auction_list_select_types);
                         if (sizeof($auction_list_select) != 0) {
                             $has_data = 1;
+
                             event(new AuctionHomeEvent($has_data, $auction_list_select));
 
                             return response()->json([
@@ -183,9 +188,9 @@ class AuctionController extends Controller
                     $id_product_types == '0'
                     && $request->has('key_word') && $request->key_word != ''
                     && $request->key_word != null
-                    ) {
+                ) {
 
-                    return "key_word";
+                    // return "key_word";
                     $auction_list_select_key_word = DB::table('auctions')
                         ->select(
                             'auctions.id_auctions',
@@ -204,6 +209,7 @@ class AuctionController extends Controller
                             'users.id_users',
                             'users.first_name_users',
                             'users.last_name_users',
+                            'product_types.product_type_text',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -217,6 +223,9 @@ class AuctionController extends Controller
                         // ->join('product_types', function(JoinClause $join) {
                         //     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                         // })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
                         ->where('auctions.auction_status', '=', true)
                         ->where('id_auction_types', '=', 1)
                         // ->where('products.id_product_types', '=', $id_product_types)
@@ -232,6 +241,7 @@ class AuctionController extends Controller
                         // return sizeof($auction_list_select_types);
                         if (sizeof($auction_list_select_key_word) != 0) {
                             $has_data = 1;
+
                             event(new AuctionHomeEvent($has_data, $auction_list_select_key_word));
 
                             return response()->json([
@@ -259,9 +269,9 @@ class AuctionController extends Controller
                     && $request->key_word == null
                     && $id_product_types != null && $id_product_types != ''
                     && $id_product_types != '0' && $id_product_types != 0
-                    ) {
+                ) {
 
-                    return "select-type";
+                    // return "select-type";
                     $auction_list_select_types = DB::table('auctions')
                         ->select(
                             'auctions.id_auctions',
@@ -280,6 +290,7 @@ class AuctionController extends Controller
                             'users.id_users',
                             'users.first_name_users',
                             'users.last_name_users',
+                            'product_types.product_type_text',
                         )
                         ->join('products', function (JoinClause $join) {
                             $join->on('auctions.id_products', '=', 'products.id_products');
@@ -289,6 +300,9 @@ class AuctionController extends Controller
                         })
                         ->join('users', function (JoinClause $join) {
                             $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                         })
                         ->where('auctions.auction_status', '=', true)
                         ->where('id_auction_types', '=', 1)
@@ -303,6 +317,7 @@ class AuctionController extends Controller
                         // return sizeof($auction_list_select_types);
                         if (sizeof($auction_list_select_types) != 0) {
                             $has_data = 1;
+
                             event(new AuctionHomeEvent($has_data, $auction_list_select_types));
 
                             return response()->json([
@@ -350,6 +365,7 @@ class AuctionController extends Controller
                     'users.id_users',
                     'users.first_name_users',
                     'users.last_name_users',
+                    'product_types.product_type_text',
                 )
                 ->join('products', function (JoinClause $join) {
                     $join->on('auctions.id_products', '=', 'products.id_products');
@@ -360,7 +376,7 @@ class AuctionController extends Controller
                 ->join('users', function (JoinClause $join) {
                     $join->on('users.id_users', '=', 'products.id_users');
                 })
-                ->join('product_types', function(JoinClause $join) {
+                ->join('product_types', function (JoinClause $join) {
                     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
                 })
                 ->where('auctions.auction_status', '=', true)
@@ -649,40 +665,402 @@ class AuctionController extends Controller
         }
     }
 
-    public function myAuctions($id_user)
+    public function myAuctions($id_users, $id_product_types, Request $request)
     {
         try {
+            $run_auction_system = new RunAuctionSystem();
+
+            $run_auction_system->runAuctionSystem();
+
+            // event(new MyAuctionEvent("aaaaaaaaaaaaaaaaaaaaaa"));
+            // broadcast(new MyAuctionEvent("d"));
             // return "A";
-            $my_auctions = DB::table('auctions')
+            // return $require->has('key_word');
+            // if (!$require->has('key_word')) {
+            //     return "false";
+            // }
+
+            // if ($request->has('key_word')) {
+            //     return $request->key_word;
+            // }
+
+            try {
+                if (
+                    $id_product_types != null && $id_product_types != ''
+                    && $id_product_types != '0' && $id_product_types != 0
+                    && $request->has('key_word') && $request->key_word != ''
+                    && $request->key_word != null
+                ) {
+                    // return "select-type and key_word";
+                    $auction_list_select = DB::table('auctions')
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                            'product_types.product_type_text',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->where('users.id_users', '=', $id_users)
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('auctions.id_auction_types', '=', 1)
+                        ->where('products.id_product_types', '=', $id_product_types)
+                        ->where('products.name_product', 'like', "%" . $request->key_word . "%")
+                        ->orderByDesc('auctions.id_auctions')
+                        // ->orderByRaw('auctions.created_at')
+                        ->get();
+
+                    if ($auction_list_select != null && $auction_list_select != '') {
+
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select) != 0) {
+                            $has_data = 1;
+
+                            event(new MyAuctionEvent($auction_list_select));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+                            event(new MyAuctionEvent($auction_list_select));
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select
+                            ], 200);
+                        }
+                    }
+                }
+
+
+                // -------------------------------------------------------------------------------------------------------------------------------------
+
+                if (
+                    $id_product_types == '0'
+                    && $request->has('key_word') && $request->key_word != ''
+                    && $request->key_word != null
+                ) {
+
+                    // return "key_word";
+                    $auction_list_select_key_word = DB::table('auctions')
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                            'product_types.product_type_text',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        // ->join('product_types', function(JoinClause $join) {
+                        //     $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        // })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->where('users.id_users', '=', $id_users)
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('auctions.id_auction_types', '=', 1)
+                        // ->where('products.id_product_types', '=', $id_product_types)
+                        ->where('products.name_product', 'like', "%" . $request->key_word . "%")
+                        ->orderByDesc('auctions.id_auctions')
+                        // ->orderByRaw('auctions.created_at')
+                        ->get();
+
+                    // return "AA";
+
+                    if ($auction_list_select_key_word != null && $auction_list_select_key_word != '') {
+
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select_key_word) != 0) {
+                            $has_data = 1;
+
+                            event(new MyAuctionEvent($auction_list_select_key_word));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select_key_word
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+                            event(new MyAuctionEvent($auction_list_select_key_word));
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select_key_word
+                            ], 200);
+                        }
+                    }
+                }
+
+                // -------------------------------------------------------------------------------------------------------------------------------------
+                if (
+                    !$request->has('key_word') && $request->key_word == ''
+                    && $request->key_word == null
+                    && $id_product_types != null && $id_product_types != ''
+                    && $id_product_types != '0' && $id_product_types != 0
+                ) {
+
+                    // return "select-type";
+                    $auction_list_select_types = DB::table('auctions')
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                            'product_types.product_type_text',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->where('users.id_users', '=', $id_users)
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('auctions.id_auction_types', '=', 1)
+                        ->where('products.id_product_types', '=', $id_product_types)
+                        // ->orderByRaw('id_auctions')
+                        ->orderByDesc('auctions.id_auctions')
+                        ->get();
+
+
+                    if ($auction_list_select_types != null && $auction_list_select_types != '') {
+
+                        // return sizeof($auction_list_select_types);
+                        if (sizeof($auction_list_select_types) != 0) {
+                            $has_data = 1;
+
+                            // return "AA";
+
+                            event(new MyAuctionEvent($auction_list_select_types));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select_types
+                            ], 200);
+                        } else {
+                            $has_data = 0;
+
+                            event(new MyAuctionEvent($auction_list_select_types));
+
+                            return response()->json([
+                                'status' => 1,
+                                'message' => "Successfully.",
+                                // 'hasData' => $has_data,
+                                'data' => $auction_list_select_types
+                            ], 200);
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                return response()->json([
+                    'status' => 0,
+                    'message' => 'Error.',
+                    // 'data' => $e
+                ], 404);
+            }
+
+
+
+            $auctions_list = DB::table('auctions')
                 ->select(
-                    '*',
+                    'auctions.id_auctions',
+                    'auctions.auction_status',
+                    'auctions.shipping_cost',
+                    'auctions.start_price',
+                    'auctions.end_date_time',
+                    'auctions.max_price',
+                    'auctions.id_auction_types',
+                    'auctions.id_payment_types',
+                    'auctions.id_bank_accounts',
+                    'products.id_products',
+                    'products.name_product',
+                    'images.image_path_1',
+                    'users.id_users',
+                    'users.first_name_users',
+                    'users.last_name_users',
+                    'product_types.product_type_text',
                 )
                 ->join('products', function (JoinClause $join) {
-                    $join->on('products.id_products', '=', 'auctions.id_products');
+                    $join->on('auctions.id_products', '=', 'products.id_products');
                 })
                 ->join('images', function (JoinClause $join) {
                     $join->on('images.id_images', '=', 'products.id_images');
                 })
-                ->orderByDesc('auctions.auction_status')
-                ->where('products.id_users', '=', $id_user)
+                ->join('users', function (JoinClause $join) {
+                    $join->on('users.id_users', '=', 'products.id_users');
+                })
+                ->join('product_types', function (JoinClause $join) {
+                    $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                })
+                ->where('users.id_users', '=', $id_users)
+                ->where('auctions.auction_status', '=', true)
+                ->where('auctions.id_auction_types', '=', 1)
+                ->orderByDesc('auctions.id_auctions')
                 ->get();
 
-            event(new MyAuctionEvent($my_auctions));
+            // $high_bit = DB::table('bids')
+            //                     ->select('id_users', 'id_auctions', 'bid_price')
+            //                     ->where('id_auctions', '=', $id_auctions)
+            //                     ->orderByDesc('bid_price')
+            //                     ->get();
+            // $counter = 0;
+            // for ($i = 0; $i < count($auctions_list); $i++) {
+            //     $counter += $i;
+            // }
 
-            return response()->json([
-                'status' => 1,
-                'message' => 'Successfully.',
-                'data' => $my_auctions
+            // return $counter;
 
-            ]);
+            // highBids();
+
+            if (sizeof($auctions_list) != 0) {
+                $has_data = 1;
+
+                event(new MyAuctionEvent($auctions_list));
+
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    // 'hasData' => $has_data,
+                    'data' => $auctions_list
+                ], 200);
+            } else {
+
+                $has_data = 0;
+
+                event(new MyAuctionEvent($auctions_list));
+                return response()->json([
+                    'status' => 1,
+                    'message' => "Successfully.",
+                    // 'hasData' => $has_data,
+                    'data' => $auctions_list
+                ], 200);
+            }
+
+            // event(new AuctionHomeEvent(1, $auctions_list));
+
+            // return response()->json([
+            //     'status' => 1,
+            //     'message' => "Successfully.",
+            //     'data' => $auctions_list
+            // ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'status' => 0,
                 'message' => 'Error.',
                 'data' => $e
-            ], 404);
+            ], 500);
         }
     }
+
+    // public function myAuctions($id_user)
+    // {
+    //     try {
+    //         // return "A";
+    //         $my_auctions = DB::table('auctions')
+    //             ->select(
+    //                 '*',
+    //             )
+    //             ->join('products', function (JoinClause $join) {
+    //                 $join->on('products.id_products', '=', 'auctions.id_products');
+    //             })
+    //             ->join('images', function (JoinClause $join) {
+    //                 $join->on('images.id_images', '=', 'products.id_images');
+    //             })
+    //             ->join('product_types', function (JoinClause $join) {
+    //                 $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+    //             })
+    //             ->orderByDesc('auctions.auction_status')
+    //             ->where('products.id_users', '=', $id_user)
+    //             ->get();
+
+    //         event(new MyAuctionEvent($my_auctions));
+
+    //         return response()->json([
+    //             'status' => 1,
+    //             'message' => 'Successfully.',
+    //             'data' => $my_auctions
+
+    //         ]);
+    //     } catch (Exception $e) {
+    //         return response()->json([
+    //             'status' => 0,
+    //             'message' => 'Error.',
+    //             'data' => $e
+    //         ], 404);
+    //     }
+    // }
 
     // public function myAuctionDetail($id_users)
     // {
