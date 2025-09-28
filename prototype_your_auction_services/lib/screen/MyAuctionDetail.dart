@@ -7,6 +7,7 @@ import 'package:prototype_your_auction_services/screen/ChatList.dart';
 import 'package:prototype_your_auction_services/screen/StoreManage.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
+import 'package:prototype_your_auction_services/share/widget_shared/show_count_down_timer.dart';
 // import 'package:pusher_channels_flutter/pusher-js/core/config.dart';
 
 import '../share/ShareUserData.dart';
@@ -55,6 +56,16 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
                   showAndSelectImage(),
                   SizedBox(height: 8),
                   selectShowImage(),
+                  SizedBox(height: 8),
+                  Center(child: Text("เหลือเวลาอีก", style: TextStyle(
+                    fontSize: 16
+                  ),)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      countDownDetail(context, data['data_auction']['end_date_time']),
+                    ],
+                  ),
                   SizedBox(height: 8),
                   myAuctionDetail(data['data_auction']!),
                   SizedBox(height: 8),
@@ -181,7 +192,7 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
 
   Stream<Map<String, dynamic>> fetchMyAuctionDetail() async* {
     await Future.delayed(Duration(seconds: 1));
-    print('Start.detailAuctions');
+    // print('Start.detailAuctions');
     // String url =
     //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
     //     .productData['id_auctions']}';
@@ -202,14 +213,14 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
         // print("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG: " + _receipt.toString());
       }
     }
-    print("nnnnn");
+    // print("nnnnn");
 
     detailAuctionData = data;
     yield data;
     setState(() {
       _imageData = data['images'];
     });
-    print('End.detialAuctions');
+    // print('End.detialAuctions');
   }
 
   TextStyle headText() {
@@ -323,12 +334,25 @@ class MyAuctionDetailState extends State<MyAuctionDetail> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => StoreManage(),));
       print("Successfully.");
+    } else if (response.statusCode == 403) {
+      showDialog(context: context, builder: (context) => AlertDialog(
+        title: Text("ไม่อนุญาตลบสินค้า"),
+        content: Text("เนื่องจาก\n"+
+                      "- เวลาปิดประมูลน้อยกว่า 12 ชั่วโมง\n"
+                      "- มีผู้เสนอราคาเท่ากับ 1 คน และ/หรือ มากกว่า 1 คน"),
+        actions: [
+          TextButton(onPressed: () {
+            Navigator.of(context).pop();
+          }, child: Text("ตกลง"))
+        ],
+      ),);
     } else {
       showDialog(
         context: context,
         builder: (context) =>
             AlertDialog(
               title: Text("ลบสินค้าล้มเหลว"),
+              content: Text('เกิดข้อผิดพลาด ${response.statusCode}'),
               actions: [
                 TextButton(
                   onPressed: () {

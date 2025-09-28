@@ -504,6 +504,7 @@ class AuctionHomeState extends State<AuctionHome> {
                               .toString()}"),
                           Text("เวลาเหลือ"),
                           countDownList(context, data['end_date_time']),
+                          Text("หน่วยเวลา (วัน : ชั่วโมง : นาที : วินาที)", style: TextStyle(fontSize: 13),),
                           Text("day:hour:min:sec"),
                         ],
                       ),
@@ -563,15 +564,28 @@ class AuctionHomeState extends State<AuctionHome> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(data['name_product']),
-                              Text("ประเภทสินค้า: ${data['product_type_text']}"),
-                              SizedBox(height: 5),
+                              Text(data['name_product'], style: TextStyle(
+                                  fontSize: 13
+                              ),),
+                              Text("ประเภทสินค้า: ${data['product_type_text']}", style: TextStyle(
+                                  fontSize: 13
+                              ),),
+                              // SizedBox(height: 5),
                               Text("ราคาสูงสุด ฿${data['max_price']
-                                  .toString()}"),
-                              SizedBox(height: 5),
-                              Text("เหลือเวลา:"),
-                              countDownList(context, data['end_date_time']),
-                              Text("day:hour:min:sec"),
+                                  .toString()}", style: TextStyle(
+                                  fontSize: 13
+                              ),),
+                              // SizedBox(height: 5),
+                              Row(
+                                children: [
+                                  Text("เหลือเวลา: ", style: TextStyle(
+                                      fontSize: 13
+                                  ),),
+                                  countDownList(context, data['end_date_time']),
+                                ],
+                              ),
+
+                              Text("(วัน:ชั่วโมง:นาที:วินาที)", style: TextStyle(fontSize: 13),),
                               // showDateTimeCountdown(data),
                             ],
                           ),

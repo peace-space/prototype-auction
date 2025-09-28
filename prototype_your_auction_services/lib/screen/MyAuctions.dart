@@ -11,6 +11,7 @@ import 'package:prototype_your_auction_services/screen/MyAuctionDetail.dart';
 import 'package:prototype_your_auction_services/share/ConfigAPI.dart';
 import 'package:prototype_your_auction_services/share/ShareProductData.dart';
 import 'package:prototype_your_auction_services/share/ShareUserData.dart';
+import 'package:prototype_your_auction_services/share/widget_shared/show_count_down_timer.dart';
 
 import '../controller/AuctionController.dart';
 import '../controller/ProductTypesController.dart';
@@ -158,10 +159,17 @@ class MyAuctionsState extends State<MyAuctions> {
                                     auctionStatus(my_auction_data['auction_status']),
                                   ],),
                                   Text('ประเภทสินค้า: ${my_auction_data['product_type_text']}'),
-                                  Text('ประเภทการประมูล: ${my_auction_data['auction_types']}')
+                                  Text('ประเภทการประมูล: ${my_auction_data['auction_types']}'),
+                                  Row(
+                                    children: [
+                                      Text("เหลือเวลาอีก: "),
+                                      countDownList(context, my_auction_data['end_date_time']),
+                                    ],
+                                  ),
+                                  Text("หน่วยเวลา (วัน : ชั่วโมง : นาที : วินาที)", style: TextStyle(fontSize: 13),),
                                 ],
                               ),
-                              subtitle: Text(""),
+                              subtitle: Divider(),
                             ),
                           );
                         }

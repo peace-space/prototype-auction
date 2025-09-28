@@ -324,7 +324,7 @@ class ProductController extends Controller
                             'status' => 1,
                             'message' => "ไม่อนุญาต",
                             'data' => "ไม่อยู่ในเงื่อนไขการลบสินค้า"
-                        ], 200);
+                        ], 403); // 403 ความหมาย ต้องห้าม คำขอถูกต้องแต่ server ไม่อนุญาต
 
                 }
             }
@@ -333,7 +333,7 @@ class ProductController extends Controller
                             'status' => 1,
                             'message' => "ไม่อยู่ในเงื่อนไข",
                             'data' => "ไม่อยู่ในเงื่อนไขการลบสินค้าหรือ อาจเกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ กรุณาติดต่อผู้ดูแลระบบ"
-                        ], 200);
+                        ], 404);
 
             // return $end_date_time_auctions->diffInHours();
 

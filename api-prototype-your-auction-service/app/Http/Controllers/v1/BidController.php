@@ -101,6 +101,22 @@ class BidController extends Controller
 
     public function userBidDelete($id_bids, $id_auctions) {
         try {
+            $check_auction_status = DB::table('auctions')
+                                        ->select('*')
+                                        ->where('id_auctions', '=', $id_auctions)
+                                        ->where('auction_status', '=', false)
+                                        ->get();
+
+            // return $check_auction_status;
+
+            if (sizeof($check_auction_status) != 0) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'ไม่อนุญาต',
+                    'data' => 'ไม่อนุญาตให้ลบการเสนอราคา'
+                ], 403);
+            }
+
             $delete_bid = DB::table('bids')
                                 ->where('id_bids', '=', $id_bids)
                                 ->delete();
