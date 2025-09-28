@@ -29,52 +29,88 @@ class AuctionController extends Controller
 
             $run_auction_system->runAuctionSystem();
 
+            // $auctions_list = DB::table('auctions')
+            //     ->select(
+            //         'auctions.id_auctions',
+            //         'auctions.auction_status',
+            //         'auctions.shipping_cost',
+            //         'auctions.start_price',
+            //         'auctions.end_date_time',
+            //         'auctions.max_price',
+            //         'auctions.id_auction_types',
+            //         'auctions.id_payment_types',
+            //         'auctions.id_bank_accounts',
+            //         'products.id_products',
+            //         'products.name_product',
+            //         'images.image_path_1',
+            //         'users.id_users',
+            //         'users.first_name_users',
+            //         'users.last_name_users',
+            //     )
+            //     ->join('products', function (JoinClause $join) {
+            //         $join->on('auctions.id_products', '=', 'products.id_products');
+            //     })
+            //     ->join('images', function (JoinClause $join) {
+            //         $join->on('images.id_images', '=', 'products.id_images');
+            //     })
+            //     ->join('users', function (JoinClause $join) {
+            //         $join->on('users.id_users', '=', 'products.id_users');
+            //     })
+            //     ->where('auctions.auction_status', '=', true)
+            //     ->where('auctions.id_auction_types', '=', 1)
+            //     // ->orderByRaw('id_auctions')
+            //     ->orderByDesc('id_auctions')
+            //     ->get();
+
+            $id_product_types = 0;
+            $has_data = 1;
+
+
+
             $auctions_list = DB::table('auctions')
-                ->select(
-                    'auctions.id_auctions',
-                    'auctions.auction_status',
-                    'auctions.shipping_cost',
-                    'auctions.start_price',
-                    'auctions.end_date_time',
-                    'auctions.max_price',
-                    'auctions.id_auction_types',
-                    'auctions.id_payment_types',
-                    'auctions.id_bank_accounts',
-                    'products.id_products',
-                    'products.name_product',
-                    'images.image_path_1',
-                    'users.id_users',
-                    'users.first_name_users',
-                    'users.last_name_users',
-                )
-                ->join('products', function (JoinClause $join) {
-                    $join->on('auctions.id_products', '=', 'products.id_products');
-                })
-                ->join('images', function (JoinClause $join) {
-                    $join->on('images.id_images', '=', 'products.id_images');
-                })
-                ->join('users', function (JoinClause $join) {
-                    $join->on('users.id_users', '=', 'products.id_users');
-                })
-                ->where('auctions.auction_status', '=', true)
-                ->where('auctions.id_auction_types', '=', 1)
-                // ->orderByRaw('id_auctions')
-                ->orderByDesc('id_auctions')
-                ->get();
+                        ->select(
+                            'auctions.id_auctions',
+                            'auctions.auction_status',
+                            'auctions.shipping_cost',
+                            'auctions.start_price',
+                            'auctions.end_date_time',
+                            'auctions.max_price',
+                            'auctions.id_auction_types',
+                            'auctions.id_payment_types',
+                            'auctions.id_bank_accounts',
+                            'products.id_products',
+                            'products.id_product_types',
+                            'products.name_product',
+                            'images.image_path_1',
+                            'users.id_users',
+                            'users.first_name_users',
+                            'users.last_name_users',
+                            'product_types.product_type_text',
+                            'auction_types.auction_types',
+                        )
+                        ->join('products', function (JoinClause $join) {
+                            $join->on('auctions.id_products', '=', 'products.id_products');
+                        })
+                        ->join('images', function (JoinClause $join) {
+                            $join->on('images.id_images', '=', 'products.id_images');
+                        })
+                        ->join('users', function (JoinClause $join) {
+                            $join->on('users.id_users', '=', 'products.id_users');
+                        })
+                        ->join('product_types', function (JoinClause $join) {
+                            $join->on('product_types.id_product_types', '=', 'products.id_product_types');
+                        })
+                        ->join('auction_types', function (JoinClause $join) {
+                            $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
+                        })
+                        ->where('auctions.auction_status', '=', true)
+                        ->where('auctions.id_auction_types', '=', 1)
+                        ->where('products.id_product_types', '=', $id_product_types)
+                        ->orderByDesc('auctions.id_auctions')
+                        // ->orderByRaw('auctions.created_at')
+                        ->get();
 
-            // $high_bit = DB::table('bids')
-            //                     ->select('id_users', 'id_auctions', 'bid_price')
-            //                     ->where('id_auctions', '=', $id_auctions)
-            //                     ->orderByDesc('bid_price')
-            //                     ->get();
-            // $counter = 0;
-            // for ($i = 0; $i < count($auctions_list); $i++) {
-            //     $counter += $i;
-            // }
-
-            // return $counter;
-
-            // highBids();
+            event(new AuctionHomeEvent($has_data, $auctions_list));
 
             return response()->json([
                 'status' => 1,

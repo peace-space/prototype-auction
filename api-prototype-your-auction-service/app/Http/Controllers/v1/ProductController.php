@@ -5,11 +5,13 @@ namespace App\Http\Controllers\v1;
 use App\Events\ProductDetailEvent;
 use App\Http\Controllers\algorithm\RunAuctionSystem;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\v1\AuctionController;
 
 use function PHPUnit\Framework\isEmpty;
 
@@ -140,6 +142,8 @@ class ProductController extends Controller
             $run_auction_system = new RunAuctionSystem();
             $run_auction_system->runAuctionSystem();
 
+            $update_auction_data_for_client = new AuctionController();
+
             $product_images = DB::table('products')
                 ->select('*')
                 ->join('images', function (JoinClause $join) {
@@ -151,46 +155,196 @@ class ProductController extends Controller
                 ->where('auctions.auction_status', '=', true)
                 ->where('products.id_products', '=', $id_products)
                 ->first();
-            // return $product_images;
-            if (!empty($product_images)) {
-                // return "has data";
-                $images_model = [
-                    $product_images->image_path_1,
-                    $product_images->image_path_2,
-                    $product_images->image_path_3,
-                    $product_images->image_path_4,
-                    $product_images->image_path_5,
-                    $product_images->image_path_6,
-                    $product_images->image_path_7,
-                    $product_images->image_path_8,
-                    $product_images->image_path_9,
-                    $product_images->image_path_10,
-                ];
 
-                for ($index = 0; $index < 10; $index++) {
-                    if ($images_model[$index] != '') {
-                        $local_path = public_path($images_model[$index]);
-                        unlink($local_path);
+            // return $product_images;
+
+
+            $counter = DB::raw('count(id_users) as bids_counter');
+
+            $bids_counter = DB::table('bids')
+                ->select($counter)
+                ->where('id_auctions', '=', $product_images->id_auctions)
+                ->first();
+
+            // $bids_counter = new BidController($product_images->id_auctions);
+            // return $bids_counter;
+
+            // return $product_images;
+
+            // if ()
+
+            $end_date_time_auctions = Carbon::parse($product_images->end_date_time, 'Asia/Bangkok');
+            // $current_date_time = Carbon::now('Asia/Bangkok');
+
+            $count_down_end_date_time = $end_date_time_auctions->diffInHours();
+
+            if ($count_down_end_date_time >= 12) {
+                if ($bids_counter->bids_counter == 0) {
+                    // yes delete
+                    // return "yes delete : มากกว่า 12 ชม. และ ไม่มีผู้เสนอราคา";
+
+                    if (!empty($product_images)) {
+                        // return "has data";
+                        $images_model = [
+                            $product_images->image_path_1,
+                            $product_images->image_path_2,
+                            $product_images->image_path_3,
+                            $product_images->image_path_4,
+                            $product_images->image_path_5,
+                            $product_images->image_path_6,
+                            $product_images->image_path_7,
+                            $product_images->image_path_8,
+                            $product_images->image_path_9,
+                            $product_images->image_path_10,
+                        ];
+
+                        for ($index = 0; $index < 10; $index++) {
+                            if ($images_model[$index] != '') {
+                                $local_path = public_path($images_model[$index]);
+                                unlink($local_path);
+                            }
+                        }
+
+                        // return $images_model;
+
+                        $delete_products = DB::table('products')->where('id_products', '=', $id_products)->delete();
+
+                        $update_auction_data_for_client->index();
+
+                        return response()->json([
+                            'status' => 1,
+                            'message' => "Successfully.",
+                            'data' => $delete_products,
+                        ], 200);
+                    } else {
+                        // return "not data";
+                        return response()->json([
+                            'status' => 0,
+                            'message' => "ไม่สามารถลบข้อมูลได้",
+                            // 'data' => $delete_products,
+                        ], 404);
+                    }
+                } else if ($bids_counter->bids_counter >= 1) {
+                    // yes delete
+                    // return "yes delete : มากกว่า 12 ชม. และ ผู้เสนอราคามากกว่าเท่ากับ 1";
+
+                    if (!empty($product_images)) {
+                        // return "has data";
+                        $images_model = [
+                            $product_images->image_path_1,
+                            $product_images->image_path_2,
+                            $product_images->image_path_3,
+                            $product_images->image_path_4,
+                            $product_images->image_path_5,
+                            $product_images->image_path_6,
+                            $product_images->image_path_7,
+                            $product_images->image_path_8,
+                            $product_images->image_path_9,
+                            $product_images->image_path_10,
+                        ];
+
+                        for ($index = 0; $index < 10; $index++) {
+                            if ($images_model[$index] != '') {
+                                $local_path = public_path($images_model[$index]);
+                                unlink($local_path);
+                            }
+                        }
+
+                        // return $images_model;
+
+                        $delete_products = DB::table('products')->where('id_products', '=', $id_products)->delete();
+
+                        $update_auction_data_for_client->index();
+
+                        return response()->json([
+                            'status' => 1,
+                            'message' => "Successfully.",
+                            'data' => $delete_products,
+                        ], 200);
+                    } else {
+                        // return "not data";
+                        return response()->json([
+                            'status' => 0,
+                            'message' => "ไม่สามารถลบข้อมูลได้",
+                            // 'data' => $delete_products,
+                        ], 404);
                     }
                 }
+            } else if ($count_down_end_date_time < 12) {
+                if ($bids_counter->bids_counter == 0) {
+                    // yes delete
+                    // return "yes delete : น้อยกว่า 12 ชม. และ ไม่มีผู้เสนอราคา";
 
-                // return $images_model;
+                    if (!empty($product_images)) {
+                        // return "has data";
+                        $images_model = [
+                            $product_images->image_path_1,
+                            $product_images->image_path_2,
+                            $product_images->image_path_3,
+                            $product_images->image_path_4,
+                            $product_images->image_path_5,
+                            $product_images->image_path_6,
+                            $product_images->image_path_7,
+                            $product_images->image_path_8,
+                            $product_images->image_path_9,
+                            $product_images->image_path_10,
+                        ];
 
-                $delete_products = DB::table('products')->where('id_products', '=', $id_products)->delete();
+                        for ($index = 0; $index < 10; $index++) {
+                            if ($images_model[$index] != '') {
+                                $local_path = public_path($images_model[$index]);
+                                unlink($local_path);
+                            }
+                        }
 
-                return response()->json([
-                    'status' => 1,
-                    'message' => "Successfully.",
-                    'data' => $delete_products,
-                ], 200);
-            } else {
-                // return "not data";
-                return response()->json([
-                    'status' => 0,
-                    'message' => "ไม่สามารถลบข้อมูลได้",
-                    // 'data' => $delete_products,
-                ], 404);
+                        // return $images_model;
+
+                        $delete_products = DB::table('products')->where('id_products', '=', $id_products)->delete();
+
+                        $update_auction_data_for_client->index();
+
+                        return response()->json([
+                            'status' => 1,
+                            'message' => "Successfully.",
+                            'data' => $delete_products,
+                        ], 200);
+                    } else {
+                        // return "not data";
+                        return response()->json([
+                            'status' => 0,
+                            'message' => "ไม่สามารถลบข้อมูลได้",
+                            // 'data' => $delete_products,
+                        ], 404);
+                    }
+                } else if ($bids_counter->bids_counter >= 1) {
+                    // on delete
+                    // return "no delete : น้อยกว่า 12 ชม. และ มีผู้เสนอราคามากกว่าเท่ากับ 1";
+
+                    return response()->json([
+                            'status' => 1,
+                            'message' => "ไม่อนุญาต",
+                            'data' => "ไม่อยู่ในเงื่อนไขการลบสินค้า"
+                        ], 200);
+
+                }
             }
+
+            return response()->json([
+                            'status' => 1,
+                            'message' => "ไม่อยู่ในเงื่อนไข",
+                            'data' => "ไม่อยู่ในเงื่อนไขการลบสินค้าหรือ อาจเกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ กรุณาติดต่อผู้ดูแลระบบ"
+                        ], 200);
+
+            // return $end_date_time_auctions->diffInHours();
+
+            // // return $end_date_time_auctions->diffInHours();
+            // return $end_date_time_auctions->diffInMinutes();
+            // return $end_date_time_auctions->diffInRealMilliseconds();
+            // // return $end_date_time_auctions->diff($current_date_time);
+            // return $end_date_time_auctions->toDateTimeString();
+            // return Carbon::now('Asia/Bangkok')->toDateTimeString();
+            // return $product_images;
+
             // return $product_images;
 
             // return $product_images;

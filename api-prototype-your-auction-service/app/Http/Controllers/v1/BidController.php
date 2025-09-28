@@ -67,7 +67,7 @@ class BidController extends Controller
                 'id_users' => $request->id_users,
                 'id_auctions' => $request->id_auctions,
                 'bid_price' => $bid_price,
-                'created_at' => Carbon::now()
+                'created_at' => Carbon::now('Asia/Bangkok')
             ];
 
             $save_data_bidding = DB::table('bids')
@@ -81,9 +81,9 @@ class BidController extends Controller
 
             // return $save_high_price;
 
-            $auctionController = new AuctionController();
-            $id_product_types = 0;
-            $auctionController->auctionSelectTypes($id_product_types);
+            // $auctionController = new AuctionController();
+            // $id_product_types = 0;
+            // $auctionController->auctionSelectTypes($id_product_types);
 
             return response()->json([
                 'status' => 1,
