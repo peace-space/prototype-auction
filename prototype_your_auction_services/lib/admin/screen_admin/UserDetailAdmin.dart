@@ -668,7 +668,7 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
       _password_user_controller.text != "") {
       data['new_password'] = _password_user_controller.text;
     }
-    print("${data}lllllllllllllllllllllllllllllllllll");
+    // print("${data}lllllllllllllllllllllllllllllllllll");
     return data;
   }
 

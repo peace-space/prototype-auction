@@ -16,7 +16,7 @@ class ProductDetailAdminChannel {
 
     String json = jsonEncode(subscription);
     channel.sink.add(json);
-    print("${id_auctions} <---5555555555555555555555555");
+    // print("${id_auctions} <---5555555555555555555555555");
     ProductDetailController().fetchProductDetail(id_auctions: id_auctions);
 
     return channel;

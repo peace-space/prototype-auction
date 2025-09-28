@@ -23,7 +23,7 @@ class UserPrivateAuctionAdminWidgetState
       body: StreamBuilder(
         stream: UserPrivateAuctionAdminChannel.connect().stream,
         builder: (context, snapshot) {
-          print("${snapshot.data}");
+          // print("${snapshot.data}");
 
           if (snapshot.hasError) {
             return Center(child: CircularProgressIndicator());

@@ -20,7 +20,7 @@ class UserController {
     Uri uri = Uri.parse(url);
     final response = await http.get(uri);
     Map<String, dynamic> resData = jsonDecode(response.body);
-    print("CONTROLLER:: ${resData}");
+    // print("CONTROLLER:: ${resData}");
     return resData;
   }
 
@@ -77,7 +77,7 @@ class UserController {
     // print(":::::::::::::::::::::: ${data.toString()}");
     String url = ConfigAPI().getEditMyUserProfileServerPost();
     final uri = Uri.parse(url);
-    print("${data}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    // print("${data}aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     // final response = await http.post(
     //   uri,
     //   headers: {"Content-Type": "application/json"},

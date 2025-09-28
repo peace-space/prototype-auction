@@ -55,7 +55,7 @@ class UserListAdminState extends State<UserListAdmin> {
             .connent()
             .stream,
         builder: (context, snapshot) {
-          print("ssss: ${snapshot.data}");
+          // print("ssss: ${snapshot.data}");
 
 
 
@@ -195,7 +195,7 @@ class UserListAdminState extends State<UserListAdmin> {
     UserListAdminModel userListAdminModel = UserListAdminModel();
     userListAdminModel.setOneUserDetail(user_data);
 
-    print(user_data.toString() + "++++++++++++++++++++++++++");
+    // print(user_data.toString() + "++++++++++++++++++++++++++");
     // UserListChannel.close();
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => UserDetailAdmin(),));

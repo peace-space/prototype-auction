@@ -5,7 +5,7 @@ class PrivateAuctionAdminModel {
   static late dynamic jsonToMap;
 
   void setProductDetailData(Map auction_detail_admin_data) {
-    print("AAAA");
+    // print("AAAA");
     PrivateAuctionAdminModel.auction_detail_admin = auction_detail_admin_data;
   }
 

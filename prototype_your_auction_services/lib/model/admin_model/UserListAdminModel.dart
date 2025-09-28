@@ -98,7 +98,7 @@ class UserListAdminModel {
   }
 
   static Map getOneUserDetail() {
-    print("${one_user_detail.toString()}----------------------------");
+    // print("${one_user_detail.toString()}----------------------------");
 
     return one_user_detail;
   }

@@ -14,7 +14,7 @@ class PrivateAuctionController {
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {
-        print("Successfully. StatusCode = ${response.statusCode}");
+        // print("Successfully. StatusCode = ${response.statusCode}");
       } else {
         throw Exception("Error StatusCode = ${response.statusCode}");
       }
