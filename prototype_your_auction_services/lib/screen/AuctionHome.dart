@@ -498,14 +498,22 @@ class AuctionHomeState extends State<AuctionHome> {
                       title: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(data['name_product']),
-                          Text("ประเภทสินค้า: ${data['product_type_text']}"),
+                          Text(data['name_product'], style: TextStyle(
+                              fontSize: 13
+                          ),),
+                          Text("ประเภทสินค้า: ${data['product_type_text']}", style: TextStyle(
+                              fontSize: 13
+                          ),),
                           Text("ราคาสูงสุด ฿${data['max_price']
-                              .toString()}"),
-                          Text("เวลาเหลือ"),
+                              .toString()}", style: TextStyle(
+                              fontSize: 13
+                          ),),
+                          Text("เวลาเหลือ", style: TextStyle(
+                              fontSize: 13
+                          ),),
                           countDownList(context, data['end_date_time']),
                           Text("หน่วยเวลา (วัน : ชั่วโมง : นาที : วินาที)", style: TextStyle(fontSize: 13),),
-                          Text("day:hour:min:sec"),
+                          // Text("day:hour:min:sec"),
                         ],
                       ),
                       // subtitle: countDownList(context, data['end_date_time']),
