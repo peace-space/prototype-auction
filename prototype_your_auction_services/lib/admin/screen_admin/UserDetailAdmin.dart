@@ -566,7 +566,18 @@ class UserDetailAdminState extends State<UserDetailAdmin> {
     } else {
       return ElevatedButton(onPressed: () {
         // print(user_data['id_users'].toString() + " <----SSSSSSSSSSSSSSSSSSSS");
-        UserController().deleteUserAdmin(context, user_data['id_users']);
+        showDialog(context: context, builder: (context) => AlertDialog(
+          title: Text("ลบบัญชีผู้ใช้งานถาวร"),
+          content: Text("ยืนยันการลบบัญชีผู้ใช้"),
+          actions: [
+            TextButton(onPressed: () {
+              Navigator.of(context).pop();
+            }, child: Text("ยกเลิก")),
+            TextButton(onPressed: () {
+              UserController().deleteUserAdmin(context, user_data['id_users']);
+            }, child: Text("ตกลง"))
+          ],
+        ),);
       }, child: Text("ลบผู้ใช้งาน"));
     }
   }

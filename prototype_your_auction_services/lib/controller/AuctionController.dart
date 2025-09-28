@@ -43,13 +43,13 @@ class AuctionController {
 
       if (key_word.isNotEmpty) {
         url = ConfigAPI().getAuctionSelectTypesGet(id_products: id_products, key_word: key_word);
-        print("${key_word}");
-        print("Keyword +++++++++++++++++++++++++++++++++++++++++++");
+        // print("${key_word}");
+        // print("Keyword +++++++++++++++++++++++++++++++++++++++++++");
       } else {
         url = ConfigAPI().getAuctionSelectTypesGet(id_products: id_products, key_word: '');
       }
 
-      print("${url}");
+      // print("${url}");
       Uri uri = Uri.parse(url);
       final response = await http.get(uri);
       final resJson = jsonDecode(response.body);
@@ -73,7 +73,7 @@ class AuctionController {
 
       // id_products = 0;
 
-      print('${id_products}');
+      // print('${id_products}');
 
       await Future.delayed(Duration(seconds: ConfigDelayBroadcast.delay()));
       // await Future.delayed(Duration(seconds: 3));
@@ -82,8 +82,8 @@ class AuctionController {
 
       if (key_word.isNotEmpty) {
         url = ConfigAPI().getMyAuctionsServerGet(id_users: id_users, id_products: id_products, key_word: key_word);
-        print("${key_word}");
-        print("Keyword +++++++++++++++++++++++++++++++++++++++++++");
+        // print("${key_word}");
+        // print("Keyword +++++++++++++++++++++++++++++++++++++++++++");
       } else {
         url = ConfigAPI().getMyAuctionsServerGet(id_users: id_users, id_products: id_products, key_word: '');
       }

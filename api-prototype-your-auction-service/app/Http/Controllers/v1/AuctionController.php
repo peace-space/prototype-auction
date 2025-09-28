@@ -792,6 +792,7 @@ class AuctionController extends Controller
                         if (sizeof($auction_list_select) != 0) {
                             $has_data = 1;
 
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select));
 
                             return response()->json([
@@ -802,6 +803,8 @@ class AuctionController extends Controller
                             ], 200);
                         } else {
                             $has_data = 0;
+
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select));
                             return response()->json([
                                 'status' => 1,
@@ -876,6 +879,7 @@ class AuctionController extends Controller
                         if (sizeof($auction_list_select_key_word) != 0) {
                             $has_data = 1;
 
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select_key_word));
 
                             return response()->json([
@@ -886,6 +890,7 @@ class AuctionController extends Controller
                             ], 200);
                         } else {
                             $has_data = 0;
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select_key_word));
                             return response()->json([
                                 'status' => 1,
@@ -959,6 +964,7 @@ class AuctionController extends Controller
 
                             // return "AA";
 
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select_types));
 
                             return response()->json([
@@ -970,6 +976,7 @@ class AuctionController extends Controller
                         } else {
                             $has_data = 0;
 
+                            // event(new MyAuctionEvent($has_data, $auction_list_select));
                             event(new MyAuctionEvent($auction_list_select_types));
 
                             return response()->json([
@@ -1049,6 +1056,7 @@ class AuctionController extends Controller
             if (sizeof($auctions_list) != 0) {
                 $has_data = 1;
 
+                // event(new MyAuctionEvent($has_data, $auction_list_select));
                 event(new MyAuctionEvent($auctions_list));
 
                 return response()->json([
@@ -1061,6 +1069,7 @@ class AuctionController extends Controller
 
                 $has_data = 0;
 
+                // event(new MyAuctionEvent($has_data, $auction_list_select));
                 event(new MyAuctionEvent($auctions_list));
                 return response()->json([
                     'status' => 1,
@@ -1078,6 +1087,9 @@ class AuctionController extends Controller
             //     'data' => $auctions_list
             // ], 200);
         } catch (Exception $e) {
+
+            // $has_data = 0;
+            // event(new MyAuctionEvent($has_data, $auction_list_select));
             return response()->json([
                 'status' => 0,
                 'message' => 'Error.',

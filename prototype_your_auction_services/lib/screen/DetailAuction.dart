@@ -245,7 +245,7 @@ class DetailAuctionState extends State<DetailAuction> {
 
   Stream<Map<String, dynamic>> fetchDataDetailAuctions() async* {
     // Future.delayed(Duration(seconds: 1));
-    print('Start.detailAuctions');
+    // print('Start.detailAuctions');
     // String url = 'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1/product-detail/${ShareProductData
     //     .productData['id_auctions']}';
     String url = ConfigAPI().getProductDetailApiServerGet(
@@ -263,7 +263,7 @@ class DetailAuctionState extends State<DetailAuction> {
       detailAuctionData = data;
       _imageData = data["images"];
     });
-    print('End.detialAuctions');
+    // print('End.detialAuctions');
   }
 
   Widget onBit(var id_users_owner) {
@@ -306,10 +306,10 @@ class DetailAuctionState extends State<DetailAuction> {
   }
 
   void submitOnBidding() async {
-    print("Start.");
+    // print("Start.");
     try {
       int bid_price = int.parse(_bid.text);
-      print("Check num bid: ${bid_price.runtimeType == int}");
+      // print("Check num bid: ${bid_price.runtimeType == int}");
       if (ShareData.userData['id_users'] != null) {
         if (bid_price > max_price) {
           Map<String, dynamic> data = {
@@ -344,7 +344,7 @@ class DetailAuctionState extends State<DetailAuction> {
                     ],
                   ),
             );
-            print("Successfully: " + responce.statusCode.toString());
+            // print("Successfully: " + responce.statusCode.toString());
 
             _bid.text = '';
             setState(() {});
@@ -473,7 +473,9 @@ class DetailAuctionState extends State<DetailAuction> {
                 content: Text("สามารถตรวจสอบผลการประมูล"),
                 actions: [
                   TextButton(
-                    onPressed: () => {Navigator.of(context).pop()},
+                    onPressed: () => {
+                      Navigator.of(context).pop()
+                    },
                     child: Text('ตกลง'),
                   ),
                 ],

@@ -122,11 +122,18 @@ class MyAuctionsState extends State<MyAuctions> {
                   dynamic data = MyAuctionModel().getConvertToData();
                   // return Text("Test: ${data}");
 
+
+
                   if (data == null) {
                     return Center(child: CircularProgressIndicator());
                   }
 
                   if (data != null) {
+                    if (data.length == 0) {
+                      return Center(child: Text("ไม่มีรายการสินค้าที่คุณเปิดประมูล", style: TextStyle(
+                        fontSize: 18
+                      ),),);
+                    }
                     return ListView.builder(
                         itemCount: data!.length,
                         padding: EdgeInsets.all(8),

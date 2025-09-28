@@ -32,12 +32,12 @@ class MyAuctionModel {
 
       print("+++++++++++++++${data}");
       if (data['status'] == 1) {
-        // if (data['hasData'] != 0) {
+        if (data['hasData'] != 0) {
           // AuctionModel.jsonToMap = data['data'];
           MyAuctionModel.jsonToData = data['data'];
-        // } else {
-        //   MyAuctionModel.jsonToData = null;
-        // }
+        } else {
+          MyAuctionModel.jsonToData = null;
+        }
       } else {
         MyAuctionModel.jsonToData = null;
       }

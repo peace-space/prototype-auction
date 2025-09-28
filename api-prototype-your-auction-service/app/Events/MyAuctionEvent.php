@@ -16,11 +16,14 @@ class MyAuctionEvent implements ShouldBroadcastNow
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $my_auction_data;
+    public $has_data;
     /**
      * Create a new event instance.
      */
+    // public function __construct($has_data, $my_auction_data)
     public function __construct($my_auction_data)
     {
+        // $this->has_data = $has_data;
         $this->my_auction_data = $my_auction_data;
     }
 
@@ -40,6 +43,7 @@ class MyAuctionEvent implements ShouldBroadcastNow
         return [
             'status' => 1,
             'message' => 'Successfully.',
+            // 'hasData' => $this->has_data,
             'data' => $this->my_auction_data
         ];
     }

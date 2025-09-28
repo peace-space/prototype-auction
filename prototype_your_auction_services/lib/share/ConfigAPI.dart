@@ -1,8 +1,10 @@
 class ConfigAPI {
-  // final String url = 'https://rmuti.your-auction-services.com';
+  final String url = 'https://rmuti.your-auction-services.com';
   //
-  final String url =
-      'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
+  // final String url =
+  //     'http://192.168.1.248/001.Work/003.Project-2567/Prototype-Your-Auction-Services/api-prototype-your-auction-service/public';
+
+
   // final String url =
   //     'https://prototype.your-auction-services.com/git/api-prototype-your-auction-service/api/v1';
 
@@ -114,7 +116,7 @@ class ConfigAPI {
 
   String getMyAuctionsServerGet({required id_users, required var id_products, required String key_word}) {
     if (key_word.isNotEmpty) {
-      print("${id_users}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
+      // print("${id_users}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
       return "${url}/api/v1/my-auctions/${id_users.toString()}/${id_products.toString()}/?key_word=${key_word.toString()}";
     } else {
       return "${url}/api/v1/my-auctions/${id_users.toString()}/${id_products.toString()}";
@@ -286,7 +288,7 @@ class ConfigAPI {
     // print("api: ${id_products}");
     // id_products = 0;
     if (key_word.isNotEmpty) {
-      print("${id_products}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
+      // print("${id_products}: ${key_word} | ssssssssssssssssssssssssssssssssssssssss");
       return "${url}/api/v1/auction-select-product-types/${id_products.toString()}?key_word=${key_word.toString()}";
     } else {
       return "${url}/api/v1/auction-select-product-types/${id_products.toString()}";

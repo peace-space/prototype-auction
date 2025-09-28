@@ -678,12 +678,12 @@ class AuctionHomeState extends State<AuctionHome> {
 
     if (product_types_data != null) {
       for (int i = 0; i <= product_types_data.length - 1; i++) {
-        print('${i + 1} ${product_types_data[i]['product_type_text']}');
+        // print('${i + 1} ${product_types_data[i]['product_type_text']}');
         product_types.add(product_types_data[i]['product_type_text'].toString());
       }
       // product_types.reversed;
       product_types.add('ทั้งหมด');
-      print("::: ${product_types.length}");
+      // print("::: ${product_types.length}");
       // product_types.reversed;
       // product_types.add('อื่น ๆ');
       // print("${test} ${product_types.length}");
