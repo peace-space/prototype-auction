@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:prototype_your_auction_services/screen/AuctionHome.dart';
 
 import '../../admin/screen_admin/user_auction_list_admin_widget.dart';
 
@@ -30,7 +31,7 @@ Widget countDownList(BuildContext context, end_date_time_data) {
     onEnd: () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => UserAuctionListAdminWidget()),
+        MaterialPageRoute(builder: (context) => AuctionHome()),
       );
       showDialog(
         context: context,
@@ -77,7 +78,7 @@ Widget countDownDetail(BuildContext context, var end_date_time_data) {
     onEnd: () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => UserAuctionListAdminWidget()),
+        MaterialPageRoute(builder: (context) => AuctionHome()),
       );
       showDialog(
         context: context,

@@ -778,7 +778,7 @@ class AuctionController extends Controller
                             $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
-                        ->where('auctions.auction_status', '=', true)
+                        // ->where('auctions.auction_status', '=', true)
                         ->where('auctions.id_auction_types', '=', 1)
                         ->where('products.id_product_types', '=', $id_product_types)
                         ->where('products.name_product', 'like', "%" . $request->key_word . "%")
@@ -863,7 +863,7 @@ class AuctionController extends Controller
                             $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
-                        ->where('auctions.auction_status', '=', true)
+                        // ->where('auctions.auction_status', '=', true)
                         ->where('auctions.id_auction_types', '=', 1)
                         // ->where('products.id_product_types', '=', $id_product_types)
                         ->where('products.name_product', 'like', "%" . $request->key_word . "%")
@@ -948,7 +948,7 @@ class AuctionController extends Controller
                             $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                         ->where('users.id_users', '=', $id_users)
-                        ->where('auctions.auction_status', '=', true)
+                        // ->where('auctions.auction_status', '=', true)
                         ->where('auctions.id_auction_types', '=', 1)
                         ->where('products.id_product_types', '=', $id_product_types)
                         // ->orderByRaw('id_auctions')
@@ -1034,7 +1034,7 @@ class AuctionController extends Controller
                             $join->on('auction_types.id_auction_types', '=', 'auctions.id_auction_types');
                         })
                 ->where('users.id_users', '=', $id_users)
-                ->where('auctions.auction_status', '=', true)
+                // ->where('auctions.auction_status', '=', true)
                 ->where('auctions.id_auction_types', '=', 1)
                 ->orderByDesc('auctions.id_auctions')
                 ->get();
